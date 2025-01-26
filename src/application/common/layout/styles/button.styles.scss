@@ -1,0 +1,94 @@
+button {
+  text-transform: none !important;
+  font-weight: 500 !important;
+  border-radius: 5px !important;
+  height: 36px;
+  box-shadow: none !important;
+}
+
+.button-group-row {
+  display: flex;
+  justify-content: end;
+}
+
+.button-header-sumbmit {
+  background-color: #0085ff !important;
+  color: #ffffff !important;
+  width: 127px;
+  border: none;
+}
+
+.button-header-upload {
+  background: #fff !important;
+  border: 1px solid #0085ff !important;
+  color: #0085ff !important;
+  width: 127px;
+}
+
+.button-header-download {
+  background: #fff !important;
+  border: 1px solid #828282 !important;
+  color: #575c61 !important;
+  width: 127px;
+}
+
+.button-update-form {
+  background-color: #0085ff !important;
+  color: #ffffff !important;
+  width: 127px;
+}
+
+.button-cancel-form {
+  background: #fff !important;
+  color: #575c61 !important;
+  border: 1px solid #575c61 !important;
+  width: 127px;
+}
+
+.button-submit-form {
+  background: #0085ff !important;
+  color: #ffffff !important;
+  width: 127px;
+  border-color: #0085ff !important;;
+}
+
+.button-submit-form-next {
+  background: #0085ff !important;
+  color: #ffffff !important;
+  border-color: #0085ff !important;;
+  width: 127px;
+}
+
+.button-more-vert {
+  border: none;
+  background: transparent;
+  height: 100%;
+}
+
+.button-option .mat-mdc-menu-item-text {
+  display: flex;
+}
+
+.button-option .mat-mdc-menu-item-text .icon-option {
+  width: 30px;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.button-option .mat-mdc-menu-item-text .text-option {
+  color: #000;
+}
+
+.button-download-qrcode {
+  background-color: #2a8ee9 !important;
+  color: #ffffff !important;
+  width: 160px;
+  border: none;
+  height: 32px;
+  font-size: 16px;
+  font-weight: 400 !important;
+}
+
+.color-blue {
+  color: #2a8ee9 !important;
+}

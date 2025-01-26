@@ -1,0 +1,155 @@
+// @import "../../styles/themes";
+@import "bootstrap/scss/mixins/breakpoints";
+@import "@nebular/theme/styles/global/breakpoints";
+
+// @include nb-install-component() {
+//   .menu-sidebar ::ng-deep .scrollable {
+//     padding-top: nb-theme(layout-padding-top);
+//   }
+// }
+
+nb-layout-header {
+  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12),
+    0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
+}
+
+nb-sidebar {
+  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.337254902));
+  position: relative;
+  height: calc(100vh - var(--header-height));
+}
+
+nb-layout-column {
+  height: calc(100vh - var(--header-height));
+  overflow-y: auto;
+}
+
+::ng-deep nb-menu .menu-item a.active {
+  background-color: white;
+  color: #3366ff;
+}
+
+::ng-deep nb-menu .menu-item a.active .menu-icon {
+  color: #3366ff;
+}
+
+::ng-deep nb-menu .menu-item a.active .menu-icon * {
+  stroke: #3366ff;
+  fill: none;
+
+  &.icon_firewall,
+  &.dot_icon {
+    path {
+      stroke-width: 0;
+      fill: #3366ff;
+    }
+  }
+}
+
+::ng-deep {
+  .cdk-overlay-pane {
+    nb-option-list {
+      box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 16px 0 rgba(0, 0, 0, 0.19) !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 1921px) {
+  .sidebar-toggle {
+    margin-bottom: 0.7rem !important;
+  }
+
+  ::ng-deep nb-layout .layout .layout-container nb-sidebar .main-container-fixed {
+    top: 0 !important;
+    height: calc(100vh - var(--header-height) + 5px);
+  }
+}
+
+@media only screen and (min-width: 1920px) {
+  .sidebar-toggle {
+    margin-bottom: 0 !important;
+  }
+
+  ::ng-deep nb-layout .layout .layout-container nb-sidebar .main-container-fixed {
+    top: 0 !important;
+    height: 100% !important;
+  }
+}
+
+.sidebar-toggle {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  padding: 16px 12px !important;
+}
+
+.safari .sidebar-toggle {
+  bottom: 40px !important;
+}
+
+.sidebar-toggle:hover {
+  cursor: pointer;
+}
+
+.sidebar-toggle:hover .collapse-text {
+  color: var(--menu-item-hover-text-color);
+}
+
+.collapse-text {
+  font-weight: 500 !important;
+  font-size: 14px !important;
+}
+
+mat-icon {
+  color: var(--menu-item-icon-color);
+}
+
+.nb-menu {
+  height: 80vh;
+}
+
+.sidebar-toggle {
+  max-height: 5vh;
+}
+
+.menu-sidebar {
+  position: relative;
+  overflow: unset !important;
+}
+
+::ng-deep nb-sidebar .scrollable {
+  overflow: unset !important;
+}
+
+.transform-sidebar {
+  background-color: aqua;
+  position: fixed;
+  right: 0;
+  bottom: 50%;
+  transform: translateX(50%);
+  z-index: 10000000000000 !important;
+}
+
+@supports (-webkit-touch-callout: none) {
+  ::ng-deep .main-container-fixed {
+    margin-top: 45px !important;
+  }
+
+  ::ng-deep nb-layout .layout .layout-container nb-sidebar .main-container-fixed {
+    top: 0 !important;
+    height: calc(100vh - 34px);
+  }
+}
+
+.safari ::ng-deep .main-container-fixed {
+  margin-top: 45px !important;
+}
+
+.safari ::ng-deep .main-container-fixed {
+  top: 0 !important;
+  height: calc(100vh - 34px) !important;
+}
+
+.safari .sidebar-toggle {
+  bottom: 40px !important;
+}

@@ -1,0 +1,519 @@
+// themes - our custom or/and out of the box themes
+@import "themes";
+// framework component themes (styles tied to theme variables)
+@import "@nebular/theme/styles/globals";
+@import "@nebular/auth/styles/globals";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/grid";
+// loading progress bar theme
+@import "./pace.theme";
+@import "./layout";
+@import "./overrides";
+
+// install the framework and custom global styles
+@include nb-install() {
+  // framework global styles
+  @include nb-theme-global();
+  @include nb-auth-global();
+  @include ngx-layout();
+  // loading progress bar
+  @include ngx-pace-theme();
+  @include nb-overrides();
+
+  nb-menu .menu-item>.menu-items>.menu-item a.active {
+    color: #3366ff;
+  }
+
+  nb-menu .menu-item a {
+    font-weight: 500;
+  }
+
+  nb-menu .menu-item a.active {
+    color: #006cb5;
+    font-weight: 500;
+  }
+
+  nb-menu .menu-item a.active .menu-icon {
+    color: #006cb5;
+    font-weight: 500;
+  }
+
+  h5 {
+    color: #1967b2;
+  }
+
+  .menu-title {
+    font-size: 15px;
+  }
+
+  nb-menu .menu-item>.menu-items>.menu-item>a {
+    margin-left: 20px;
+    font-weight: 500;
+  }
+
+  .menu-icon {
+    font-size: 1.8em !important;
+    width: 1.5em !important;
+  }
+
+  nb-layout.window-mode .scrollable-container {
+    height: 100vh;
+    box-shadow: none;
+  }
+
+  nb-layout.window-mode {
+    padding-top: 0;
+  }
+
+  nb-layout.window-mode nb-layout-header.fixed {
+    top: 0;
+  }
+
+  nb-menu .menu-item .active .menu-icon {
+    font-size: 1.8em !important;
+    width: 1.5em !important;
+  }
+
+  .mdc-form-field label {
+    margin-bottom: 0 !important;
+  }
+
+  .logo-text {
+    color: #1967b2;
+  }
+
+  nb-layout-column {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+.title-template {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 0;
+  color: #0f2128;
+}
+
+.h-content {
+  height: 75vh !important;
+}
+
+.ng-template-body {
+  border: 1px solid #8282827a;
+  border-radius: 5px;
+}
+
+.ng-template-item {
+  height: 35px;
+  padding: 1rem;
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.ng-template-item:hover {
+  background-color: #d9d9d986;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+}
+
+nb-user nb-menu .menu-item a {
+  padding-left: 0;
+}
+
+nb-toast.status-danger {
+  background: #c3180d !important;
+  border: #c3180d !important;
+}
+
+nb-toast.status-danger .icon-container {
+  color: #c3180d !important;
+}
+
+button:focus {
+  outline: none;
+}
+
+.mat-primary {
+  --mat-full-pseudo-checkbox-selected-icon-color: #3366ff;
+  --mat-minimal-pseudo-checkbox-selected-checkmark-color: #3366ff;
+  --mat-datepicker-calendar-date-selected-state-background-color: #3366ff;
+  --mat-datepicker-toggle-active-state-icon-color: #3366ff;
+  --mat-datepicker-calendar-date-hover-state-background-color: #3366ff4f;
+  --mat-datepicker-calendar-date-in-range-state-background-color: #3366ff4f;
+  --mat-datepicker-calendar-date-selected-disabled-state-background-color: #3366ff4f;
+  --mat-datepicker-calendar-date-focus-state-background-color: #3366ff4f;
+  --mdc-filled-text-field-focus-label-text-color: #3366ff;
+  --mdc-filled-text-field-caret-color: #3366ff;
+  --mdc-filled-text-field-focus-active-indicator-color: #fff;
+  --mdc-outlined-text-field-focus-outline-color: #3366ff;
+  --mat-form-field-container-height: 1.5rem;
+  --mdc-outlined-text-field-outline-color: #e4e9f2;
+  --mdc-outlined-text-field-hover-outline-color: #e4e9f2;
+  --mat-datepicker-range-input-separator-color: #8f9bb3;
+  --mdc-filled-text-field-error-focus-active-indicator-color: #fff;
+  --mdc-filled-text-field-error-caret-color: #000;
+}
+
+.mdc-line-ripple::before {
+  border: none !important;
+}
+
+.mat-mdc-text-field-wrapper {
+  background-color: #fff !important;
+  padding-left: 0;
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.mat-mdc-button.mat-primary {
+  --mdc-text-button-label-text-color: #3366ff;
+  --mat-text-button-state-layer-color: #3366ff;
+  --mat-text-button-ripple-color: #3366ff4f;
+}
+
+.mat-mdc-text-field-wrapper {
+  background-color: #ffffff;
+}
+
+.mat-mdc-text-field-wrapper:hover {
+  background-color: #fff !important;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused {
+  background-color: #ffffff !important;
+}
+
+/* Angular 15 adds grey background on mat form components */
+
+/* below removes that background color */
+
+/* Manipulate initial background color*/
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: transparent !important;
+}
+
+/*Manipulate background color on hover and focus*/
+
+.mat-mdc-form-field-focus-overlay {
+  background-color: transparent !important;
+}
+
+.mat-mdc-text-field-wrapper:hover .mat-mdc-form-field-focus-overlay {
+  opacity: 0 !important;
+}
+
+.mdc-notched-outline {
+  height: 100% !important;
+}
+
+.mdc-text-field--outlined .mat-mdc-form-field-infix,
+.mdc-text-field--no-label .mat-mdc-form-field-infix {
+  padding-top: 7px !important;
+  padding-bottom: 7px !important;
+}
+
+::placeholder {
+  color: #8f9bb3;
+}
+
+mat-datepicker-toggle .mat-mdc-icon-button.mat-mdc-button-base {
+  height: 36px;
+  width: 36px;
+  padding: 7px;
+  margin-right: 5px;
+}
+
+nb-layout-header {
+  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12),
+    0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
+  padding-right: 5px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+}
+
+.header-bar {
+  height: 56px;
+}
+
+nb-layout.window-mode .layout nb-layout-header {
+  max-width: none;
+}
+
+nb-layout.window-mode .layout nb-layout-header nav {
+  max-width: none;
+  height: 56px;
+  padding: 0;
+}
+
+nb-layout-header.fixed~.layout-container {
+  background: #f6f6f6;
+}
+
+nb-layout.window-mode .scrollable-container {
+  max-width: none;
+}
+
+nb-layout .layout .layout-container .content .columns nb-layout-column {
+  padding: 0;
+}
+
+.body-container {
+  max-width: 1296px;
+  margin: 0 auto;
+}
+
+@media only screen and (min-device-width: 720px) and (max-device-width: 1280px) {
+  .body-container {
+    margin-left: 72px;
+    margin-right: 72px;
+  }
+}
+
+.nb-theme-default {
+  --header-height: 3.5rem;
+}
+
+html {
+  --mat-expansion-header-text-font: Roboto, Helvetica, Arial, sans-serif;
+}
+
+p {
+  font-size: 14px;
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+
+input {
+  min-height: 36px;
+}
+
+.table tbody tr:hover {
+  background-color: #ecf9ff !important;
+  cursor: pointer;
+}
+
+.invalid-text {
+  font-size: 13px !important;
+  color: #ff0000;
+}
+
+date-picker {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+::ng-deep mat-form-field input {
+  border-bottom: none !important;
+}
+
+.boder-false {
+  border: 1px solid #ff0000 !important;
+}
+
+.vali-text-false {
+  padding-top: 4px;
+  color: #ff0000 !important;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+/* Chiều rộng */
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Đường dẫn */
+
+::-webkit-scrollbar-track {
+  border-radius: 7px;
+}
+
+/* Tay cầm */
+
+::-webkit-scrollbar-thumb {
+  background: #d6d6d6;
+  border-radius: 7px;
+}
+
+/* Tay cầm khi hover */
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3eaffa;
+  cursor: pointer;
+}
+
+.action-table {
+  cursor: pointer;
+}
+
+.table td {
+  vertical-align: middle !important;
+}
+
+.color-done {
+  color: #04bc17;
+}
+
+.color-reject {
+  color: #ff0000;
+}
+
+.color-review {
+  color: #1da4ff;
+}
+
+.ck.ck-balloon-panel.ck-powered-by-balloon .ck.ck-powered-by {
+  display: none !important;
+}
+
+table img {
+  height: 20px;
+  width: 20px;
+}
+
+nb-tooltip {
+  box-shadow: none !important;
+  background: #f3f3f3 !important;
+  border: 0.4px solid #f8f8f8 !important;
+  max-width: 25rem;
+  box-shadow: 0px 4px 4px 0px #00000040 !important;
+  transform: translateX(10%);
+  padding: 8px !important;
+}
+
+nb-tooltip .content {
+  color: #000 !important;
+  white-space: pre-wrap;
+}
+
+nb-tooltip .arrow {
+  color: #000 !important;
+  border-bottom: 6px dashed #f8f8f8 !important;
+}
+
+.invalid-form {
+  border: 1px solid #ff0000 !important;
+}
+
+.invalid-form:focus {
+  border: 1px solid #ff0000 !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #ffffff;
+}
+
+.table-no-data {
+  background-color: #ffffff52;
+  color: #828282;
+}
+
+.cdk-overlay-container {
+  z-index: 2000 !important;
+}
+
+nb-select.appearance-outline.status-basic .select-button:focus {
+  border-color: #3366ff !important;
+}
+
+nb-select.appearance-outline.status-basic .select-button:active {
+  border-color: #3366ff !important;
+}
+
+nb-select.appearance-outline.status-basic .select-button.bottom {
+  border-color: #3366ff !important;
+}
+
+nb-select.appearance-outline.status-basic .select-button.bottom,
+nb-select.appearance-outline.status-basic .select-button.top {
+  border-color: #3366ff !important;
+}
+
+nb-select.invalid.appearance-outline.status-basic .select-button:focus {
+  border: 1px solid #ff0000 !important;
+}
+
+.text-14 {
+  font-size: 14px;
+}
+
+.safari nb-sidebar .scrollable {
+  padding-top: 2.5rem;
+}
+
+.app-company input::placeholder,
+.app-company textarea::placeholder {
+  font-size: 13px !important;
+}
+
+li {
+  font-size: 14px !important;
+}
+
+nb-menu .menu-item .menu-icon {
+  margin: unset !important;
+}
+
+.sub-title {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.apply-state {
+  width: 127px;
+  padding: 3px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 12px;
+
+  &.pending {
+    background-color: #ed954b;
+  }
+
+  &.applied {
+    background-color: #219551;
+  }
+
+  &.wait-to-delete {
+    background-color: #e75354;
+  }
+}

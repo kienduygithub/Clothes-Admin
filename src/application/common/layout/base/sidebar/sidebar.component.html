@@ -1,0 +1,18 @@
+<!-- <nb-sidebar #menu [state]="
+          screenWidth > 1920
+            ? compacted
+              ? 'compacted'
+              : 'expanded'
+            : compacted
+            ? 'compacted'
+            : 'expanded'
+        " id="menu-sidebar" class="menu-sidebar" tag="menu-sidebar" autoCollapse="true"> -->
+<ng-content select="nb-menu"></ng-content>
+<div class="row sidebar-toggle col-lg-12 p-3" (click)="toggleSidebar()">
+  <img *ngIf="sidebar_state == 'expanded'" src="{{ compacted_menu }}" class="mr-2" />
+  <img *ngIf="sidebar_state == 'compacted'" src="{{ expand_menu }}" class="mr-2" />
+  <div *ngIf="!compacted" style="padding-top: 2px">
+    <span class="collapse-text col-lg-10 m-0 pl-0">Thu gọn</span>
+  </div>
+</div>
+<!-- </nb-sidebar> -->

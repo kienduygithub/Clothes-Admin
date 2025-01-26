@@ -1,0 +1,13 @@
+<div class="outer-wraper">
+  <!-- <div class="image-container" [ngStyle]="{ backgroundImage: 'url(' + imageURL + ')' }"></div> -->
+  <img *ngIf="imagePath != ''" class="avatar" [src]="imagePath" alt="" onerror="this.src = 'assets/image/avt_3.png'">
+  <div *ngIf="imagePath == ''" class="avatar-default mr-2 d-flex justify-content-center"
+    [ngStyle]="{'background-color': getColor(id) }">
+    <span class="text-avatar" [ngStyle]="{'font-size': nameSize + 'px'}">{{getFirstChar(name)}}</span>
+  </div>
+  <div class="icon-wrapper" for="avatar-input-file">
+    <a>
+      <img src="{{ edit_logo }}" class="edit-icon" />
+    </a>
+  </div>
+</div>

@@ -1,0 +1,129 @@
+input {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  height: 36px;
+}
+
+textarea {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+}
+
+.form-control-input {
+  display: flex;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+.form-control-input input {
+  width: calc(100% - 9rem);
+  padding-bottom: 0 !important;
+  padding-left: 10px !important;
+  font-weight: 400 !important;
+}
+
+.form-control-input input:focus {
+  border-bottom: 1px solid #0083fc !important;
+}
+
+.form-control-input nb-select {
+  width: calc(100% - 9rem);
+  max-width: none !important;
+}
+
+.form-control-input nb-select:focus {
+  border-bottom: 1px solid #0083fc !important;
+}
+
+.form-control-input nb-select button {
+  padding-bottom: 0 !important;
+  padding-left: 10px !important;
+  font-size: 14px;
+}
+
+.form-control-input span {
+  width: 8rem;
+  font-size: 14px;
+}
+
+.input-container {
+  width: 100%;
+}
+
+nb-option {
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  height: 36px;
+}
+
+nb-checkbox.status-basic .text,
+nb-radio.status-basic .text {
+  font-weight: 400 !important;
+  font-size: 14px;
+}
+
+.search-input {
+  height: 36px;
+  width: 399px;
+  max-width: none !important;
+  border-radius: 4px !important;
+  background-color: #ffffff !important;
+  float: left;
+  padding-left: 45px !important;
+  border: 1px solid #b3bdc6 !important;
+  /* box-shadow: 0 0px 0px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15); */
+}
+
+.search-input::placeholder {
+  color: #828282;
+  font-size: 13px;
+}
+
+.search-input:hover {
+  background-color: #ffffff;
+}
+
+nb-select.appearance-outline.status-basic .select-button {
+  background: #fff;
+}
+
+.safari input::-webkit-contacts-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+
+input::-webkit-credentials-auto-fill-button {
+  width: 0;
+  margin: 0;
+}
+
+// input::-webkit-inner-spin-button {
+// display: none;
+// }
+
+.safari ::-webkit-inner-spin-button {
+  // display: none;
+  opacity: 0;
+}
+
+::-webkit-inner-spin-button:hover {
+  // display: block !important;
+  opacity: 1;
+}
+
+// <iframe _ngcontent-ng-c1144565491="" frameborder="0" src="https://help.datatrust.one/privacy-policy"></iframe>
+
+.status-basic:disabled {
+  color: #222b45 !important;
+}
+
+nb-radio.status-basic .native-input:disabled~.text {
+  color: #222b45 !important;
+}
+
+.mdc-text-field--filled.mdc-text-field--disabled .mdc-text-field__input {
+  color: #222b45 !important;
+}
