@@ -10,7 +10,7 @@
                 </label>
             </div>
             <div class="button-header">
-                <button nbButton class="button-submit-form ml-2">
+                <button nbButton class="button-submit-form ml-2" (click)="onSave()">
                     Lưu
                 </button>
             </div>
@@ -22,7 +22,7 @@
 </div>
 
 <ng-template #cruRef>
-    <form>
+    <form *ngIf="cruForm" [formGroup]="cruForm">
         <span class="sub-title">Thông tin cơ bản</span>
         <div class="info-wrapper">
             <div class="info-left">
@@ -31,7 +31,7 @@
                         Tên sản phẩm<span class="required">*</span>
                     </label>
                     <div class="input-container">
-                        <input nbInput type="text" id="name" placeholder="Nhập tên">
+                        <input nbInput type="text" formControlName="product_name" id="name" placeholder="Nhập tên">
                     </div>
                 </div>
                 <div class="info">
@@ -39,7 +39,7 @@
                         Xuất xứ<span class="required">*</span>
                     </label>
                     <div class="select-wrapper">
-                        <nb-select placeholder="Chọn xuất xứ">
+                        <nb-select formControlName="origin" placeholder="Chọn xuất xứ">
                             <nb-option *ngFor="let origin of originList" [value]="origin">
                                 {{origin}}
                             </nb-option>
@@ -51,13 +51,14 @@
                         Giá thành<span class="required">*</span>
                     </label>
                     <div class="input-container">
-                        <input nbInput type="text" id="unit_price" placeholder="Nhập giá thành">
+                        <input nbInput type="text" formControlName="unit_price" id="unit_price"
+                            placeholder="Nhập giá thành">
                     </div>
                 </div>
                 <div class="info">
                     <label for="description">Mô tả sản phẩm</label>
                     <div class="input-container">
-                        <textarea nbInput id="description" placeholder="Mô tả"></textarea>
+                        <textarea nbInput formControlName="description" id="description" placeholder="Mô tả"></textarea>
                     </div>
                 </div>
             </div>
@@ -71,7 +72,7 @@
                             <div class="image-child" *ngFor="let image of infoImageUrls;let i = index">
                                 <img [src]="image.url" class="image">
                                 <img [src]="icon_delete" class="common-icon"
-                                    (click)="removeInfoImageFiles(i, image.isNew)" />
+                                    (click)="onRemoveInfoImageFiles(i, image.isNew)" />
                             </div>
                         </div>
                         <div class="no-data-list" *ngIf="infoImageUrls.length === 0">

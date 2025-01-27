@@ -1,9 +1,15 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ImageResource } from "../../../../common/resource/image_resource";
 import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { NbButtonModule, NbCheckboxModule, NbInputModule, NbSelectModule } from "@nebular/theme";
 import { countries } from "../../../../common/resource/country_resource";
+import { Router } from "@angular/router";
+import { actions } from "../../../../common/resource/actions";
+import { ValueValidators } from "../../../../common/utils/validate/value.validate";
+import { ProductModel } from "../../../../data/model/product.model";
+import { ProductManagement } from "../../../../data/management/product.management";
+import { ProductService } from "../../../../data/service/product.service";
 
 const NB_LIBS = [
     NbInputModule,
@@ -24,10 +30,13 @@ declare const $: any;
         CommonModule,
         ReactiveFormsModule
     ],
-    providers: []
+    providers: [
+        ProductManagement,
+        ProductService
+    ]
 })
 
-export class CRUProductComponent {
+export class CRUProductComponent implements OnInit {
 
     icons_arrow_line = ImageResource.icons_arrow_line;
     icon_upload_v2 = ImageResource.icon_upload_v2;
@@ -35,12 +44,69 @@ export class CRUProductComponent {
 
     originList: string[] = countries;
 
+    actionWebs = actions;
+    action = this.actionWebs.CREATE;
+    cruForm!: FormGroup;
+
     selectedInfoFiles: File[] = [];
     infoImageUrls: { url: string, isNew: boolean }[] = [];
 
     constructor(
-
+        private router: Router,
+        private formBuilder: FormBuilder,
+        private productManagement: ProductManagement
     ) { }
+
+    ngOnInit() {
+        this.checkCreateOrUpdate();
+    }
+
+    checkCreateOrUpdate() {
+        this.initCreateForm();
+    }
+
+    initCreateForm() {
+        this.cruForm = this.formBuilder.group({
+            product_name: this.formBuilder.control('', [Validators.required]),
+            origin: this.formBuilder.control('', [Validators.required]),
+            unit_price: this.formBuilder.control('', [Validators.required, ValueValidators.isNumber]),
+            description: this.formBuilder.control('')
+        });
+    }
+
+    onSave() {
+        this.handleCreate();
+    }
+
+    async handleCreate() {
+        console.log(this.cruForm.value);
+        if (this.cruForm.invalid) {
+            console.log('INVALID FORM');
+            return;
+        }
+
+        try {
+            const instance = this.convertValueFormToModel();
+            await this.productManagement.createNewProduct(instance, this.selectedInfoFiles);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    convertValueFormToModel() {
+        const model = new ProductModel();
+
+        if (this.action === this.actionWebs.UPDATE) {
+            model.id = this.cruForm.getRawValue().id;
+        }
+        model.shopId = 1; // Tạm thời thế
+        model.product_name = this.cruForm.getRawValue().product_name;
+        model.origin = this.cruForm.getRawValue().origin;
+        model.unit_price = this.cruForm.getRawValue().unit_price;
+        model.description = this.cruForm.getRawValue().description;
+
+        return model;
+    }
 
     onChangeFiles(event: any, files: any) {
         const fileLists = files as FileList;
@@ -50,8 +116,6 @@ export class CRUProductComponent {
             event.target.value = "";
             return;
         }
-
-        this.selectedInfoFiles = [];
 
         for (let i = 0; i < fileLists.length; i++) {
             const file = fileLists.item(i);
@@ -63,7 +127,7 @@ export class CRUProductComponent {
         }
     }
 
-    removeInfoImageFiles(index: number, isNew: boolean) {
+    onRemoveInfoImageFiles(index: number, isNew: boolean) {
         this.infoImageUrls.splice(index, 1);
         if (isNew) {
             this.selectedInfoFiles.splice(index, 1);

@@ -1,3 +1,4 @@
 {
-    "apis": "http://localhost:3000/api/v1"
+    "apis": "http://localhost:3000/api",
+    "pre_image": "http://localhost:3000"
 }

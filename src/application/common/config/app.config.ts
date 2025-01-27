@@ -8,6 +8,7 @@ import { Router } from "@angular/router";
 
 export class AppConfig {
     private domain?: string;
+    private preImage?: string;
 
     constructor(
         private router: Router,
@@ -18,7 +19,7 @@ export class AppConfig {
         try {
             const config = await this.http.get<any>("assets/config.json").toPromise();
             this.setDomain(config?.apis);
-            console.log(this.domain);
+            this.setPreImage(config?.pre_image);
         } catch (error) {
             console.error('Error loading config: ', error);
         }
@@ -30,6 +31,14 @@ export class AppConfig {
 
     setDomain(domain: string) {
         this.domain = domain;
+    }
+
+    getPreImage() {
+        return this.preImage;
+    }
+
+    setPreImage(preImage: string) {
+        this.preImage = preImage;
     }
 
     getAccessToken() {
@@ -54,5 +63,11 @@ export class AppConfig {
 
     setRefreshToken(token: string) {
         localStorage.setItem('refresh-token', token);
+    }
+
+    clear() {
+        this.setDomain("");
+        this.setPreImage("");
+        localStorage.clear();
     }
 }

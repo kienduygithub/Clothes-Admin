@@ -1,0 +1,33 @@
+import { Injectable } from "@angular/core";
+import { AppConfig } from "../../common/config/app.config";
+import { ServiceCore } from "../../common/service/service-core";
+import { ProductModel } from "../model/product.model";
+
+@Injectable()
+export class ProductService {
+
+    constructor(
+        private serviceCore: ServiceCore,
+        private appConfig: AppConfig
+    ) { }
+
+    async createNewProduct(data: ProductModel, files: any): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const basicInfo = new ProductModel().convertObjToAdd(data);
+            const formData = new FormData();
+            formData.append('basicInfo', JSON.stringify(basicInfo));
+            for (let i = 0; i < files.length; i++) {
+                formData.append('infoImages', files[i]);
+            }
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `product/?shopId=${data.shopId}`,
+                formData
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+}
