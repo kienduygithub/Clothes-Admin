@@ -1,0 +1,108 @@
+<div class="screen">
+    <div class="layout-size">
+        <div class="d-flex align-items-center mb-2 header-form">
+            <!-- <div class="mr-3 icons_arrow_line">
+                <img src="{{ icons_arrow_line }}" class="icon-back" />
+            </div> -->
+            <div class="d-flex flex-column">
+                <label class="header-title">
+                    Thêm mới sản phẩm
+                </label>
+            </div>
+            <div class="button-header">
+                <button nbButton class="button-submit-form ml-2">
+                    Lưu
+                </button>
+            </div>
+        </div>
+        <div class="body-form">
+            <ng-container [ngTemplateOutlet]="cruRef"></ng-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #cruRef>
+    <form>
+        <span class="sub-title">Thông tin cơ bản</span>
+        <div class="info-wrapper">
+            <div class="info-left">
+                <div class="info">
+                    <label for="name">
+                        Tên sản phẩm<span class="required">*</span>
+                    </label>
+                    <div class="input-container">
+                        <input nbInput type="text" id="name" placeholder="Nhập tên">
+                    </div>
+                </div>
+                <div class="info">
+                    <label for="origin">
+                        Xuất xứ<span class="required">*</span>
+                    </label>
+                    <div class="select-wrapper">
+                        <nb-select placeholder="Chọn xuất xứ">
+                            <nb-option *ngFor="let origin of originList" [value]="origin">
+                                {{origin}}
+                            </nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+                <div class="info">
+                    <label for="unit_price">
+                        Giá thành<span class="required">*</span>
+                    </label>
+                    <div class="input-container">
+                        <input nbInput type="text" id="unit_price" placeholder="Nhập giá thành">
+                    </div>
+                </div>
+                <div class="info">
+                    <label for="description">Mô tả sản phẩm</label>
+                    <div class="input-container">
+                        <textarea nbInput id="description" placeholder="Mô tả"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="info-right">
+                <div class="info">
+                    <label>
+                        Danh sách ảnh<span class="required">*</span>
+                    </label>
+                    <div class="info-image-wrapper">
+                        <div class="image-list" *ngIf="infoImageUrls.length > 0">
+                            <div class="image-child" *ngFor="let image of infoImageUrls;let i = index">
+                                <img [src]="image.url" class="image">
+                                <img [src]="icon_delete" class="common-icon"
+                                    (click)="removeInfoImageFiles(i, image.isNew)" />
+                            </div>
+                        </div>
+                        <div class="no-data-list" *ngIf="infoImageUrls.length === 0">
+                            <span>Không có dữ liệu</span>
+                        </div>
+                        <label class="upload-image" for="info-product-files">
+                            <img [src]="icon_upload_v2">
+                            <span>Upload files</span>
+                        </label>
+                        <input #infoImageFiles (change)="onChangeFiles($event, infoImageFiles.files)" type="file"
+                            multiple id="info-product-files" accept=".png, .jpg, .jpeg" [hidden]="true" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="sub-title">Danh sách biến thể</span>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Hình ảnh</th>
+                        <th>Màu sản phẩm</th>
+                        <th>Kích cỡ sản phẩm</th>
+                        <th class="action">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </form>
+</ng-template>

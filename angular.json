@@ -49,9 +49,13 @@
               "src/application/common/layout/styles/input.styles.scss",
               "src/application/common/layout/styles/themes.scss",
               "src/application/common/layout/styles/tab.scss",
-              "src/application/common/layout/styles/icon.css"
+              "src/application/common/layout/styles/icon.css",
+              "node_modules/dropify/dist/css/dropify.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/dropify/dist/js/dropify.min.js"
+            ]
           },
           "configurations": {
             "production": {

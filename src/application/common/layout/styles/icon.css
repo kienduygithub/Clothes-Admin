@@ -1,4 +1,9 @@
-.icon_delete{
-    width: 17px;
+.icon_delete {
+    width : 17px;
     height: 17px;
+}
+
+.common-icon {
+    width : 18px;
+    height: 18px;
 }

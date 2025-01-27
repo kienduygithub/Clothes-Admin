@@ -18,7 +18,7 @@ export const MENU_ITEMS: any[] = [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh sách sản phẩm',
-                link: '/shop/product',
+                link: '/shop/product/products',
                 pathMatch: 'prefix'
             },
             {
@@ -33,6 +33,12 @@ export const MENU_ITEMS: any[] = [
                 link: '/shop/product/category',
                 pathMatch: 'prefix'
             },
+            {
+                icon: { icon: 'dot_icon', pack: 'mainIcon' },
+                title: 'Thêm mới sản phẩm',
+                link: '/shop/product/products/create',
+                pathMatch: 'prefix'
+            }
         ],
     },
     {

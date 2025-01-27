@@ -1,0 +1,149 @@
+.required {
+    color: #FF0000;
+}
+
+.info-wrapper {
+    display: flex;
+    padding: 10px 15px;
+    gap: 20px;
+
+    .info-left,
+    .info-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .info {
+            display: flex;
+
+            label {
+                font-size: 14px;
+                font-weight: 400;
+                display: block;
+                line-height: 36px;
+                width: 150px;
+                flex-shrink: 0;
+            }
+
+        }
+    }
+}
+
+.info-image-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+
+    .image-list {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        width: 100%;
+        max-width: 400px;
+        height: 240px;
+        max-height: 240px;
+        overflow: auto;
+        border: 1px solid #e4e9f2;
+        border-radius: 5px;
+        color: #222b45;
+
+        &::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .image-child {
+            width: 100%;
+            height: 120px;
+            padding: 10px 0;
+            border-top: 1px solid #e4e9f2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            img.image {
+                width: 80px;
+                height: 100%;
+                overflow: hidden;
+            }
+        }
+    }
+
+    .no-data-list {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        width: 100%;
+        max-width: 400px;
+        height: 240px;
+        border: 1px solid #e4e9f2;
+        border-radius: 5px;
+        background-color: #e4e9f2;
+
+        span {
+            color: #444;
+            font-size: 14px;
+            font-weight: 500;
+        }
+    }
+}
+
+label.upload-image {
+    width: 120px;
+    height: 72px;
+    border: 1px dashed #e4e9f2;
+    border-radius: 5px;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    img {
+        height: 32px;
+        width: 32px;
+    }
+
+    span {
+        height: fit-content !important;
+        line-height: 24px !important;
+        font-size: 14px;
+        font-weight: 500;
+        color: #ccc;
+        user-select: none;
+    }
+
+    &:hover {
+        border-color: #3366ff;
+    }
+}
+
+textarea {
+    height: 151px !important;
+    max-width: 600px !important;
+}
+
+.select-wrapper {
+    width: 100%;
+
+    ::ng-deep nb-select {
+        width: 100%;
+        max-width: 600px !important;
+
+        button {
+            width: 100%;
+            background-color: white !important;
+        }
+    }
+}
+
+.input-container {
+    max-width: 600px !important;
+
+    input {
+        width: 100%;
+        max-width: 600px !important;
+    }
+}

@@ -517,3 +517,21 @@ nb-menu .menu-item .menu-icon {
     background-color: #e75354;
   }
 }
+
+span.sub-title {
+  display: block;
+  width: 100%;
+  padding: 5px 8px;
+  margin-bottom: 10px;
+  background-color: #4A739F;
+  color: white;
+  font-weight: 700;
+}
+
+nb-option-list {
+  ul {
+    &::-webkit-scrollbar {
+      width: 3px !important;
+    }
+  }
+}
