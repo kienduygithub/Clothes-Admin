@@ -5,5 +5,9 @@ export const ProductRouting: Routes = [
     {
         path: 'shop/product/products/create',
         component: CRUProductComponent
+    },
+    {
+        path: 'shop/product/products/view',
+        component: CRUProductComponent
     }
 ];

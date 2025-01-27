@@ -1,10 +1,11 @@
 import { Component, OnInit } from "@angular/core";
+import { ProductListComponent } from "./product-list/product-list.component";
 
 @Component({
     selector: 'app-product',
     standalone: true,
     imports: [
-
+        ProductListComponent
     ],
     providers: [
 

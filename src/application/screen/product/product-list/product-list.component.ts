@@ -1,0 +1,62 @@
+import { Component, OnInit } from "@angular/core";
+import { ProductManagement } from "../../../data/management/product.management";
+import { ProductService } from "../../../data/service/product.service";
+import { Router } from "@angular/router";
+import { ProductModel } from "../../../data/model/product.model";
+import { AppConfig } from "../../../common/config/app.config";
+import { CommonModule } from "@angular/common";
+import { NbButtonModule, NbIconModule, NbInputModule, NbTooltipModule } from "@nebular/theme";
+
+const NB_LIBS = [
+    NbInputModule,
+    NbButtonModule,
+    NbIconModule,
+    NbTooltipModule
+]
+
+@Component({
+    selector: 'product-list-component',
+    standalone: true,
+    templateUrl: './product-list.component.html',
+    styleUrl: './product-list.component.scss',
+    imports: [
+        ...NB_LIBS,
+        CommonModule,
+    ],
+    providers: [
+        ProductManagement,
+        ProductService
+    ]
+})
+
+export class ProductListComponent implements OnInit {
+
+    preImage: string = '';
+    allProducts: ProductModel[] = [];
+
+    constructor(
+        private router: Router,
+        private appConfig: AppConfig,
+        private productManagement: ProductManagement
+    ) { }
+
+    async ngOnInit() {
+        this.preImage = this.appConfig.getPreImage() ?? "";
+        await this.fetchAllProducts();
+    }
+
+    async fetchAllProducts() {
+        try {
+            let shopId: any = this.appConfig.getShopId();
+            shopId = 1; // Nhớ sửa sau
+            this.allProducts = await this.productManagement.fetchAllProductsByShopId(shopId);
+            console.log(this.allProducts[0].unit_price);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    onUpdateProduct(id: number) {
+        this.router.navigate(['shop/product/products/view'], { queryParams: { id: id } });
+    }
+}

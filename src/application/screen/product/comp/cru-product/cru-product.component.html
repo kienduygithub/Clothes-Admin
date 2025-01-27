@@ -1,17 +1,22 @@
 <div class="screen">
     <div class="layout-size">
         <div class="d-flex align-items-center mb-2 header-form">
-            <!-- <div class="mr-3 icons_arrow_line">
+            <div class="mr-3 icons_arrow_line" *ngIf="action === actionWebs.UPDATE" (click)="onCancel()">
                 <img src="{{ icons_arrow_line }}" class="icon-back" />
-            </div> -->
+            </div>
             <div class="d-flex flex-column">
                 <label class="header-title">
                     Thêm mới sản phẩm
                 </label>
             </div>
             <div class="button-header">
+                <button nbButton *ngIf="action === actionWebs.UPDATE" class="button-cancel-form" (click)="onCancel()">
+                    Hủy
+                </button>
                 <button nbButton class="button-submit-form ml-2" (click)="onSave()">
-                    Lưu
+                    {{
+                    action === actionWebs.CREATE ? 'Thêm mới' : 'Lưu'
+                    }}
                 </button>
             </div>
         </div>

@@ -41,6 +41,19 @@ export class AppConfig {
         this.preImage = preImage;
     }
 
+    getShopId() {
+        const shopId = localStorage.getItem('shopId');
+        if (!shopId) {
+            // Xử lý vụ đăng xuất
+            return "";
+        }
+        return shopId;
+    }
+
+    setShopId(shopId: number) {
+        localStorage.setItem('shopId', JSON.stringify(shopId));
+    }
+
     getAccessToken() {
         const accessToken = localStorage.getItem('access-token');
         if (accessToken) {

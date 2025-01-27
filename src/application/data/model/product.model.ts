@@ -4,7 +4,7 @@ export class ProductModel {
     product_name?: string;
     origin?: string;
     description?: string;
-    unit_price?: number;
+    unit_price?: string;
     sold_quantity?: number;
     image_urls?: ProductImagesModel[];
     createdAt?: string;
@@ -15,7 +15,7 @@ export class ProductModel {
         product_name?: string,
         origin?: string,
         description?: string,
-        unit_price?: number,
+        unit_price?: string,
         sold_quantity?: number,
         image_urls?: ProductImagesModel[],
         createdAt?: string,
@@ -25,10 +25,31 @@ export class ProductModel {
         this.product_name = product_name ?? "";
         this.origin = origin ?? "Việt Nam";
         this.description = description ?? "";
-        this.unit_price = unit_price ?? 0.00;
+        this.unit_price = unit_price ?? "0.00";
         this.sold_quantity = sold_quantity ?? 0;
         this.image_urls = image_urls ?? [];
         this.createdAt = createdAt ?? "";
+    }
+
+    convertObj(obj: any) {
+        const model = new ProductModel();
+        model.id = obj.id;
+        model.shopId = obj.shopId;
+        model.product_name = obj.product_name;
+        model.origin = obj.origin;
+        model.unit_price = obj.unit_price;
+        model.description = obj.description;
+        model.sold_quantity = obj.sold_quantity;
+        model.image_urls = obj.product_images.map((item: any) => {
+            const productImages = new ProductImagesModel();
+            productImages.id = item.id;
+            productImages.productId = item.productId;
+            productImages.image_url = item.image_url;
+            return productImages;
+        });
+        model.createdAt = obj.createdAt;
+
+        return model;
     }
 
     convertObjToAdd(obj: ProductModel) {

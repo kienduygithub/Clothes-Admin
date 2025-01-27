@@ -4,7 +4,7 @@ import { CommonModule } from "@angular/common";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { NbButtonModule, NbCheckboxModule, NbInputModule, NbSelectModule } from "@nebular/theme";
 import { countries } from "../../../../common/resource/country_resource";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { actions } from "../../../../common/resource/actions";
 import { ValueValidators } from "../../../../common/utils/validate/value.validate";
 import { ProductModel } from "../../../../data/model/product.model";
@@ -47,12 +47,14 @@ export class CRUProductComponent implements OnInit {
     actionWebs = actions;
     action = this.actionWebs.CREATE;
     cruForm!: FormGroup;
+    updatedProduct!: ProductModel;
 
     selectedInfoFiles: File[] = [];
     infoImageUrls: { url: string, isNew: boolean }[] = [];
 
     constructor(
         private router: Router,
+        private activatedRoute: ActivatedRoute,
         private formBuilder: FormBuilder,
         private productManagement: ProductManagement
     ) { }
@@ -62,7 +64,15 @@ export class CRUProductComponent implements OnInit {
     }
 
     checkCreateOrUpdate() {
-        this.initCreateForm();
+        this.activatedRoute.queryParams.subscribe((params) => {
+            if (params['id']) {
+                this.action = actions.UPDATE;
+                this.initUpdateForm();
+            } else {
+                this.action = actions.CREATE;
+                this.initCreateForm();
+            }
+        })
     }
 
     initCreateForm() {
@@ -72,6 +82,22 @@ export class CRUProductComponent implements OnInit {
             unit_price: this.formBuilder.control('', [Validators.required, ValueValidators.isNumber]),
             description: this.formBuilder.control('')
         });
+    }
+
+    initUpdateForm() {
+        try {
+
+        } catch (error) {
+            console.log(error);
+        }
+        if (!this.updatedProduct) {
+            // this.action = actions.CREATE;
+            this.initCreateForm();
+        }
+    }
+
+    onCancel() {
+        this.router.navigate(['/shop/product/products']);
     }
 
     onSave() {

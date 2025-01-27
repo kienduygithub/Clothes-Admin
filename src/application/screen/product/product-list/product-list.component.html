@@ -1,0 +1,70 @@
+<div class="router-static">
+    <div class="search-and-add">
+        <!-- <button nbButton class="button-submit-form ml-2">
+            Thêm Nat rule
+        </button> -->
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>Hình ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Xuất xứ</th>
+                    <th>Giá thành</th>
+                    <th>Tồn kho</th>
+                    <th style="color: transparent">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let product of allProducts; let i = index">
+                    <td style="width: 5%;">
+                        <span style="font-size: 14px;">
+                            {{i + 1}}
+                        </span>
+                    </td>
+                    <td style="width: 8%;">
+                        <div class="image-container">
+                            <img *ngIf="product.image_urls" src="{{preImage}}/{{product.image_urls[0].image_url}}">
+                        </div>
+                    </td>
+                    <td style="width: 22%;">
+                        <span style="font-size: 14px;">
+                            {{product.product_name}}
+                        </span>
+                    </td>
+                    <td style="width: 16%;">
+                        <span style="font-size: 14px;">
+                            {{product.origin}}
+                        </span>
+                    </td>
+                    <td style="width: 20%;">
+                        <span style="font-size: 14px;">
+                            đ{{product.unit_price}}
+                        </span>
+                    </td>
+                    <td style="width: 10%;">
+                        <span style="font-size: 14px;">
+                            100
+                        </span>
+                    </td>
+                    <td style="width: 19%;" (click)="$event.stopPropagation()">
+                        <div class="list-actions">
+                            <nb-icon class="common-icon" icon="icon_edit" pack="mainIcon" [nbTooltip]="'Chỉnh sửa'"
+                                nbTooltipPlacement="bottom" (click)="onUpdateProduct(product.id!)"></nb-icon>
+                            <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"
+                                nbTooltipPlacement="bottom">
+                            </nb-icon>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="allProducts.length === 0">
+                    <td class="table-no-data text-center" colspan="11">
+                        Không có dữ liệu
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -17,9 +17,10 @@ export class ServiceCore {
   async GET(domain: string, url: string, options?: any): Promise<any> {
     try {
       let optionsConfig = {
-        headers: new HttpHeaders({
-          Authorization: this.appConfig.getAccessToken(),
-        }),
+        // headers: new HttpHeaders({
+        //   Authorization: this.appConfig.getAccessToken(),
+        // }),
+        // withCredentials: true
       };
       const result = await this.http
         .get<any>(`${domain}/${url}`, options ?? optionsConfig)
@@ -38,9 +39,10 @@ export class ServiceCore {
   async POST(domain: string, url: string, body: any | null, options?: any): Promise<any> {
     try {
       let optionsConfig = {
-        headers: new HttpHeaders({
-          Authorization: this.appConfig.getAccessToken(),
-        }),
+        // headers: new HttpHeaders({
+        //   Authorization: this.appConfig.getAccessToken(),
+        // }),
+        // withCredentials: true
       };
 
       const result = await this.http
@@ -60,9 +62,10 @@ export class ServiceCore {
   async PUT(domain: string, url: string, body?: any | null, options?: any): Promise<any> {
     try {
       let optionsConfig = {
-        headers: new HttpHeaders({
-          Authorization: this.appConfig.getAccessToken(),
-        }),
+        // headers: new HttpHeaders({
+        //   Authorization: this.appConfig.getAccessToken(),
+        // }),
+        // withCredentials: true
       };
 
       const result = await this.http
@@ -82,9 +85,10 @@ export class ServiceCore {
   async DETELE(domain: string, url: string, options?: any): Promise<any> {
     try {
       let optionsConfig = {
-        headers: new HttpHeaders({
-          Authorization: this.appConfig.getAccessToken(),
-        }),
+        // headers: new HttpHeaders({
+        //   Authorization: this.appConfig.getAccessToken(),
+        // }),
+        // withCredentials: true
       };
 
       const result = await this.http
@@ -104,9 +108,10 @@ export class ServiceCore {
   async PATCH(domain: string, url: string, body?: any | null, options?: any) {
     try {
       let optionsConfig = {
-        headers: new HttpHeaders({
-          Authorization: this.appConfig.getAccessToken(),
-        }),
+        // headers: new HttpHeaders({
+        //   Authorization: this.appConfig.getAccessToken(),
+        // }),
+        // withCredentials: true
       };
 
       const result = await this.http

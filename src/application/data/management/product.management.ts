@@ -16,4 +16,14 @@ export class ProductManagement {
             throw error;
         }
     }
+
+    async fetchAllProductsByShopId(shopId: number) {
+        try {
+            const result = await this.productService.fetchAllProductByShopId(shopId);
+            const response = result?.body?.products?.map((product: any) => new ProductModel().convertObj(product));
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
