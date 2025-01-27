@@ -2,43 +2,37 @@ export const MENU_ITEMS: any[] = [
     {
         title: 'Tổng quan',
         icon: { icon: 'dashboard_icon', pack: 'mainIcon' },
-        link: '/',
+        link: '/overview',
     },
     {
-        title: 'Quản lý mạng',
+        title: 'Người dùng',
         icon: { icon: 'reports_icon', pack: 'mainIcon' },
-        link: '/network-management',
+        link: '/user',
     },
     {
-        title: 'Cấu hình mạng',
+        title: 'Sản phẩm',
         icon: { icon: 'network_icon', pack: 'mainIcon' },
-        link: '/network',
+        link: '/shop/product',
         pathMatch: 'prefix',
         children: [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Giao diện mạng',
-                link: '/network/interface',
+                title: 'Danh sách sản phẩm',
+                link: '/shop/product',
                 pathMatch: 'prefix'
             },
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Định tuyến',
-                link: '/network/routing',
+                title: 'Danh sách biến thể',
+                link: '/shop/product/variants',
                 pathMatch: 'prefix'
             },
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'DHCP và DNS',
-                link: '/network/dhcp-dns',
+                title: 'Danh mục sản phẩm',
+                link: '/shop/product/category',
                 pathMatch: 'prefix'
             },
-            {
-                icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Static lease',
-                link: '/network/static-lease',
-                pathMatch: 'prefix'
-            }
         ],
     },
     {

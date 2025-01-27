@@ -1709,7 +1709,7 @@ template {
     font-size  : .8125rem;
     font-weight: 600;
     line-height: 1.5rem;
-    padding    : .75rem 1rem
+    padding    : .75rem 1rem;
 }
 
 .nb-theme-default nb-menu .menu-group,
@@ -1784,7 +1784,8 @@ template {
     border-color: rgba(0, 0, 0, 0);
     border-style: solid;
     border-width: 0;
-    padding     : .75rem 1rem
+    padding     : .75rem 1rem;
+    margin-left : 0px;
 }
 
 .nb-theme-default nb-menu .menu-item>.menu-items>.menu-item a.active {
