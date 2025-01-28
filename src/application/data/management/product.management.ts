@@ -26,4 +26,14 @@ export class ProductManagement {
             throw error;
         }
     }
+
+    async fetchProductById(productId: number) {
+        try {
+            const result = await this.productService.fetchProductById(productId);
+            const response = result?.body?.products?.map((product: any) => new ProductModel().convertObj(product));
+            return response[0];
+        } catch (error) {
+            throw error;
+        }
+    }
 }

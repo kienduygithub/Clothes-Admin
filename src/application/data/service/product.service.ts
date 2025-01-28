@@ -44,4 +44,16 @@ export class ProductService {
         }
     }
 
+    async fetchProductById(productId: number): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.GET(
+                `${domain}`,
+                `product/${productId}`
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

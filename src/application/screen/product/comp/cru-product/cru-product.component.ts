@@ -1,13 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { ImageResource } from "../../../../common/resource/image_resource";
 import { CommonModule } from "@angular/common";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { NbButtonModule, NbCheckboxModule, NbInputModule, NbSelectModule } from "@nebular/theme";
 import { countries } from "../../../../common/resource/country_resource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { actions } from "../../../../common/resource/actions";
 import { ValueValidators } from "../../../../common/utils/validate/value.validate";
-import { ProductModel } from "../../../../data/model/product.model";
+import { ProductImagesModel, ProductModel } from "../../../../data/model/product.model";
 import { ProductManagement } from "../../../../data/management/product.management";
 import { ProductService } from "../../../../data/service/product.service";
 
@@ -48,6 +48,9 @@ export class CRUProductComponent implements OnInit {
     action = this.actionWebs.CREATE;
     cruForm!: FormGroup;
     updatedProduct!: ProductModel;
+    updatedId!: number;
+    updatedName!: string;
+    updatedImageUrls: ProductImagesModel[] = [];
 
     selectedInfoFiles: File[] = [];
     infoImageUrls: { url: string, isNew: boolean }[] = [];
@@ -59,15 +62,16 @@ export class CRUProductComponent implements OnInit {
         private productManagement: ProductManagement
     ) { }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.checkCreateOrUpdate();
     }
 
     checkCreateOrUpdate() {
-        this.activatedRoute.queryParams.subscribe((params) => {
+        this.activatedRoute.queryParams.subscribe(async (params) => {
             if (params['id']) {
                 this.action = actions.UPDATE;
-                this.initUpdateForm();
+                this.updatedId = params['id'];
+                await this.initUpdateForm();
             } else {
                 this.action = actions.CREATE;
                 this.initCreateForm();
@@ -84,15 +88,36 @@ export class CRUProductComponent implements OnInit {
         });
     }
 
-    initUpdateForm() {
+    async initUpdateForm() {
         try {
-
+            this.updatedProduct = await this.productManagement.fetchProductById(this.updatedId);
         } catch (error) {
             console.log(error);
         }
         if (!this.updatedProduct) {
-            // this.action = actions.CREATE;
+            this.action = actions.CREATE;
             this.initCreateForm();
+        } else {
+            console.log(this.updatedProduct);
+            this.updatedName = this.updatedProduct.product_name ?? '';
+            this.cruForm = this.formBuilder.group({
+                product_name: this.formBuilder.control(this.updatedProduct.product_name ?? '', [Validators.required]),
+                origin: this.formBuilder.control(this.updatedProduct.origin, [Validators.required]),
+                unit_price: this.formBuilder.control(this.updatedProduct.unit_price, [Validators.required, ValueValidators.isNumber]),
+                description: this.formBuilder.control(this.updatedProduct.description),
+                image_urls: this.formBuilder.array([])
+            });
+            this.updatedImageUrls = this.updatedProduct.image_urls?.map(item => item) ?? [];
+            this.updatedImageUrls.forEach(item => {
+                this.getArrayControl('image_urls').push(
+                    this.formBuilder.group({
+                        id: item.id,
+                        productId: item.productId,
+                        image_url: item.image_url
+                    })
+                )
+            });
+            console.log(this.getArrayControl('image_urls').value)
         }
     }
 
@@ -133,6 +158,14 @@ export class CRUProductComponent implements OnInit {
 
         return model;
     }
+
+    getFormControl(controlName: string) {
+        return this.cruForm.get(controlName);
+    }
+
+    getArrayControl(controlName: string) {
+        return this.cruForm.get(controlName) as FormArray;
+    };
 
     onChangeFiles(event: any, files: any) {
         const fileLists = files as FileList;
