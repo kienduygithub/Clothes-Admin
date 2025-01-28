@@ -11,6 +11,10 @@ import { ProductImagesModel, ProductModel } from "../../../../data/model/product
 import { ProductManagement } from "../../../../data/management/product.management";
 import { ProductService } from "../../../../data/service/product.service";
 import { AppConfig } from "../../../../common/config/app.config";
+import { ColorModel } from "../../../../data/model/attribute/color.model";
+import { SizeModel } from "../../../../data/model/attribute/size.model";
+import { AttributeManagement } from "../../../../data/management/attribute.management";
+import { AttributeService } from "../../../../data/service/attribute.service";
 
 const NB_LIBS = [
     NbInputModule,
@@ -33,7 +37,9 @@ declare const $: any;
     ],
     providers: [
         ProductManagement,
-        ProductService
+        ProductService,
+        AttributeManagement,
+        AttributeService
     ]
 })
 
@@ -57,17 +63,34 @@ export class CRUProductComponent implements OnInit {
     selectedInfoFiles: File[] = [];
     infoImageUrls: { url: string, isNew: boolean }[] = [];
 
+    allColors: ColorModel[] = [];
+    allSizes: SizeModel[] = [];
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private appConfig: AppConfig,
         private formBuilder: FormBuilder,
-        private productManagement: ProductManagement
+        private productManagement: ProductManagement,
+        private attributeManagement: AttributeManagement
     ) { }
 
     async ngOnInit() {
+        await this.fetchAllAttributes();
         this.preImage = this.appConfig.getPreImage() ?? "";
         this.checkCreateOrUpdate();
+    }
+
+    async fetchAllAttributes() {
+        try {
+            this.allColors = await this.attributeManagement.fetchAllColors();
+            this.allSizes = await this.attributeManagement.fetchAllSizes();
+
+            console.log(this.allColors);
+            console.log(this.allSizes);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     checkCreateOrUpdate() {
