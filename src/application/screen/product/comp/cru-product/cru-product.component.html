@@ -72,15 +72,23 @@
                     <label>
                         Danh sách ảnh<span class="required">*</span>
                     </label>
-                    <div class="info-image-wrapper">
-                        <div class="image-list" *ngIf="infoImageUrls.length > 0">
+                    <div class="info-image-wrapper" formArrayName="image_urls">
+                        <div class="image-list"
+                            *ngIf="(cruForm.get('image_urls')?.value.length + infoImageUrls.length) > 0">
+                            <div class="image-child"
+                                *ngFor="let image of cruForm.get('image_urls')?.value;let i = index">
+                                <img src="{{preImage}}/{{image.image_url}}" class="image">
+                                <img [src]="icon_delete" class="common-icon"
+                                    (click)="onRemoveInfoImageFiles(i, false)" />
+                            </div>
                             <div class="image-child" *ngFor="let image of infoImageUrls;let i = index">
                                 <img [src]="image.url" class="image">
                                 <img [src]="icon_delete" class="common-icon"
                                     (click)="onRemoveInfoImageFiles(i, image.isNew)" />
                             </div>
                         </div>
-                        <div class="no-data-list" *ngIf="infoImageUrls.length === 0">
+                        <div class="no-data-list"
+                            *ngIf="(cruForm.get('image_urls')?.value.length + infoImageUrls.length) === 0">
                             <span>Không có dữ liệu</span>
                         </div>
                         <label class="upload-image" for="info-product-files">

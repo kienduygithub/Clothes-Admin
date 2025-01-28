@@ -31,6 +31,26 @@ export class ProductService {
         }
     }
 
+    async updateProduct(data: ProductModel, files: any): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const basicInfo = new ProductModel().convertObjToUpdate(data);
+            const formData = new FormData();
+            formData.append('basicInfo', JSON.stringify(basicInfo));
+            for (let i = 0; i < files.length; i++) {
+                formData.append('infoImages', files[i]);
+            }
+            const response = this.serviceCore.PATCH(
+                `${domain}`,
+                `product/${data.id}`,
+                formData
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async fetchAllProductByShopId(shopId: number): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();

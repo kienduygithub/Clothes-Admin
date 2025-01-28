@@ -63,6 +63,7 @@ export class ProductModel {
 
     convertObjToUpdate(obj: ProductModel) {
         return {
+            shopId: obj.shopId,
             product_name: obj.product_name,
             origin: obj.origin,
             description: obj.description,

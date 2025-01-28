@@ -6,6 +6,7 @@ import { ProductModel } from "../../../data/model/product.model";
 import { AppConfig } from "../../../common/config/app.config";
 import { CommonModule } from "@angular/common";
 import { NbButtonModule, NbIconModule, NbInputModule, NbTooltipModule } from "@nebular/theme";
+import { ImageResource } from "../../../common/resource/image_resource";
 
 const NB_LIBS = [
     NbInputModule,
@@ -30,6 +31,8 @@ const NB_LIBS = [
 })
 
 export class ProductListComponent implements OnInit {
+
+    image_not_found: string = ImageResource.image_not_found;
 
     preImage: string = '';
     allProducts: ProductModel[] = [];

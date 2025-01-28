@@ -10,6 +10,7 @@ import { ValueValidators } from "../../../../common/utils/validate/value.validat
 import { ProductImagesModel, ProductModel } from "../../../../data/model/product.model";
 import { ProductManagement } from "../../../../data/management/product.management";
 import { ProductService } from "../../../../data/service/product.service";
+import { AppConfig } from "../../../../common/config/app.config";
 
 const NB_LIBS = [
     NbInputModule,
@@ -42,6 +43,7 @@ export class CRUProductComponent implements OnInit {
     icon_upload_v2 = ImageResource.icon_upload_v2;
     icon_delete = ImageResource.delete_button;
 
+    preImage: string = '';
     originList: string[] = countries;
 
     actionWebs = actions;
@@ -58,11 +60,13 @@ export class CRUProductComponent implements OnInit {
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
+        private appConfig: AppConfig,
         private formBuilder: FormBuilder,
         private productManagement: ProductManagement
     ) { }
 
     async ngOnInit() {
+        this.preImage = this.appConfig.getPreImage() ?? "";
         this.checkCreateOrUpdate();
     }
 
@@ -84,7 +88,8 @@ export class CRUProductComponent implements OnInit {
             product_name: this.formBuilder.control('', [Validators.required]),
             origin: this.formBuilder.control('', [Validators.required]),
             unit_price: this.formBuilder.control('', [Validators.required, ValueValidators.isNumber]),
-            description: this.formBuilder.control('')
+            description: this.formBuilder.control(''),
+            image_urls: this.formBuilder.array([])
         });
     }
 
@@ -98,7 +103,6 @@ export class CRUProductComponent implements OnInit {
             this.action = actions.CREATE;
             this.initCreateForm();
         } else {
-            console.log(this.updatedProduct);
             this.updatedName = this.updatedProduct.product_name ?? '';
             this.cruForm = this.formBuilder.group({
                 product_name: this.formBuilder.control(this.updatedProduct.product_name ?? '', [Validators.required]),
@@ -111,13 +115,12 @@ export class CRUProductComponent implements OnInit {
             this.updatedImageUrls.forEach(item => {
                 this.getArrayControl('image_urls').push(
                     this.formBuilder.group({
-                        id: item.id,
-                        productId: item.productId,
-                        image_url: item.image_url
+                        id: this.formBuilder.control(item.id),
+                        productId: this.formBuilder.control(item.productId),
+                        image_url: this.formBuilder.control(item.image_url)
                     })
                 )
             });
-            console.log(this.getArrayControl('image_urls').value)
         }
     }
 
@@ -125,8 +128,12 @@ export class CRUProductComponent implements OnInit {
         this.router.navigate(['/shop/product/products']);
     }
 
-    onSave() {
-        this.handleCreate();
+    async onSave() {
+        if (this.action === actions.CREATE) {
+            await this.handleCreate();
+        } else if (this.action === actions.UPDATE) {
+            await this.handleUpdate();
+        }
     }
 
     async handleCreate() {
@@ -144,17 +151,33 @@ export class CRUProductComponent implements OnInit {
         }
     }
 
+    async handleUpdate() {
+        console.log(this.cruForm.value);
+        if (this.cruForm.invalid) {
+            console.log('INVALID FORM');
+            return;
+        }
+
+        try {
+            const instance = this.convertValueFormToModel();
+            await this.productManagement.updateProduct(instance, this.selectedInfoFiles);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     convertValueFormToModel() {
         const model = new ProductModel();
 
         if (this.action === this.actionWebs.UPDATE) {
-            model.id = this.cruForm.getRawValue().id;
+            model.id = this.updatedId;
         }
         model.shopId = 1; // Tạm thời thế
-        model.product_name = this.cruForm.getRawValue().product_name;
+        model.product_name = this.cruForm.getRawValue().product_name === this.updatedName ? undefined : this.cruForm.getRawValue().product_name;
         model.origin = this.cruForm.getRawValue().origin;
         model.unit_price = this.cruForm.getRawValue().unit_price;
         model.description = this.cruForm.getRawValue().description;
+        model.image_urls = this.cruForm.getRawValue().image_urls;
 
         return model;
     }
@@ -187,9 +210,11 @@ export class CRUProductComponent implements OnInit {
     }
 
     onRemoveInfoImageFiles(index: number, isNew: boolean) {
-        this.infoImageUrls.splice(index, 1);
         if (isNew) {
+            this.infoImageUrls.splice(index, 1);
             this.selectedInfoFiles.splice(index, 1);
+        } else {
+            this.getArrayControl('image_urls').removeAt(index);
         }
     }
 }

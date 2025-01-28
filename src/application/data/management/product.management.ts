@@ -12,6 +12,16 @@ export class ProductManagement {
     async createNewProduct(data: ProductModel, files: any) {
         try {
             await this.productService.createNewProduct(data, files);
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async updateProduct(data: ProductModel, files: any) {
+        try {
+            await this.productService.updateProduct(data, files);
+            return true;
         } catch (error) {
             throw error;
         }
