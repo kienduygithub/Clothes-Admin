@@ -7,6 +7,7 @@ export class ProductModel {
     unit_price?: string;
     sold_quantity?: number;
     image_urls?: ProductImagesModel[];
+    product_variants?: ProductVariantModel[];
     createdAt?: string;
 
     constructor(
@@ -18,6 +19,7 @@ export class ProductModel {
         unit_price?: string,
         sold_quantity?: number,
         image_urls?: ProductImagesModel[],
+        product_variants?: ProductVariantModel[],
         createdAt?: string,
     ) {
         this.id = id ?? 0;
@@ -28,6 +30,7 @@ export class ProductModel {
         this.unit_price = unit_price ?? "0.00";
         this.sold_quantity = sold_quantity ?? 0;
         this.image_urls = image_urls ?? [];
+        this.product_variants = product_variants ?? [];
         this.createdAt = createdAt ?? "";
     }
 
@@ -47,6 +50,7 @@ export class ProductModel {
             productImages.image_url = item.image_url;
             return productImages;
         });
+        model.product_variants = obj.product_variants?.map((variant: any) => new ProductVariantModel().convertObj(variant)) ?? [];
         model.createdAt = obj.createdAt;
 
         return model;
@@ -58,6 +62,7 @@ export class ProductModel {
             origin: obj.origin,
             description: obj.description,
             unit_price: obj.unit_price,
+            product_variants: obj.product_variants
         }
     };
 
@@ -86,5 +91,38 @@ export class ProductImagesModel {
         this.id = id ?? 0;
         this.productId = productId ?? 0;
         this.image_url = image_url ?? "";
+    }
+}
+
+export class ProductVariantModel {
+    id?: number;
+    productId?: number;
+    colorId?: number;
+    sizeId?: number;
+    image_url?: string;
+
+    constructor(
+        id?: number,
+        productId?: number,
+        colorId?: number,
+        sizeId?: number,
+        image_url?: string,
+    ) {
+        this.id = id ?? 0;
+        this.productId = productId ?? 0;
+        this.colorId = colorId ?? 0;
+        this.sizeId = sizeId ?? 0;
+        this.image_url = image_url ?? '';
+    }
+
+    convertObj(data: any) {
+        const model = new ProductVariantModel();
+        model.id = data.id;
+        model.productId = data.productId;
+        model.colorId = data.colorId;
+        model.sizeId = data.sizeId;
+        model.image_url = data.image_url;
+
+        return model;
     }
 }

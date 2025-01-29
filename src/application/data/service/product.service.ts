@@ -11,7 +11,7 @@ export class ProductService {
         private appConfig: AppConfig
     ) { }
 
-    async createNewProduct(data: ProductModel, files: any): Promise<any> {
+    async createNewProduct(data: ProductModel, files: any, variantFiles: any): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
             const basicInfo = new ProductModel().convertObjToAdd(data);
@@ -19,6 +19,9 @@ export class ProductService {
             formData.append('basicInfo', JSON.stringify(basicInfo));
             for (let i = 0; i < files.length; i++) {
                 formData.append('infoImages', files[i]);
+            }
+            for (let i = 0; i < variantFiles.length; i++) {
+                formData.append('variantImages', variantFiles[i]);
             }
             const response = await this.serviceCore.POST(
                 `${domain}`,

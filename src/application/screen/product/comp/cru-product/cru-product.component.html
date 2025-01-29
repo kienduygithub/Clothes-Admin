@@ -102,19 +102,66 @@
             </div>
         </div>
         <span class="sub-title">Danh sách biến thể</span>
+        <div>
+            <button nbButton class="button-submit-form mb-2" (click)="onAddVariantControl()">
+                Thêm biến thể
+            </button>
+        </div>
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
                         <th>STT</th>
                         <th>Hình ảnh</th>
-                        <th>Màu sản phẩm</th>
-                        <th>Kích cỡ sản phẩm</th>
+                        <th>Màu sắc</th>
+                        <th>Kích cỡ</th>
+                        <th>SKU</th>
                         <th class="action">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-
+                    <ng-container formArrayName="product_variants">
+                        <tr *ngFor="let variant of product_variants.controls; let j = index" [formGroupName]="j">
+                            <td>{{j + 1}}</td>
+                            <td>
+                                <div class="image-container">
+                                    <label for="file-{{j}}">
+                                        <img *ngIf="variant.get('image_url')?.value !== ''"
+                                            [src]="variant.get('image_url')?.value">
+                                        <img *ngIf="variant.get('image_url')?.value === ''" [src]="image_not_found">
+                                    </label>
+                                    <input (change)="onChangeVariantFile(j, $event)" type="file"
+                                        accept=".png, .jpg, .jpeg" id="file-{{j}}" [hidden]="true">
+                                </div>
+                            </td>
+                            <td>
+                                <nb-select formControlName="colorId" style="max-width: 200px;">
+                                    <nb-select-label>
+                                        <span class="color-opt"
+                                            [style]="{'background-color': variant.get('colorId')?.value | transformColorId: allColors}"></span>
+                                    </nb-select-label>
+                                    <nb-option [value]="color.id" *ngFor="let color of allColors">
+                                        <span class="color-opt" [style]="{'background-color': color.color_code}"></span>
+                                    </nb-option>
+                                </nb-select>
+                            </td>
+                            <td>
+                                <nb-select formControlName="sizeId" style="max-width: 200px;">
+                                    <nb-option [value]="size.id" *ngFor="let size of allSizes">
+                                        {{size.size_code}}
+                                    </nb-option>
+                                </nb-select>
+                            </td>
+                            <td>
+                                <div class="input-container" style="max-width: 200px;">
+                                    <input nbInput type="text" formControlName="sku">
+                                </div>
+                            </td>
+                            <td style="width: 10%;text-align: right;">
+                                <img [src]="icon_delete" class="common-icon">
+                            </td>
+                        </tr>
+                    </ng-container>
                 </tbody>
             </table>
         </div>

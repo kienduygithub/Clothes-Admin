@@ -9,9 +9,9 @@ export class ProductManagement {
         private productService: ProductService
     ) { }
 
-    async createNewProduct(data: ProductModel, files: any) {
+    async createNewProduct(data: ProductModel, files: any, variantFiles: any) {
         try {
-            await this.productService.createNewProduct(data, files);
+            await this.productService.createNewProduct(data, files, variantFiles);
             return true;
         } catch (error) {
             throw error;

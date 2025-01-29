@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { ImageResource } from "../../../../common/resource/image_resource";
 import { CommonModule } from "@angular/common";
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -7,7 +7,7 @@ import { countries } from "../../../../common/resource/country_resource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { actions } from "../../../../common/resource/actions";
 import { ValueValidators } from "../../../../common/utils/validate/value.validate";
-import { ProductImagesModel, ProductModel } from "../../../../data/model/product.model";
+import { ProductImagesModel, ProductModel, ProductVariantModel } from "../../../../data/model/product.model";
 import { ProductManagement } from "../../../../data/management/product.management";
 import { ProductService } from "../../../../data/service/product.service";
 import { AppConfig } from "../../../../common/config/app.config";
@@ -15,6 +15,7 @@ import { ColorModel } from "../../../../data/model/attribute/color.model";
 import { SizeModel } from "../../../../data/model/attribute/size.model";
 import { AttributeManagement } from "../../../../data/management/attribute.management";
 import { AttributeService } from "../../../../data/service/attribute.service";
+import { TransformColorId } from "../../../../common/layout/pipes/transformColorId";
 
 const NB_LIBS = [
     NbInputModule,
@@ -23,7 +24,9 @@ const NB_LIBS = [
     NbCheckboxModule
 ]
 
-declare const $: any;
+const PIPES = [
+    TransformColorId
+]
 
 @Component({
     standalone: true,
@@ -32,6 +35,7 @@ declare const $: any;
     styleUrl: './cru-product.component.scss',
     imports: [
         ...NB_LIBS,
+        ...PIPES,
         CommonModule,
         ReactiveFormsModule
     ],
@@ -40,7 +44,8 @@ declare const $: any;
         ProductService,
         AttributeManagement,
         AttributeService
-    ]
+    ],
+    // changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class CRUProductComponent implements OnInit {
@@ -48,6 +53,7 @@ export class CRUProductComponent implements OnInit {
     icons_arrow_line = ImageResource.icons_arrow_line;
     icon_upload_v2 = ImageResource.icon_upload_v2;
     icon_delete = ImageResource.delete_button;
+    image_not_found: string = ImageResource.image_not_found;
 
     preImage: string = '';
     originList: string[] = countries;
@@ -62,9 +68,16 @@ export class CRUProductComponent implements OnInit {
 
     selectedInfoFiles: File[] = [];
     infoImageUrls: { url: string, isNew: boolean }[] = [];
+    selectedVariantFiles: File[] = [];
+    variantImageUrls: { index: number, image_url: string }[] = [];
 
     allColors: ColorModel[] = [];
     allSizes: SizeModel[] = [];
+
+    get product_variants(): FormArray {
+        // console.log('aaaa');
+        return this.cruForm.get('product_variants') as FormArray;
+    }
 
     constructor(
         private router: Router,
@@ -72,7 +85,8 @@ export class CRUProductComponent implements OnInit {
         private appConfig: AppConfig,
         private formBuilder: FormBuilder,
         private productManagement: ProductManagement,
-        private attributeManagement: AttributeManagement
+        private attributeManagement: AttributeManagement,
+        private cdr: ChangeDetectorRef
     ) { }
 
     async ngOnInit() {
@@ -112,8 +126,19 @@ export class CRUProductComponent implements OnInit {
             origin: this.formBuilder.control('', [Validators.required]),
             unit_price: this.formBuilder.control('', [Validators.required, ValueValidators.isNumber]),
             description: this.formBuilder.control(''),
-            image_urls: this.formBuilder.array([])
+            image_urls: this.formBuilder.array([]),
+            product_variants: this.formBuilder.array([
+                this.formBuilder.group({
+                    id: this.formBuilder.control(0),
+                    productId: this.updatedId ?? 0,
+                    image_url: this.formBuilder.control(''),
+                    colorId: this.formBuilder.control('', [Validators.required]),
+                    sizeId: this.formBuilder.control('', [Validators.required]),
+                    sku: this.formBuilder.control('')
+                })
+            ])
         });
+        this.cdr.detectChanges();
     }
 
     async initUpdateForm() {
@@ -168,7 +193,7 @@ export class CRUProductComponent implements OnInit {
 
         try {
             const instance = this.convertValueFormToModel();
-            await this.productManagement.createNewProduct(instance, this.selectedInfoFiles);
+            await this.productManagement.createNewProduct(instance, this.selectedInfoFiles, this.selectedVariantFiles);
         } catch (error) {
             console.log(error);
         }
@@ -201,7 +226,9 @@ export class CRUProductComponent implements OnInit {
         model.unit_price = this.cruForm.getRawValue().unit_price;
         model.description = this.cruForm.getRawValue().description;
         model.image_urls = this.cruForm.getRawValue().image_urls;
+        model.product_variants = this.cruForm.getRawValue().product_variants.map((variant: any) => new ProductVariantModel().convertObj(variant));
 
+        console.log(model);
         return model;
     }
 
@@ -239,5 +266,34 @@ export class CRUProductComponent implements OnInit {
         } else {
             this.getArrayControl('image_urls').removeAt(index);
         }
+    }
+
+    onChangeVariantFile(index: number, event: any) {
+        if (event && event.target.files) {
+            this.selectedVariantFiles.push(event.target.files[0]);
+            this.variantImageUrls.push({
+                index: index,
+                image_url: URL.createObjectURL(event.target.files[0])
+            });
+            const imageUrl = URL.createObjectURL(event.target.files[0]);
+            const variants = this.product_variants.controls;
+            if (variants[index]) {
+                variants[index].patchValue({ image_url: imageUrl });
+                this.cdr.detectChanges();
+            }
+        }
+    }
+
+    onAddVariantControl() {
+        this.product_variants.push(
+            this.formBuilder.group({
+                id: this.formBuilder.control(0),
+                productId: this.updatedId ?? 0,
+                image_url: this.formBuilder.control(''),
+                colorId: this.formBuilder.control('', [Validators.required]),
+                sizeId: this.formBuilder.control('', [Validators.required]),
+                sku: this.formBuilder.control('')
+            })
+        )
     }
 }
