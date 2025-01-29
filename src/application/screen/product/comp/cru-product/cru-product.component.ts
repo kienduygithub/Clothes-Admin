@@ -73,6 +73,7 @@ export class CRUProductComponent implements OnInit {
 
     allColors: ColorModel[] = [];
     allSizes: SizeModel[] = [];
+    timeSKU = Date.now();
 
     get product_variants(): FormArray {
         // console.log('aaaa');
@@ -134,7 +135,7 @@ export class CRUProductComponent implements OnInit {
                     image_url: this.formBuilder.control(''),
                     colorId: this.formBuilder.control('', [Validators.required]),
                     sizeId: this.formBuilder.control('', [Validators.required]),
-                    sku: this.formBuilder.control('')
+                    sku: this.formBuilder.control(`${this.timeSKU}`)
                 })
             ])
         });
@@ -285,6 +286,7 @@ export class CRUProductComponent implements OnInit {
     }
 
     onAddVariantControl() {
+        this.timeSKU = Date.now();
         this.product_variants.push(
             this.formBuilder.group({
                 id: this.formBuilder.control(0),
@@ -292,7 +294,7 @@ export class CRUProductComponent implements OnInit {
                 image_url: this.formBuilder.control(''),
                 colorId: this.formBuilder.control('', [Validators.required]),
                 sizeId: this.formBuilder.control('', [Validators.required]),
-                sku: this.formBuilder.control('')
+                sku: this.formBuilder.control(`${this.timeSKU}`)
             })
         )
     }

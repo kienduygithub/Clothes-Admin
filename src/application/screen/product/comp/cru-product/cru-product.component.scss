@@ -187,3 +187,9 @@ textarea {
     width: 100% !important;
     border: 1px solid #ccc;
 }
+
+input.disabled {
+    user-select: none;
+    pointer-events: none;
+    background-color: #e4e9f2 !important;
+}
