@@ -116,6 +116,7 @@
                         <th>Màu sắc</th>
                         <th>Kích cỡ</th>
                         <th>SKU</th>
+                        <th>Tồn kho</th>
                         <th class="action">Actions</th>
                     </tr>
                 </thead>
@@ -155,6 +156,11 @@
                             <td>
                                 <div class="input-container" style="max-width: 200px;">
                                     <input class="disabled" nbInput type="text" formControlName="sku">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-container">
+                                    <input nbInput type="text" formControlName="stock_quantity">
                                 </div>
                             </td>
                             <td style="width: 10%;text-align: right;">

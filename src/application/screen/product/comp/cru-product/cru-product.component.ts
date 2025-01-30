@@ -135,7 +135,8 @@ export class CRUProductComponent implements OnInit {
                     image_url: this.formBuilder.control(''),
                     colorId: this.formBuilder.control('', [Validators.required]),
                     sizeId: this.formBuilder.control('', [Validators.required]),
-                    sku: this.formBuilder.control(`${this.timeSKU}`)
+                    sku: this.formBuilder.control(`${this.timeSKU}`),
+                    stock_quantity: 0
                 })
             ])
         });
@@ -152,13 +153,15 @@ export class CRUProductComponent implements OnInit {
             this.action = actions.CREATE;
             this.initCreateForm();
         } else {
+            console.log(this.updatedProduct);
             this.updatedName = this.updatedProduct.product_name ?? '';
             this.cruForm = this.formBuilder.group({
                 product_name: this.formBuilder.control(this.updatedProduct.product_name ?? '', [Validators.required]),
                 origin: this.formBuilder.control(this.updatedProduct.origin, [Validators.required]),
                 unit_price: this.formBuilder.control(this.updatedProduct.unit_price, [Validators.required, ValueValidators.isNumber]),
                 description: this.formBuilder.control(this.updatedProduct.description),
-                image_urls: this.formBuilder.array([])
+                image_urls: this.formBuilder.array([]),
+                product_variants: this.formBuilder.array([])
             });
             this.updatedImageUrls = this.updatedProduct.image_urls?.map(item => item) ?? [];
             this.updatedImageUrls.forEach(item => {
@@ -170,6 +173,27 @@ export class CRUProductComponent implements OnInit {
                     })
                 )
             });
+            this.initVariantAsUpdate();
+        }
+    }
+
+    initVariantAsUpdate() {
+        const variants = this.updatedProduct.variants ?? [];
+        for (let i = 0; i < variants?.length; i++) {
+            this.getArrayControl('product_variants').push(
+                this.formBuilder.group({
+                    id: variants[i].id,
+                    productId: variants[i].productId,
+                    image_url: `${this.preImage}/${variants[i].image_url}`,
+                    colorId: this.formBuilder.control(variants[i].colorId, [Validators.required]),
+                    sizeId: this.formBuilder.control(variants[i].sizeId, [Validators.required]),
+                    sku: variants[i].sku,
+                    stock_quantity: this.formBuilder.control(
+                        variants[i].stock_quantity + "",
+                        [Validators.required, ValueValidators.isNumber]
+                    )
+                })
+            )
         }
     }
 
@@ -227,7 +251,7 @@ export class CRUProductComponent implements OnInit {
         model.unit_price = this.cruForm.getRawValue().unit_price;
         model.description = this.cruForm.getRawValue().description;
         model.image_urls = this.cruForm.getRawValue().image_urls;
-        model.product_variants = this.cruForm.getRawValue().product_variants.map((variant: any) => new ProductVariantModel().convertObj(variant));
+        model.variants = this.cruForm.getRawValue().product_variants.map((variant: any) => new ProductVariantModel().convertObj(variant));
 
         console.log(model);
         return model;
@@ -294,7 +318,8 @@ export class CRUProductComponent implements OnInit {
                 image_url: this.formBuilder.control(''),
                 colorId: this.formBuilder.control('', [Validators.required]),
                 sizeId: this.formBuilder.control('', [Validators.required]),
-                sku: this.formBuilder.control(`${this.timeSKU}`)
+                sku: this.formBuilder.control(`${this.timeSKU}`),
+                stock_quantity: 0
             })
         )
     }

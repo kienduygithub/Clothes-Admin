@@ -7,7 +7,7 @@ export class ProductModel {
     unit_price?: string;
     sold_quantity?: number;
     image_urls?: ProductImagesModel[];
-    product_variants?: ProductVariantModel[];
+    variants?: ProductVariantModel[];
     createdAt?: string;
 
     constructor(
@@ -19,7 +19,7 @@ export class ProductModel {
         unit_price?: string,
         sold_quantity?: number,
         image_urls?: ProductImagesModel[],
-        product_variants?: ProductVariantModel[],
+        variants?: ProductVariantModel[],
         createdAt?: string,
     ) {
         this.id = id ?? 0;
@@ -30,7 +30,7 @@ export class ProductModel {
         this.unit_price = unit_price ?? "0.00";
         this.sold_quantity = sold_quantity ?? 0;
         this.image_urls = image_urls ?? [];
-        this.product_variants = product_variants ?? [];
+        this.variants = variants ?? [];
         this.createdAt = createdAt ?? "";
     }
 
@@ -50,7 +50,7 @@ export class ProductModel {
             productImages.image_url = item.image_url;
             return productImages;
         });
-        model.product_variants = obj.product_variants?.map((variant: any) => new ProductVariantModel().convertObj(variant)) ?? [];
+        model.variants = obj.variants?.map((variant: any) => new ProductVariantModel().convertObj(variant)) ?? [];
         model.createdAt = obj.createdAt;
 
         return model;
@@ -62,7 +62,7 @@ export class ProductModel {
             origin: obj.origin,
             description: obj.description,
             unit_price: obj.unit_price,
-            product_variants: obj.product_variants
+            variants: obj.variants
         }
     };
 
@@ -100,6 +100,8 @@ export class ProductVariantModel {
     colorId?: number;
     sizeId?: number;
     image_url?: string;
+    sku?: string;
+    stock_quantity?: number;
 
     constructor(
         id?: number,
@@ -107,12 +109,16 @@ export class ProductVariantModel {
         colorId?: number,
         sizeId?: number,
         image_url?: string,
+        sku?: string,
+        stock_quantity?: number,
     ) {
         this.id = id ?? 0;
         this.productId = productId ?? 0;
         this.colorId = colorId ?? 0;
         this.sizeId = sizeId ?? 0;
         this.image_url = image_url ?? '';
+        this.sku = sku ?? '';
+        this.stock_quantity = stock_quantity ?? 0;
     }
 
     convertObj(data: any) {
@@ -122,6 +128,8 @@ export class ProductVariantModel {
         model.colorId = data.colorId;
         model.sizeId = data.sizeId;
         model.image_url = data.image_url;
+        model.sku = data.sku;
+        model.stock_quantity = data.stock_quantity;
 
         return model;
     }
