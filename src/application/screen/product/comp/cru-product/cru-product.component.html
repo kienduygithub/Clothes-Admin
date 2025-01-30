@@ -168,6 +168,11 @@
                                     (click)="onConfirmDeleteVariant(variant.get('id')?.value, variant.get('isTemp')?.value)">
                             </td>
                         </tr>
+                        <tr *ngIf="cruForm.get('product_variants')?.value.length === 0">
+                            <td class="table-no-data text-center" colspan="11">
+                                Không có dữ liệu
+                            </td>
+                        </tr>
                     </ng-container>
                 </tbody>
             </table>
