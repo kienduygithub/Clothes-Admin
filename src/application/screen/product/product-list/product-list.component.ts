@@ -68,7 +68,7 @@ export class ProductListComponent implements OnInit {
         this.dialogService.open(WarningComponent, {
             context: {
                 title: 'Xóa',
-                content: 'Bạn có chắc muốn xóa sản phẩm ' + product.product_name,
+                content: 'Bạn có chắc muốn xóa sản phẩm ' + product.product_name + ' này?',
                 acceptFunc: this.handleDeleteProduct.bind(this, product.id!)
             }
         })
