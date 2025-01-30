@@ -18,9 +18,16 @@ export class ProductManagement {
         }
     }
 
-    async updateProduct(data: ProductModel, files: any) {
+    async updateProduct(
+        data: ProductModel,
+        files: any,
+        variantFiles: any,
+        updatedIds: number[],
+        updatedFiles: any,
+        deletedIds: number[]
+    ) {
         try {
-            await this.productService.updateProduct(data, files);
+            await this.productService.updateProduct(data, files, variantFiles, updatedIds, updatedFiles, deletedIds);
             return true;
         } catch (error) {
             throw error;

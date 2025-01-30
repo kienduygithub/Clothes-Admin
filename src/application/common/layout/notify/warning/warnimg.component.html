@@ -1,0 +1,25 @@
+<div class="h-100">
+    <div class="model-full h-100">
+        <div class="d-flex justify-content-start align-items-start h-75 pt-3">
+            <div class="mr-3 mt-2">
+                <img src="{{icon_alert}}">
+            </div>
+            <div class="d-grid mt-2">
+                <div class="mb-1 title-section">
+                    <span class="title">{{ title | translate}}</span>
+                </div>
+                <div>
+                    <span class="content">{{ content | translate}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end align-items-end h-25">
+            <button autofocus nbButton class="dialog-btn btn-close" (click)="close()">
+                {{ "Đóng" | translate }}
+            </button>
+            <button nbButton class="dialog-btn btn-accept" (click)="onAccept()" style="margin-left: 10px;">
+                {{'Đồng ý' | translate}}
+            </button>
+        </div>
+    </div>
+</div>

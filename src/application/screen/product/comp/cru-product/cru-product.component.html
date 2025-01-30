@@ -131,8 +131,8 @@
                                             [src]="variant.get('image_url')?.value">
                                         <img *ngIf="variant.get('image_url')?.value === ''" [src]="image_not_found">
                                     </label>
-                                    <input (change)="onChangeVariantFile(j, $event)" type="file"
-                                        accept=".png, .jpg, .jpeg" id="file-{{j}}" [hidden]="true">
+                                    <input type="file" accept=".png, .jpg, .jpeg" id="file-{{j}}" [hidden]="true"
+                                        (change)="onChangeVariantFile(variant.get('id')?.value, $event, variant.get('isTemp')?.value)">
                                 </div>
                             </td>
                             <td>
@@ -164,7 +164,8 @@
                                 </div>
                             </td>
                             <td style="width: 10%;text-align: right;">
-                                <img [src]="icon_delete" class="common-icon">
+                                <img [src]="icon_delete" class="common-icon"
+                                    (click)="onConfirmDeleteVariant(variant.get('id')?.value, variant.get('isTemp')?.value)">
                             </td>
                         </tr>
                     </ng-container>

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@
 import { ImageResource } from "../../../../common/resource/image_resource";
 import { CommonModule } from "@angular/common";
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { NbButtonModule, NbCheckboxModule, NbInputModule, NbSelectModule } from "@nebular/theme";
+import { NbButtonModule, NbCheckboxModule, NbDialogService, NbInputModule, NbSelectModule } from "@nebular/theme";
 import { countries } from "../../../../common/resource/country_resource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { actions } from "../../../../common/resource/actions";
@@ -16,6 +16,8 @@ import { SizeModel } from "../../../../data/model/attribute/size.model";
 import { AttributeManagement } from "../../../../data/management/attribute.management";
 import { AttributeService } from "../../../../data/service/attribute.service";
 import { TransformColorId } from "../../../../common/layout/pipes/transformColorId";
+import { ErrorComponent } from "../../../../common/layout/notify/error/error.component";
+import { WarningComponent } from "../../../../common/layout/notify/warning/warnimg.component";
 
 const NB_LIBS = [
     NbInputModule,
@@ -69,7 +71,9 @@ export class CRUProductComponent implements OnInit {
     selectedInfoFiles: File[] = [];
     infoImageUrls: { url: string, isNew: boolean }[] = [];
     selectedVariantFiles: File[] = [];
-    variantImageUrls: { index: number, image_url: string }[] = [];
+    variantImageUrls = new Map<number, File | null>(); // Dùng cho thêm mới hoặc update (những biến thể thêm mới)
+    variantUpdatedImages = new Map<number, File | null>(); // Chỉ dùng khi update ảnh biến thể tồn tại trên CSDL
+    deletedVariantId: number[] = []; // Chỉ dùng khi xóa một biến thể tồn tại trên CSDL
 
     allColors: ColorModel[] = [];
     allSizes: SizeModel[] = [];
@@ -87,6 +91,7 @@ export class CRUProductComponent implements OnInit {
         private formBuilder: FormBuilder,
         private productManagement: ProductManagement,
         private attributeManagement: AttributeManagement,
+        private dialogService: NbDialogService,
         private cdr: ChangeDetectorRef
     ) { }
 
@@ -100,9 +105,6 @@ export class CRUProductComponent implements OnInit {
         try {
             this.allColors = await this.attributeManagement.fetchAllColors();
             this.allSizes = await this.attributeManagement.fetchAllSizes();
-
-            console.log(this.allColors);
-            console.log(this.allSizes);
         } catch (error) {
             console.log(error);
         }
@@ -130,16 +132,18 @@ export class CRUProductComponent implements OnInit {
             image_urls: this.formBuilder.array([]),
             product_variants: this.formBuilder.array([
                 this.formBuilder.group({
-                    id: this.formBuilder.control(0),
+                    id: this.formBuilder.control(this.timeSKU),
                     productId: this.updatedId ?? 0,
                     image_url: this.formBuilder.control(''),
                     colorId: this.formBuilder.control('', [Validators.required]),
                     sizeId: this.formBuilder.control('', [Validators.required]),
                     sku: this.formBuilder.control(`${this.timeSKU}`),
-                    stock_quantity: 0
+                    stock_quantity: 0,
+                    isTemp: true
                 })
             ])
         });
+        this.variantImageUrls.set(this.timeSKU, null);
         this.cdr.detectChanges();
     }
 
@@ -153,7 +157,6 @@ export class CRUProductComponent implements OnInit {
             this.action = actions.CREATE;
             this.initCreateForm();
         } else {
-            console.log(this.updatedProduct);
             this.updatedName = this.updatedProduct.product_name ?? '';
             this.cruForm = this.formBuilder.group({
                 product_name: this.formBuilder.control(this.updatedProduct.product_name ?? '', [Validators.required]),
@@ -191,7 +194,8 @@ export class CRUProductComponent implements OnInit {
                     stock_quantity: this.formBuilder.control(
                         variants[i].stock_quantity + "",
                         [Validators.required, ValueValidators.isNumber]
-                    )
+                    ),
+                    isTemp: false
                 })
             )
         }
@@ -218,6 +222,9 @@ export class CRUProductComponent implements OnInit {
 
         try {
             const instance = this.convertValueFormToModel();
+            this.selectedVariantFiles = [...this.variantImageUrls.values()]
+                .filter(file => file !== null)
+                .reverse();
             await this.productManagement.createNewProduct(instance, this.selectedInfoFiles, this.selectedVariantFiles);
         } catch (error) {
             console.log(error);
@@ -233,7 +240,24 @@ export class CRUProductComponent implements OnInit {
 
         try {
             const instance = this.convertValueFormToModel();
-            await this.productManagement.updateProduct(instance, this.selectedInfoFiles);
+            // Danh sách File ảnh của biến thể mới
+            this.selectedVariantFiles = [...this.variantImageUrls.values()].filter(file => file !== null);
+            // Danh sách ID và File ảnh của biến thể thay đổi
+            const updatedIds = Array.from(this.variantUpdatedImages.keys());
+            const updatedFiles = Array.from(this.variantUpdatedImages.values());
+
+            console.log(this.selectedVariantFiles);
+            console.log(updatedIds);
+            console.log(updatedFiles);
+
+            await this.productManagement.updateProduct(
+                instance,
+                this.selectedInfoFiles,
+                this.selectedVariantFiles,
+                updatedIds,
+                updatedFiles,
+                this.deletedVariantId
+            );
         } catch (error) {
             console.log(error);
         }
@@ -293,34 +317,76 @@ export class CRUProductComponent implements OnInit {
         }
     }
 
-    onChangeVariantFile(index: number, event: any) {
+    onChangeVariantFile(id: number, event: any, isTemp: boolean) {
         if (event && event.target.files) {
-            this.selectedVariantFiles.push(event.target.files[0]);
-            this.variantImageUrls.push({
-                index: index,
-                image_url: URL.createObjectURL(event.target.files[0])
-            });
-            const imageUrl = URL.createObjectURL(event.target.files[0]);
+            let file = event.target.files[0];
+            if (isTemp === true) {
+                // Cập nhật ảnh cho biến thể mới
+                this.variantImageUrls.set(id, file);
+                console.log(this.variantImageUrls);
+            } else if (isTemp === false) {
+                // Cập nhật ảnh cho biến thể cũ
+                this.variantUpdatedImages.set(id, file);
+                console.log(this.variantUpdatedImages);
+            }
+            const imageUrl = URL.createObjectURL(file);
             const variants = this.product_variants.controls;
-            if (variants[index]) {
-                variants[index].patchValue({ image_url: imageUrl });
-                this.cdr.detectChanges();
+            const variantIndex = this.product_variants.value.findIndex(
+                (variant: any) => variant.id === id
+            );
+            if (variantIndex > -1) {
+                variants.at(variantIndex)?.patchValue({
+                    image_url: imageUrl
+                });
             }
         }
     }
 
     onAddVariantControl() {
         this.timeSKU = Date.now();
-        this.product_variants.push(
+        this.product_variants.insert(
+            0,
             this.formBuilder.group({
-                id: this.formBuilder.control(0),
-                productId: this.updatedId ?? 0,
+                id: this.formBuilder.control(this.timeSKU),
+                productId: (this.updatedId && Number(this.updatedId)) ?? 0,
                 image_url: this.formBuilder.control(''),
                 colorId: this.formBuilder.control('', [Validators.required]),
                 sizeId: this.formBuilder.control('', [Validators.required]),
                 sku: this.formBuilder.control(`${this.timeSKU}`),
-                stock_quantity: 0
+                stock_quantity: 0,
+                isTemp: true
             })
         )
+        this.variantImageUrls.set(this.timeSKU, null);
+    }
+
+    onConfirmDeleteVariant(id: number, isTemp: boolean) {
+        this.dialogService.open(WarningComponent, {
+            context: {
+                title: 'Xóa',
+                content: 'Bạn có chắc muốn xóa biến thể này?',
+                acceptFunc: this.handleDeleteVariant.bind(this, id, isTemp)
+            }
+        })
+    }
+
+    handleDeleteVariant(id: number, isTemp: boolean) {
+        if (isTemp) {
+            this.variantImageUrls.delete(id);
+        } else {
+            if (this.variantUpdatedImages.has(id)) {
+                this.variantUpdatedImages.delete(id);
+            }
+            this.deletedVariantId.push(id);
+        }
+        const variants = this.product_variants.controls;
+        const variantIndex = this.product_variants.value.findIndex(
+            (variant: any) => variant.id === id
+        );
+        if (variantIndex > -1) {
+            variants.splice(variantIndex, 1);
+            this.product_variants.patchValue(variants);
+            console.log(this.product_variants.value);
+        }
     }
 }

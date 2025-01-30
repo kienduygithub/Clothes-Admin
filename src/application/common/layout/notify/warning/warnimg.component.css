@@ -1,0 +1,48 @@
+.model-full {
+    max-width: 460px;
+    max-height: 215px;
+    border-radius: 5px;
+    animation: rebound .3s;
+    background: #fff;
+    min-width: 350px;
+    min-height: 147px;
+    overflow: auto;
+    width: 414px;
+    padding: 1rem;
+    padding-top: 0 !important;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #5F6368;
+}
+
+img {
+    transform: translateY(-2px);
+}
+
+.content {
+    font-size: 13px;
+    color: #5F6368;
+}
+
+.dialog-btn {
+    border-radius: 4px;
+    box-shadow: none;
+    font-size: 14px;
+    padding: 8px 20px;
+  }
+
+.btn-close {
+    background-color: white;
+    border: 1px solid rgba(130, 130, 130, 1);
+    /* border: 1px solid rgba(255, 132, 1, 1); */
+    /* border-radius: soli; */
+  }
+
+.btn-accept {
+  border: none;
+  background-color: rgba(255, 132, 1, 1) !important;
+  color: #fff !important;
+}

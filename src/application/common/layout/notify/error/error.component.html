@@ -1,0 +1,29 @@
+<div class="h-100">
+    <div class="model-full h-100">
+        <div class="d-flex justify-content-start align-items-start h-75 pt-3">
+            <div class="mr-3 mt-2">
+                <img src="{{icon_alert}}">
+            </div>
+            <div class="d-grid mt-2">
+                <div class="mb-1 title-section">
+                    <span class="title">{{ title | translate}}</span>
+                </div>
+                <div>
+                    <span class="content">{{ content | translate}}</span>
+                </div>
+                <div *ngIf="error.body">
+                    <span class="content">{{error.body | translate}}</span>
+                </div>
+
+                <div *ngIf="!error.body && error.message">
+                    <!-- <div class="content">Code: {{error.code}}</div>
+                    <div class="content">Message: {{error.message}}</div> -->
+                </div>
+
+            </div>
+        </div>
+        <div class="d-flex justify-content-end align-items-end h-25">
+            <button nbButton class="btn-close" (click)="close()"> {{ "common.close" | translate }} </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+.model-full {
+    max-width: 460px;
+    max-height: 300px !important;
+    border-radius: 5px;
+    animation: rebound .3s;
+    background: #fff;
+    min-width: 350px;
+    min-height: 147px;
+    // overflow: auto;
+    width: 414px;
+    padding: 1rem;
+    padding-top: 0 !important;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #5F6368;
+}
+
+img {
+    transform: translateY(-2px);
+}
+
+.content {
+    font-size: 13px;
+    color: #5F6368;
+}
+
+
+.btn-close {
+    border-radius: 4px;
+    background-color: #FF0000 !important;
+    color: #fff !important;
+    width: 93px;
+    height: 32px;
+    box-shadow: none;
+    font-size: 13px;
+    border: none;
+}

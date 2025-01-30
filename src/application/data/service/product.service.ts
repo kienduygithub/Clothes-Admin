@@ -11,7 +11,11 @@ export class ProductService {
         private appConfig: AppConfig
     ) { }
 
-    async createNewProduct(data: ProductModel, files: any, variantFiles: any): Promise<any> {
+    async createNewProduct(
+        data: ProductModel,
+        files: any,
+        variantFiles: any
+    ): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
             const basicInfo = new ProductModel().convertObjToAdd(data);
@@ -34,14 +38,29 @@ export class ProductService {
         }
     }
 
-    async updateProduct(data: ProductModel, files: any): Promise<any> {
+    async updateProduct(
+        data: ProductModel,
+        files: any,
+        variantFiles: any,
+        updatedIds: number[],
+        updatedFiles: any,
+        deletedIds: number[]
+    ): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
             const basicInfo = new ProductModel().convertObjToUpdate(data);
             const formData = new FormData();
             formData.append('basicInfo', JSON.stringify(basicInfo));
+            formData.append('updatedIds', JSON.stringify(updatedIds));
+            formData.append('deletedIds', JSON.stringify(deletedIds));
             for (let i = 0; i < files.length; i++) {
                 formData.append('infoImages', files[i]);
+            }
+            for (let i = 0; i < variantFiles.length; i++) {
+                formData.append('variantImages', variantFiles[i]);
+            }
+            for (let i = 0; i < updatedFiles.length; i++) {
+                formData.append('variantUpdateImages', updatedFiles[i]);
             }
             const response = this.serviceCore.PATCH(
                 `${domain}`,

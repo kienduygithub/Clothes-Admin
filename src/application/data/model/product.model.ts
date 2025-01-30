@@ -74,6 +74,7 @@ export class ProductModel {
             description: obj.description,
             unit_price: obj.unit_price,
             image_urls: obj.image_urls, // Dùng để xóa ảnh
+            variants: obj.variants
         }
     }
 }
