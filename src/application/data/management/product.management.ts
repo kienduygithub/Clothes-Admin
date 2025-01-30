@@ -53,4 +53,13 @@ export class ProductManagement {
             throw error;
         }
     }
+
+    async deleteProductById(productId: number) {
+        try {
+            await this.productService.deleteProductById(productId);
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

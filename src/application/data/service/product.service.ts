@@ -98,4 +98,17 @@ export class ProductService {
             throw error;
         }
     }
+
+    async deleteProductById(productId: number): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.DETELE(
+                `${domain}`,
+                `product/${productId}`
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
