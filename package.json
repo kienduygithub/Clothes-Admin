@@ -28,6 +28,7 @@
     "bootstrap": "4.6.2",
     "dropify": "^0.2.2",
     "eva-icons": "^1.1.3",
+    "ngx-pagination": "^6.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

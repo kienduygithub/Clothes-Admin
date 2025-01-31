@@ -17,10 +17,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let product of allProducts; let i = index">
+                <tr *ngFor="let product of allProducts | paginate: paging;let i = index">
                     <td style="width: 5%;">
                         <span style="font-size: 14px;">
-                            {{i + 1}}
+                            {{offset + i}}
                         </span>
                     </td>
                     <td style="width: 13%;">
@@ -72,5 +72,14 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <div class="total-items">
+            <span>Tổng số: {{ paging.totalItems }}</span>
+        </div>
+        <div class="pagination-flex">
+            <pagination-controls (pageChange)="onPageChange($event)" previousLabel="" nextLabel="">
+            </pagination-controls>
+        </div>
     </div>
 </div>

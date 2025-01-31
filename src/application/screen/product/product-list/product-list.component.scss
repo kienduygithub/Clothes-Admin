@@ -23,3 +23,23 @@
         overflow: hidden;
     }
 }
+
+.pagination-flex {
+    ::ng-deep pagination-controls {
+
+        .ngx-pagination {
+            margin-bottom: 0px !important;
+
+            li.current {
+                border-radius: 50%;
+            }
+
+            li.pagination-previous,
+            li.pagination-next {
+                span {
+                    display: none;
+                }
+            }
+        }
+    }
+}
