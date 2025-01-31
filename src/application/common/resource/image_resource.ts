@@ -150,6 +150,8 @@ export class ImageResource {
 
   static icon_upload: string = 'assets/icon/upload-icon.svg';
   static icon_upload_v2: string = 'assets/icon/upload-icon-v2.svg';
+  static icon_filter: string = 'assets/icon/filter_icon.svg';
+  static icon_refresh: string = 'assets/icon/refresh_icon.svg';
 
   static image_not_found: string = 'assets/image/image_not_found.jpg';
 }

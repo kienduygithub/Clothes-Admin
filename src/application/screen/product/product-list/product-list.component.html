@@ -1,6 +1,14 @@
 <div class="router-static">
-    <div class="search-and-add">
-
+    <div class="search-and-filter">
+        <div class="input-container">
+            <input nbInput type="text" placeholder="Nhập tên sản phẩm">
+        </div>
+        <button nbButton class="util-box">
+            <img class="common-icon" [src]="icon_filter" />
+        </button>
+        <button nbButton class="util-box">
+            <img class="common-icon" [src]="icon_refresh" />
+        </button>
     </div>
     <div class="table-responsive">
         <table class="table">

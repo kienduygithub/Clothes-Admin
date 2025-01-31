@@ -40,6 +40,8 @@ const ANGULAR_LIBS = [
 
 export class ProductListComponent implements OnInit {
 
+    icon_filter: string = ImageResource.icon_filter;
+    icon_refresh: string = ImageResource.icon_refresh;
     image_not_found: string = ImageResource.image_not_found;
     currentPage: number = 1;
     itemsPerPage: number = 3;
@@ -121,7 +123,7 @@ export class ProductListComponent implements OnInit {
 
     resetPagination() {
         this.paging.currentPage = 1;
-        this.paging.itemsPerPage = 3;
+        this.paging.itemsPerPage = 10;
         this.paging.totalItems = this.allProducts.length;
         this.paging.totalPage = Math.ceil(this.allProducts.length / 3);
         this.paging.before = 0;

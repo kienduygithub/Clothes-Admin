@@ -1,3 +1,34 @@
+.search-and-filter {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .input-container {
+        width: 500px;
+        max-width: 500px !important;
+
+        input {
+            width: 100%;
+            max-width: 500px !important;
+            font-size: 13px !important;
+
+            &::placeholder {
+                font-size: 13px !important;
+            }
+        }
+    }
+
+    button.util-box {
+        background-color: white;
+        width: 36px;
+
+        &:active {
+            border-color: #42aaff;
+        }
+    }
+}
+
 .list-actions {
     display: flex;
     align-items: center;
