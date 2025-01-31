@@ -344,8 +344,9 @@ date-picker {
 .vali-text-false {
   padding-top: 4px;
   color: #ff0000 !important;
-  font-size: 13px;
-  font-weight: 400;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  margin-bottom: 0 !important;
 }
 
 /* Chiều rộng */

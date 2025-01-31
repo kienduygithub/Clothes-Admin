@@ -1,12 +1,16 @@
 <div class="screen">
     <div class="layout-size">
         <div class="d-flex align-items-center mb-2 header-form">
-            <div class="mr-3 icons_arrow_line" *ngIf="action === actionWebs.UPDATE" (click)="onCancel()">
+            <div class="mr-3 icons_arrow_line" (click)="onCancel()">
                 <img src="{{ icons_arrow_line }}" class="icon-back" />
             </div>
             <div class="d-flex flex-column">
                 <label class="header-title">
-                    Thêm mới sản phẩm
+                    {{
+                    action === actionWebs.CREATE
+                    ? "Thêm mới sản phẩm"
+                    : updatedName
+                    }}
                 </label>
             </div>
             <div class="button-header">
@@ -36,7 +40,16 @@
                         Tên sản phẩm<span class="required">*</span>
                     </label>
                     <div class="input-container">
-                        <input nbInput type="text" formControlName="product_name" id="name" placeholder="Nhập tên">
+                        <input nbInput type="text" formControlName="product_name" id="name" placeholder="Nhập tên"
+                            [ngClass]="{
+                            'invalid-form': (cruForm.get('product_name')?.dirty || isSubmit) && cruForm.get('product_name')?.invalid
+                        }">
+                        <ng-container
+                            *ngIf="(cruForm.get('product_name')?.dirty || isSubmit) && cruForm.get('product_name')?.invalid">
+                            <p *ngIf="cruForm.get('product_name')?.hasError('required')" class="vali-text-false">
+                                Tên sản phẩm không được bỏ trống
+                            </p>
+                        </ng-container>
                     </div>
                 </div>
                 <div class="info">
@@ -44,11 +57,19 @@
                         Xuất xứ<span class="required">*</span>
                     </label>
                     <div class="select-wrapper">
-                        <nb-select formControlName="origin" placeholder="Chọn xuất xứ">
+                        <nb-select formControlName="origin" placeholder="Chọn xuất xứ" [ngClass]="{
+                            'invalid': (cruForm.get('origin')?.dirty || isSubmit) && cruForm.get('origin')?.invalid
+                        }">
                             <nb-option *ngFor="let origin of originList" [value]="origin">
                                 {{origin}}
                             </nb-option>
                         </nb-select>
+                        <ng-container
+                            *ngIf="(cruForm.get('origin')?.dirty || isSubmit) && cruForm.get('origin')?.invalid">
+                            <p class="vali-text-false" *ngIf="cruForm.get('origin')?.hasError('required')">
+                                Xuất xứ không được bỏ trống
+                            </p>
+                        </ng-container>
                     </div>
                 </div>
                 <div class="info">
@@ -57,7 +78,18 @@
                     </label>
                     <div class="input-container">
                         <input nbInput type="text" formControlName="unit_price" id="unit_price"
-                            placeholder="Nhập giá thành">
+                            placeholder="Nhập giá thành" [ngClass]="{
+                                'invalid-form': (cruForm.get('unit_price')?.dirty || isSubmit) && cruForm.get('unit_price')?.invalid
+                            }">
+                        <ng-container
+                            *ngIf="(cruForm.get('unit_price')?.dirty || isSubmit) && cruForm.get('unit_price')?.invalid">
+                            <p class="vali-text-false" *ngIf="cruForm.get('unit_price')?.hasError('required')">
+                                Giá thành không được bỏ trống
+                            </p>
+                            <p class="vali-text-false" *ngIf="cruForm.get('unit_price')?.hasError('isNumber')">
+                                Giá thành chỉ chấp nhận nhập số
+                            </p>
+                        </ng-container>
                     </div>
                 </div>
                 <div class="info">
@@ -126,7 +158,8 @@
                             <td>{{j + 1}}</td>
                             <td>
                                 <div class="image-container">
-                                    <label for="file-{{j}}">
+                                    <label for="file-{{j}}"
+                                        [ngClass]="{'invalid': (variant.get('image_url')?.dirty || isSubmit) && variant.get('image_url')?.invalid}">
                                         <img *ngIf="variant.get('image_url')?.value !== ''"
                                             [src]="variant.get('image_url')?.value">
                                         <img *ngIf="variant.get('image_url')?.value === ''" [src]="image_not_found">
@@ -136,22 +169,30 @@
                                 </div>
                             </td>
                             <td>
-                                <nb-select formControlName="colorId" style="max-width: 200px;">
-                                    <nb-select-label>
-                                        <span class="color-opt"
-                                            [style]="{'background-color': variant.get('colorId')?.value | transformColorId: allColors}"></span>
-                                    </nb-select-label>
-                                    <nb-option [value]="color.id" *ngFor="let color of allColors">
-                                        <span class="color-opt" [style]="{'background-color': color.color_code}"></span>
-                                    </nb-option>
-                                </nb-select>
+                                <div class="select-wrapper">
+                                    <nb-select formControlName="colorId" style="max-width: 200px;"
+                                        [ngClass]="{'invalid': (variant.get('colorId')?.dirty || isSubmit) && variant.get('colorId')?.invalid}">
+                                        <nb-select-label>
+                                            <span class="color-opt"
+                                                [style]="{'background-color': variant.get('colorId')?.value | transformColorId: allColors}"></span>
+                                        </nb-select-label>
+                                        <nb-option [value]="color.id" *ngFor="let color of allColors">
+                                            <span class="color-opt"
+                                                [style]="{'background-color': color.color_code}"></span>
+                                        </nb-option>
+                                    </nb-select>
+                                </div>
                             </td>
                             <td>
-                                <nb-select formControlName="sizeId" style="max-width: 200px;">
-                                    <nb-option [value]="size.id" *ngFor="let size of allSizes">
-                                        {{size.size_code}}
-                                    </nb-option>
-                                </nb-select>
+                                <div class="select-wrapper">
+                                    <nb-select formControlName="sizeId" style="max-width: 200px;" [ngClass]="{
+                                        'invalid': (variant.get('sizeId')?.dirty || isSubmit) && variant.get('sizeId')?.invalid
+                                    }">
+                                        <nb-option [value]="size.id" *ngFor="let size of allSizes">
+                                            {{size.size_code}}
+                                        </nb-option>
+                                    </nb-select>
+                                </div>
                             </td>
                             <td>
                                 <div class="input-container" style="max-width: 200px;">
@@ -160,7 +201,9 @@
                             </td>
                             <td>
                                 <div class="input-container">
-                                    <input nbInput type="text" formControlName="stock_quantity">
+                                    <input nbInput type="text" formControlName="stock_quantity" [ngClass]="{
+                                        'invalid-form': (variant.get('stock_quantity')?.dirty || isSubmit) && variant.get('stock_quantity')?.invalid
+                                    }">
                                 </div>
                             </td>
                             <td style="width: 10%;text-align: right;">

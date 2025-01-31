@@ -8,6 +8,7 @@ export class ProductModel {
     sold_quantity?: number;
     image_urls?: ProductImagesModel[];
     variants?: ProductVariantModel[];
+    stock_product?: number;
     createdAt?: string;
 
     constructor(
@@ -20,6 +21,7 @@ export class ProductModel {
         sold_quantity?: number,
         image_urls?: ProductImagesModel[],
         variants?: ProductVariantModel[],
+        stock_product?: number,
         createdAt?: string,
     ) {
         this.id = id ?? 0;
@@ -31,6 +33,7 @@ export class ProductModel {
         this.sold_quantity = sold_quantity ?? 0;
         this.image_urls = image_urls ?? [];
         this.variants = variants ?? [];
+        this.stock_product = stock_product ?? 0;
         this.createdAt = createdAt ?? "";
     }
 
@@ -51,6 +54,10 @@ export class ProductModel {
             return productImages;
         });
         model.variants = obj.variants?.map((variant: any) => new ProductVariantModel().convertObj(variant)) ?? [];
+        model.stock_product = model.variants?.reduce((stock: number, curr: ProductVariantModel) => {
+            return stock + curr.stock_quantity!
+        }, 0);
+
         model.createdAt = obj.createdAt;
 
         return model;

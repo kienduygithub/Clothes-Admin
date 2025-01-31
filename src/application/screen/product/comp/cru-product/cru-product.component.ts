@@ -62,6 +62,7 @@ export class CRUProductComponent implements OnInit {
 
     actionWebs = actions;
     action = this.actionWebs.CREATE;
+    isSubmit: boolean = false;
     cruForm!: FormGroup;
     updatedProduct!: ProductModel;
     updatedId!: number;
@@ -134,11 +135,13 @@ export class CRUProductComponent implements OnInit {
                 this.formBuilder.group({
                     id: this.formBuilder.control(this.timeSKU),
                     productId: this.updatedId ?? 0,
-                    image_url: this.formBuilder.control(''),
+                    image_url: this.formBuilder.control('', [Validators.required]),
                     colorId: this.formBuilder.control('', [Validators.required]),
                     sizeId: this.formBuilder.control('', [Validators.required]),
                     sku: this.formBuilder.control(`${this.timeSKU}`),
-                    stock_quantity: 0,
+                    stock_quantity: this.formBuilder.control('0', [
+                        Validators.required, ValueValidators.isNumber
+                    ]),
                     isTemp: true
                 })
             ])
@@ -214,8 +217,9 @@ export class CRUProductComponent implements OnInit {
     }
 
     async handleCreate() {
-        console.log(this.cruForm.value);
+        this.isSubmit = true;
         if (this.cruForm.invalid) {
+            console.log(this.cruForm.value);
             console.log('INVALID FORM');
             return;
         }
@@ -225,15 +229,22 @@ export class CRUProductComponent implements OnInit {
             this.selectedVariantFiles = [...this.variantImageUrls.values()]
                 .filter(file => file !== null)
                 .reverse();
-            await this.productManagement.createNewProduct(instance, this.selectedInfoFiles, this.selectedVariantFiles);
+            await this.productManagement.createNewProduct(
+                instance,
+                this.selectedInfoFiles,
+                this.selectedVariantFiles
+            );
+
+            this.router.navigate(['/shop/product/products']);
         } catch (error) {
             console.log(error);
         }
     }
 
     async handleUpdate() {
-        console.log(this.cruForm.value);
+        this.isSubmit = true;
         if (this.cruForm.invalid) {
+            console.log(this.cruForm.value);
             console.log('INVALID FORM');
             return;
         }
@@ -258,6 +269,8 @@ export class CRUProductComponent implements OnInit {
                 updatedFiles,
                 this.deletedVariantId
             );
+
+            this.router.navigate(['/shop/product/products']);
         } catch (error) {
             console.log(error);
         }
@@ -349,11 +362,14 @@ export class CRUProductComponent implements OnInit {
             this.formBuilder.group({
                 id: this.formBuilder.control(this.timeSKU),
                 productId: (this.updatedId && Number(this.updatedId)) ?? 0,
-                image_url: this.formBuilder.control(''),
+                image_url: this.formBuilder.control('', [Validators.required]),
                 colorId: this.formBuilder.control('', [Validators.required]),
                 sizeId: this.formBuilder.control('', [Validators.required]),
                 sku: this.formBuilder.control(`${this.timeSKU}`),
-                stock_quantity: 0,
+                stock_quantity: this.formBuilder.control('0', [
+                    Validators.required,
+                    ValueValidators.isNumber
+                ]),
                 isTemp: true
             })
         )

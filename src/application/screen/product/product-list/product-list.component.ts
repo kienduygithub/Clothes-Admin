@@ -55,6 +55,7 @@ export class ProductListComponent implements OnInit {
             let shopId: any = this.appConfig.getShopId();
             shopId = 1; // Nhớ sửa sau
             this.allProducts = await this.productManagement.fetchAllProductsByShopId(shopId);
+            console.log(this.allProducts);
         } catch (error) {
             console.log(error);
         }
