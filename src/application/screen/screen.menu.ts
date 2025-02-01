@@ -12,7 +12,7 @@ export const MENU_ITEMS: any[] = [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh sách nhân sự',
-                link: '/employee/lists',
+                link: '/employee/list',
             },
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
@@ -51,35 +51,17 @@ export const MENU_ITEMS: any[] = [
     {
         title: 'Firewall',
         icon: { icon: 'firewall_icon', pack: 'mainIcon' },
-        link: '/firewall',
+        link: '/employee',
         children: [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Firewall',
-                link: '/firewall/dashboard',
+                title: 'Danh sách nhân sự',
+                link: '/employee/list',
             },
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Port forward',
-                link: '/firewall/port-forward',
-                pathMatch: 'prefix'
-            },
-            {
-                icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Traffic rule',
-                link: '/firewall/traffic-rule',
-                pathMatch: 'prefix'
-            },
-            {
-                icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'NAT rule',
-                link: '/firewall/nat-rule',
-                pathMatch: 'prefix'
-            },
-            {
-                icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Schedule',
-                link: '/firewall/schedule',
+                title: 'Phân quyền',
+                link: '/employee/access',
                 pathMatch: 'prefix'
             },
         ],
