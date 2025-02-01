@@ -1,3 +1,98 @@
-<div>
-    Xin chào
+<div class="router-static">
+    <div class="search-and-filter">
+        <div class="input-container">
+            <input nbInput type="text" placeholder="Nhập tên sản phẩm">
+        </div>
+        <button nbButton class="util-box">
+            <img class="common-icon" [src]="icon_filter" />
+        </button>
+        <button nbButton class="util-box">
+            <img class="common-icon" [src]="icon_refresh" />
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>Mã người dùng</th>
+                    <th>Hình ảnh</th>
+                    <th>Tên người dùng</th>
+                    <th>Liên hệ</th>
+                    <th>Địa chỉ</th>
+                    <th>Chức vụ</th>
+                    <th style="color: transparent">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of allUsers | paginate: paging;let i = index">
+                    <td style="width: 5%;">
+                        <span style="font-size: 14px;">
+                            {{offset + i}}
+                        </span>
+                    </td>
+                    <td style="width: 15%;">
+                        <span style="font-size: 14px;">
+                            {{user.id}}
+                        </span>
+                    </td>
+                    <td style="width: 13%;">
+                        <div class="image-container">
+                            <img *ngIf="user.image_url !== undefined && user.image_url !== null"
+                                src="{{preImage}}/{{user.image_url}}">
+                            <img *ngIf="user.image_url === '' || user.image_url === null" [src]="image_not_found">
+                        </div>
+                    </td>
+                    <td style="width: 15%;">
+                        <span style="font-size: 14px;">
+                            {{user.name}}
+                        </span>
+                    </td>
+                    <td style="width: 12%;">
+                        <div class="d-flex flex-column">
+                            <span style="font-size: 14px;">
+                                {{user.email}}
+                            </span>
+                            <span style="font-size: 14px;">
+                                {{user.phone}}
+                            </span>
+                        </div>
+                    </td>
+                    <td style="width: 14%;">
+                        <span style="font-size: 14px;">
+                            {{user.address}}
+                        </span>
+                    </td>
+                    <td style="width: 14%;">
+                        <span style="font-size: 14px;">
+                            {{user.roles}}
+                        </span>
+                    </td>
+                    <td style="width: 10%;" (click)="$event.stopPropagation()">
+                        <div class="list-actions">
+                            <nb-icon class="common-icon" icon="icon_edit" pack="mainIcon" [nbTooltip]="'Chỉnh sửa'"
+                                nbTooltipPlacement="bottom" (click)="onUpdateProduct(user.id!)"></nb-icon>
+                            <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"
+                                nbTooltipPlacement="bottom" (click)="onConfirmDeleteProduct(user)">
+                            </nb-icon>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="allUsers.length === 0">
+                    <td class="table-no-data text-center" colspan="11">
+                        Không có dữ liệu
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <div class="total-items">
+            <span>Tổng số: {{ paging.totalItems }}</span>
+        </div>
+        <div class="pagination-flex">
+            <pagination-controls (pageChange)="onPageChange($event)" previousLabel="" nextLabel="">
+            </pagination-controls>
+        </div>
+    </div>
 </div>

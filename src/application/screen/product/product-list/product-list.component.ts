@@ -43,11 +43,8 @@ export class ProductListComponent implements OnInit {
     icon_filter: string = ImageResource.icon_filter;
     icon_refresh: string = ImageResource.icon_refresh;
     image_not_found: string = ImageResource.image_not_found;
-    currentPage: number = 1;
-    itemsPerPage: number = 3;
-    totalItems: number = 20;
+
     offset: number = 0;
-    indexTable: number = 0;
     paging!: PagingModel;
 
     preImage: string = '';
@@ -72,7 +69,6 @@ export class ProductListComponent implements OnInit {
             let shopId: any = this.appConfig.getShopId();
             shopId = 1; // Nhớ sửa sau
             this.allProducts = await this.productManagement.fetchAllProductsByShopId(shopId);
-            this.totalItems = this.allProducts.length;
         } catch (error) {
             console.log(error);
         }
@@ -130,6 +126,5 @@ export class ProductListComponent implements OnInit {
         this.paging.after = 0;
 
         this.offset = (this.paging.currentPage - 1) * this.paging.itemsPerPage + 1;
-        this.indexTable = 0;
     }
 }
