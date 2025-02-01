@@ -27,7 +27,8 @@ export class ScreenComponent {
             reports_icon: ImageResource.icon_reports,
             system_icon: ImageResource.icon_system,
             vpn_icon: ImageResource.icon_vpn,
-            dot_icon: ImageResource.dot_icon
+            dot_icon: ImageResource.dot_icon,
+            group_icon: ImageResource.icon_group
         });
     }
 

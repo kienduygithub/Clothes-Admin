@@ -5,9 +5,22 @@ export const MENU_ITEMS: any[] = [
         link: '/overview',
     },
     {
-        title: 'Người dùng',
-        icon: { icon: 'reports_icon', pack: 'mainIcon' },
-        link: '/user',
+        title: 'Nhân sự',
+        icon: { icon: 'group_icon', pack: 'mainIcon' },
+        link: '/employee',
+        children: [
+            {
+                icon: { icon: 'dot_icon', pack: 'mainIcon' },
+                title: 'Danh sách nhân sự',
+                link: '/employee/lists',
+            },
+            {
+                icon: { icon: 'dot_icon', pack: 'mainIcon' },
+                title: 'Phân quyền',
+                link: '/employee/access',
+                pathMatch: 'prefix'
+            },
+        ],
     },
     {
         title: 'Sản phẩm',
