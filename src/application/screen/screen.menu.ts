@@ -8,11 +8,13 @@ export const MENU_ITEMS: any[] = [
         title: 'Nhân sự',
         icon: { icon: 'group_icon', pack: 'mainIcon' },
         link: '/employee',
+        pathMath: 'prefix',
         children: [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh sách nhân sự',
                 link: '/employee/list',
+                pathMath: 'prefix'
             },
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
@@ -62,7 +64,6 @@ export const MENU_ITEMS: any[] = [
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Phân quyền',
                 link: '/employee/access',
-                pathMatch: 'prefix'
             },
         ],
     },
