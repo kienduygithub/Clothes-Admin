@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ServiceCore } from "../../common/service/service-core";
 import { AppConfig } from "../../common/config/app.config";
+import { UserModel } from "../model/user.model";
 
 @Injectable()
 export class UserService {
@@ -9,6 +10,26 @@ export class UserService {
         private serviceCore: ServiceCore,
         private appConfig: AppConfig
     ) { }
+
+    async createUser(data: UserModel, file: any): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+
+            const info = new UserModel().convertModelToAdd(data);
+            const formData = new FormData();
+            formData.append('info', JSON.stringify(info));
+            formData.append('adminOwnerFile', file);
+
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `user/admin/create`,
+                formData
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 
     async fetchAllUsers(type?: string): Promise<any> {
         try {

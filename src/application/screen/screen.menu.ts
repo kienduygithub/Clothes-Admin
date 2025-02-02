@@ -8,7 +8,6 @@ export const MENU_ITEMS: any[] = [
         title: 'Nhân sự',
         icon: { icon: 'group_icon', pack: 'mainIcon' },
         link: '/employee',
-        pathMath: 'prefix',
         children: [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },

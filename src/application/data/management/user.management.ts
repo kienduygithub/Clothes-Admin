@@ -9,6 +9,15 @@ export class UserManagement {
         private userService: UserService
     ) { }
 
+    async createUser(data: UserModel, file: any) {
+        try {
+            await this.userService.createUser(data, file);
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async fetchAllUser(type?: string) {
         try {
             const result = await this.userService.fetchAllUsers(type);

@@ -62,7 +62,7 @@ export class UserModel {
             phone: data.phone,
             gender: data.gender,
             address: data.address,
-            shopId: data.shopId,
+            shopId: data.shopId === 0 ? undefined : data.shopId,
             roles: data.roles,
         }
     }

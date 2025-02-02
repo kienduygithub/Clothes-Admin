@@ -1,0 +1,145 @@
+.required {
+    color: #FF0000;
+}
+
+.info-wrapper {
+    display: flex;
+    padding: 10px 15px;
+    gap: 20px;
+
+    .info-left,
+    .info-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .info {
+            display: flex;
+
+            label {
+                font-size: 14px;
+                font-weight: 400;
+                display: block;
+                line-height: 36px;
+                width: 150px;
+                flex-shrink: 0;
+            }
+
+        }
+    }
+}
+
+.info-image-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    height: 425px;
+
+    label.upload-image {
+        width: 100% !important;
+        height: 100%;
+        border-radius: 5px;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        img {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    }
+}
+
+
+textarea {
+    height: 151px !important;
+    max-width: 600px !important;
+}
+
+.select-wrapper {
+    width: 100%;
+
+    ::ng-deep nb-select {
+        width: 100%;
+        max-width: 600px !important;
+
+        button {
+            width: 100%;
+            background-color: white !important;
+        }
+
+        &.invalid {
+            button {
+                border-color: red !important;
+
+                &.top,
+                &.bottom {
+                    border-color: red !important;
+                }
+            }
+        }
+    }
+}
+
+.input-container {
+    max-width: 600px !important;
+
+    input {
+        width: 100%;
+        max-width: 600px !important;
+    }
+}
+
+.action {
+    color: transparent;
+}
+
+.image-container {
+    height: 80px;
+    width: 80px;
+    padding: 10px 0;
+
+    label {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+
+        &.invalid {
+            border: 1px solid red;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    }
+
+}
+
+.table-responsive {
+
+    ::ng-deep nb-select,
+    .input-container input {
+        max-width: 200px !important;
+    }
+
+}
+
+.color-opt {
+    display: block;
+    height: 100% !important;
+    width: 100% !important;
+    border: 1px solid #ccc;
+}
+
+input.disabled {
+    user-select: none;
+    pointer-events: none;
+    background-color: #e4e9f2 !important;
+}

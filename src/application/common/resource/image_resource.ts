@@ -156,4 +156,5 @@ export class ImageResource {
   `;
 
   static image_not_found: string = 'assets/image/image_not_found.jpg';
+  static image_no_avatar: string = 'assets/image/no_avatar.png';
 }

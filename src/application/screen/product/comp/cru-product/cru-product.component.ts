@@ -81,7 +81,6 @@ export class CRUProductComponent implements OnInit {
     timeSKU = Date.now();
 
     get product_variants(): FormArray {
-        // console.log('aaaa');
         return this.cruForm.get('product_variants') as FormArray;
     }
 
