@@ -38,6 +38,8 @@ export class CRUEmployeeComponent implements OnInit {
     icons_arrow_line = ImageResource.icons_arrow_line;
     icon_upload_v2 = ImageResource.icon_upload_v2;
     icon_delete = ImageResource.delete_button;
+    icon_visible_eye = ImageResource.icon_visible_eye;
+    icon_invisible_eye = ImageResource.icon_invisible_eye;
     image_not_found: string = ImageResource.image_not_found;
     image_no_avatar: string = ImageResource.image_no_avatar;
     preImage: string = '';
@@ -45,6 +47,7 @@ export class CRUEmployeeComponent implements OnInit {
     actionWebs = actions;
     action = this.actionWebs.CREATE;
     isSubmit: boolean = false;
+    isVisiblePassword = false;
     cruForm!: FormGroup;
     updatedUser!: UserModel;
     updatedId!: number;
@@ -111,7 +114,7 @@ export class CRUEmployeeComponent implements OnInit {
                 gender: [this.updatedUser.gender + ""],
                 address: [this.updatedUser.address],
                 image_url: [this.updatedUser.image_url ?? '', [Validators.required]],
-                shopId: [this.updatedUser.shopId],
+                shopId: [this.updatedUser.shopId + ""],
                 roles: [this.updatedUser.roles]
             });
         }
@@ -190,8 +193,10 @@ export class CRUEmployeeComponent implements OnInit {
         model.roles = this.cruForm.getRawValue().roles;
         model.shopId = this.cruForm.getRawValue().shopId;
 
-        console.log(model);
-
         return model;
+    }
+
+    onToggleVisiblePassword() {
+        this.isVisiblePassword = !this.isVisiblePassword;
     }
 }

@@ -87,11 +87,19 @@ textarea {
 }
 
 .input-container {
+    position: relative;
     max-width: 600px !important;
 
     input {
         width: 100%;
         max-width: 600px !important;
+    }
+
+    img {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
     }
 }
 

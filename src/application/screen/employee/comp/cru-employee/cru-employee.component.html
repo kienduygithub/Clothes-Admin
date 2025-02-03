@@ -70,7 +70,7 @@
                         Email<span class="required">*</span>
                     </label>
                     <div class="input-container">
-                        <input nbInput type="text" formControlName="email" id="email" placeholder="Nhập họ tên"
+                        <input nbInput type="text" formControlName="email" id="email" placeholder="Nhập email"
                             [ngClass]="{
                             'invalid-form': (cruForm.get('email')?.dirty || isSubmit) && cruForm.get('email')?.invalid
                         }">
@@ -86,11 +86,17 @@
                     <label for="password">
                         Mật khẩu<span class="required">*</span>
                     </label>
-                    <div class="input-container">
-                        <input nbInput type="text" formControlName="password" id="password" placeholder="Nhập họ tên"
-                            [ngClass]="{
-                            'invalid-form': (cruForm.get('password')?.dirty || isSubmit) && cruForm.get('password')?.invalid
-                        }">
+                    <div class="select-wrapper" *ngIf="action !== actionWebs.UPDATE">
+                        <div class="input-container">
+                            <input nbInput [type]="isVisiblePassword ? 'type' : 'password'" formControlName="password"
+                                id="password" placeholder="Nhập mật khẩu" [ngClass]="{
+                                'invalid-form': (cruForm.get('password')?.dirty || isSubmit) && cruForm.get('password')?.invalid
+                            }">
+                            <img [src]="icon_visible_eye" class="common-icon" *ngIf="!isVisiblePassword"
+                                (click)="onToggleVisiblePassword()" />
+                            <img [src]="icon_invisible_eye" class="common-icon" *ngIf="isVisiblePassword"
+                                (click)="onToggleVisiblePassword()" />
+                        </div>
                         <ng-container
                             *ngIf="(cruForm.get('password')?.dirty || isSubmit) && cruForm.get('password')?.invalid">
                             <p *ngIf="cruForm.get('password')?.hasError('required')" class="vali-text-false">
@@ -98,13 +104,18 @@
                             </p>
                         </ng-container>
                     </div>
+                    <div class="select-wrapper" *ngIf="action === actionWebs.UPDATE">
+                        <div class="input-container">
+                            <input nbInput class="disabled" [type]="'password'" [value]="'***********'">
+                        </div>
+                    </div>
                 </div>
                 <div class="info">
                     <label for="phone">
                         Số liên hệ<span class="required">*</span>
                     </label>
                     <div class="input-container">
-                        <input nbInput type="text" formControlName="phone" id="phone" placeholder="Nhập họ tên"
+                        <input nbInput type="text" formControlName="phone" id="phone" placeholder="Nhập số liên hệ"
                             [ngClass]="{
                             'invalid-form': (cruForm.get('phone')?.dirty || isSubmit) && cruForm.get('phone')?.invalid
                         }">
@@ -121,7 +132,7 @@
                         Địa chỉ
                     </label>
                     <div class="input-container">
-                        <input nbInput type="text" formControlName="address" id="address" placeholder="Nhập họ tên"
+                        <input nbInput type="text" formControlName="address" id="address" placeholder="Nhập địa chỉ"
                             [ngClass]="{
                             'invalid-form': (cruForm.get('address')?.dirty || isSubmit) && cruForm.get('address')?.invalid
                         }">
