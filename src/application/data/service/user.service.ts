@@ -18,7 +18,9 @@ export class UserService {
             const info = new UserModel().convertModelToAdd(data);
             const formData = new FormData();
             formData.append('info', JSON.stringify(info));
-            formData.append('adminOwnerFile', file);
+            if (file) {
+                formData.append('adminOwnerFile', file);
+            }
 
             const response = await this.serviceCore.POST(
                 `${domain}`,

@@ -9,6 +9,7 @@ import { NbButtonModule, NbCheckboxModule, NbInputModule, NbSelectModule } from 
 import { UserManagement } from "../../../../data/management/user.management";
 import { UserService } from "../../../../data/service/user.service";
 import { AppConfig } from "../../../../common/config/app.config";
+import { ValueValidators } from "../../../../common/utils/validate/value.validate";
 
 const NB_LIBS = [
     NbInputModule,
@@ -82,14 +83,13 @@ export class CRUEmployeeComponent implements OnInit {
 
     initCreateForm() {
         this.cruForm = this.formBuilder.group({
-            name: ['', [Validators.required]],
-            email: ['', [Validators.required, Validators.email]],
-            password: ['', [Validators.required]],
-            phone: ['', [Validators.required]],
+            name: ['', [ValueValidators.required]],
+            email: ['', [ValueValidators.required, Validators.email]],
+            password: ['', [ValueValidators.required]],
+            phone: ['', [ValueValidators.required]],
             gender: ['1'],
             address: [''],
-            image_url: ['', [Validators.required]],
-            shopId: [0],
+            image_url: [''],
             roles: ['Admin']
         });
     }
@@ -103,18 +103,18 @@ export class CRUEmployeeComponent implements OnInit {
         }
         if (!this.updatedUser) {
             this.action = actions.CREATE;
+            this.updatedId = 0;
             this.initCreateForm();
         } else {
             this.updatedName = this.updatedUser.name ?? '';
             this.cruForm = this.formBuilder.group({
-                name: [this.updatedName, [Validators.required]],
-                email: [this.updatedUser.email, [Validators.required, Validators.email]],
+                name: [this.updatedName, [ValueValidators.required]],
+                email: [this.updatedUser.email, [ValueValidators.required, Validators.email]],
                 password: [this.updatedUser.password],
-                phone: [this.updatedUser.phone, [Validators.required]],
+                phone: [this.updatedUser.phone, [ValueValidators.required]],
                 gender: [this.updatedUser.gender + ""],
                 address: [this.updatedUser.address],
-                image_url: [this.updatedUser.image_url ?? '', [Validators.required]],
-                shopId: [this.updatedUser.shopId + ""],
+                image_url: [this.updatedUser.image_url ?? ''],
                 roles: [this.updatedUser.roles]
             });
         }
@@ -184,14 +184,13 @@ export class CRUEmployeeComponent implements OnInit {
         if (this.action === actions.UPDATE) {
             model.id = this.updatedId;
         }
-        model.name = this.updatedName === this.cruForm.getRawValue().name ? undefined : this.cruForm.getRawValue().name;
-        model.email = this.cruForm.getRawValue().email;
+        model.name = this.updatedName === this.cruForm.getRawValue().name.trim() ? undefined : this.cruForm.getRawValue().name.trim();
+        model.email = this.cruForm.getRawValue().email.trim();
         model.password = this.cruForm.getRawValue().password;
-        model.phone = this.cruForm.getRawValue().phone;
-        model.address = this.cruForm.getRawValue().address;
+        model.phone = this.cruForm.getRawValue().phone.trim();
+        model.address = this.cruForm.getRawValue().address.trim();
         model.gender = Number(this.cruForm.getRawValue().gender);
         model.roles = this.cruForm.getRawValue().roles;
-        model.shopId = this.cruForm.getRawValue().shopId;
 
         return model;
     }
