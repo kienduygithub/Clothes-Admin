@@ -46,4 +46,13 @@ export class UserManagement {
             throw error;
         }
     }
+
+    async deleteUserById(userId: number) {
+        try {
+            await this.userService.deleteUserById(userId);
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

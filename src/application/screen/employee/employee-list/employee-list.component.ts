@@ -80,24 +80,24 @@ export class EmployeeListComponent implements OnInit {
         this.dialogService.open(WarningComponent, {
             context: {
                 title: 'Xóa',
-                content: 'Bạn có chắc muốn xóa sản phẩm ' + user.name + ' này?',
+                content: 'Bạn có chắc muốn xóa nhân sự ' + user.name + '?',
                 acceptFunc: this.handleDeleteUser.bind(this, user.id!)
             }
         })
     }
 
-    async handleDeleteUser(productId: number) {
-        // try {
-        //     await this.userManagement.deleteProductById(productId);
-        //     this.allUsers = this.allUsers.filter(product => product.id !== productId);
-        //     this.paging.totalItems = this.allUsers.length;
-        //     this.paging.totalPage = Math.ceil(this.allUsers.length / this.paging.itemsPerPage);
-        //     if (this.paging.currentPage === this.paging.totalPage + 1) {
-        //         this.onPageChange(this.paging.currentPage - 1);
-        //     }
-        // } catch (error) {
-        //     console.log(error);
-        // }
+    async handleDeleteUser(userId: number) {
+        try {
+            await this.userManagement.deleteUserById(userId);
+            this.allUsers = this.allUsers.filter(user => user.id !== userId);
+            this.paging.totalItems = this.allUsers.length;
+            this.paging.totalPage = Math.ceil(this.allUsers.length / this.paging.itemsPerPage);
+            if (this.paging.currentPage === this.paging.totalPage + 1) {
+                this.onPageChange(this.paging.currentPage - 1);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     onPageChange(currentPage: number) {

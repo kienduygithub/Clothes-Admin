@@ -76,4 +76,17 @@ export class UserService {
             throw error;
         }
     }
+
+    async deleteUserById(userId: number): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.DETELE(
+                `${domain}`,
+                `user/admin/${userId}`
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
