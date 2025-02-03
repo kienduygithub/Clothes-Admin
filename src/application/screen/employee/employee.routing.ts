@@ -5,5 +5,9 @@ export const EmployeeRouting: Routes = [
     {
         path: 'employee/list/create',
         component: CRUEmployeeComponent,
-    }
+    },
+    {
+        path: 'employee/list/view',
+        component: CRUEmployeeComponent,
+    },
 ]

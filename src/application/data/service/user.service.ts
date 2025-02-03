@@ -31,12 +31,45 @@ export class UserService {
         }
     }
 
+    async updateUserById(data: UserModel, file: any): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+
+            const info = new UserModel().convertModelToUpdate(data);
+            const formData = new FormData();
+            formData.append('info', JSON.stringify(info));
+            formData.append('adminOwnerFile', file);
+
+            const response = await this.serviceCore.PATCH(
+                `${domain}`,
+                `user/admin/${data.id}`,
+                formData
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async fetchAllUsers(type?: string): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
             const response = await this.serviceCore.GET(
                 `${domain}`,
                 `user/all`
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchUserById(userId: number): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.GET(
+                `${domain}`,
+                `user/${userId}`
             );
             return response;
         } catch (error) {

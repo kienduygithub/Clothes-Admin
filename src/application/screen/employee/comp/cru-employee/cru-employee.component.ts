@@ -93,7 +93,8 @@ export class CRUEmployeeComponent implements OnInit {
 
     async initUpdateForm() {
         try {
-
+            this.updatedUser = await this.userManagement.fetchUserById(this.updatedId);
+            this.updatedName = this.updatedUser.name!;
         } catch (error) {
             console.log(error);
         }
@@ -103,9 +104,16 @@ export class CRUEmployeeComponent implements OnInit {
         } else {
             this.updatedName = this.updatedUser.name ?? '';
             this.cruForm = this.formBuilder.group({
-
+                name: [this.updatedName, [Validators.required]],
+                email: [this.updatedUser.email, [Validators.required, Validators.email]],
+                password: [this.updatedUser.password],
+                phone: [this.updatedUser.phone, [Validators.required]],
+                gender: [this.updatedUser.gender + ""],
+                address: [this.updatedUser.address],
+                image_url: [this.updatedUser.image_url ?? '', [Validators.required]],
+                shopId: [this.updatedUser.shopId],
+                roles: [this.updatedUser.roles]
             });
-
         }
     }
 
@@ -150,8 +158,18 @@ export class CRUEmployeeComponent implements OnInit {
     }
 
     async handleUpdate() {
-        try {
+        this.isSubmit = true;
 
+        if (this.cruForm.invalid) {
+            console.log('INVALID FORM');
+            console.log(this.cruForm.value);
+            return;
+        }
+
+        try {
+            const instance = this.convertValueFormToModel();
+            await this.userManagement.updateUserById(instance, this.selectedImageFile);
+            this.onCancel();
         } catch (error) {
             console.log(error);
         }

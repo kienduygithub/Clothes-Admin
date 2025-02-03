@@ -72,21 +72,21 @@ export class EmployeeListComponent implements OnInit {
         }
     }
 
-    onUpdateProduct(id: number) {
-        this.router.navigate(['shop/product/products/view'], { queryParams: { id: id } });
+    onUpdateUser(id: number) {
+        this.router.navigate(['/employee/list/view'], { queryParams: { id: id } });
     }
 
-    onConfirmDeleteProduct(user: UserModel) {
+    onConfirmDeleteUser(user: UserModel) {
         this.dialogService.open(WarningComponent, {
             context: {
                 title: 'Xóa',
                 content: 'Bạn có chắc muốn xóa sản phẩm ' + user.name + ' này?',
-                acceptFunc: this.handleDeleteProduct.bind(this, user.id!)
+                acceptFunc: this.handleDeleteUser.bind(this, user.id!)
             }
         })
     }
 
-    async handleDeleteProduct(productId: number) {
+    async handleDeleteUser(productId: number) {
         // try {
         //     await this.userManagement.deleteProductById(productId);
         //     this.allUsers = this.allUsers.filter(product => product.id !== productId);

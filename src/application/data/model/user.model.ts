@@ -71,11 +71,10 @@ export class UserModel {
         return {
             name: data.name,
             email: data.email,
-            password: data.password,
             phone: data.phone,
             gender: data.gender,
             address: data.address,
-            shopId: data.shopId,
+            shopId: data.shopId === 0 ? undefined : data.shopId,
             roles: data.roles,
         }
     }

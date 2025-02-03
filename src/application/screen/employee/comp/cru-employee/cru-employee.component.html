@@ -38,9 +38,11 @@
                 <div class="info">
                     <div class="info-image-wrapper">
                         <label class="upload-image" for="info-employee-files">
-                            <img *ngIf="cruForm.get('image_url')?.value === null || cruForm.get('image_url')?.value === ''"
-                                [src]="image_no_avatar">
-                            <img *ngIf="cruForm.get('image_url')?.value !== ''" [src]="cruForm.get('image_url')?.value">
+                            <img *ngIf="cruForm.get('image_url')?.value === ''" [src]="image_no_avatar">
+                            <img *ngIf="cruForm.get('image_url')?.value !== '' && !selectedImageFile"
+                                [src]="preImage + '/' + cruForm.get('image_url')?.value">
+                            <img *ngIf="cruForm.get('image_url')?.value !== '' && selectedImageFile"
+                                [src]="cruForm.get('image_url')?.value">
                         </label>
                         <input #infoImageFile type="file" id="info-employee-files" accept=".png, .jpg, .jpeg"
                             [hidden]="true" (change)="onChangeAvatarFile(infoImageFile.files)" />
