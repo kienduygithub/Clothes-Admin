@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, Input, ViewChild } from "@angular/core";
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import {
     type EditorConfig,
@@ -39,6 +39,7 @@ import {
 } from 'ckeditor5';
 import { environment } from "../../../../environments/environment";
 import { CommonModule } from "@angular/common";
+import { FormGroup, FormsModule } from "@angular/forms";
 
 @Component({
     standalone: true,
@@ -47,7 +48,8 @@ import { CommonModule } from "@angular/common";
     styleUrl: './ckeditor.component.scss',
     imports: [
         CommonModule,
-        CKEditorModule
+        CKEditorModule,
+        FormsModule
     ],
     providers: [
 
@@ -57,10 +59,14 @@ import { CommonModule } from "@angular/common";
 export class CKEditorComponent implements AfterViewInit {
 
     @Input() placeholder: string = '';
+    @Input() group!: FormGroup;
+    @Input() controlName!: string;
 
     isLayoutReady = false;
     Editor = ClassicEditor;
     config: EditorConfig = {};
+
+    editorData = '';
 
     constructor(
         private cdr: ChangeDetectorRef
@@ -195,9 +201,23 @@ export class CKEditorComponent implements AfterViewInit {
         configUpdateAlert(this.config);
 
         this.isLayoutReady = true;
+
+        if (this.group && this.controlName) {
+            const html = this.group.get(this.controlName)?.value;
+            this.editorData = html;
+        }
         this.cdr.detectChanges();
     }
 
+    onChangeEditor(event: any) {
+        const content = event.editor.getData();
+        if (this.group && this.controlName) {
+            this.group.get(this.controlName)?.patchValue(
+                content,
+                { emitEvent: false }
+            )
+        }
+    }
 }
 
 function configUpdateAlert(config: any) {

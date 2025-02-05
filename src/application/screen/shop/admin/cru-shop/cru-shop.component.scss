@@ -55,7 +55,6 @@
                 width: 140px;
                 height: 140px;
                 border-radius: 50%;
-                border: 6px solid #ccc;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -66,9 +65,17 @@
                     overflow: hidden;
                 }
 
-                img.no-logo {
+                img {
                     width: 80%;
                     height: 80%;
+                }
+
+                &.no-logo {
+                    border: 6px solid #ccc;
+                }
+
+                &:not(.no-logo) {
+                    border: 1px solid #ccc;
                 }
             }
 
@@ -165,7 +172,7 @@ input.disabled {
         margin-bottom: 0.5rem;
     }
 
-    label.no-background {
+    label.upload {
         width: 100%;
         height: 100%;
         border-radius: 5px;
@@ -185,20 +192,32 @@ input.disabled {
             font-size: 15px;
         }
 
-        &::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: transparent;
-            border-radius: 5px;
-            border: 2px dashed transparent;
-            transition: border-color 0.15s linear;
+        &.no-background {
+            &::before {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: transparent;
+                border-radius: 5px;
+                border: 2px dashed transparent;
+                transition: border-color 0.15s linear;
+            }
+
+            &:hover::before {
+                border-color: #0085ff;
+            }
         }
 
-        &:hover::before {
-            border-color: #0085ff;
+        &:not(.no-background) {
+            border-color: transparent;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
         }
+
     }
 }
 

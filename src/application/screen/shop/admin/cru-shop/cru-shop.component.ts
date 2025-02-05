@@ -59,7 +59,12 @@ export class CRUShopComponent implements OnInit {
     updatedShop!: ShopModel;
     updatedId!: number;
     updatedName!: string;
-    selectedImageFile!: File;
+    selectedLogoFile!: File;
+    selectedBackgroundFile!: File;
+    typeFiles = {
+        LOGO: 'logo',
+        BACKGROUND: 'background'
+    };
 
     constructor(
         private router: Router,
@@ -91,9 +96,13 @@ export class CRUShopComponent implements OnInit {
     initCreateForm() {
         this.cruForm = this.formBuilder.group({
             shop_name: ['', [ValueValidators.required]],
+            logo_url: ['', [ValueValidators.required]],
+            background_url: ['', [ValueValidators.required]],
             contact_email: ['', [ValueValidators.required]],
             contact_address: ['', [ValueValidators.required]],
+            description: ['']
         });
+
     }
 
     async initUpdateForm() {
@@ -115,6 +124,26 @@ export class CRUShopComponent implements OnInit {
             });
         }
     }
+
+    onChangeLogoFile(files: any, typeFile: string) {
+        if (files) {
+            if (typeFile === this.typeFiles.LOGO) {
+                this.selectedLogoFile = files[0];
+                this.cruForm.get('logo_url')?.patchValue(
+                    URL.createObjectURL(files[0]),
+                    { emitEvent: false }
+                );
+            } else if (typeFile === this.typeFiles.BACKGROUND) {
+                this.selectedBackgroundFile = files[0];
+                this.cruForm.get('background_url')?.patchValue(
+                    URL.createObjectURL(files[0]),
+                    { emitEvent: false }
+                )
+            }
+        }
+    }
+
+
 
     onCancel() {
         this.router.navigate(['/employee/list']);
