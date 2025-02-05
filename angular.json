@@ -50,6 +50,7 @@
               "src/application/common/layout/styles/themes.scss",
               "src/application/common/layout/styles/tab.scss",
               "src/application/common/layout/styles/icon.css",
+              "src/application/common/layout/styles/ckeditor.scss",
               "node_modules/dropify/dist/css/dropify.min.css"
             ],
             "scripts": [

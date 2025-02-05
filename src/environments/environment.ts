@@ -1,3 +1,5 @@
 export const environment = {
-    production: true
+    production: true,
+    LICENSE_KEY: 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3Mzk5MjMxOTksImp0aSI6IjNiMDE1YzJmLTU1MWQtNDI1NS1hNTc1LTM4NDYyMWRmOWMwZSIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6ImViMDk0ZTdjIn0.8xw7qr5lQgqeZfuCsd6d2kMPMZNCfkz1mXtB-dj5NRl1iMbDqJd7kK4cJsd8BWgXBnqQp3LWpInrZ0mTGzGZDA',
+    CLOUD_SERVICES_TOKEN_URL: 'https://6jg3m4vvxnt6.cke-cs.com/token/dev/6d903de3cba3a38532a504987cf31f5d73d47d2436778cd976bc80622dc0?limit=10',
 };  

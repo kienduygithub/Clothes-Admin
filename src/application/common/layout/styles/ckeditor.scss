@@ -1,0 +1,44 @@
+@import 'ckeditor5/ckeditor5.css';
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+@media print {
+    body {
+        margin: 0 !important;
+        font-family: 'Roboto', sans-serif;
+    }
+}
+
+.ckeditor-wrapper {
+    font-family: 'Roboto', sans-serif;
+    width: 100%;
+    min-height: 500px;
+}
+
+.ck-content {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    word-break: break-word;
+}
+
+.editor-container_classic-editor .editor-container__editor {
+    width: 100%;
+    max-width: 1500px;
+
+    ckeditor {
+        height: 100%;
+        background-color: red;
+
+        .ck-editor__main {
+
+            .ck-content {
+                min-height: 300px;
+                max-height: 300px;
+
+                &::-webkit-scrollbar {
+                    width: 3px;
+                }
+            }
+        }
+    }
+}

@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ShopManagement } from "../../../../data/management/shop.management";
 import { ShopService } from "../../../../data/service/shop.service";
@@ -10,6 +10,7 @@ import { actions } from "../../../../common/resource/actions";
 import { ImageResource } from "../../../../common/resource/image_resource";
 import { AppConfig } from "../../../../common/config/app.config";
 import { ValueValidators } from "../../../../common/utils/validate/value.validate";
+import { CKEditorComponent } from "../../../../common/utils/ckeditor/ckeditor.component";
 
 const NB_LIBS = [
     NbInputModule,
@@ -27,7 +28,8 @@ const NB_LIBS = [
     imports: [
         ...NB_LIBS,
         CommonModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        CKEditorComponent
     ],
     providers: [
         ShopManagement,
@@ -63,7 +65,8 @@ export class CRUShopComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private appConfig: AppConfig,
         private formBuilder: FormBuilder,
-        private shopManagement: ShopManagement
+        private shopManagement: ShopManagement,
+        private cdr: ChangeDetectorRef
     ) { }
 
     async ngOnInit() {
@@ -167,5 +170,7 @@ export class CRUShopComponent implements OnInit {
 
         return model;
     }
+
+
 
 }
