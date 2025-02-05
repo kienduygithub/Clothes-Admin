@@ -50,19 +50,21 @@ export const MENU_ITEMS: any[] = [
         ],
     },
     {
-        title: 'Firewall',
+        title: 'Cửa hàng',
         icon: { icon: 'firewall_icon', pack: 'mainIcon' },
-        link: '/employee',
+        link: '/shop',
+        pathMath: 'prefix',
         children: [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Danh sách nhân sự',
-                link: '/employee/list',
+                title: 'Danh sách cửa hàng',
+                link: '/shop/list',
+                pathMath: 'prefix'
             },
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Phân quyền',
-                link: '/employee/access',
+                title: 'Phân phụ trách',
+                link: '/shop/access',
             },
         ],
     },
