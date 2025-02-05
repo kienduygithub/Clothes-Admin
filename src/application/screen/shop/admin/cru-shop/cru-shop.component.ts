@@ -40,6 +40,7 @@ const NB_LIBS = [
 export class CRUShopComponent implements OnInit {
 
     icons_arrow_line = ImageResource.icons_arrow_line;
+    icon_upload_v4 = ImageResource.icon_upload_v4;
     icon_upload_v3 = ImageResource.icon_upload_v3;
 
     icon_delete = ImageResource.delete_button;

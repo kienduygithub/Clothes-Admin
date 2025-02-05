@@ -42,7 +42,7 @@
                     <div class="upload-logo-wrapper">
                         <label class="upload-image" for="logo-files">
                             <img [src]="icon_upload_v3" />
-                            <span>Upload</span>
+                            <span>Tải logo</span>
                         </label>
                         <input #infoImageFile type="file" id="logo-files" accept=".png, .jpg, .jpeg" [hidden]="true" />
                     </div>
@@ -107,6 +107,16 @@
                 Mô tả cửa hàng
             </label>
             <app-ckeditor [placeholder]="'Mô tả cửa hàng'"></app-ckeditor>
+        </div>
+        <div class="padding-form upload-background-wrapper">
+            <label>
+                Tải ảnh nền<span class="required">*</span>
+            </label>
+            <label for="backgroundForm" class="no-background">
+                <img [src]="icon_upload_v4" />
+                <span class="upload-text">Tải ảnh nền</span>
+            </label>
+            <input type="file" id="backgroundForm" accept=".png, .jpg, .jpeg" hidden />
         </div>
     </form>
 </ng-template>
