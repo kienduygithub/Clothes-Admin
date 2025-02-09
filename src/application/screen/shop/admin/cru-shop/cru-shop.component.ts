@@ -159,15 +159,20 @@ export class CRUShopComponent implements OnInit {
 
     async handleCreate() {
         this.isSubmit = true;
+        console.log(this.cruForm.value);
 
         if (this.cruForm.invalid) {
             console.log('INVALID FORM');
-            console.log(this.cruForm.value);
             return;
         }
 
         try {
             const instance = this.convertValueFormToModel();
+            await this.shopManagement.createShop(
+                instance,
+                this.selectedLogoFile,
+                this.selectedBackgroundFile
+            );
             this.onCancel();
         } catch (error) {
             console.log(error);
@@ -197,6 +202,14 @@ export class CRUShopComponent implements OnInit {
         if (this.action === actions.UPDATE) {
             model.id = this.updatedId;
         }
+        model.shop_name = this.cruForm.getRawValue().shop_name === this.updatedName
+            ? undefined
+            : this.cruForm.getRawValue().shop_name;
+        model.contact_email = this.cruForm.getRawValue().contact_email;
+        model.contact_address = this.cruForm.getRawValue().contact_address;
+        model.description = this.cruForm.getRawValue().description;
+        model.logo_url = this.cruForm.getRawValue().logo_url;
+        model.background_url = this.cruForm.getRawValue().background_url;
 
         return model;
     }

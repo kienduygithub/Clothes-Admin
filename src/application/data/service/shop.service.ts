@@ -18,10 +18,10 @@ export class ShopService {
             const formData = new FormData();
             formData.append("shopInfo", JSON.stringify(shopInfo));
             if (logoFile) {
-                formData.append("logoFile", logoFile);
+                formData.append("logoShopFile", logoFile);
             }
             if (backgroundFile) {
-                formData.append("backgroundFile", backgroundFile);
+                formData.append("backgroundShopFile", backgroundFile);
             }
             const response = await this.serviceCore.POST(
                 `${domain}`,
