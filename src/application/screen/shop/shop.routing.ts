@@ -11,5 +11,9 @@ export const ShopRouting: Routes = [
     {
         path: 'shop/list/create',
         component: CRUShopComponent
+    },
+    {
+        path: 'shop/list/view',
+        component: CRUShopComponent
     }
 ];

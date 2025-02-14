@@ -66,7 +66,7 @@ export class ShopModel {
                 }
             }
         )
-        model.stock_quantities = stockProducts.reduce((sum: number, curr: any) => {
+        model.stock_quantities = stockProducts?.reduce((sum: number, curr: any) => {
             return sum + curr.stocks
         }, 0);
         model.createdAt = data.createdAt;

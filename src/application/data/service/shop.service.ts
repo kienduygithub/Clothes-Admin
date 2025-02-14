@@ -37,15 +37,11 @@ export class ShopService {
     async updateShopById(data: ShopModel, logoFile: any, backgroundFile: any): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
-            const shopInfo = new ShopModel().convertObj(data);
+            const shopInfo = new ShopModel().convertModelToUpdate(data);
             const formData = new FormData();
             formData.append("shopInfo", JSON.stringify(shopInfo));
-            if (logoFile) {
-                formData.append("logoFile", logoFile);
-            }
-            if (backgroundFile) {
-                formData.append("backgroundFile", backgroundFile);
-            }
+            formData.append("logoShopFile", logoFile);
+            formData.append("backgroundShopFile", backgroundFile);
             const response = await this.serviceCore.PATCH(
                 `${domain}`,
                 `shop/admin/${data.id}`,
@@ -75,7 +71,7 @@ export class ShopService {
             const domain = this.appConfig.getDomain();
             const response = await this.serviceCore.GET(
                 `${domain}`,
-                `shop/${shopId}`,
+                `shop/admin/${shopId}`,
             );
             return response;
         } catch (error) {

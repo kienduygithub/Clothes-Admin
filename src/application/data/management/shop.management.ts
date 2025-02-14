@@ -39,6 +39,7 @@ export class ShopManagement {
     async fetchShopById(shopId: number) {
         try {
             const result = await this.shopService.fetchShopById(shopId);
+            console.log(result);
             const response = await result?.body?.shops?.map((shop: any) => new ShopModel().convertObj(shop));
             return response[0];
         } catch (error) {

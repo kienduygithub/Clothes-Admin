@@ -132,7 +132,7 @@
             </label>
             <label for="backgroundForm" class="upload"
                 *ngIf="cruForm.get('background_url')?.value !== '' && !selectedBackgroundFile">
-                <img [src]="icon_upload_v4" />
+                <img [src]="preImage + '/' + cruForm.get('background_url')?.value" />
             </label>
             <input #backgroundFile type="file" id="backgroundForm" accept=".png, .jpg, .jpeg" [hidden]="true"
                 (change)="onChangeLogoFile(backgroundFile.files, typeFiles.BACKGROUND)" />

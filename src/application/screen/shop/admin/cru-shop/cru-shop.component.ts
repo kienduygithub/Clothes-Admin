@@ -85,7 +85,7 @@ export class CRUShopComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe(async (params) => {
             if (params['id']) {
                 this.action = actions.UPDATE;
-                this.updatedId = params['id'];
+                this.updatedId = +params['id'];
                 await this.initUpdateForm();
             } else {
                 this.action = actions.CREATE;
@@ -120,8 +120,12 @@ export class CRUShopComponent implements OnInit {
         } else {
             this.updatedName = this.updatedShop.shop_name ?? '';
             this.cruForm = this.formBuilder.group({
-                name: [this.updatedName, [ValueValidators.required]],
-
+                shop_name: [this.updatedName, [ValueValidators.required]],
+                logo_url: [this.updatedShop.logo_url, [ValueValidators.required]],
+                background_url: [this.updatedShop.background_url, [ValueValidators.required]],
+                contact_email: [this.updatedShop.contact_email, [ValueValidators.required]],
+                contact_address: [this.updatedShop.contact_address, [ValueValidators.required]],
+                description: [this.updatedShop.description]
             });
         }
     }
@@ -191,6 +195,11 @@ export class CRUShopComponent implements OnInit {
 
         try {
             const instance = this.convertValueFormToModel();
+            await this.shopManagement.updateShopById(
+                instance,
+                this.selectedLogoFile,
+                this.selectedBackgroundFile
+            );
             this.onCancel();
         } catch (error) {
             console.log(error);
@@ -209,8 +218,6 @@ export class CRUShopComponent implements OnInit {
         model.contact_email = this.cruForm.getRawValue().contact_email;
         model.contact_address = this.cruForm.getRawValue().contact_address;
         model.description = this.cruForm.getRawValue().description;
-        model.logo_url = this.cruForm.getRawValue().logo_url;
-        model.background_url = this.cruForm.getRawValue().background_url;
 
         return model;
     }
