@@ -1,3 +1,4 @@
+import { ProductModel } from "./product.model";
 import { UserModel } from "./user.model";
 
 export class ShopModel {
@@ -8,7 +9,10 @@ export class ShopModel {
     contact_email?: string;
     contact_address?: string;
     description?: string;
-    users?: UserModel[];
+    user?: UserModel;
+    products?: ProductModel[];
+    stock_quantities?: number;
+    createdAt?: string;
 
     constructor(
         id?: number,
@@ -18,7 +22,10 @@ export class ShopModel {
         contact_email?: string,
         contact_address?: string,
         description?: string,
-        users?: UserModel[],
+        user?: UserModel,
+        products?: ProductModel[],
+        stock_quantities?: number,
+        createdAt?: string,
     ) {
         this.id = id ?? 0;
         this.shop_name = shop_name ?? '';
@@ -26,8 +33,11 @@ export class ShopModel {
         this.background_url = background_url ?? '';
         this.contact_email = contact_email ?? '';
         this.contact_address = contact_address ?? '';
-        this.users = users ?? [];
+        this.user = user;
         this.description = description ?? '';
+        this.products = products ?? [];
+        this.stock_quantities = stock_quantities ?? 0;
+        this.createdAt = createdAt;
     }
 
     convertObj(data: any) {
@@ -40,7 +50,26 @@ export class ShopModel {
         model.contact_email = data.contact_email;
         model.contact_address = data.contact_address;
         model.description = data.description;
-        model.users = data?.users.map((user: any) => new UserModel().convertObj(user));
+        model.user = data.user ? new UserModel().convertObj(data.user) : undefined;
+        model.products = data.products?.map((product: any) => new ProductModel().convertObj(product));
+
+        const stockProducts = data.products?.map(
+            (product: any) => {
+                const totalStock = product?.variants?.reduce(
+                    (stocks: number, variant: any) => {
+                        return stocks + variant?.stock_quantity;
+                    }, 0
+                );
+                return {
+                    id: product.id,
+                    stocks: totalStock
+                }
+            }
+        )
+        model.stock_quantities = stockProducts.reduce((sum: number, curr: any) => {
+            return sum + curr.stocks
+        }, 0);
+        model.createdAt = data.createdAt;
 
         return model;
     }

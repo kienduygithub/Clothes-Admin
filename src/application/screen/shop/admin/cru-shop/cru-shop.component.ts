@@ -11,6 +11,7 @@ import { ImageResource } from "../../../../common/resource/image_resource";
 import { AppConfig } from "../../../../common/config/app.config";
 import { ValueValidators } from "../../../../common/utils/validate/value.validate";
 import { CKEditorComponent } from "../../../../common/utils/ckeditor/ckeditor.component";
+import { ShopURL } from "../../shop.routing";
 
 const NB_LIBS = [
     NbInputModule,
@@ -146,7 +147,7 @@ export class CRUShopComponent implements OnInit {
 
 
     onCancel() {
-        this.router.navigate(['/employee/list']);
+        this.router.navigate([ShopURL.SHOP_URL]);
     }
 
     async onSave() {

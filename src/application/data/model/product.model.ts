@@ -46,7 +46,7 @@ export class ProductModel {
         model.unit_price = obj.unit_price;
         model.description = obj.description;
         model.sold_quantity = obj.sold_quantity;
-        model.image_urls = obj.product_images.map((item: any) => {
+        model.image_urls = obj.product_images?.map((item: any) => {
             const productImages = new ProductImagesModel();
             productImages.id = item.id;
             productImages.productId = item.productId;

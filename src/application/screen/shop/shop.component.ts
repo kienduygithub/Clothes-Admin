@@ -3,6 +3,7 @@ import { ShopListComponent } from "./admin/shop-list/shop-list.component";
 import { Router } from "@angular/router";
 import { NbButtonModule, NbInputModule } from "@nebular/theme";
 import { CommonModule } from "@angular/common";
+import { ShopURL } from "./shop.routing";
 
 const NB_LIBS = [
     NbInputModule,
@@ -35,6 +36,6 @@ export class ShopComponent implements OnInit {
     }
 
     onCreate() {
-        this.router.navigate(['/shop/list/create']);
+        this.router.navigate([ShopURL.CREATE_SHOP_URL]);
     }
 }

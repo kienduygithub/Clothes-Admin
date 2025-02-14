@@ -1,0 +1,117 @@
+<div class="router-static">
+    <div class="search-and-filter">
+        <div class="input-container">
+            <input nbInput type="text" placeholder="Nhập tên sản phẩm">
+        </div>
+        <button nbButton class="util-box">
+            <img class="common-icon" [src]="icon_filter" />
+        </button>
+        <button nbButton class="util-box">
+            <img class="common-icon" [src]="icon_refresh" />
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="d-flex align-items-center" style="gap: 5px;">
+                            <nb-icon class="table-header" icon="hash-outline"></nb-icon>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="d-flex align-items-center" style="gap: 5px;">
+                            <nb-icon class="table-header" icon="code-outline"></nb-icon>
+                            <span>ID</span>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="d-flex align-items-center" style="gap: 5px;">
+                            <nb-icon class="table-header" icon="image-outline"></nb-icon>
+                            <span>Logo</span>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="d-flex align-items-center" style="gap: 5px;">
+                            <nb-icon class="table-header" icon="shopping-bag-outline"></nb-icon>
+                            <span>Cửa hàng</span>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="d-flex align-items-center" style="gap: 5px;">
+                            <nb-icon class="table-header" icon="email-outline"></nb-icon>
+                            <span>Liên hệ</span>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="d-flex align-items-center" style="gap: 5px;">
+                            <nb-icon class="table-header" icon="archive-outline"></nb-icon>
+                            <span>Tồn kho</span>
+                        </div>
+                    </th>
+                    <th style="color: transparent">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let shop of allShops | paginate: paging;let i = index">
+                    <td style="width: 5%;">
+                        <span style="font-size: 14px;">
+                            {{offset + i}}
+                        </span>
+                    </td>
+                    <td style="width: 10%;">
+                        <span style="font-size: 14px;">
+                            {{shop.id}}
+                        </span>
+                    </td>
+                    <td style="width: 13%;">
+                        <div class="image-container">
+                            <img *ngIf="shop.logo_url !== ''" src="{{preImage}}/{{shop.logo_url}}">
+                            <img *ngIf="shop.logo_url === ''" [src]="image_not_found">
+                        </div>
+                    </td>
+                    <td style="width: 15%;">
+                        <span style="font-size: 14px;">
+                            {{shop.shop_name}}
+                        </span>
+                    </td>
+                    <td style="width: 12%;">
+                        <div class="d-flex flex-column">
+                            <span style="font-size: 14px;">
+                                {{shop.contact_email}}
+                            </span>
+                        </div>
+                    </td>
+                    <td style="width: 14%;">
+                        <span style="font-size: 14px;">
+                            {{shop.stock_quantities}}
+                        </span>
+                    </td>
+                    <td style="width: 10%;" (click)="$event.stopPropagation()">
+                        <div class="list-actions">
+                            <nb-icon class="common-icon" icon="icon_edit" pack="mainIcon" [nbTooltip]="'Chỉnh sửa'"
+                                nbTooltipPlacement="bottom" (click)="onUpdateShop(shop.id!)"></nb-icon>
+                            <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"
+                                nbTooltipPlacement="bottom" (click)="onConfirmDeleteShop(shop, i)">
+                            </nb-icon>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="allShops.length === 0">
+                    <td class="table-no-data text-center" colspan="11">
+                        Không có dữ liệu
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <div class="total-items">
+            <span>Tổng số: {{ paging.totalItems }}</span>
+        </div>
+        <div class="pagination-flex">
+            <pagination-controls (pageChange)="onPageChange($event)" previousLabel="" nextLabel="">
+            </pagination-controls>
+        </div>
+    </div>
+</div>

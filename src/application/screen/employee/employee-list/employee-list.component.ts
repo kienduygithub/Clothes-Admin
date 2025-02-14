@@ -60,11 +60,11 @@ export class EmployeeListComponent implements OnInit {
     async ngOnInit() {
         this.preImage = this.appConfig.getPreImage() ?? "";
         this.paging = new PagingModel();
-        await this.fetchallUsers();
+        await this.fetchAllUsers();
         this.resetPagination();
     }
 
-    async fetchallUsers() {
+    async fetchAllUsers() {
         try {
             this.allUsers = await this.userManagement.fetchAllUser("Chưa biết");
         } catch (error) {
