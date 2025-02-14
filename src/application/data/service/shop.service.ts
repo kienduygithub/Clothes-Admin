@@ -83,6 +83,19 @@ export class ShopService {
         }
     }
 
+    async deleteShopById(shopId: number): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.DETELE(
+                `${domain}`,
+                `shop/admin/${shopId}`,
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async changeOwnersForShop(shopId: number, ownerIds: number[]): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();

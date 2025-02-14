@@ -46,6 +46,15 @@ export class ShopManagement {
         }
     }
 
+    async deleteShopById(shopId: number) {
+        try {
+            await this.shopService.deleteShopById(shopId);
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async changeOwnersForShop(shopId: number, ownerIds: number[]) {
         try {
             await this.shopService.changeOwnersForShop(shopId, ownerIds);

@@ -84,9 +84,9 @@ export class ShopListComponent implements OnInit {
         })
     }
 
-    async handleDeleteShop(userId: number, index: number) {
+    async handleDeleteShop(shopId: number, index: number) {
         try {
-            // await this.shopManagement.deleteShopById(userId);
+            await this.shopManagement.deleteShopById(shopId);
             this.allShops.splice(index, 1);
             this.paging.totalItems = this.allShops.length;
             this.paging.totalPage = Math.ceil(this.allShops.length / this.paging.itemsPerPage);
