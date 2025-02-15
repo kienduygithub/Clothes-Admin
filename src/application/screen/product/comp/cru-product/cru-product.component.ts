@@ -16,11 +16,11 @@ import { SizeModel } from "../../../../data/model/attribute/size.model";
 import { AttributeManagement } from "../../../../data/management/attribute.management";
 import { AttributeService } from "../../../../data/service/attribute.service";
 import { TransformColorId } from "../../../../common/layout/pipes/transformColorId";
-import { ErrorComponent } from "../../../../common/layout/notify/error/error.component";
 import { WarningComponent } from "../../../../common/layout/notify/warning/warnimg.component";
 import { ProductValidate } from "../../../../common/utils/validate/product.validate";
 import { Option } from "../../../../common/resource/option.interface";
 import { GenderResource } from "../../../../common/resource/gender_resource";
+import { CKEditorComponent } from "../../../../common/utils/ckeditor/ckeditor.component";
 
 const NB_LIBS = [
     NbInputModule,
@@ -43,7 +43,8 @@ const PIPES = [
         ...NB_LIBS,
         ...PIPES,
         CommonModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        CKEditorComponent,
     ],
     providers: [
         ProductManagement,
@@ -130,22 +131,24 @@ export class CRUProductComponent implements OnInit {
 
     initCreateForm() {
         this.cruForm = this.formBuilder.group({
-            product_name: this.formBuilder.control('', [Validators.required]),
-            origin: this.formBuilder.control('', [Validators.required]),
+            product_name: this.formBuilder.control('', [ValueValidators.required]),
+            origin: this.formBuilder.control('', [ValueValidators.required]),
             gender: this.formBuilder.control(this.genderProductList[0].value),
-            unit_price: this.formBuilder.control('', [Validators.required, ValueValidators.isNumber]),
+            unit_price: this.formBuilder.control('', [ValueValidators.required, ValueValidators.isNumber]),
+            category1: this.formBuilder.control('', [ValueValidators.required]),
+            category2: this.formBuilder.control('', [ValueValidators.required]),
             description: this.formBuilder.control(''),
             image_urls: this.formBuilder.array([]),
             product_variants: this.formBuilder.array([
                 this.formBuilder.group({
                     id: this.formBuilder.control(this.timeSKU),
                     productId: this.updatedId ?? 0,
-                    image_url: this.formBuilder.control('', [Validators.required]),
-                    colorId: this.formBuilder.control('', [Validators.required]),
-                    sizeId: this.formBuilder.control('', [Validators.required]),
+                    image_url: this.formBuilder.control('', [ValueValidators.required]),
+                    colorId: this.formBuilder.control('', [ValueValidators.required]),
+                    sizeId: this.formBuilder.control('', [ValueValidators.required]),
                     sku: this.formBuilder.control(`${this.timeSKU}`),
                     stock_quantity: this.formBuilder.control('0', [
-                        Validators.required, ValueValidators.isNumber
+                        ValueValidators.required, ValueValidators.isNumber
                     ]),
                     isTemp: true
                 })
@@ -167,10 +170,12 @@ export class CRUProductComponent implements OnInit {
         } else {
             this.updatedName = this.updatedProduct.product_name ?? '';
             this.cruForm = this.formBuilder.group({
-                product_name: this.formBuilder.control(this.updatedProduct.product_name ?? '', [Validators.required]),
-                origin: this.formBuilder.control(this.updatedProduct.origin, [Validators.required]),
+                product_name: this.formBuilder.control(this.updatedProduct.product_name ?? '', [ValueValidators.required]),
+                origin: this.formBuilder.control(this.updatedProduct.origin, [ValueValidators.required]),
                 gender: this.formBuilder.control(this.updatedProduct.gender),
-                unit_price: this.formBuilder.control(this.updatedProduct.unit_price, [Validators.required, ValueValidators.isNumber]),
+                unit_price: this.formBuilder.control(this.updatedProduct.unit_price, [ValueValidators.required, ValueValidators.isNumber]),
+                category1: this.formBuilder.control('', [ValueValidators.required]),
+                category2: this.formBuilder.control('', [ValueValidators.required]),
                 description: this.formBuilder.control(this.updatedProduct.description),
                 image_urls: this.formBuilder.array([]),
                 product_variants: this.formBuilder.array([])
@@ -197,12 +202,12 @@ export class CRUProductComponent implements OnInit {
                     id: variants[i].id,
                     productId: variants[i].productId,
                     image_url: `${this.preImage}/${variants[i].image_url}`,
-                    colorId: this.formBuilder.control(variants[i].colorId, [Validators.required]),
-                    sizeId: this.formBuilder.control(variants[i].sizeId, [Validators.required]),
+                    colorId: this.formBuilder.control(variants[i].colorId, [ValueValidators.required]),
+                    sizeId: this.formBuilder.control(variants[i].sizeId, [ValueValidators.required]),
                     sku: variants[i].sku,
                     stock_quantity: this.formBuilder.control(
                         variants[i].stock_quantity + "",
-                        [Validators.required, ValueValidators.isNumber]
+                        [ValueValidators.required, ValueValidators.isNumber]
                     ),
                     isTemp: false
                 })
@@ -369,12 +374,12 @@ export class CRUProductComponent implements OnInit {
             this.formBuilder.group({
                 id: this.formBuilder.control(this.timeSKU),
                 productId: (this.updatedId && Number(this.updatedId)) ?? 0,
-                image_url: this.formBuilder.control('', [Validators.required]),
-                colorId: this.formBuilder.control('', [Validators.required]),
-                sizeId: this.formBuilder.control('', [Validators.required]),
+                image_url: this.formBuilder.control('', [ValueValidators.required]),
+                colorId: this.formBuilder.control('', [ValueValidators.required]),
+                sizeId: this.formBuilder.control('', [ValueValidators.required]),
                 sku: this.formBuilder.control(`${this.timeSKU}`),
                 stock_quantity: this.formBuilder.control('0', [
-                    Validators.required,
+                    ValueValidators.required,
                     ValueValidators.isNumber
                 ]),
                 isTemp: true
@@ -409,7 +414,6 @@ export class CRUProductComponent implements OnInit {
         if (variantIndex > -1) {
             variants.splice(variantIndex, 1);
             this.product_variants.patchValue(variants);
-            console.log(this.product_variants.value);
         }
     }
 }
