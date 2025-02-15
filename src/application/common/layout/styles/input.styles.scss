@@ -131,6 +131,17 @@ input::-webkit-credentials-auto-fill-button {
   opacity: 1;
 }
 
+.search-input-container {
+  width: 500px;
+}
+
+.search-input-container input {
+  width: 100% !important;
+  font-size: 13px !important;
+  max-width: 500px !important;
+  font-weight: 400;
+}
+
 // <iframe _ngcontent-ng-c1144565491="" frameborder="0" src="https://help.datatrust.one/privacy-policy"></iframe>
 
 .status-basic:disabled {

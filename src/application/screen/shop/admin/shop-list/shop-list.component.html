@@ -1,7 +1,7 @@
 <div class="router-static">
     <div class="search-and-filter">
-        <div class="input-container">
-            <input nbInput type="text" placeholder="Nhập tên sản phẩm">
+        <div class="search-input-container">
+            <input nbInput type="text" placeholder="Nhập tên cửa hàng">
         </div>
         <button nbButton class="util-box">
             <img class="common-icon" [src]="icon_filter" />
@@ -53,7 +53,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let shop of allShops | paginate: paging;let i = index">
+                <tr (click)="onUpdateShop(shop.id!)" *ngFor="let shop of allShops | paginate: paging;let i = index">
                     <td style="width: 5%;">
                         <span style="font-size: 14px;">
                             {{offset + i}}

@@ -36,7 +36,7 @@
 
 .header-form .header-title {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 700;
   margin-bottom: 0;
   color: #0f2128;
 }
@@ -196,7 +196,7 @@
   border: none;
 }
 
-table > thead > tr > th {
+table>thead>tr>th {
   font-size: 14px;
   font-weight: 500;
   color: #222222;
@@ -209,13 +209,13 @@ table > thead > tr > th {
   border-right: none !important;
 }
 
-table > thead {
+table>thead {
   border: 1px solid #dee2e6;
   border-bottom: none;
   background-color: #ededed !important;
 }
 
-table > tbody {
+table>tbody {
   border: 1px solid #dee2e6;
   border-top: none;
 }
@@ -402,8 +402,7 @@ textarea:focus {
   font-weight: 500;
 }
 
-.filter-layout .filter-body {
-}
+.filter-layout .filter-body {}
 
 .filter-layout .filter-body .item {
   display: grid;

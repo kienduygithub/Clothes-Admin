@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ShopManagement } from "../../../../data/management/shop.management";
 import { ShopService } from "../../../../data/service/shop.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { NbButtonModule, NbIconModule, NbInputModule, NbSelectModule, NbTooltipModule } from "@nebular/theme";
+import { NbButtonModule, NbDialogService, NbIconModule, NbInputModule, NbSelectModule, NbTooltipModule } from "@nebular/theme";
 import { ShopModel } from "../../../../data/model/shop.model";
 import { actions } from "../../../../common/resource/actions";
 import { ImageResource } from "../../../../common/resource/image_resource";
@@ -12,6 +12,7 @@ import { AppConfig } from "../../../../common/config/app.config";
 import { ValueValidators } from "../../../../common/utils/validate/value.validate";
 import { CKEditorComponent } from "../../../../common/utils/ckeditor/ckeditor.component";
 import { ShopURL } from "../../shop.routing";
+import { ErrorComponent } from "../../../../common/layout/notify/error/error.component";
 
 const NB_LIBS = [
     NbInputModule,
@@ -73,6 +74,7 @@ export class CRUShopComponent implements OnInit {
         private appConfig: AppConfig,
         private formBuilder: FormBuilder,
         private shopManagement: ShopManagement,
+        private dialogService: NbDialogService,
         private cdr: ChangeDetectorRef
     ) { }
 
@@ -131,7 +133,7 @@ export class CRUShopComponent implements OnInit {
     }
 
     onChangeLogoFile(files: any, typeFile: string) {
-        if (files) {
+        if (files && files.length > 0) {
             if (typeFile === this.typeFiles.LOGO) {
                 this.selectedLogoFile = files[0];
                 this.cruForm.get('logo_url')?.patchValue(
@@ -147,8 +149,6 @@ export class CRUShopComponent implements OnInit {
             }
         }
     }
-
-
 
     onCancel() {
         this.router.navigate([ShopURL.SHOP_URL]);
@@ -167,6 +167,14 @@ export class CRUShopComponent implements OnInit {
         console.log(this.cruForm.value);
 
         if (this.cruForm.invalid) {
+            if (this.cruForm.get('logo_url')?.hasError('required') || this.cruForm.get('background_url')?.hasError('required')) {
+                this.dialogService.open(ErrorComponent, {
+                    context: {
+                        title: 'Không hợp lệ',
+                        content: 'Ảnh nền và logo không được để trống. Vui lòng thêm để hoàn tất thao tác.'
+                    }
+                })
+            }
             console.log('INVALID FORM');
             return;
         }
