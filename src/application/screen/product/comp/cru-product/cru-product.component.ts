@@ -19,6 +19,8 @@ import { TransformColorId } from "../../../../common/layout/pipes/transformColor
 import { ErrorComponent } from "../../../../common/layout/notify/error/error.component";
 import { WarningComponent } from "../../../../common/layout/notify/warning/warnimg.component";
 import { ProductValidate } from "../../../../common/utils/validate/product.validate";
+import { Option } from "../../../../common/resource/option.interface";
+import { GenderResource } from "../../../../common/resource/gender_resource";
 
 const NB_LIBS = [
     NbInputModule,
@@ -61,6 +63,7 @@ export class CRUProductComponent implements OnInit {
 
     preImage: string = '';
     originList: string[] = countries;
+    genderProductList: Option[] = GenderResource;
 
     actionWebs = actions;
     action = this.actionWebs.CREATE;
@@ -129,6 +132,7 @@ export class CRUProductComponent implements OnInit {
         this.cruForm = this.formBuilder.group({
             product_name: this.formBuilder.control('', [Validators.required]),
             origin: this.formBuilder.control('', [Validators.required]),
+            gender: this.formBuilder.control(this.genderProductList[0].value),
             unit_price: this.formBuilder.control('', [Validators.required, ValueValidators.isNumber]),
             description: this.formBuilder.control(''),
             image_urls: this.formBuilder.array([]),
@@ -165,6 +169,7 @@ export class CRUProductComponent implements OnInit {
             this.cruForm = this.formBuilder.group({
                 product_name: this.formBuilder.control(this.updatedProduct.product_name ?? '', [Validators.required]),
                 origin: this.formBuilder.control(this.updatedProduct.origin, [Validators.required]),
+                gender: this.formBuilder.control(this.updatedProduct.gender),
                 unit_price: this.formBuilder.control(this.updatedProduct.unit_price, [Validators.required, ValueValidators.isNumber]),
                 description: this.formBuilder.control(this.updatedProduct.description),
                 image_urls: this.formBuilder.array([]),
@@ -286,6 +291,7 @@ export class CRUProductComponent implements OnInit {
         model.shopId = 1; // Tạm thời thế
         model.product_name = this.cruForm.getRawValue().product_name === this.updatedName ? undefined : this.cruForm.getRawValue().product_name;
         model.origin = this.cruForm.getRawValue().origin;
+        model.gender = this.cruForm.getRawValue().gender;
         model.unit_price = this.cruForm.getRawValue().unit_price;
         model.description = this.cruForm.getRawValue().description;
         model.image_urls = this.cruForm.getRawValue().image_urls;

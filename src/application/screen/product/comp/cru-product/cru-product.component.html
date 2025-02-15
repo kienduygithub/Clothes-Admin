@@ -73,6 +73,18 @@
                     </div>
                 </div>
                 <div class="info">
+                    <label for="gender">
+                        Sản phẩm dành cho<span class="required">*</span>
+                    </label>
+                    <div class="select-wrapper">
+                        <nb-select formControlName="gender">
+                            <nb-option *ngFor="let gender of genderProductList" [value]="gender.value">
+                                {{gender.label}}
+                            </nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+                <div class="info">
                     <label for="unit_price">
                         Giá thành<span class="required">*</span>
                     </label>

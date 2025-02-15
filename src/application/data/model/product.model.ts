@@ -3,6 +3,7 @@ export class ProductModel {
     shopId?: number;
     product_name?: string;
     origin?: string;
+    gender?: string;
     description?: string;
     unit_price?: string;
     sold_quantity?: number;
@@ -16,6 +17,7 @@ export class ProductModel {
         shopId?: number,
         product_name?: string,
         origin?: string,
+        gender?: string,
         description?: string,
         unit_price?: string,
         sold_quantity?: number,
@@ -28,6 +30,7 @@ export class ProductModel {
         this.shopId = shopId ?? 0;
         this.product_name = product_name ?? "";
         this.origin = origin ?? "Việt Nam";
+        this.gender = gender;
         this.description = description ?? "";
         this.unit_price = unit_price ?? "0.00";
         this.sold_quantity = sold_quantity ?? 0;
@@ -42,6 +45,7 @@ export class ProductModel {
         model.id = obj.id;
         model.shopId = obj.shopId;
         model.product_name = obj.product_name;
+        model.gender = obj.gender;
         model.origin = obj.origin;
         model.unit_price = obj.unit_price;
         model.description = obj.description;
@@ -67,6 +71,7 @@ export class ProductModel {
         return {
             product_name: obj.product_name,
             origin: obj.origin,
+            gender: obj.gender,
             description: obj.description,
             unit_price: obj.unit_price,
             variants: obj.variants
@@ -78,6 +83,7 @@ export class ProductModel {
             shopId: obj.shopId,
             product_name: obj.product_name,
             origin: obj.origin,
+            gender: obj.gender,
             description: obj.description,
             unit_price: obj.unit_price,
             image_urls: obj.image_urls, // Dùng để xóa ảnh
