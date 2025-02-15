@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@
 import { ImageResource } from "../../../../common/resource/image_resource";
 import { CommonModule } from "@angular/common";
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { NbButtonModule, NbCheckboxModule, NbDialogService, NbInputModule, NbSelectModule } from "@nebular/theme";
+import { NbButtonModule, NbCheckboxModule, NbDialogService, NbInputModule, NbSelectModule, NbTooltipModule } from "@nebular/theme";
 import { countries } from "../../../../common/resource/country_resource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { actions } from "../../../../common/resource/actions";
@@ -18,12 +18,14 @@ import { AttributeService } from "../../../../data/service/attribute.service";
 import { TransformColorId } from "../../../../common/layout/pipes/transformColorId";
 import { ErrorComponent } from "../../../../common/layout/notify/error/error.component";
 import { WarningComponent } from "../../../../common/layout/notify/warning/warnimg.component";
+import { ProductValidate } from "../../../../common/utils/validate/product.validate";
 
 const NB_LIBS = [
     NbInputModule,
     NbButtonModule,
     NbSelectModule,
-    NbCheckboxModule
+    NbCheckboxModule,
+    NbTooltipModule
 ]
 
 const PIPES = [
@@ -143,7 +145,7 @@ export class CRUProductComponent implements OnInit {
                     ]),
                     isTemp: true
                 })
-            ])
+            ], [ProductValidate.uniqueVariantsValidator])
         });
         this.variantImageUrls.set(this.timeSKU, null);
         this.cdr.detectChanges();

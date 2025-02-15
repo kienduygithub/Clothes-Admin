@@ -170,8 +170,10 @@
                             </td>
                             <td>
                                 <div class="select-wrapper">
-                                    <nb-select formControlName="colorId" style="max-width: 200px;"
-                                        [ngClass]="{'invalid': (variant.get('colorId')?.dirty || isSubmit) && variant.get('colorId')?.invalid}">
+                                    <nb-select formControlName="colorId" nbTooltipStatus="danger"
+                                        [nbTooltipDisabled]="!variant.get('colorId')?.hasError('unique')"
+                                        [nbTooltip]="variant.get('colorId')?.hasError('unique') ? 'Có biến thể trùng' : ''"
+                                        [ngClass]="{'invalid': ((variant.get('colorId')?.dirty || isSubmit) && variant.get('colorId')?.invalid) || variant.get('colorId')?.hasError('unique')}">
                                         <nb-select-label>
                                             <span class="color-opt"
                                                 [style]="{'background-color': variant.get('colorId')?.value | transformColorId: allColors}"></span>
@@ -185,9 +187,10 @@
                             </td>
                             <td>
                                 <div class="select-wrapper">
-                                    <nb-select formControlName="sizeId" style="max-width: 200px;" [ngClass]="{
-                                        'invalid': (variant.get('sizeId')?.dirty || isSubmit) && variant.get('sizeId')?.invalid
-                                    }">
+                                    <nb-select formControlName="sizeId" nbTooltipStatus="danger"
+                                        [nbTooltipDisabled]="!variant.get('sizeId')?.hasError('unique')"
+                                        [nbTooltip]="variant.get('sizeId')?.hasError('unique') ? 'Có biến thể trùng' : ''"
+                                        [ngClass]="{'invalid': ((variant.get('sizeId')?.dirty || isSubmit) && variant.get('sizeId')?.invalid) || variant.get('sizeId')?.hasError('unique')}">
                                         <nb-option [value]="size.id" *ngFor="let size of allSizes">
                                             {{size.size_code}}
                                         </nb-option>
