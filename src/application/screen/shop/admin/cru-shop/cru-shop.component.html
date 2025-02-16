@@ -62,8 +62,8 @@
                         Tên cửa hàng<span class="required">*</span>
                     </label>
                     <div class="input-container">
-                        <input nbInput type="text" formControlName="shop_name" id="shop_name" placeholder="Nhập họ tên"
-                            [ngClass]="{
+                        <input nbInput type="text" formControlName="shop_name" id="shop_name"
+                            placeholder="Nhập tên cửa hàng" [ngClass]="{
                             'invalid-form': (cruForm.get('shop_name')?.dirty || isSubmit) && cruForm.get('shop_name')?.invalid
                         }">
                         <ng-container
@@ -86,7 +86,7 @@
                         <ng-container
                             *ngIf="(cruForm.get('contact_email')?.dirty || isSubmit) && cruForm.get('contact_email')?.invalid">
                             <p *ngIf="cruForm.get('contact_email')?.hasError('required')" class="vali-text-false">
-                                Tên cửa hàng không được bỏ trống
+                                Email liên hệ không được bỏ trống
                             </p>
                         </ng-container>
                     </div>

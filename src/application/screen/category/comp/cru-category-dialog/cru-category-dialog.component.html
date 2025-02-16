@@ -1,0 +1,91 @@
+<div class="dialog-custom-size" [nbSpinner]="loading" nbSpinnerStatus="primary">
+    <div class="modal-header">
+        <span class="title-dialog">
+            {{
+            action === actions.CREATE
+            ? 'Thêm danh mục'
+            : ('Thông tin chi tiết: ' + categoryModel.category_name)
+            }}
+        </span>
+        <img src="{{ icon_close_dialog }}" class="icon-close" (click)="onCancel()" />
+    </div>
+    <div class="modal-body">
+        <form *ngIf="cruForm" [formGroup]="cruForm">
+            <div class="info-wrapper">
+                <div class="info-up">
+                    <div class="info-logo no-image" *ngIf="cruForm.get('image_url')?.value === '' && !selectedFile">
+                        <div class="logo-wrapper">
+                            <img [src]="icon_category">
+                        </div>
+                        <div class="upload-logo-wrapper">
+                            <label class="upload-image" for="logo-files">
+                                <img [src]="icon_upload_v3" />
+                                <span>Tải ảnh</span>
+                            </label>
+                            <input #imageFile type="file" id="logo-files" accept=".png, .jpg, .jpeg" [hidden]="true"
+                                (change)="onChangeLogoFile(imageFile.files)" />
+                        </div>
+                    </div>
+                    <div class="info-logo has-image" *ngIf="cruForm.get('image_url')?.value !== ''">
+                        <div class="logo-wrapper" *ngIf="selectedFile">
+                            <img [src]="cruForm.get('image_url')?.value">
+                        </div>
+                        <div class="logo-wrapper" *ngIf="!selectedFile">
+                            <img [src]="preImage + '/' + cruForm.get('image_url')?.value">
+                        </div>
+                        <div class="upload-logo-wrapper">
+                            <label class="upload-image" for="logo-files">
+                                <img [src]="icon_upload_v3" />
+                                <span>Tải ảnh</span>
+                            </label>
+                            <input #imageFile type="file" id="logo-files" accept=".png, .jpg, .jpeg" [hidden]="true"
+                                (change)="onChangeLogoFile(imageFile.files)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="info-down">
+                    <div class="info">
+                        <label>
+                            Tên danh mục<span class="required">*</span>
+                        </label>
+                        <div class="input-container">
+                            <input nbInput type="text" formControlName="category_name" placeholder="Nhập tên danh mục"
+                                [ngClass]="{'invalid-form': (cruForm.get('category_name')?.dirty || isSubmit) && cruForm.get('category_name')?.invalid}">
+                            <ng-container
+                                *ngIf="(cruForm.get('category_name')?.dirty || isSubmit) && cruForm.get('category_name')?.invalid">
+                                <p *ngIf="cruForm.get('category_name')?.hasError('required')" class="vali-text-false">
+                                    Tên danh mục không được bỏ trống
+                                </p>
+                                <p *ngIf="cruForm.get('category_name')?.hasError('unique')" class="vali-text-false">
+                                    Tên danh mục đã tồn tại
+                                </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <label>Mô tả</label>
+                        <div class="input-container">
+                            <textarea nbInput formControlName="description" id="description"
+                                placeholder="Mô tả"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form *ngIf="!cruForm">
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button nbButton class="button-cancel-form" (click)="onCancel()">
+            Hủy
+        </button>
+        <button nbButton class="button-submit-form ml-3" (click)="onSave()">
+            {{
+            action === actions.CREATE
+            ? "Lưu"
+            : "Cập nhật"
+            }}
+        </button>
+    </div>
+</div>

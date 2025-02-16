@@ -9,6 +9,9 @@
         <button nbButton class="util-box">
             <img class="common-icon" [src]="icon_refresh" />
         </button>
+        <button nbButton class="button-submit-form ml-auto" (click)="onCreate()">
+            Thêm danh mục
+        </button>
     </div>
     <div class="table-responsive">
         <table class="table">
@@ -24,7 +27,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let category of categories | paginate: paging;let i = index"
-                    (click)="onUpdateCategory(category.id!)">
+                    (click)="onUpdateCategory(category, i)">
                     <td style="width: 5%;">
                         <span style="font-size: 14px;">
                             {{offset + i}}
@@ -54,7 +57,7 @@
                     <td style="width: 10%;" (click)="$event.stopPropagation()">
                         <div class="list-actions">
                             <nb-icon class="common-icon" icon="icon_edit" pack="mainIcon" [nbTooltip]="'Chỉnh sửa'"
-                                nbTooltipPlacement="bottom" (click)="onUpdateCategory(category.id!)"></nb-icon>
+                                nbTooltipPlacement="bottom" (click)="onUpdateCategory(category, i)"></nb-icon>
                             <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"
                                 nbTooltipPlacement="bottom" (click)="onConfirmDeleteCategory(category, i)">
                             </nb-icon>

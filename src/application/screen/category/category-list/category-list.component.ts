@@ -11,6 +11,8 @@ import { CategoryModel } from "../../../data/model/category.model";
 import { AppConfig } from "../../../common/config/app.config";
 import { CategoryUrl } from "../category.routing";
 import { WarningComponent } from "../../../common/layout/notify/warning/warnimg.component";
+import { CRUCategoryDialogComponent } from "../comp/cru-category-dialog/cru-category-dialog.component";
+import { actions } from "../../../common/resource/actions";
 
 const NB_LIBS = [
     NbInputModule,
@@ -66,6 +68,24 @@ export class CategoryListComponent implements OnInit {
         this.resetPagination();
     }
 
+    onCreate() {
+        this.dialogService.open(CRUCategoryDialogComponent, {
+            context: {
+                action: actions.CREATE,
+                categoryModel: new CategoryModel(),
+            }
+        }).onClose.subscribe((response) => {
+            if (response === true) {
+                return;
+            }
+
+            if (response instanceof CategoryModel) {
+                this.categories.unshift(response);
+                this.cdr.detectChanges();
+            }
+        })
+    }
+
     async fetchCategories() {
         try {
             this.categories = await this.categoryManagement.fetchCategories();
@@ -75,8 +95,22 @@ export class CategoryListComponent implements OnInit {
         }
     }
 
-    onUpdateCategory(id: number) {
-        this.router.navigate([CategoryUrl.VIEW_CATEGORY_URL], { queryParams: { id: id } });
+    onUpdateCategory(category: CategoryModel, index: number) {
+        this.dialogService.open(CRUCategoryDialogComponent, {
+            context: {
+                action: actions.UPDATE,
+                categoryModel: category,
+            }
+        }).onClose.subscribe(response => {
+            if (response === true) {
+                return;
+            }
+
+            if (response instanceof CategoryModel) {
+                this.categories.splice(index, 1, response);
+                this.cdr.detectChanges();
+            }
+        })
     }
 
     onConfirmDeleteCategory(category: CategoryModel, index: number) {

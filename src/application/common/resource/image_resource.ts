@@ -136,7 +136,8 @@ export class ImageResource {
       </g>
     </svg>
   `
-
+  static icon_category: string = 'assets/icon/category-icon.svg';
+  static icon_close_dialog: string = 'assets/icon/close-dialog-icon.svg';
   static icon_upload: string = 'assets/icon/upload-icon.svg';
   static icon_upload_v2: string = 'assets/icon/upload-icon-v2.svg';
   static icon_upload_v3: string = 'assets/icon/upload-icon-v3.svg';
