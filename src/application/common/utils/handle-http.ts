@@ -16,8 +16,11 @@ export class HandleHttp {
       this.appConfig.clear();
       this.router.navigate(['/auth/login']);
     }
-    let error = new ErrorModel(result?.status, result?.error?.msg)
-    console.log(error)
-    return error
+    let error = new ErrorModel(
+      result?.status,
+      result?.error?.message,
+      result?.error?.body
+    );
+    return error;
   }
 }

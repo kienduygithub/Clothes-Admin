@@ -56,7 +56,6 @@ export class CRUShopComponent implements OnInit {
     actionWebs = actions;
     action = this.actionWebs.CREATE;
     isSubmit: boolean = false;
-    isVisiblePassword = false;
     cruForm!: FormGroup;
     updatedShop!: ShopModel;
     updatedId!: number;
@@ -229,7 +228,4 @@ export class CRUShopComponent implements OnInit {
 
         return model;
     }
-
-
-
 }
