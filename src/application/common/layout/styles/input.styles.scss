@@ -140,6 +140,11 @@ input::-webkit-credentials-auto-fill-button {
   font-size: 13px !important;
   max-width: 500px !important;
   font-weight: 400;
+
+  &::placeholder {
+    font-size: 13px !important;
+    font-weight: 400 !important;
+  }
 }
 
 // <iframe _ngcontent-ng-c1144565491="" frameborder="0" src="https://help.datatrust.one/privacy-policy"></iframe>

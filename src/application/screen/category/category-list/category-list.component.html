@@ -1,7 +1,7 @@
 <div class="router-static">
     <div class="search-and-filter">
         <div class="search-input-container">
-            <input nbInput type="text" placeholder="Nhập tên sản phẩm">
+            <input nbInput type="text" placeholder="Nhập tên danh mục">
         </div>
         <button nbButton class="util-box">
             <img class="common-icon" [src]="icon_filter" />
@@ -14,71 +14,54 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>NO</th>
-                    <th>Mã người dùng</th>
+                    <th>#</th>
+                    <th>Mã danh mục</th>
                     <th>Hình ảnh</th>
-                    <th>Tên người dùng</th>
-                    <th>Liên hệ</th>
-                    <th>Địa chỉ</th>
-                    <th>Chức vụ</th>
+                    <th>Tên danh mục</th>
+                    <th>Loại</th>
                     <th style="color: transparent">Hành động</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let user of allUsers | paginate: paging;let i = index">
+                <tr *ngFor="let category of categories | paginate: paging;let i = index"
+                    (click)="onUpdateCategory(category.id!)">
                     <td style="width: 5%;">
                         <span style="font-size: 14px;">
                             {{offset + i}}
                         </span>
                     </td>
-                    <td style="width: 15%;">
+                    <td style="width: 10%;">
                         <span style="font-size: 14px;">
-                            {{user.id}}
+                            {{category.id}}
                         </span>
                     </td>
-                    <td style="width: 13%;">
+                    <td style="width: 10%;">
                         <div class="image-container">
-                            <img *ngIf="user.image_url !== undefined && user.image_url !== null"
-                                src="{{preImage}}/{{user.image_url}}">
-                            <img *ngIf="user.image_url === '' || user.image_url === null" [src]="image_not_found">
+                            <img *ngIf="category.image_url !== ''" src="{{preImage}}/{{category.image_url}}">
+                            <img *ngIf="category.image_url === ''" [src]="image_not_found">
                         </div>
                     </td>
-                    <td style="width: 15%;">
+                    <td style="width: 20%;">
                         <span style="font-size: 14px;">
-                            {{user.name}}
+                            {{category.category_name}}
                         </span>
                     </td>
-                    <td style="width: 12%;">
-                        <div class="d-flex flex-column">
-                            <span style="font-size: 14px;">
-                                {{user.email}}
-                            </span>
-                            <span style="font-size: 14px;">
-                                {{user.phone}}
-                            </span>
-                        </div>
-                    </td>
-                    <td style="width: 14%;">
+                    <td style="width: 10%;">
                         <span style="font-size: 14px;">
-                            {{user.address}}
-                        </span>
-                    </td>
-                    <td style="width: 14%;">
-                        <span style="font-size: 14px;">
-                            {{user.roles}}
+                            Cha
                         </span>
                     </td>
                     <td style="width: 10%;" (click)="$event.stopPropagation()">
                         <div class="list-actions">
                             <nb-icon class="common-icon" icon="icon_edit" pack="mainIcon" [nbTooltip]="'Chỉnh sửa'"
-                                nbTooltipPlacement="bottom" (click)="onUpdateUser(user.id!)"></nb-icon>
+                                nbTooltipPlacement="bottom" (click)="onUpdateCategory(category.id!)"></nb-icon>
                             <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"
-                                nbTooltipPlacement="bottom" (click)="onConfirmDeleteUser(user)">
+                                nbTooltipPlacement="bottom" (click)="onConfirmDeleteCategory(category, i)">
                             </nb-icon>
                         </div>
                     </td>
                 </tr>
-                <tr *ngIf="allUsers.length === 0">
+                <tr *ngIf="categories.length === 0">
                     <td class="table-no-data text-center" colspan="11">
                         Không có dữ liệu
                     </td>

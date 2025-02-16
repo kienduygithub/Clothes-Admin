@@ -1,3 +1,5 @@
+import { CategoryUrl } from "./category/category.routing";
+
 export const MENU_ITEMS: any[] = [
     {
         title: 'Tổng quan',
@@ -44,7 +46,7 @@ export const MENU_ITEMS: any[] = [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh mục sản phẩm',
-                link: '/shop/product/category',
+                link: `/${CategoryUrl.CATEGORY_URL}`,
                 pathMatch: 'prefix'
             },
         ],

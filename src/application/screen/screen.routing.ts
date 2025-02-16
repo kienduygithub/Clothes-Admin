@@ -6,7 +6,9 @@ import { ProductComponent } from './product/product.component';
 import { EmployeeRouting } from './employee/employee.routing';
 import { EmployeeComponent } from './employee/employee.component';
 import { ShopComponent } from './shop/shop.component';
-import { ShopRouting } from './shop/shop.routing';
+import { ShopRouting, ShopURL } from './shop/shop.routing';
+import { CategoryRouting, CategoryUrl } from './category/category.routing';
+import { CategoryComponent } from './category/category.component';
 
 const routes: Routes = [
     {
@@ -16,6 +18,7 @@ const routes: Routes = [
             ...ShopRouting,
             ...EmployeeRouting,
             ...ProductRouting,
+            ...CategoryRouting,
             {
                 path: 'shop/product',
                 redirectTo: '/shop/product/products',
@@ -44,9 +47,14 @@ const routes: Routes = [
                 pathMatch: 'full'
             },
             {
-                path: 'shop/list',
+                path: ShopURL.SHOP_URL,
                 component: ShopComponent,
                 title: 'Cửa hàng',
+            },
+            {
+                path: CategoryUrl.CATEGORY_URL,
+                component: CategoryComponent,
+                title: 'Danh mục'
             }
         ],
     },
