@@ -13,6 +13,7 @@ import { CategoryUrl } from "../category.routing";
 import { WarningComponent } from "../../../common/layout/notify/warning/warnimg.component";
 import { CRUCategoryDialogComponent } from "../comp/cru-category-dialog/cru-category-dialog.component";
 import { actions } from "../../../common/resource/actions";
+import { CRUSubcategoryDialogComponent } from "../comp/cru-subcategory-dialog/cru-subcategory-dialog.component";
 
 const NB_LIBS = [
     NbInputModule,
@@ -45,6 +46,7 @@ export class CategoryListComponent implements OnInit {
 
     icon_filter: string = ImageResource.icon_filter;
     icon_refresh: string = ImageResource.icon_refresh;
+    icon_folder_open: string = ImageResource.icon_folder_open;
     image_not_found: string = ImageResource.image_not_found;
 
     offset: number = 0;
@@ -65,6 +67,11 @@ export class CategoryListComponent implements OnInit {
         this.preImage = this.appConfig.getPreImage() ?? "";
         this.paging = new PagingModel();
         await this.fetchCategories();
+        this.dialogService.open(CRUSubcategoryDialogComponent, {
+            context: {
+                categoryModel: this.categories[0]
+            }
+        })
         this.resetPagination();
     }
 
@@ -139,6 +146,10 @@ export class CategoryListComponent implements OnInit {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    onOpenViewChildList(parentCategory: CategoryModel) {
+        console.log(parentCategory);
     }
 
     onPageChange(currentPage: number) {

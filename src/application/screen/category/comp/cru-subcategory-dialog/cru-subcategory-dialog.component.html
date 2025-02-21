@@ -1,0 +1,92 @@
+<div class="dialog-custom-size" [nbSpinner]="loading" nbSpinnerStatus="primary">
+    <div class="modal-header">
+        <span class="title-dialog">
+            Thông tin danh mục
+        </span>
+        <img src="{{ icon_close_dialog }}" class="icon-close" (click)="onCancel()" />
+    </div>
+    <div class="modal-body">
+        <div class="info-wrapper">
+            <div class="info-left">
+                <div class="info-logo has-image">
+                    <div class="logo-wrapper">
+                        <img [src]="preImage + '/' + categoryModel.image_url">
+                    </div>
+                </div>
+            </div>
+            <div class="info-right">
+                <div class="info">
+                    <label>
+                        Danh mục: {{categoryModel.category_name}}
+                    </label>
+                </div>
+                <div class="info">
+                    <label>
+                        Mô tả: {{categoryModel.description !== '' ? categoryModel.description : 'Không có mô tả'}}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="child-category-wrapper">
+            <span class="sub-title">Danh mục con</span>
+            <div class="search-and-filter">
+                <div class="search-input-container mb-2 d-flex align-items-center">
+                    <input nbInput type="text" placeholder="Nhập danh mục">
+                    <button nbButton class="button-submit-form ml-2">
+                        Thêm danh mục
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tên danh mục</th>
+                            <th style="color: transparent">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let subCategory of categoryModel.sub_categories! | paginate: paging;let i = index">
+                            <td style="width: 5%;">
+                                <span style="font-size: 14px;">
+                                    {{offset + i}}
+                                </span>
+                            </td>
+                            <td style="width: 20%;">
+                                <span style="font-size: 14px;">
+                                    {{subCategory.category_name}}
+                                </span>
+                            </td>
+                            <td style="width: 10%;" (click)="$event.stopPropagation()">
+                                <div class="list-actions">
+                                    <nb-icon class="common-icon" icon="icon_edit" pack="mainIcon"
+                                        [nbTooltip]="'Chỉnh sửa'" nbTooltipPlacement="bottom"></nb-icon>
+                                    <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"
+                                        nbTooltipPlacement="bottom">
+                                    </nb-icon>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="categoryModel.sub_categories?.length === 0">
+                            <td class="table-no-data text-center" colspan="11">
+                                Không có dữ liệu
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div style="display: flex; align-items: center;">
+                <div class="total-items">
+                    <span>Tổng số: {{ paging.totalItems }}</span>
+                </div>
+                <div class="pagination-flex">
+                    <pagination-controls (pageChange)="onPageChange($event)" previousLabel="" nextLabel="">
+                    </pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer"></div>
+</div>

@@ -7,3 +7,18 @@
     width : 18px;
     height: 18px;
 }
+
+.list-actions {
+    display        : flex;
+    align-items    : center;
+    justify-content: right;
+    gap            : 3px;
+}
+
+nb-icon {
+    width          : 18px !important;
+    height         : 18px !important;
+    display        : flex !important;
+    align-items    : center !important;
+    justify-content: center !important;
+}
