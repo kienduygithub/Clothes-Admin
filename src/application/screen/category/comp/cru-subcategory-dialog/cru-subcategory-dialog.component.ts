@@ -3,12 +3,16 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@
 import { CategoryManagement } from "../../../../data/management/category.management";
 import { CategoryService } from "../../../../data/service/category.service";
 import { NbButtonModule, NbDialogRef, NbDialogService, NbIconModule, NbInputModule, NbSpinnerModule, NbTooltipModule } from "@nebular/theme";
-import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { AppConfig } from "../../../../common/config/app.config";
 import { CategoryModel } from "../../../../data/model/category.model";
 import { ImageResource } from "../../../../common/resource/image_resource";
 import { NgxPaginationModule } from "ngx-pagination";
 import { PagingModel } from "../../../../common/model/paging.model";
+import { WarningComponent } from "../../../../common/layout/notify/warning/warnimg.component";
+import { ErrorModel } from "../../../../common/model/error";
+import { HttpCode } from "../../../../common/resource/http-code";
+import { CategoryValidate } from "../../../../common/utils/validate/category.validate";
 
 const NB_LIBS = [
     NbInputModule,
@@ -47,7 +51,11 @@ export class CRUSubcategoryDialogComponent implements OnInit {
     paging!: PagingModel;
 
     categoryModel!: CategoryModel;
+    protected subCategories: CategoryModel[] = [];
+    protected subCategoryNames: string[] = [];
     protected preImage = "";
+
+    protected addForm!: FormGroup;
 
     constructor(
         private appConfig: AppConfig,
@@ -58,11 +66,93 @@ export class CRUSubcategoryDialogComponent implements OnInit {
         private cdr: ChangeDetectorRef
     ) { }
 
-    ngOnInit(): void {
-        console.log(this.categoryModel)
+    async ngOnInit() {
         this.preImage = this.appConfig.getPreImage() ?? "";
+        this.subCategories = this.categoryModel.sub_categories ?? [];
+        this.subCategoryNames = this.subCategories.map(category => category.category_name!);
         this.paging = new PagingModel();
         this.resetPagination();
+        await this.getCategory();
+        this.initForm();
+        this.cdr.detectChanges();
+    }
+
+    async getCategory() {
+        try {
+            this.categoryModel = await this.categoryManagement.fetchCategoryByParentId(this.categoryModel.id!);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    initForm() {
+        this.addForm = this.fb.group({
+            category_name: ['', [CategoryValidate.uniqueSubCategory(this.subCategoryNames)]],
+        });
+    }
+
+    async onAddSubCategory() {
+        console.log(this.addForm.value);
+        if (this.addForm.invalid) {
+            console.log('INVALID FORM');
+            return;
+        }
+
+        if (this.addForm.getRawValue().category_name.trim() === '') {
+            return;
+        }
+
+        try {
+            const model = new CategoryModel();
+            model.category_name = this.addForm.getRawValue().category_name;
+            model.parentId = this.categoryModel.id;
+            const response = await this.categoryManagement.addNewSubCategory(model);
+            this.subCategories.unshift(response);
+            this.subCategoryNames.unshift(model.category_name!);
+            this.addForm.setValue({
+                category_name: ''
+            });
+            this.resetPagination();
+            this.cdr.detectChanges();
+        } catch (error) {
+            console.log(error);
+            if (error instanceof ErrorModel) {
+                if (error.code === HttpCode.BAD_REQUEST) {
+                    if (error.message.includes('Tên thư mục con đã tồn tại')) {
+                        this.addForm.get('category_name')?.setErrors({ conflictName: true });
+                    }
+                }
+            }
+        }
+    }
+
+    onConfirmDeleteCategory(category: CategoryModel, index: number) {
+        this.dialogService.open(WarningComponent, {
+            context: {
+                title: 'Xóa',
+                content: 'Bạn có chắc muốn xóa danh mục ' + category.category_name + '?',
+            }
+        }).onClose.subscribe(async (response) => {
+            if (response === true) {
+                await this.handleDeleteCategory(category.id!, index);
+            }
+        })
+    }
+
+    async handleDeleteCategory(categoryId: number, index: number) {
+        try {
+            await this.categoryManagement.deleteSubCategory(this.categoryModel.id!, categoryId);
+            this.subCategoryNames.splice(index, 1);
+            this.subCategories.splice(index, 1);
+            this.paging.totalItems = this.subCategories.length;
+            this.paging.totalPage = Math.ceil(this.subCategories.length / this.paging.itemsPerPage);
+            if (this.paging.currentPage === this.paging.totalPage + 1) {
+                this.onPageChange(this.paging.currentPage - 1);
+            }
+            this.cdr.detectChanges();
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     onCancel() {
@@ -87,8 +177,8 @@ export class CRUSubcategoryDialogComponent implements OnInit {
     resetPagination() {
         this.paging.currentPage = 1;
         this.paging.itemsPerPage = 5;
-        this.paging.totalItems = this.categoryModel.sub_categories!.length;
-        this.paging.totalPage = Math.ceil(this.categoryModel.sub_categories!.length / 3);
+        this.paging.totalItems = this.subCategories.length;
+        this.paging.totalPage = Math.ceil(this.subCategories.length / 3);
         this.paging.before = 0;
         this.paging.after = 0;
 

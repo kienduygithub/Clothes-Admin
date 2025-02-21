@@ -69,7 +69,7 @@ export class CategoryManagement {
     async addNewSubCategory(data: CategoryModel) {
         try {
             const result = await this.categoryService.addNewSubCategory(data);
-            const response = new CategoryModel().convertSubObj(result?.body?.subCategory);
+            const response = new CategoryModel().convertObj(result?.body?.subCategory);
             return response;
         } catch (error) {
             throw error;

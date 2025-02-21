@@ -5,6 +5,7 @@ export class CategoryModel {
     description?: string;
     parentId?: number;
     sub_categories?: CategoryModel[];
+    editMode?: boolean;
     createdAt?: string;
     updatedAt?: string;
 

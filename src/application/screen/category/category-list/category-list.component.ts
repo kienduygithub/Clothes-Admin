@@ -149,7 +149,11 @@ export class CategoryListComponent implements OnInit {
     }
 
     onOpenViewChildList(parentCategory: CategoryModel) {
-        console.log(parentCategory);
+        this.dialogService.open(CRUSubcategoryDialogComponent, {
+            context: {
+                categoryModel: parentCategory
+            }
+        })
     }
 
     onPageChange(currentPage: number) {
