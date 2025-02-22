@@ -35,57 +35,75 @@
                         <input nbInput type="text" placeholder="Nhập danh mục">
                     </form>
                     <form style="width: 100%;" *ngIf="addForm" [formGroup]="addForm">
-                        <input nbInput type="text" placeholder="Nhập danh mục" formControlName="category_name"
+                        <input nbInput type="text" placeholder="Nhập danh mục"
+                            (keydown.enter)="onEnterToAddSubcategory()" formControlName="category_name"
                             [ngClass]="{'invalid-form': addForm.get('category_name')?.invalid}">
                     </form>
-                    <button nbButton class="button-submit-form ml-2" [nbSpinner]="loading" nbSpinnerStatus="control"
-                        nbSpinnerSize="small" (click)="onAddSubCategory()">
+                    <button nbButton class="button-submit-form ml-2" (click)="onAddSubCategory()">
                         Thêm danh mục
                     </button>
                 </div>
-                <p class="vali-text-false" *ngIf="addForm.get('category_name')?.hasError('conflictName')">
+                <p class="vali-text-false" *ngIf="addForm && addForm?.get('category_name')?.hasError('conflictName')">
                     Danh mục đã tồn tại
                 </p>
             </div>
             <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Tên danh mục</th>
-                            <th style="color: transparent">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let subCategory of subCategories | paginate: paging;let i = index">
-                            <td style="width: 5%;">
-                                <span style="font-size: 14px;">
-                                    {{offset + i}}
-                                </span>
-                            </td>
-                            <td style="width: 20%;">
-                                <span style="font-size: 14px;">
-                                    {{subCategory.category_name}}
-                                </span>
-                            </td>
-                            <td style="width: 10%;" (click)="$event.stopPropagation()">
-                                <div class="list-actions">
-                                    <nb-icon class="common-icon" icon="icon_edit" pack="mainIcon"
-                                        [nbTooltip]="'Chỉnh sửa'" nbTooltipPlacement="bottom"></nb-icon>
-                                    <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"
-                                        nbTooltipPlacement="bottom" (click)="onConfirmDeleteCategory(subCategory, i)">
-                                    </nb-icon>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr *ngIf="subCategories.length === 0">
-                            <td class="table-no-data text-center" colspan="11">
-                                Không có dữ liệu
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
+                <form *ngIf="subCategoryForm" [formGroup]="subCategoryForm">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tên danh mục</th>
+                                <th style="color: transparent">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let subCategory of subCategoryControls | paginate: paging;let i = index"
+                                [formGroup]="subCategory">
+                                <td style="width: 100px;">
+                                    <span style="font-size: 14px;">
+                                        {{offset + i}}
+                                    </span>
+                                </td>
+                                <td style="width: 250px">
+                                    <span style="font-size: 14px;" *ngIf="!subCategory.get('editMode')?.value">
+                                        {{subCategory.get('category_name')?.value}}
+                                    </span>
+                                    <div class="input-container" *ngIf="subCategory.get('editMode')?.value">
+                                        <input nbInput type="text" formControlName="category_name"
+                                            nbTooltipStatus="danger"
+                                            [nbTooltipDisabled]="!subCategory.get('category_name')?.invalid && !subCategory.hasError('conflictName')"
+                                            [nbTooltip]="subCategory.hasError('conflictName') ? 'Danh mục đã tồn tại' : 'Danh mục không được bỏ trống'"
+                                            [ngClass]="{'invalid-form': (subCategory.get('category_name')?.dirty && subCategory.get('category_name')?.invalid) || subCategory.hasError('conflictName')}" />
+                                    </div>
+                                </td>
+                                <td style="width: 10%; flex-shrink: 0;" (click)="$event.stopPropagation()">
+                                    <div class="list-actions" *ngIf="!subCategory.get('editMode')?.value">
+                                        <nb-icon class="common-icon" icon="icon_edit" pack="mainIcon"
+                                            [nbTooltip]="'Chỉnh sửa'" nbTooltipPlacement="bottom"
+                                            (click)="onEditSubcategory(i)"></nb-icon>
+                                        <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon"
+                                            [nbTooltip]="'Xóa'" nbTooltipPlacement="bottom"
+                                            (click)="onConfirmDeleteCategory(i)">
+                                        </nb-icon>
+                                    </div>
+                                    <div class="list-actions" *ngIf="subCategory.get('editMode')?.value">
+                                        <img class="common-icon" style="width: 16px;height: 16px;" [src]="icon_cancel"
+                                            [nbTooltip]="'Hủy'" nbTooltipPlacement="bottom"
+                                            (click)="onCancelEditSubcategory(i)" />
+                                        <img class="common-icon" [src]="icon_accept_tick" [nbTooltip]="'Lưu'"
+                                            nbTooltipPlacement="bottom" (click)="onSaveEditSubcategory(i)" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="subCategoryControls.length === 0">
+                                <td class="table-no-data text-center" colspan="11">
+                                    Không có dữ liệu
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
             </div>
             <div style="display: flex; align-items: center;">
                 <div class="total-items">

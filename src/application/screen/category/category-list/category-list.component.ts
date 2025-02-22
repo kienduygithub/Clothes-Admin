@@ -67,11 +67,6 @@ export class CategoryListComponent implements OnInit {
         this.preImage = this.appConfig.getPreImage() ?? "";
         this.paging = new PagingModel();
         await this.fetchCategories();
-        this.dialogService.open(CRUSubcategoryDialogComponent, {
-            context: {
-                categoryModel: this.categories[0]
-            }
-        })
         this.resetPagination();
     }
 

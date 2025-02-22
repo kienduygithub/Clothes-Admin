@@ -162,6 +162,9 @@ export class ImageResource {
   static icon_invisible_eye: string = 'assets/icon/invisible_eye.svg';
   static icon_no_logo_shop: string = 'assets/icon/no_logo_shop.svg';
   static icon_folder_open: string = 'assets/icon/folder_open.svg';
+  static icon_cancel: string = 'assets/icon/cancel.svg';
+  static icon_accept_tick: string = 'assets/icon/accept_tick.svg';
+
 
   static image_not_found: string = 'assets/image/image_not_found.jpg';
   static image_no_avatar: string = 'assets/image/no_avatar.png';

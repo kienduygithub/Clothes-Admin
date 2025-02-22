@@ -56,21 +56,21 @@ export class CategoryModel {
 
     convertModelToAdd(model: CategoryModel) {
         return {
-            category_name: model.category_name,
+            category_name: model.category_name?.trim(),
             description: model.description
         }
     }
 
     convertModelToUpdate(model: CategoryModel) {
         return {
-            category_name: model.category_name,
+            category_name: model.category_name?.trim(),
             description: model.description
         }
     }
 
     convertSubCategoryModelToExecute(model: CategoryModel) {
         return {
-            category_name: model.category_name,
+            category_name: model.category_name?.trim(),
             parentId: model.parentId
         }
     }
