@@ -5,6 +5,10 @@ export const routes: Routes = [
     {
         path: '',
         loadChildren: () => import('./screen/screen.module').then(m => m.ScreenModule)
+    },
+    {
+        path: 'auth',
+        loadChildren: () => import('./screen/auth/auth.module').then(m => m.AuthModule)
     }
 ];
 

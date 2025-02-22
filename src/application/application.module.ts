@@ -9,6 +9,7 @@ import { NbDatepickerModule, NbDialogModule, NbMenuModule, NbSidebarModule, NbTh
 import { NbEvaIconsModule } from "@nebular/eva-icons";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
+import { AuthRouting } from "./screen/auth/auth.routing";
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -48,7 +49,8 @@ const ANGULAR_LIB = [
     imports: [
         ...NB_LIB,
         ...ANGULAR_LIB,
-        ApplicationRouting
+        AuthRouting,
+        ApplicationRouting,
     ],
     bootstrap: [ApplicationComponent],
     providers: [
