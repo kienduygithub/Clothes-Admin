@@ -2,10 +2,17 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AuthComponent } from "./auth.component";
 import { SignInComponent } from "./sign-in/sign-in.component";
+import { AuthGuard } from "../../common/config/guard.config";
+
+export const AuthUrl = {
+    SIGNIN: '/auth/sign-in',
+    SIGNUP: '/auth/sign-up'
+};
 
 const AuthRoutes: Routes = [
     {
         path: 'auth',
+        canActivate: [AuthGuard],
         component: AuthComponent,
         children: [
             {
@@ -17,14 +24,13 @@ const AuthRoutes: Routes = [
                 path: 'sign-in',
                 title: 'Đăng nhập',
                 component: SignInComponent
+            },
+            {
+                path: '**',
+                redirectTo: 'sign-in'
             }
         ]
     },
-    // {
-    //     path: 'auth/sign-in',
-    //     title: 'Đăng nhập hệ thống',
-    //     component: SignInComponent
-    // }
 ];
 
 @NgModule({

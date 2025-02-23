@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { UserModel } from "../../data/model/user.model";
 
 @Injectable({
     providedIn: 'root'
@@ -52,6 +53,18 @@ export class AppConfig {
 
     setShopId(shopId: number) {
         localStorage.setItem('shopId', JSON.stringify(shopId));
+    }
+
+    getUserInfo() {
+        const info = localStorage.getItem('info');
+        if (!info) {
+            return null;
+        }
+        return JSON.parse(info);
+    }
+
+    setUserInfo(info: UserModel) {
+        localStorage.setItem('info', JSON.stringify(info));
     }
 
     getAccessToken() {

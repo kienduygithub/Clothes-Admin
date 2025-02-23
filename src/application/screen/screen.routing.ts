@@ -3,16 +3,18 @@ import { NgModule } from '@angular/core';
 import { ScreenComponent } from './screen.component';
 import { ProductRouting } from './product/product.routing';
 import { ProductComponent } from './product/product.component';
-import { EmployeeRouting } from './employee/employee.routing';
+import { EmployeeRouting, EmployeeUrl } from './employee/employee.routing';
 import { EmployeeComponent } from './employee/employee.component';
 import { ShopComponent } from './shop/shop.component';
 import { ShopRouting, ShopURL } from './shop/shop.routing';
 import { CategoryRouting, CategoryUrl } from './category/category.routing';
 import { CategoryComponent } from './category/category.component';
+import { AuthGuard } from '../common/config/guard.config';
 
 const routes: Routes = [
     {
         path: '',
+        canActivate: [AuthGuard],
         component: ScreenComponent,
         children: [
             ...ShopRouting,
@@ -36,7 +38,7 @@ const routes: Routes = [
                 pathMatch: 'full'
             },
             {
-                path: 'employee/list',
+                path: EmployeeUrl.EMPLOYEE_LIST,
                 title: 'Nhân sự',
                 component: EmployeeComponent,
                 pathMatch: 'prefix'

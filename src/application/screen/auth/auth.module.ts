@@ -2,7 +2,6 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { AuthComponent } from "./auth.component";
 import { AuthRouting } from "./auth.routing";
-import { SignInComponent } from "./sign-in/sign-in.component";
 import { NbButtonModule, NbInputModule } from "@nebular/theme";
 
 const NB_LIBS = [
@@ -13,14 +12,15 @@ const NB_LIBS = [
 @NgModule({
     declarations: [
         AuthComponent,
-        SignInComponent
     ],
     imports: [
         ...NB_LIBS,
         CommonModule,
-        AuthRouting
+        AuthRouting,
     ],
-    providers: []
+    providers: [
+
+    ]
 })
 
 export class AuthModule {

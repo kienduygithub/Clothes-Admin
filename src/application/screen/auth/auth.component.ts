@@ -1,4 +1,6 @@
 import { Component } from "@angular/core";
+import { AuthService } from "../../data/service/auth.service";
+import { AuthManagement } from "../../data/management/auth.management";
 
 @Component({
     standalone: false,
@@ -12,6 +14,10 @@ import { Component } from "@angular/core";
             height: 100vh;
         }    
     `],
+    providers: [
+        AuthManagement,
+        AuthService
+    ]
 })
 
 export class AuthComponent {

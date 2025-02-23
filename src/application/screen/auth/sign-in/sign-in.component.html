@@ -1,46 +1,52 @@
-<div class="container">
-    <input type="checkbox" id="flip">
-    <div class="cover">
-        <div class="front">
-            <img [src]="image_sign_in" alt="">
-            <div class="text">
-                <span class="text-1" style="padding-top: 220px;">Quản lý hệ thống dễ dàng</span>
-                <span class="text-2">Quản lý sản phẩm, đơn hàng và khách hàng của bạn</span>
-            </div>
-        </div>
-    </div>
-    <div class="forms">
-        <div class="form-content">
-            <div class="login-form">
-                <div class="title">Đăng nhập</div>
-                <form action="#">
-                    <div class="input-boxes">
-                        <div class="input-box">
-                            <img [src]="icon_email" class="common-icon" />
-                            <input type="text" placeholder="Nhập địa chỉ email">
-                        </div>
-                        <div class="input-box">
-                            <img [src]="icon_lock" class="common-icon" />
-                            <input [type]="isVisiblePassword ? 'text' : 'password'" placeholder="Nhập mật khẩu">
-                            <img [src]="icon_visible_eye" class="common-icon password" *ngIf="!isVisiblePassword"
-                                (click)="onToggleVisiblePassword()" />
-                            <img [src]="icon_invisible_eye" class="common-icon password" *ngIf="isVisiblePassword"
-                                (click)="onToggleVisiblePassword()" />
-                        </div>
-                        <div class="button input-box">
-                            <button nbButton class="button-submit-form" style="width: 100%; height: 44px;">
-                                Đăng nhập
-                            </button>
-                        </div>
-                        <div class="text sign-up-text">
-                            Đăng ký làm chủ cửa hàng?
-                            <label>
-                                Đăng ký
-                            </label>
-                        </div>
+<nb-layout>
+    <nb-layout-column style="padding: 0;">
+        <div class="container">
+            <input type="checkbox" id="flip">
+            <div class="cover">
+                <div class="front">
+                    <img [src]="image_sign_in" alt="">
+                    <div class="text">
+                        <span class="text-1" style="padding-top: 220px;">Quản lý hệ thống dễ dàng</span>
+                        <span class="text-2">Quản lý sản phẩm, đơn hàng và khách hàng của bạn</span>
                     </div>
-                </form>
+                </div>
+            </div>
+            <div class="forms">
+                <div class="form-content">
+                    <div class="login-form">
+                        <div class="title">Đăng nhập</div>
+                        <form *ngIf="authForm" [formGroup]="authForm">
+                            <div class="input-boxes">
+                                <div class="input-box">
+                                    <img [src]="icon_email" class="common-icon" />
+                                    <input type="text" placeholder="Nhập địa chỉ email" formControlName="email">
+                                </div>
+                                <div class="input-box">
+                                    <img [src]="icon_lock" class="common-icon" />
+                                    <input [type]="isVisiblePassword ? 'text' : 'password'" placeholder="Nhập mật khẩu"
+                                        formControlName="password">
+                                    <img [src]="icon_visible_eye" class="common-icon password"
+                                        *ngIf="!isVisiblePassword" (click)="onToggleVisiblePassword()" />
+                                    <img [src]="icon_invisible_eye" class="common-icon password"
+                                        *ngIf="isVisiblePassword" (click)="onToggleVisiblePassword()" />
+                                </div>
+                                <div class="button input-box">
+                                    <button nbButton class="button-submit-form" (click)="onSignIn()"
+                                        style="width: 100%; height: 44px;">
+                                        Đăng nhập
+                                    </button>
+                                </div>
+                                <div class="text sign-up-text">
+                                    Đăng ký làm chủ cửa hàng?
+                                    <label>
+                                        Đăng ký
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    </nb-layout-column>
+</nb-layout>

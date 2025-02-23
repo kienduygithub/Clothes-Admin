@@ -10,6 +10,7 @@ import { NbEvaIconsModule } from "@nebular/eva-icons";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { AuthRouting } from "./screen/auth/auth.routing";
+import { AuthService } from "./data/service/auth.service";
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -23,7 +24,10 @@ const NB_LIB = [
     NbSidebarModule.forRoot(),
     NbThemeModule.forRoot({ name: 'default' }),
     NbDialogModule.forRoot(),
-    NbToastrModule.forRoot(),
+    NbToastrModule.forRoot({
+        duration: 3000,
+        limit: 5,
+    }),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),
     NbTimepickerModule.forRoot(),
@@ -62,7 +66,8 @@ const ANGULAR_LIB = [
             useFactory: initializeApp,
             deps: [AppConfig],
             multi: true
-        }
+        },
+        AuthService
     ]
 })
 
