@@ -27,4 +27,14 @@ export class AuthManagement {
             throw error;
         }
     }
+
+    async fetchUserDetails(id: string) {
+        try {
+            const result = await this.authService.fetchDetailUser(id);
+            const response = result?.body?.users.map((user: any) => new UserModel().convertObj(user));
+            return response[0];
+        } catch (error) {
+            throw error;
+        }
+    }
 }

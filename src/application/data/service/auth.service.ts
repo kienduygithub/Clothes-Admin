@@ -24,4 +24,17 @@ export class AuthService {
             throw error;
         }
     }
+
+    async fetchDetailUser(id: string): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.GET(
+                `${domain}`,
+                `auth/user-details/${id}`,
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

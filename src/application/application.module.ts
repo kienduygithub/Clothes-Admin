@@ -67,7 +67,7 @@ const ANGULAR_LIB = [
             deps: [AppConfig],
             multi: true
         },
-        AuthService
+        AuthService,
     ]
 })
 

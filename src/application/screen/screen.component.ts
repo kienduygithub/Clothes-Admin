@@ -3,6 +3,9 @@ import { NbIconLibraries, NbMenuItem } from "@nebular/theme";
 import { ImageResource } from "../common/resource/image_resource";
 import { MENU_ITEMS } from "./screen.menu";
 import { BaseLayoutComponent } from "../common/layout/base/base.layout";
+import { AuthManagement } from "../data/management/auth.management";
+import { AppConfig } from "../common/config/app.config";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'app-root',
@@ -12,11 +15,19 @@ import { BaseLayoutComponent } from "../common/layout/base/base.layout";
             <router-outlet></router-outlet>
         </base-layout>
     `,
+    providers: [
+        AuthManagement
+    ]
 })
 export class ScreenComponent {
     menu: NbMenuItem[] = [];
 
-    constructor(private iconLibrary: NbIconLibraries) {
+    constructor(
+        private iconLibrary: NbIconLibraries,
+        private authManagement: AuthManagement,
+        private appConfig: AppConfig,
+        private router: Router
+    ) {
         this.iconLibrary.registerSvgPack('mainIcon', {
             dashboard_icon: ImageResource.icon_dasb,
             edit_icon: ImageResource.edit_logo,
@@ -32,7 +43,18 @@ export class ScreenComponent {
         });
     }
 
-    ngOnInit(): void {
+    async ngOnInit() {
         this.menu = MENU_ITEMS;
+        await this.fetchDetailUser();
+    }
+
+    async fetchDetailUser() {
+        try {
+            const info = this.appConfig.getUserInfo();
+            const id = info.id;
+            const response = await this.authManagement.fetchUserDetails(id);
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
