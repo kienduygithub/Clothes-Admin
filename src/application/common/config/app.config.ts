@@ -70,7 +70,7 @@ export class AppConfig {
     getAccessToken() {
         const accessToken = localStorage.getItem('access-token');
         if (accessToken) {
-            return JSON.parse(accessToken);
+            return accessToken;
         }
         return "";
     }
@@ -82,7 +82,7 @@ export class AppConfig {
     getRefreshToken() {
         const refreshToken = localStorage.getItem('refresh-token');
         if (refreshToken) {
-            return JSON.parse(refreshToken);
+            return refreshToken;
         }
         return "";
     }

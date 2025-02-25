@@ -37,4 +37,21 @@ export class AuthService {
             throw error;
         }
     }
+
+    async getNewAccessToken(): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const refreshToken = this.appConfig.getRefreshToken();
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                'auth/refresh',
+                {
+                    refreshToken: refreshToken
+                }
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

@@ -5,6 +5,8 @@ import { ScreenComponent } from "./screen.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BaseLayoutComponent } from "../common/layout/base/base.layout";
 import { ScreenRouting } from "./screen.routing";
+import { AuthInterceptor } from "../common/utils/auth.interceptor";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
 const NB_LIB = [
     NbMenuModule,
     NbEvaIconsModule
@@ -18,6 +20,9 @@ const NB_LIB = [
         ScreenRouting,
         BaseLayoutComponent,
     ],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    ]
 })
 
 export class ScreenModule { }

@@ -12,10 +12,6 @@ export class HandleHttp {
   }
 
   exception(result: any) {
-    if (result?.status === 401) {
-      this.appConfig.clear();
-      this.router.navigate(['/auth/login']);
-    }
     let error = new ErrorModel(
       result?.status,
       result?.error?.message,

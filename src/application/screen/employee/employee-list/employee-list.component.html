@@ -25,7 +25,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let user of allUsers | paginate: paging;let i = index">
+                <tr *ngFor="let user of allUsers | paginate: paging;let i = index" (click)="onUpdateUser(user.id!)">
                     <td style="width: 5%;">
                         <span style="font-size: 14px;">
                             {{offset + i}}

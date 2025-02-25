@@ -25,7 +25,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let product of allProducts | paginate: paging;let i = index">
+                <tr *ngFor="let product of allProducts | paginate: paging;let i = index"
+                    (click)="onUpdateProduct(product.id!)">
                     <td style="width: 5%;">
                         <span style="font-size: 14px;">
                             {{offset + i}}

@@ -2,7 +2,7 @@ import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { ApplicationComponent } from "./application.component";
 import { ApplicationRouting } from "./application.routing";
 import { AppConfig } from "./common/config/app.config";
-import { HttpClient, provideHttpClient, withInterceptors } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptors, withInterceptorsFromDi } from "@angular/common/http";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { NbDatepickerModule, NbDialogModule, NbMenuModule, NbSidebarModule, NbThemeModule, NbTimepickerModule, NbToastrModule } from "@nebular/theme";
@@ -11,6 +11,7 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { AuthRouting } from "./screen/auth/auth.routing";
 import { AuthService } from "./data/service/auth.service";
+import { AuthInterceptor } from "./common/utils/auth.interceptor";
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -59,7 +60,8 @@ const ANGULAR_LIB = [
     bootstrap: [ApplicationComponent],
     providers: [
         provideHttpClient(
-            withInterceptors([])
+            // withInterceptors([]),
+            withInterceptorsFromDi()
         ),
         {
             provide: APP_INITIALIZER,
@@ -68,6 +70,7 @@ const ANGULAR_LIB = [
             multi: true
         },
         AuthService,
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     ]
 })
 
