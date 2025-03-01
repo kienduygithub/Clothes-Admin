@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ImageResource } from "../../../../common/resource/image_resource";
-import { UserModel } from "../../../../data/model/user.model";
+import { UserModel } from "../../../../data/model/user/user.model";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { actions } from "../../../../common/resource/actions";
 import { NbButtonModule, NbCheckboxModule, NbInputModule, NbSelectModule } from "@nebular/theme";

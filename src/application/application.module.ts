@@ -12,6 +12,7 @@ import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { AuthRouting } from "./screen/auth/auth.routing";
 import { AuthService } from "./data/service/auth.service";
 import { AuthInterceptor } from "./common/utils/auth.interceptor";
+import { AkitaNgDevtools } from "@datorama/akita-ngdevtools";
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -44,6 +45,9 @@ const ANGULAR_LIB = [
             useFactory: HttpLoaderFactory,
             deps: [HttpClient],
         },
+    }),
+    AkitaNgDevtools.forRoot({
+        maxAge: 25,
     }),
 ];
 

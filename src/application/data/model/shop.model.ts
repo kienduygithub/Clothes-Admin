@@ -1,5 +1,5 @@
 import { ProductModel } from "./product.model";
-import { UserModel } from "./user.model";
+import { UserModel } from "./user/user.model";
 
 export class ShopModel {
     id?: number;

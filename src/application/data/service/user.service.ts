@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ServiceCore } from "../../common/service/service-core";
 import { AppConfig } from "../../common/config/app.config";
-import { UserModel } from "../model/user.model";
+import { UserModel } from "../model/user/user.model";
 
 @Injectable()
 export class UserService {

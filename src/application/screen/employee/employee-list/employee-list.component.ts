@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { AppConfig } from "../../../common/config/app.config";
 import { NbButtonModule, NbDialogService, NbIconModule, NbInputModule, NbTooltipModule } from "@nebular/theme";
 import { ImageResource } from "../../../common/resource/image_resource";
-import { UserModel } from "../../../data/model/user.model";
+import { UserModel } from "../../../data/model/user/user.model";
 import { UserManagement } from "../../../data/management/user.management";
 import { UserService } from "../../../data/service/user.service";
 import { NgxPaginationModule } from "ngx-pagination";
