@@ -8,9 +8,9 @@
     <a style="text-decoration: none">
       <div class="box-title">
         <div class="d-flex">
-          <span class="text-title">SafeGate Office</span>
+          <span class="text-title">Fashion Zone</span>
         </div>
-        <span class="text-title-deps">Smart Firewall</span>
+        <span class="text-title-deps">Xu hướng mới, mua sắm dễ dàng</span>
       </div>
     </a>
   </div>
@@ -19,35 +19,39 @@
 <div class="header-container">
   <div>
     <button mat-button #account_button="matMenuTrigger" [matMenuTriggerFor]="account_menu" class="no-hover mr-sm-3">
-      <img class="avatar" src="{{ avt_3 }}" />
+      <img *ngIf="userInfo && userInfo.image_url === ''" class="avatar" src="{{ avt_3 }}" />
+      <img *ngIf="userInfo && userInfo.image_url !== ''" class="avatar" src="{{preImage}}/{{ userInfo.image_url }}" />
     </button>
     <mat-menu #account_menu="matMenu">
       <div class="row avatar-container m-0">
         <div class="background"></div>
-        <avatar title="{{ 'header_component.update_avatar' | translate }}" style="width: 64px; height: 64px"
-          [name]="userName" [id]="userId" [imagePath]="getAva()" [nameSize]="28"></avatar>
+        <avatar *ngIf="!userInfo || userInfo && userInfo.image_url === ''" style="width: 64px; height: 64px"
+          [name]="userName" [id]="userId" [imagePath]="getAva()" [nameSize]="28">
+        </avatar>
+        <avatar *ngIf="userInfo && userInfo.image_url !== ''" style="width: 64px; height: 64px" [name]="userName"
+          [id]="userId" [imagePath]="preImage + '/' + userInfo.image_url" [nameSize]="28"></avatar>
       </div>
       <div class="col-lg-12 text-center mt-4">
-        <p class="font-weight-bold prevent-overflow">username</p>
+        <p class="font-weight-bold prevent-overflow">{{userInfo && userInfo.name ?? 'Anonymous'}}</p>
       </div>
 
       <button mat-menu-item (click)="toChangePassword()">
         <img src="{{ change_password }}" class="overwrite-default-icn-size" />
-        <span class="button-txt-style">{{
-          "header_component.change_password" | translate
-          }}</span>
+        <span class="button-txt-style">
+          Đổi mật khẩu
+        </span>
       </button>
       <button mat-menu-item (click)="toAccountManagement()">
         <img src="{{ account_setting }}" class="overwrite-default-icn-size" />
-        <span class="button-txt-style">{{
-          "header_component.acc_setting" | translate
-          }}</span>
+        <span class="button-txt-style">
+          Thông tin tài khoản
+        </span>
       </button>
       <button mat-menu-item (click)="logOut()" class="log-out">
         <img src="{{ logout }}" class="overwrite-default-icn-size" />
-        <span class="button-txt-style">{{
-          "header_component.logout" | translate
-          }}</span>
+        <span class="button-txt-style">
+          Đăng xuất
+        </span>
       </button>
     </mat-menu>
   </div>

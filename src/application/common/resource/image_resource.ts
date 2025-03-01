@@ -172,4 +172,6 @@ export class ImageResource {
   static image_not_found: string = 'assets/image/image_not_found.jpg';
   static image_no_avatar: string = 'assets/image/no_avatar.png';
   static image_sign_in: string = 'assets/image/sign-in.jpg';
+  static image_fashion_logo: string = 'assets/image/Fashion logo.png';
+  static image_fashion_logo_big: string = 'assets/image/fashion_big_logo.png';
 }

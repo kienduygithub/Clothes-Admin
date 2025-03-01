@@ -37,10 +37,9 @@
                         </span>
                     </td>
                     <td style="width: 13%;">
-                        <div class="image-container">
-                            <img *ngIf="user.image_url !== undefined && user.image_url !== null"
-                                src="{{preImage}}/{{user.image_url}}">
-                            <img *ngIf="user.image_url === '' || user.image_url === null" [src]="image_not_found">
+                        <div class="image-container" style="padding: 10px 0;">
+                            <img *ngIf="user.image_url !== ''" src="{{preImage}}/{{user.image_url}}">
+                            <img *ngIf="user.image_url === ''" [src]="image_not_found">
                         </div>
                     </td>
                     <td style="width: 15%;">

@@ -94,6 +94,8 @@ export class AppConfig {
     clear() {
         this.setDomain("");
         this.setPreImage("");
-        localStorage.clear();
+        localStorage.removeItem('access-token');
+        localStorage.removeItem('refresh-token');
+        localStorage.removeItem('info')
     }
 }
