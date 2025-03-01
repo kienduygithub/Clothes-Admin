@@ -1,3 +1,5 @@
+import { CategoryModel } from "./category.model";
+
 export class ProductModel {
     id?: number;
     shopId?: number;
@@ -10,6 +12,8 @@ export class ProductModel {
     image_urls?: ProductImagesModel[];
     variants?: ProductVariantModel[];
     stock_product?: number;
+    categoryId?: number;
+    category?: CategoryModel;
     createdAt?: string;
 
     constructor(
@@ -24,6 +28,8 @@ export class ProductModel {
         image_urls?: ProductImagesModel[],
         variants?: ProductVariantModel[],
         stock_product?: number,
+        categoryId?: number,
+        category?: CategoryModel,
         createdAt?: string,
     ) {
         this.id = id ?? 0;
@@ -37,6 +43,8 @@ export class ProductModel {
         this.image_urls = image_urls ?? [];
         this.variants = variants ?? [];
         this.stock_product = stock_product ?? 0;
+        this.categoryId = categoryId ?? 0;
+        this.category = category;
         this.createdAt = createdAt ?? "";
     }
 
@@ -47,23 +55,24 @@ export class ProductModel {
         model.product_name = obj.product_name;
         model.gender = obj.gender;
         model.origin = obj.origin;
-        model.unit_price = obj.unit_price;
-        model.description = obj.description;
-        model.sold_quantity = obj.sold_quantity;
-        model.image_urls = obj.product_images?.map((item: any) => {
+        model.unit_price = obj?.unit_price ?? 0;
+        model.description = obj?.description;
+        model.sold_quantity = obj?.sold_quantity;
+        model.image_urls = obj?.product_images?.map((item: any) => {
             const productImages = new ProductImagesModel();
             productImages.id = item.id;
             productImages.productId = item.productId;
             productImages.image_url = item.image_url;
             return productImages;
-        });
-        model.variants = obj.variants?.map((variant: any) => new ProductVariantModel().convertObj(variant)) ?? [];
+        }) ?? [];
+        model.variants = obj?.variants?.map((variant: any) => new ProductVariantModel().convertObj(variant)) ?? [];
         model.stock_product = model.variants?.reduce((stock: number, curr: ProductVariantModel) => {
             return stock + curr.stock_quantity!
         }, 0);
 
-        model.createdAt = obj.createdAt;
-
+        model.createdAt = obj?.createdAt;
+        model.categoryId = obj?.categoryId;
+        model.category = new CategoryModel().convertObj(obj?.category);
         return model;
     }
 
@@ -74,7 +83,8 @@ export class ProductModel {
             gender: obj.gender,
             description: obj.description,
             unit_price: obj.unit_price,
-            variants: obj.variants
+            variants: obj.variants,
+            categoryId: obj.categoryId
         }
     };
 
@@ -87,7 +97,8 @@ export class ProductModel {
             description: obj.description,
             unit_price: obj.unit_price,
             image_urls: obj.image_urls, // Dùng để xóa ảnh
-            variants: obj.variants
+            variants: obj.variants,
+            categoryId: obj.categoryId
         }
     }
 }

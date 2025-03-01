@@ -2,7 +2,7 @@
     <div class="editor-container editor-container_classic-editor" #editorContainerElement>
         <div class="editor-container__editor">
             <div #editorElement>
-                <ckeditor #editor [editor]="Editor" [config]="config" *ngIf="isLayoutReady" [data]="editorData"
+                <ckeditor #editor [editor]="Editor" [config]="config" *ngIf="Editor && config"
                     (change)="onChangeEditor($event)" />
             </div>
         </div>

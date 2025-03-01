@@ -9,10 +9,22 @@ export class CategoryManagement {
         private categoryService: CategoryService
     ) { }
 
+    async fetchCategorisBoth() {
+        try {
+            const result = await this.categoryService.fetchCategorisBoth();
+            const response: CategoryModel[] = result?.body?.categories?.map(
+                (category: any) => new CategoryModel().convertObj(category)
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async fetchCategories() {
         try {
             const result = await this.categoryService.fetchCategories();
-            const response = result?.body?.categories?.map(
+            const response: CategoryModel[] = result?.body?.categories?.map(
                 (category: any) => new CategoryModel().convertObj(category)
             );
             return response;

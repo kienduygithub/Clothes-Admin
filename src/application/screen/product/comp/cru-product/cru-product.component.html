@@ -111,7 +111,9 @@
                     <div class="select-wrapper">
                         <nb-select formControlName="category1" placeholder="Chọn danh mục cha"
                             [ngClass]="{'invalid': (cruForm.get('category1')?.dirty || isSubmit) && cruForm.get('category1')?.invalid}">
-
+                            <nb-option *ngFor="let parent of parentCategories" [value]="parent.id">
+                                {{parent.category_name}}
+                            </nb-option>
                         </nb-select>
                         <ng-container
                             *ngIf="(cruForm.get('category1')?.dirty || isSubmit) && cruForm.get('category1')?.invalid">
@@ -128,7 +130,9 @@
                     <div class="select-wrapper">
                         <nb-select formControlName="category2" placeholder="Chọn danh mục con"
                             [ngClass]="{'invalid': (cruForm.get('category2')?.dirty || isSubmit) && cruForm.get('category2')?.invalid}">
-
+                            <nb-option *ngFor="let child of childCategories" [value]="child.id">
+                                {{child.category_name}}
+                            </nb-option>
                         </nb-select>
                         <ng-container
                             *ngIf="(cruForm.get('category2')?.dirty || isSubmit) && cruForm.get('category2')?.invalid">
@@ -138,12 +142,6 @@
                         </ng-container>
                     </div>
                 </div>
-                <!-- <div class="info">
-                    <label for="description">Mô tả sản phẩm</label>
-                    <div class="input-container">
-                        <textarea nbInput formControlName="description" id="description" placeholder="Mô tả"></textarea>
-                    </div>
-                </div> -->
             </div>
             <div class="info-right">
                 <div class="info">
@@ -186,95 +184,97 @@
             <app-ckeditor [group]="cruForm" [controlName]="'description'"
                 [placeholder]="'Mô tả sản phẩm'"></app-ckeditor>
         </div>
-        <span class="sub-title">Danh sách biến thể</span>
-        <div>
-            <button nbButton class="button-submit-form mb-2" (click)="onAddVariantControl()">
-                Thêm biến thể
-            </button>
-        </div>
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Hình ảnh</th>
-                        <th>Màu sắc</th>
-                        <th>Kích cỡ</th>
-                        <th>SKU</th>
-                        <th>Tồn kho</th>
-                        <th class="action">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <ng-container formArrayName="product_variants">
-                        <tr *ngFor="let variant of product_variants.controls; let j = index" [formGroupName]="j">
-                            <td>{{j + 1}}</td>
-                            <td>
-                                <div class="image-container">
-                                    <label for="file-{{j}}"
-                                        [ngClass]="{'invalid': (variant.get('image_url')?.dirty || isSubmit) && variant.get('image_url')?.invalid}">
-                                        <img *ngIf="variant.get('image_url')?.value !== ''"
-                                            [src]="variant.get('image_url')?.value">
-                                        <img *ngIf="variant.get('image_url')?.value === ''" [src]="image_not_found">
-                                    </label>
-                                    <input type="file" accept=".png, .jpg, .jpeg" id="file-{{j}}" [hidden]="true"
-                                        (change)="onChangeVariantFile(variant.get('id')?.value, $event, variant.get('isTemp')?.value)">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="select-wrapper">
-                                    <nb-select formControlName="colorId" nbTooltipStatus="danger"
-                                        [nbTooltipDisabled]="!variant.get('colorId')?.hasError('unique')"
-                                        [nbTooltip]="variant.get('colorId')?.hasError('unique') ? 'Có biến thể trùng' : ''"
-                                        [ngClass]="{'invalid': ((variant.get('colorId')?.dirty || isSubmit) && variant.get('colorId')?.invalid) || variant.get('colorId')?.hasError('unique')}">
-                                        <nb-select-label>
-                                            <span class="color-opt"
-                                                [style]="{'background-color': variant.get('colorId')?.value | transformColorId: allColors}"></span>
-                                        </nb-select-label>
-                                        <nb-option [value]="color.id" *ngFor="let color of allColors">
-                                            <span class="color-opt"
-                                                [style]="{'background-color': color.color_code}"></span>
-                                        </nb-option>
-                                    </nb-select>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="select-wrapper">
-                                    <nb-select formControlName="sizeId" nbTooltipStatus="danger"
-                                        [nbTooltipDisabled]="!variant.get('sizeId')?.hasError('unique')"
-                                        [nbTooltip]="variant.get('sizeId')?.hasError('unique') ? 'Có biến thể trùng' : ''"
-                                        [ngClass]="{'invalid': ((variant.get('sizeId')?.dirty || isSubmit) && variant.get('sizeId')?.invalid) || variant.get('sizeId')?.hasError('unique')}">
-                                        <nb-option [value]="size.id" *ngFor="let size of allSizes">
-                                            {{size.size_code}}
-                                        </nb-option>
-                                    </nb-select>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="input-container" style="max-width: 200px;">
-                                    <input class="disabled" nbInput type="text" formControlName="sku">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="input-container">
-                                    <input nbInput type="text" formControlName="stock_quantity" [ngClass]="{
-                                        'invalid-form': (variant.get('stock_quantity')?.dirty || isSubmit) && variant.get('stock_quantity')?.invalid
-                                    }">
-                                </div>
-                            </td>
-                            <td style="width: 10%;text-align: right;">
-                                <img [src]="icon_delete" class="common-icon"
-                                    (click)="onConfirmDeleteVariant(variant.get('id')?.value, variant.get('isTemp')?.value)">
-                            </td>
+        <span class="sub-title mt-2">Danh sách biến thể</span>
+        <div class="table-wrapper">
+            <div>
+                <button nbButton class="button-submit-form mb-2" (click)="onAddVariantControl()">
+                    Thêm biến thể
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Hình ảnh</th>
+                            <th>Màu sắc</th>
+                            <th>Kích cỡ</th>
+                            <th>SKU</th>
+                            <th>Tồn kho</th>
+                            <th class="action">Actions</th>
                         </tr>
-                        <tr *ngIf="cruForm.get('product_variants')?.value.length === 0">
-                            <td class="table-no-data text-center" colspan="11">
-                                Không có dữ liệu
-                            </td>
-                        </tr>
-                    </ng-container>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <ng-container formArrayName="product_variants">
+                            <tr *ngFor="let variant of product_variants.controls; let j = index" [formGroupName]="j">
+                                <td>{{j + 1}}</td>
+                                <td>
+                                    <div class="image-container">
+                                        <label for="file-{{j}}"
+                                            [ngClass]="{'invalid': (variant.get('image_url')?.dirty || isSubmit) && variant.get('image_url')?.invalid}">
+                                            <img *ngIf="variant.get('image_url')?.value !== ''"
+                                                [src]="variant.get('image_url')?.value">
+                                            <img *ngIf="variant.get('image_url')?.value === ''" [src]="image_not_found">
+                                        </label>
+                                        <input type="file" accept=".png, .jpg, .jpeg" id="file-{{j}}" [hidden]="true"
+                                            (change)="onChangeVariantFile(variant.get('id')?.value, $event, variant.get('isTemp')?.value)">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="select-wrapper">
+                                        <nb-select formControlName="colorId" nbTooltipStatus="danger"
+                                            [nbTooltipDisabled]="!variant.get('colorId')?.hasError('unique')"
+                                            [nbTooltip]="variant.get('colorId')?.hasError('unique') ? 'Có biến thể trùng' : ''"
+                                            [ngClass]="{'invalid': ((variant.get('colorId')?.dirty || isSubmit) && variant.get('colorId')?.invalid) || variant.get('colorId')?.hasError('unique')}">
+                                            <nb-select-label>
+                                                <span class="color-opt"
+                                                    [style]="{'background-color': variant.get('colorId')?.value | transformColorId: allColors}"></span>
+                                            </nb-select-label>
+                                            <nb-option [value]="color.id" *ngFor="let color of allColors">
+                                                <span class="color-opt"
+                                                    [style]="{'background-color': color.color_code}"></span>
+                                            </nb-option>
+                                        </nb-select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="select-wrapper">
+                                        <nb-select formControlName="sizeId" nbTooltipStatus="danger"
+                                            [nbTooltipDisabled]="!variant.get('sizeId')?.hasError('unique')"
+                                            [nbTooltip]="variant.get('sizeId')?.hasError('unique') ? 'Có biến thể trùng' : ''"
+                                            [ngClass]="{'invalid': ((variant.get('sizeId')?.dirty || isSubmit) && variant.get('sizeId')?.invalid) || variant.get('sizeId')?.hasError('unique')}">
+                                            <nb-option [value]="size.id" *ngFor="let size of allSizes">
+                                                {{size.size_code}}
+                                            </nb-option>
+                                        </nb-select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-container" style="max-width: 200px;">
+                                        <input class="disabled" nbInput type="text" formControlName="sku">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-container">
+                                        <input nbInput type="text" formControlName="stock_quantity" [ngClass]="{
+                                            'invalid-form': (variant.get('stock_quantity')?.dirty || isSubmit) && variant.get('stock_quantity')?.invalid
+                                        }">
+                                    </div>
+                                </td>
+                                <td style="width: 10%;text-align: right;">
+                                    <img [src]="icon_delete" class="common-icon"
+                                        (click)="onConfirmDeleteVariant(variant.get('id')?.value, variant.get('isTemp')?.value)">
+                                </td>
+                            </tr>
+                            <tr *ngIf="cruForm.get('product_variants')?.value.length === 0">
+                                <td class="table-no-data text-center" colspan="11">
+                                    Không có dữ liệu
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </form>
 </ng-template>

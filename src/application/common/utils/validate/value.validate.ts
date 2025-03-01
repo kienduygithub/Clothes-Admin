@@ -5,7 +5,7 @@ export class ValueValidators {
     static required(control: AbstractControl): ValidationErrors | null {
         const value = control.value;
 
-        if (value.trim() === '' || value === undefined || value === null) {
+        if (value?.trim() === '' || value === undefined || value === null) {
             return {
                 required: true
             };

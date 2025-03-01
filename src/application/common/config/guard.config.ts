@@ -21,25 +21,25 @@ export class AuthGuard implements CanActivate {
     ): boolean {
 
         const user = this.appConfig.getUserInfo();
-        console.log(state.url)
-        // if (!user) {
-        //     if (state.url === AuthUrl.SIGNIN) {
-        //         return true;
-        //     }
+        // console.log(state.url)
+        if (!user) {
+            if (state.url === AuthUrl.SIGNIN) {
+                return true;
+            }
 
-        //     this.router.navigate([AuthUrl.SIGNIN]);
-        //     return false;
-        // }
+            this.router.navigate([AuthUrl.SIGNIN]);
+            return false;
+        }
 
         const isAdminRoute = state.url.startsWith('/admin');
         const isShopRoute = state.url.startsWith('/shop');
         const isLoginPage = state.url.includes('/auth');
 
         // Đăng nhập rồi vẫn cố tình vào trang thì quay lại
-        // if (isLoginPage) {
-        //     this.location.back();
-        //     return false;
-        // }
+        if (isLoginPage) {
+            this.location.back();
+            return false;
+        }
 
         return true;
     }

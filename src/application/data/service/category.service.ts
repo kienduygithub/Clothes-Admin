@@ -11,6 +11,19 @@ export class CategoryService {
         private appConfig: AppConfig
     ) { }
 
+    async fetchCategorisBoth(): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.GET(
+                `${domain}`,
+                `category/all/both`
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async fetchCategories(): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();

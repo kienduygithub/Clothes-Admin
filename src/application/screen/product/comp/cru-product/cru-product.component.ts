@@ -21,6 +21,10 @@ import { ProductValidate } from "../../../../common/utils/validate/product.valid
 import { Option } from "../../../../common/resource/option.interface";
 import { GenderResource } from "../../../../common/resource/gender_resource";
 import { CKEditorComponent } from "../../../../common/utils/ckeditor/ckeditor.component";
+import { CategoryModel } from "../../../../data/model/category.model";
+import { CategoryManagement } from "../../../../data/management/category.management";
+import { CategoryService } from "../../../../data/service/category.service";
+import { debounceTime } from "rxjs";
 
 const NB_LIBS = [
     NbInputModule,
@@ -50,7 +54,9 @@ const PIPES = [
         ProductManagement,
         ProductService,
         AttributeManagement,
-        AttributeService
+        AttributeService,
+        CategoryManagement,
+        CategoryService
     ],
     // changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -84,6 +90,9 @@ export class CRUProductComponent implements OnInit {
 
     allColors: ColorModel[] = [];
     allSizes: SizeModel[] = [];
+    categories = new Map<number, CategoryModel>([]);
+    parentCategories: CategoryModel[] = [];
+    childCategories: CategoryModel[] = [];
     timeSKU = Date.now();
 
     get product_variants(): FormArray {
@@ -97,12 +106,14 @@ export class CRUProductComponent implements OnInit {
         private formBuilder: FormBuilder,
         private productManagement: ProductManagement,
         private attributeManagement: AttributeManagement,
+        private categoryManagement: CategoryManagement,
         private dialogService: NbDialogService,
         private cdr: ChangeDetectorRef
     ) { }
 
     async ngOnInit() {
         await this.fetchAllAttributes();
+        await this.fetchAllCategories();
         this.preImage = this.appConfig.getPreImage() ?? "";
         this.checkCreateOrUpdate();
     }
@@ -111,6 +122,18 @@ export class CRUProductComponent implements OnInit {
         try {
             this.allColors = await this.attributeManagement.fetchAllColors();
             this.allSizes = await this.attributeManagement.fetchAllSizes();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async fetchAllCategories() {
+        try {
+            let allCategories = await this.categoryManagement.fetchCategories();
+            allCategories.forEach(category => {
+                this.categories.set(category.id ?? 0, category);
+            })
+            this.parentCategories = allCategories.filter(category => category.parentId === 0);
         } catch (error) {
             console.log(error);
         }
@@ -135,8 +158,8 @@ export class CRUProductComponent implements OnInit {
             origin: this.formBuilder.control('', [ValueValidators.required]),
             gender: this.formBuilder.control(this.genderProductList[0].value),
             unit_price: this.formBuilder.control('', [ValueValidators.required, ValueValidators.isNumber]),
-            category1: this.formBuilder.control('', [ValueValidators.required]),
-            category2: this.formBuilder.control('', [ValueValidators.required]),
+            category1: this.formBuilder.control('', [Validators.required]),
+            category2: this.formBuilder.control('', [Validators.required]),
             description: this.formBuilder.control(''),
             image_urls: this.formBuilder.array([]),
             product_variants: this.formBuilder.array([
@@ -155,6 +178,14 @@ export class CRUProductComponent implements OnInit {
             ], [ProductValidate.uniqueVariantsValidator])
         });
         this.variantImageUrls.set(this.timeSKU, null);
+        this.cruForm.get('category1')?.valueChanges
+            .subscribe((response) => {
+                this.cruForm.get('category2')?.patchValue('');
+                this.cruForm.get('category2')?.markAsPristine();
+                this.childCategories = this.parentCategories.find(cate => cate.id === response)
+                    ?.sub_categories ?? [];
+            })
+
         this.cdr.detectChanges();
     }
 
@@ -174,13 +205,17 @@ export class CRUProductComponent implements OnInit {
                 origin: this.formBuilder.control(this.updatedProduct.origin, [ValueValidators.required]),
                 gender: this.formBuilder.control(this.updatedProduct.gender),
                 unit_price: this.formBuilder.control(this.updatedProduct.unit_price, [ValueValidators.required, ValueValidators.isNumber]),
-                category1: this.formBuilder.control('', [ValueValidators.required]),
-                category2: this.formBuilder.control('', [ValueValidators.required]),
+                category1: this.formBuilder.control(
+                    this.categories.get(this.updatedProduct.category?.parentId ?? 0)?.id ?? 0,
+                    [Validators.required]
+                ),
+                category2: this.formBuilder.control(this.updatedProduct.categoryId ?? 0, [Validators.required]),
                 description: this.formBuilder.control(this.updatedProduct.description),
                 image_urls: this.formBuilder.array([]),
                 product_variants: this.formBuilder.array([])
             });
             this.updatedImageUrls = this.updatedProduct.image_urls?.map(item => item) ?? [];
+
             this.updatedImageUrls.forEach(item => {
                 this.getArrayControl('image_urls').push(
                     this.formBuilder.group({
@@ -191,6 +226,15 @@ export class CRUProductComponent implements OnInit {
                 )
             });
             this.initVariantAsUpdate();
+            this.initChildCategoriesAsUpdate();
+
+            this.cruForm.get('category1')?.valueChanges
+                .subscribe((response) => {
+                    this.cruForm.get('category2')?.patchValue('');
+                    this.cruForm.get('category2')?.markAsPristine();
+                    this.childCategories = this.parentCategories.find(cate => cate.id === response)
+                        ?.sub_categories ?? [];
+                })
         }
     }
 
@@ -202,17 +246,23 @@ export class CRUProductComponent implements OnInit {
                     id: variants[i].id,
                     productId: variants[i].productId,
                     image_url: `${this.preImage}/${variants[i].image_url}`,
-                    colorId: this.formBuilder.control(variants[i].colorId, [ValueValidators.required]),
-                    sizeId: this.formBuilder.control(variants[i].sizeId, [ValueValidators.required]),
+                    colorId: this.formBuilder.control(variants[i].colorId, [Validators.required]),
+                    sizeId: this.formBuilder.control(variants[i].sizeId, [Validators.required]),
                     sku: variants[i].sku,
                     stock_quantity: this.formBuilder.control(
-                        variants[i].stock_quantity + "",
-                        [ValueValidators.required, ValueValidators.isNumber]
+                        variants[i].stock_quantity?.toString() + "",
+                        [Validators.required, ValueValidators.isNumber]
                     ),
                     isTemp: false
                 })
             )
         }
+    }
+
+    initChildCategoriesAsUpdate() {
+        let parentId = this.cruForm.getRawValue().category1;
+        this.childCategories = this.parentCategories.find(cate => cate.id === parentId)
+            ?.sub_categories ?? [];
     }
 
     onCancel() {
@@ -301,8 +351,8 @@ export class CRUProductComponent implements OnInit {
         model.description = this.cruForm.getRawValue().description;
         model.image_urls = this.cruForm.getRawValue().image_urls;
         model.variants = this.cruForm.getRawValue().product_variants.map((variant: any) => new ProductVariantModel().convertObj(variant));
+        model.categoryId = this.cruForm.getRawValue().category2;
 
-        console.log(model);
         return model;
     }
 
