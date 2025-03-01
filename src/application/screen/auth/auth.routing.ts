@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { AuthComponent } from "./auth.component";
 import { SignInComponent } from "./sign-in/sign-in.component";
 import { AuthGuard } from "../../common/config/guard.config";
+import { SignUpComponent } from "./sign-up/sign-up.component";
 
 export const AuthUrl = {
     SIGNIN: '/auth/sign-in',
@@ -24,6 +25,11 @@ const AuthRoutes: Routes = [
                 path: 'sign-in',
                 title: 'Đăng nhập',
                 component: SignInComponent
+            },
+            {
+                path: 'sign-up',
+                title: 'Đăng ký',
+                component: SignUpComponent
             },
             {
                 path: '**',

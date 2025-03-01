@@ -5,13 +5,11 @@ import { AuthManagement } from "../../../data/management/auth.management";
 import { AuthModel } from "../../../common/model/auth.model";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
-import { NbAlertModule, NbDialogService, NbLayoutModule, NbRestoreScrollTopHelper, NbToastrService } from "@nebular/theme";
-import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { NbDialogService, NbLayoutModule, NbRestoreScrollTopHelper, NbToastrService } from "@nebular/theme";
 import { ErrorModel } from "../../../common/model/error";
 import { HttpCode } from "../../../common/resource/http-code";
-import { WarningComponent } from "../../../common/layout/notify/warning/warnimg.component";
-import { ShopURL } from "../../shop/shop.routing";
 import { EmployeeUrl } from "../../employee/employee.routing";
+import { AuthUrl } from "../auth.routing";
 
 @Component({
     standalone: true,
@@ -22,7 +20,6 @@ import { EmployeeUrl } from "../../employee/employee.routing";
         CommonModule,
         ReactiveFormsModule,
         NbLayoutModule,
-        // MatSnackBarModule
     ],
     providers: [
         AuthManagement
@@ -44,8 +41,6 @@ export class SignInComponent implements OnInit {
         private router: Router,
         private fb: FormBuilder,
         private authManagement: AuthManagement,
-        private dialogService: NbDialogService,
-        // private snackBar: MatSnackBar
         private toastrService: NbToastrService
     ) { }
 
@@ -95,5 +90,9 @@ export class SignInComponent implements OnInit {
 
     onToggleVisiblePassword() {
         this.isVisiblePassword = !this.isVisiblePassword;
+    }
+
+    onSignUp() {
+        this.router.navigate([AuthUrl.SIGNUP]);
     }
 }

@@ -174,4 +174,5 @@ export class ImageResource {
   static image_sign_in: string = 'assets/image/sign-in.jpg';
   static image_fashion_logo: string = 'assets/image/Fashion logo.png';
   static image_fashion_logo_big: string = 'assets/image/fashion_big_logo.png';
+  static image_store_logo_upload: string = 'assets/image/store_logo_upload.svg';
 }

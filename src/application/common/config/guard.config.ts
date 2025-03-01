@@ -23,8 +23,10 @@ export class AuthGuard implements CanActivate {
         const user = this.appConfig.getUserInfo();
         // console.log(state.url)
         if (!user) {
-            if (state.url === AuthUrl.SIGNIN) {
-                return true;
+            switch (state.url) {
+                case AuthUrl.SIGNIN:
+                case AuthUrl.SIGNUP:
+                    return true;
             }
 
             this.router.navigate([AuthUrl.SIGNIN]);
