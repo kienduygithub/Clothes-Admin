@@ -5,6 +5,7 @@ import { AuthModel } from "../../common/model/auth.model";
 import { UserModel } from "../model/user/user.model";
 import { UserStore } from "../stores/user.store";
 import { UserStoreModel } from "../model/user/user.store.model";
+import { ShopModel } from "../model/shop.model";
 
 @Injectable()
 export class AuthManagement {
@@ -42,6 +43,27 @@ export class AuthManagement {
             };
             this.userStore.setUser(userStoreModel);
             return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async signUp(
+        userModel: UserModel,
+        shopModel: ShopModel,
+        adminOwnerFile: any,
+        logoShopFile: any,
+        backgroundShopFile: any
+    ): Promise<any> {
+        try {
+            await this.authService.signUp(
+                userModel,
+                shopModel,
+                adminOwnerFile,
+                logoShopFile,
+                backgroundShopFile
+            );
+            return true;
         } catch (error) {
             throw error;
         }

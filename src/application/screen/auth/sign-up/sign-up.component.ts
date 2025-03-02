@@ -2,11 +2,14 @@ import { Component, OnInit } from "@angular/core";
 import { AuthManagement } from "../../../data/management/auth.management";
 import { CommonModule } from "@angular/common";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { NbButtonModule, NbCheckboxModule, NbInputModule, NbLayoutModule, NbSelectModule } from "@nebular/theme";
+import { NbButtonModule, NbCheckboxModule, NbDialogService, NbInputModule, NbLayoutModule, NbSelectModule } from "@nebular/theme";
 import { ImageResource } from "../../../common/resource/image_resource";
 import { Router } from "@angular/router";
 import { AppConfig } from "../../../common/config/app.config";
 import { ValueValidators } from "../../../common/utils/validate/value.validate";
+import { UserModel } from "../../../data/model/user/user.model";
+import { ShopModel } from "../../../data/model/shop.model";
+import { ErrorComponent } from "../../../common/layout/notify/error/error.component";
 
 const NB_LIBS = [
     NbButtonModule,
@@ -59,6 +62,8 @@ export class SignUpComponent implements OnInit {
         private router: Router,
         private appConfig: AppConfig,
         private formBuilder: FormBuilder,
+        private dialogService: NbDialogService,
+        private authManagement: AuthManagement
     ) { }
 
     ngOnInit(): void {
@@ -73,7 +78,7 @@ export class SignUpComponent implements OnInit {
             phone: ['', [ValueValidators.required]],
             gender: ['1'],
             address: [''],
-            image_url: [''],
+            image_url: ['', [ValueValidators.required]],
             // Shop
             shop_name: ['', [ValueValidators.required]],
             logo_url: ['', [ValueValidators.required]],
@@ -83,6 +88,20 @@ export class SignUpComponent implements OnInit {
             description: [''],
             accept: [false]
         });
+
+        this.emailValueChanges();
+    }
+
+    private emailValueChanges() {
+        this.cruForm.get('email')?.valueChanges
+            .subscribe((response) => {
+                this.cruForm.get('contact_email')?.patchValue(response, { emitEvent: false });
+            });
+
+        this.cruForm.get('contact_email')?.valueChanges
+            .subscribe((response) => {
+                this.cruForm.get('email')?.patchValue(response, { emitEvent: false });
+            })
     }
 
     onChangeLogoFile(files: any, typeFile: string) {
@@ -115,5 +134,69 @@ export class SignUpComponent implements OnInit {
 
     onToggleVisiblePassword() {
         this.isVisiblePassword = !this.isVisiblePassword;
+    }
+
+    async onSignUp() {
+        this.isSubmit = true;
+        console.log(this.cruForm.value);
+        if (this.cruForm.invalid) {
+            console.log('INVALID FORM');
+            let errorMessage: string[] = [];
+            if (this.cruForm.get('image_url')?.hasError('required')) {
+                errorMessage.push("Ảnh đại diện <b>người dùng</b> không được bỏ trống</br>");
+            }
+            if (this.cruForm.get('logo_url')?.hasError('required')) {
+                errorMessage.push("Ảnh đại diện <b>cửa hàng</b> không được bỏ trống</br>");
+            }
+            if (this.cruForm.get('background_url')?.hasError('required')) {
+                errorMessage.push("Ảnh nền <b>cửa hàng</b> không được bỏ trống</br>");
+            }
+            this.dialogService.open(ErrorComponent, {
+                context: {
+                    title: 'Không hợp lệ',
+                    content: errorMessage.join("")
+                }
+            });
+            return;
+        }
+
+        try {
+            const userModel = this.convertValueFormToUserModel();
+            const shopModel = this.convertValueFormToShopModel();
+            const adminOwnerFile = this.selectedImageFile;
+            const logoShopFile = this.selectedLogoFile;
+            const backgroundShopFile = this.selectedBackgroundFile;
+            await this.authManagement.signUp(
+                userModel,
+                shopModel,
+                adminOwnerFile,
+                logoShopFile,
+                backgroundShopFile
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    convertValueFormToUserModel() {
+        const model = new UserModel();
+        model.name = this.cruForm.getRawValue().name.trim();
+        model.email = this.cruForm.getRawValue().email.trim();
+        model.password = this.cruForm.getRawValue().password.trim();
+        model.phone = this.cruForm.getRawValue().phone.trim();
+        model.address = this.cruForm.getRawValue().address.trim();
+        model.gender = this.cruForm.getRawValue().gender;
+
+        return model;
+    }
+
+    convertValueFormToShopModel() {
+        const model = new ShopModel();
+        model.shop_name = this.cruForm.getRawValue().shop_name.trim();
+        model.contact_email = this.cruForm.getRawValue().contact_email.trim();
+        model.contact_address = this.cruForm.getRawValue().contact_address.trim();
+        model.description = this.cruForm.getRawValue().description.trim();
+
+        return model;
     }
 }

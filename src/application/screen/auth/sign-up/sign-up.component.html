@@ -53,7 +53,7 @@
             <div class="info-right">
                 <div class="info">
                     <label for="name">
-                        Tên nhân sự<span class="required">*</span>
+                        Tên người dùng<span class="required">*</span>
                     </label>
                     <div class="input-container">
                         <input nbInput type="text" formControlName="name" id="name" placeholder="Nhập họ tên" [ngClass]="{
@@ -61,7 +61,7 @@
                         }">
                         <ng-container *ngIf="(cruForm.get('name')?.dirty || isSubmit) && cruForm.get('name')?.invalid">
                             <p *ngIf="cruForm.get('name')?.hasError('required')" class="vali-text-false">
-                                Tên nhân sự không được bỏ trống
+                                Tên người dùng không được bỏ trống
                             </p>
                         </ng-container>
                     </div>
@@ -155,7 +155,7 @@
                 </div>
             </div>
         </div>
-        <span class="sub-title">Thông tin chi tiết</span>
+        <span class="sub-title">Thông tin cửa hàng</span>
         <div class="info-wrapper">
             <div class="info-left shop">
                 <div class="info">
@@ -270,7 +270,7 @@
                 </label>
             </div>
             <button nbButton class="button-submit-form" [ngClass]="{'disabled': !cruForm.get('accept')?.value}"
-                style="width: 100%;max-width: 10000px;">
+                style="width: 100%;max-width: 10000px;" (click)="onSignUp()">
                 Đăng ký
             </button>
         </div>
