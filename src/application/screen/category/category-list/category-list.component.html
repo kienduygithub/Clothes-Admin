@@ -58,8 +58,8 @@
                         <div class="list-actions">
                             <img class="common-icon" [src]="icon_folder_open" [nbTooltip]="'Danh mục con'"
                                 nbTooltipPlacement="bottom" (click)="onOpenViewChildList(category)" />
-                            <nb-icon class="common-icon" icon="icon_edit" pack="mainIcon" [nbTooltip]="'Chỉnh sửa'"
-                                nbTooltipPlacement="bottom" (click)="onUpdateCategory(category, i)"></nb-icon>
+                            <img class="common-icon" [src]="icon_edit" [nbTooltip]="'Chỉnh sửa'"
+                                nbTooltipPlacement="bottom" (click)="onUpdateCategory(category, i)" />
                             <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"
                                 nbTooltipPlacement="bottom" (click)="onConfirmDeleteCategory(category, i)">
                             </nb-icon>

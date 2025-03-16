@@ -84,8 +84,8 @@
                     </td>
                     <td style="width: 10%;" (click)="$event.stopPropagation()">
                         <div class="list-actions">
-                            <nb-icon class="common-icon" icon="icon_edit" pack="mainIcon" [nbTooltip]="'Chỉnh sửa'"
-                                nbTooltipPlacement="bottom" (click)="onUpdateShop(shop.id!)"></nb-icon>
+                            <img class="common-icon" [src]="icon_edit" [nbTooltip]="'Chỉnh sửa'"
+                                nbTooltipPlacement="bottom" (click)="onUpdateShop(shop.id!)" />
                             <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"
                                 nbTooltipPlacement="bottom" (click)="onConfirmDeleteShop(shop, i)">
                             </nb-icon>

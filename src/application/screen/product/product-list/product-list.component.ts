@@ -42,6 +42,7 @@ export class ProductListComponent implements OnInit {
 
     icon_filter: string = ImageResource.icon_filter;
     icon_refresh: string = ImageResource.icon_refresh;
+    icon_edit: string = ImageResource.icon_edit;
     image_not_found: string = ImageResource.image_not_found;
 
     offset: number = 0;

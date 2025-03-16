@@ -46,6 +46,7 @@ export class CategoryListComponent implements OnInit {
 
     icon_filter: string = ImageResource.icon_filter;
     icon_refresh: string = ImageResource.icon_refresh;
+    icon_edit: string = ImageResource.icon_edit;
     icon_folder_open: string = ImageResource.icon_folder_open;
     image_not_found: string = ImageResource.image_not_found;
 
