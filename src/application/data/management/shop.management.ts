@@ -71,6 +71,24 @@ export class ShopManagement {
         }
     }
 
+    async declineRegisterShopById(shopId: number): Promise<any> {
+        try {
+            await this.shopService.declineRegisterShopById(shopId);
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async acceptRegisterShopById(shopId: number): Promise<any> {
+        try {
+            await this.shopService.acceptRegisterShopById(shopId);
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async changeOwnersForShop(shopId: number, ownerIds: number[]) {
         try {
             await this.shopService.changeOwnersForShop(shopId, ownerIds);

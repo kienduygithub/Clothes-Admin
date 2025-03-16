@@ -125,26 +125,26 @@ export class RegisterShopListComponent implements OnInit {
 
     async declineRegisterShop(shopId: number, index: number) {
         try {
-            // await this.shopManagement.deleteShopById(shopId);
-            // this.shops.splice(index, 1);
-            // this.paging.totalItems = this.shops.length;
-            // this.paging.totalPage = Math.ceil(this.shops.length / this.paging.itemsPerPage);
-            // if (this.paging.currentPage === this.paging.totalPage + 1) {
-            //     this.onPageChange(this.paging.currentPage - 1);
-            // }
+            await this.shopManagement.declineRegisterShopById(shopId);
+            this.shops.splice(index, 1);
+            this.paging.totalItems = this.shops.length;
+            this.paging.totalPage = Math.ceil(this.shops.length / this.paging.itemsPerPage);
+            if (this.paging.currentPage === this.paging.totalPage + 1) {
+                this.onPageChange(this.paging.currentPage - 1);
+            }
         } catch (error) {
             console.log(error);
         }
     }
     async acceptRegisterShop(shopId: number, index: number) {
         try {
-            // await this.shopManagement.deleteShopById(shopId);
-            // this.shops.splice(index, 1);
-            // this.paging.totalItems = this.shops.length;
-            // this.paging.totalPage = Math.ceil(this.shops.length / this.paging.itemsPerPage);
-            // if (this.paging.currentPage === this.paging.totalPage + 1) {
-            //     this.onPageChange(this.paging.currentPage - 1);
-            // }
+            await this.shopManagement.acceptRegisterShopById(shopId);
+            this.shops.splice(index, 1);
+            this.paging.totalItems = this.shops.length;
+            this.paging.totalPage = Math.ceil(this.shops.length / this.paging.itemsPerPage);
+            if (this.paging.currentPage === this.paging.totalPage + 1) {
+                this.onPageChange(this.paging.currentPage - 1);
+            }
         } catch (error) {
             console.log(error);
         }

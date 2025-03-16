@@ -72,13 +72,19 @@ export class SignInComponent implements OnInit {
             console.log(error);
             if (error instanceof ErrorModel) {
                 if (error.code === HttpCode.BAD_REQUEST) {
+                    if (error.message.includes('Tài khoản chủ shop chưa được xét duyệt')) {
+                        this.toastrService.danger(
+                            'Tên đăng nhập hoặc mật khẩu không hợp lệ.',
+                            'Không hợp lệ',
+                        );
+                    }
                     return;
                 }
 
                 if (error.code === HttpCode.NOT_FOUND) {
                     if (error.message.includes('Tên đăng nhập hoặc mật khẩu không chính xác.')) {
                         this.toastrService.danger(
-                            'Tên đăng nhập hoặc mật khẩu không chính xác.',
+                            'Tên đăng nhập hoặc mật khẩu không hợp lệ.',
                             'Không hợp lệ',
                         );
                     }

@@ -176,12 +176,18 @@ export class CRURegisterShopComponent implements OnInit {
     }
 
     async onCancel() {
-        this.router.navigate([RegisterShopURL.REGISTER_SHOP_URL]);
+        try {
+            await this.shopManagement.declineRegisterShopById(this.registerShopId);
+            this.onBack();
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     async onSave() {
         try {
-
+            await this.shopManagement.acceptRegisterShopById(this.registerShopId);
+            this.onBack();
         } catch (error) {
             console.log(error);
         }

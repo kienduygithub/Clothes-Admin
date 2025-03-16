@@ -10,6 +10,7 @@ import { ValueValidators } from "../../../common/utils/validate/value.validate";
 import { UserModel } from "../../../data/model/user/user.model";
 import { ShopModel } from "../../../data/model/shop.model";
 import { ErrorComponent } from "../../../common/layout/notify/error/error.component";
+import { AuthUrl } from "../auth.routing";
 
 const NB_LIBS = [
     NbButtonModule,
@@ -136,6 +137,10 @@ export class SignUpComponent implements OnInit {
         this.isVisiblePassword = !this.isVisiblePassword;
     }
 
+    onCancel() {
+        this.router.navigate([AuthUrl.SIGNIN]);
+    }
+
     async onSignUp() {
         this.isSubmit = true;
         console.log(this.cruForm.value);
@@ -173,6 +178,7 @@ export class SignUpComponent implements OnInit {
                 logoShopFile,
                 backgroundShopFile
             );
+            this.router.navigate([AuthUrl.SIGNIN]);
         } catch (error) {
             console.log(error);
         }

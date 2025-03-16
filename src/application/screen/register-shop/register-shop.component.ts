@@ -19,22 +19,7 @@ const NB_LIBS = [
         CommonModule,
         RegisterShopListComponent
     ],
-    providers: [
-
-    ]
+    providers: []
 })
 
-export class RegisterShopComponent implements OnInit {
-
-    constructor(
-        private router: Router
-    ) { }
-
-    ngOnInit(): void {
-
-    }
-
-    onCreate() {
-
-    }
-}
+export class RegisterShopComponent { }

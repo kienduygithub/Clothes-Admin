@@ -105,6 +105,34 @@ export class ShopService {
         }
     }
 
+    async declineRegisterShopById(shopId: number): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `shop/decline-register/${shopId}`,
+                {}
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async acceptRegisterShopById(shopId: number): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `shop/accept-register/${shopId}`,
+                {}
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async changeOwnersForShop(shopId: number, ownerIds: number[]): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
