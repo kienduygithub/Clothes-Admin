@@ -49,6 +49,7 @@ export class CRUSubcategoryDialogComponent implements OnInit {
     protected icon_close_dialog = ImageResource.icon_close_dialog;
     protected icon_cancel = ImageResource.icon_cancel;
     protected icon_accept_tick = ImageResource.icon_accept_tick;
+    protected icon_edit = ImageResource.icon_edit;
 
     offset: number = 0;
     paging!: PagingModel;
