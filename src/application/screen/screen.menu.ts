@@ -1,4 +1,7 @@
 import { CategoryUrl } from "./category/category.routing";
+import { EmployeeUrl } from "./employee/employee.routing";
+import { RegisterShopURL } from "./register-shop/register-shop.routing";
+import { ShopURL } from "./shop/shop.routing";
 
 export const MENU_ITEMS: any[] = [
     {
@@ -9,27 +12,13 @@ export const MENU_ITEMS: any[] = [
     {
         title: 'Nhân sự',
         icon: { icon: 'group_icon', pack: 'mainIcon' },
-        link: '/employee',
-        children: [
-            {
-                icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Danh sách nhân sự',
-                link: '/employee/list',
-                pathMath: 'prefix'
-            },
-            {
-                icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Phân quyền',
-                link: '/employee/access',
-                pathMatch: 'prefix'
-            },
-        ],
+        link: EmployeeUrl.EMPLOYEE_LIST,
+        pathMatch: 'prefix',
     },
     {
         title: 'Sản phẩm',
         icon: { icon: 'network_icon', pack: 'mainIcon' },
         link: '/shop/product',
-        pathMatch: 'prefix',
         children: [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
@@ -39,14 +28,8 @@ export const MENU_ITEMS: any[] = [
             },
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Danh sách biến thể',
-                link: '/shop/product/variants',
-                pathMatch: 'prefix'
-            },
-            {
-                icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh mục sản phẩm',
-                link: `/${CategoryUrl.CATEGORY_URL}`,
+                link: CategoryUrl.CATEGORY_URL,
                 pathMatch: 'prefix'
             },
         ],
@@ -55,29 +38,29 @@ export const MENU_ITEMS: any[] = [
         title: 'Cửa hàng',
         icon: { icon: 'firewall_icon', pack: 'mainIcon' },
         link: '/shop',
-        pathMath: 'prefix',
         children: [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh sách cửa hàng',
-                link: '/shop/list',
-                pathMath: 'prefix'
+                link: ShopURL.SHOP_URL,
+                pathMatch: 'prefix'
             },
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Phân phụ trách',
-                link: '/shop/access',
+                title: 'Đăng ký cửa hàng',
+                link: RegisterShopURL.REGISTER_SHOP_URL,
+                pathMatch: 'prefix'
             },
         ],
     },
-    {
-        title: 'VPN',
-        icon: { icon: 'vpn_icon', pack: 'mainIcon' },
-        link: '/vpn',
-    },
-    {
-        title: 'Hệ thống',
-        icon: { icon: 'system_icon', pack: 'mainIcon' },
-        link: '/system',
-    },
+    // {
+    //     title: 'VPN',
+    //     icon: { icon: 'vpn_icon', pack: 'mainIcon' },
+    //     link: '/vpn',
+    // },
+    // {
+    //     title: 'Hệ thống',
+    //     icon: { icon: 'system_icon', pack: 'mainIcon' },
+    //     link: '/system',
+    // },
 ];

@@ -21,11 +21,6 @@
                     </th>
                     <th>
                         <div class="d-flex align-items-center" style="gap: 5px;">
-                            <span>ID</span>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="d-flex align-items-center" style="gap: 5px;">
                             <span>Logo</span>
                         </div>
                     </th>
@@ -36,27 +31,22 @@
                     </th>
                     <th>
                         <div class="d-flex align-items-center" style="gap: 5px;">
-                            <span>Liên hệ</span>
+                            <span>Tài khoản</span>
                         </div>
                     </th>
                     <th>
                         <div class="d-flex align-items-center" style="gap: 5px;">
-                            <span>Tồn kho</span>
+                            <span>Tình trạng</span>
                         </div>
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr (click)="onUpdateShop(shop.id!)" *ngFor="let shop of allShops | paginate: paging;let i = index">
+                <tr *ngFor="let shop of shops | paginate: paging;let i = index" (click)="onViewDetails(shop.id ?? 0)">
                     <td style="width: 5%;">
                         <span style="font-size: 14px;">
                             {{offset + i}}
-                        </span>
-                    </td>
-                    <td style="width: 10%;">
-                        <span style="font-size: 14px;">
-                            {{shop.id}}
                         </span>
                     </td>
                     <td style="width: 13%;">
@@ -73,26 +63,32 @@
                     <td style="width: 12%;">
                         <div class="d-flex flex-column">
                             <span style="font-size: 14px;">
-                                {{shop.contact_email}}
+                                {{shop.user?.email ?? "&mdash;"}}
                             </span>
                         </div>
                     </td>
                     <td style="width: 14%;">
-                        <span style="font-size: 14px;">
-                            {{shop.stock_quantities}}
-                        </span>
+                        <div class="status-box" [ngClass]="{
+                            'pending': shop.status === shopStatus.PENDING,
+                            'active': shop.status === shopStatus.ACTIVE,
+                            'inactive': shop.status === shopStatus.INACTIVE
+                        }">
+                            <img [src]="icon_edit_white_with_line" />
+                            <span>{{shop.status ?? '' | transformShopStatus}}</span>
+                        </div>
                     </td>
                     <td style="width: 10%;" (click)="$event.stopPropagation()">
                         <div class="list-actions">
-                            <nb-icon class="common-icon" icon="icon_edit" pack="mainIcon" [nbTooltip]="'Chỉnh sửa'"
-                                nbTooltipPlacement="bottom" (click)="onUpdateShop(shop.id!)"></nb-icon>
-                            <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"
-                                nbTooltipPlacement="bottom" (click)="onConfirmDeleteShop(shop, i)">
-                            </nb-icon>
+                            <img class="common-icon" [src]="icon_edit" [nbTooltip]="'Xem chi tiết'"
+                                nbTooltipPlacement="bottom" (click)="onViewDetails(shop.id ?? 0)" />
+                            <img class="common-icon" [src]="icon_tick_accept" [nbTooltip]="'Chấp thuận'"
+                                nbTooltipPlacement="bottom" (click)="onConfirmRequest(shop, i, actionWebs.ACCEPT)" />
+                            <img class="common-icon" [src]="icon_close_refuse" [nbTooltip]="'Bác bỏ'"
+                                nbTooltipPlacement="bottom" (click)="onConfirmRequest(shop, i, actionWebs.DECLINE)" />
                         </div>
                     </td>
                 </tr>
-                <tr *ngIf="allShops.length === 0">
+                <tr *ngIf="shops.length === 0">
                     <td class="table-no-data text-center" colspan="11">
                         Không có dữ liệu
                     </td>

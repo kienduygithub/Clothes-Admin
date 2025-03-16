@@ -557,3 +557,26 @@ nb-option-list {
 .required {
   color: #FF0000;
 }
+
+.status-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 140px;
+  padding: 3px 0;
+  border-radius: 12px;
+
+  &.pending {
+    background-color: #FFC107;
+  }
+
+  img {
+    height: 16px;
+  }
+
+  span {
+    font-size: 13px;
+    color: white;
+  }
+}

@@ -1,3 +1,4 @@
+import { ShopStatus } from "../../common/resource/status";
 import { ProductModel } from "./product.model";
 import { UserModel } from "./user/user.model";
 
@@ -12,6 +13,7 @@ export class ShopModel {
     user?: UserModel;
     products?: ProductModel[];
     stock_quantities?: number;
+    status?: string;
     createdAt?: string;
 
     constructor(
@@ -25,6 +27,7 @@ export class ShopModel {
         user?: UserModel,
         products?: ProductModel[],
         stock_quantities?: number,
+        status?: string,
         createdAt?: string,
     ) {
         this.id = id ?? 0;
@@ -37,6 +40,7 @@ export class ShopModel {
         this.description = description ?? '';
         this.products = products ?? [];
         this.stock_quantities = stock_quantities ?? 0;
+        this.status = status ?? ShopStatus.ACTIVE;
         this.createdAt = createdAt;
     }
 
@@ -69,6 +73,7 @@ export class ShopModel {
         model.stock_quantities = stockProducts?.reduce((sum: number, curr: any) => {
             return sum + curr.stocks
         }, 0);
+        model.status = data.status ?? ShopStatus.ACTIVE;
         model.createdAt = data.createdAt;
 
         return model;

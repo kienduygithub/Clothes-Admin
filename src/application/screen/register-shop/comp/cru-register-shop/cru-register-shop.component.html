@@ -1,0 +1,149 @@
+<div class="container">
+    <div class="screen" style="width: 100%;">
+        <div class="layout-size" style="min-width: 0;">
+            <div class="d-flex align-items-center mb-2 header-form">
+                <div class="mr-3 icons_arrow_line" (click)="onCancel()">
+                    <img src="{{ icons_arrow_line }}" class="icon-back" />
+                </div>
+                <div class="d-flex flex-column">
+                    <label class="header-title">
+                        Đơn đăng ký
+                    </label>
+                </div>
+                <div class="button-header">
+                    <button nbButton class="button-cancel-form" (click)="onCancel()">
+                        Bác bỏ
+                    </button>
+                    <button nbButton class="button-submit-form ml-2" (click)="onSave()">
+                        Đồng ý
+                    </button>
+                </div>
+            </div>
+            <div class="body-form">
+                <ng-container [ngTemplateOutlet]="cruRef"></ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #cruRef>
+    <form *ngIf="cruForm" [formGroup]="cruForm">
+        <span class="sub-title">Thông tin cá nhân</span>
+        <div class="info-wrapper">
+            <div class="info-left">
+                <div class="info">
+                    <div class="info-image-wrapper">
+                        <label class="upload-image" for="info-employee-files">
+                            <img *ngIf="cruForm.get('image_url')?.value === ''" [src]="image_no_avatar">
+                            <img *ngIf="cruForm.get('image_url')?.value !== ''"
+                                [src]="preImage + '/'+ cruForm.get('image_url')?.value">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="info-right">
+                <div class="info">
+                    <label for="name">
+                        Tên người dùng<span class="required">*</span>
+                    </label>
+                    <div class="input-container">
+                        <input nbInput type="text" formControlName="name" id="name" placeholder="Nhập họ tên">
+                    </div>
+                </div>
+                <div class=" info">
+                    <label for="email">
+                        Email<span class="required">*</span>
+                    </label>
+                    <div class="input-container">
+                        <input nbInput type="text" formControlName="email" id="email" placeholder="Nhập email">
+                    </div>
+                </div>
+                <div class="info">
+                    <label for="phone">
+                        Số liên hệ<span class="required">*</span>
+                    </label>
+                    <div class="input-container">
+                        <input nbInput type="text" formControlName="phone" id="phone" placeholder="Nhập số liên hệ">
+                    </div>
+                </div>
+                <div class="info">
+                    <label for="phone">
+                        Địa chỉ
+                    </label>
+                    <div class="input-container">
+                        <input nbInput type="text" formControlName="address" id="address" placeholder="Nhập địa chỉ">
+                    </div>
+                </div>
+                <div class="info">
+                    <label for="gender">
+                        Giới tính
+                    </label>
+                    <div class="select-wrapper">
+                        <nb-select formControlName="gender">
+                            <nb-option [value]="'1'">Nam</nb-option>
+                            <nb-option [value]="'0'">Nữ</nb-option>
+                            <nb-option [value]="'2'">Khác</nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="sub-title">Thông tin cửa hàng</span>
+        <div class="info-wrapper">
+            <div class="info-left shop">
+                <div class="info">
+                    <div class="info-image-wrapper logo">
+                        <label class="upload-image" *ngIf="cruForm.get('logo_url')?.value === ''">
+                            <img [src]="image_store_logo_upload">
+                        </label>
+                        <label class="upload-image" *ngIf="cruForm.get('logo_url')?.value !== ''">
+                            <img [src]="preImage + '/' + cruForm.get('logo_url')?.value">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="info-right shop">
+                <div class="info">
+                    <label for="shop_name">
+                        Tên cửa hàng<span class="required">*</span>
+                    </label>
+                    <div class="input-container">
+                        <input nbInput type="text" formControlName="shop_name" id="shop_name">
+                    </div>
+                </div>
+                <div class="info">
+                    <label for="contact_email">
+                        Email liên hệ<span class="required">*</span>
+                    </label>
+                    <div class="input-container">
+                        <input nbInput type="email" formControlName="contact_email" id="contact_email">
+                    </div>
+                </div>
+                <div class=" info">
+                    <label for="contact_address">
+                        Địa chỉ liên hệ<span class="required">*</span>
+                    </label>
+                    <div class="input-container">
+                        <input nbInput type="text" formControlName="contact_address" id="contact_address">
+                    </div>
+                </div>
+                <div class="info">
+                    <label for="description">
+                        Mô tả cửa hàng
+                    </label>
+                    <div class="input-container">
+                        <textarea nbInput type="text" formControlName="description" id="description"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="padding-form upload-background-wrapper">
+            <label>
+                Ảnh nền<span class="required">*</span>
+            </label>
+            <label for="backgroundForm" class="upload" *ngIf="cruForm.get('background_url')?.value !== ''">
+                <img [src]="preImage + '/' + cruForm.get('background_url')?.value" />
+            </label>
+        </div>
+    </form>
+</ng-template>

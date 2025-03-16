@@ -37,11 +37,6 @@ export class ImageResource {
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#465E69"><path d="m787-146.54 21.85-21.84-73.47-73.47v-108.92h-30.76v121.85L787-146.54ZM224.62-160q-26.85 0-45.74-18.88Q160-197.77 160-224.62v-510.76q0-26.85 18.88-45.74Q197.77-800 224.62-800h510.76q26.85 0 45.74 18.88Q800-762.23 800-735.38v238q-10.54-3.62-20.15-5.89-9.62-2.27-19.85-4.5v-227.61q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H224.62q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v510.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69h226.61q1.46 11.23 3.73 20.85 2.27 9.61 5.89 19.15H224.62ZM200-240v40-560V-507.77v-3V-240Zm100-69.23h158.38q2.24-10.23 6.04-19.85 3.81-9.61 7.96-20.15H300v40ZM300-460h263.23q19.69-13.85 38.81-23.46 19.11-9.62 41.04-15.08V-500H300v40Zm0-150.77h360v-40H300v40ZM720-75.38q-66.85 0-113.42-46.58Q560-168.54 560-235.38q0-66.85 46.58-113.43 46.57-46.57 113.42-46.57t113.42 46.57Q880-302.23 880-235.38q0 66.84-46.58 113.42Q786.85-75.38 720-75.38Z"/></svg>
   `;
 
-  static icon_edit: string = `
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4.16667 2.5C3.24167 2.5 2.5 3.24167 2.5 4.16667V15.8333C2.5 16.2754 2.67559 16.6993 2.98816 17.0118C3.30072 17.3244 3.72464 17.5 4.16667 17.5H15.8333C16.2754 17.5 16.6993 17.3244 17.0118 17.0118C17.3244 16.6993 17.5 16.2754 17.5 15.8333V10H15.8333V15.8333H4.16667V4.16667H10V2.5H4.16667ZM14.8167 3.33333C14.675 3.33333 14.525 3.39167 14.4167 3.5L13.4 4.50833L15.4833 6.59167L16.5 5.58333C16.7167 5.36667 16.7167 5 16.5 4.79167L15.2083 3.5C15.1 3.39167 14.9583 3.33333 14.8167 3.33333ZM12.8083 5.1L6.66667 11.25V13.3333H8.75L14.8917 7.18333L12.8083 5.1Z" fill="#138275"/>
-    </svg>
-  `
 
   static icon_delete: string = `
     <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -168,6 +163,12 @@ export class ImageResource {
   static icon_accept_tick: string = 'assets/icon/accept_tick.svg';
   static icon_email: string = 'assets/icon/email.svg';
   static icon_lock: string = 'assets/icon/lock.svg';
+  static icon_edit: string = 'assets/icon/edit.svg';
+  static icon_edit_white: string = 'assets/icon/icon_edit_white.svg';
+  static icon_edit_white_with_line: string = 'assets/icon/icon_edit_white_with_line.svg';
+  static icon_close_refuse: string = 'assets/icon/icon_close_refuse.svg';
+  static icon_tick_accept: string = 'assets/icon/icon_tick_accept.svg';
+
 
   static image_not_found: string = 'assets/image/image_not_found.jpg';
   static image_no_avatar: string = 'assets/image/no_avatar.png';

@@ -10,6 +10,8 @@ import { ShopRouting, ShopURL } from './shop/shop.routing';
 import { CategoryRouting, CategoryUrl } from './category/category.routing';
 import { CategoryComponent } from './category/category.component';
 import { AuthGuard } from '../common/config/guard.config';
+import { RegisterShopRouting, RegisterShopURL } from './register-shop/register-shop.routing';
+import { RegisterShopComponent } from './register-shop/register-shop.component';
 
 const routes: Routes = [
     {
@@ -18,6 +20,7 @@ const routes: Routes = [
         component: ScreenComponent,
         children: [
             ...ShopRouting,
+            ...RegisterShopRouting,
             ...EmployeeRouting,
             ...ProductRouting,
             ...CategoryRouting,
@@ -33,11 +36,6 @@ const routes: Routes = [
                 pathMatch: 'prefix'
             },
             {
-                path: 'employee',
-                redirectTo: '/employee/list',
-                pathMatch: 'full'
-            },
-            {
                 path: EmployeeUrl.EMPLOYEE_LIST,
                 title: 'Nhân sự',
                 component: EmployeeComponent,
@@ -45,13 +43,18 @@ const routes: Routes = [
             },
             {
                 path: 'shop',
-                redirectTo: '/shop/list',
+                redirectTo: '/shop/applied/list',
                 pathMatch: 'full'
             },
             {
                 path: ShopURL.SHOP_URL,
                 component: ShopComponent,
                 title: 'Cửa hàng',
+            },
+            {
+                path: RegisterShopURL.REGISTER_SHOP_URL,
+                component: RegisterShopComponent,
+                title: 'Cửa hàng đăng ký'
             },
             {
                 path: CategoryUrl.CATEGORY_URL,

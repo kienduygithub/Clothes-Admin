@@ -66,6 +66,19 @@ export class ShopService {
         }
     }
 
+    async fetchRegisterShops(): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.GET(
+                `${domain}`,
+                `shop/register-shops`,
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async fetchShopById(shopId: number): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();

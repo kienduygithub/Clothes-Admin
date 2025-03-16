@@ -1,5 +1,7 @@
 export const actions = {
     CREATE: 'CREATE',
     UPDATE: 'UPDATE',
-    DELETE: 'DELETE'
+    DELETE: 'DELETE',
+    ACCEPT: 'ACCEPT',
+    DECLINE: 'DECLINE',
 };
