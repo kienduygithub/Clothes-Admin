@@ -1,0 +1,94 @@
+<div class="router-static">
+    <div class="search-and-filter">
+        <div class="search-input-container">
+            <input nbInput type="text" placeholder="Nhập mã khuyến mãi">
+        </div>
+        <button nbButton class="util-box">
+            <img class="common-icon" [src]="icon_filter" />
+        </button>
+        <button nbButton class="util-box">
+            <img class="common-icon" [src]="icon_refresh" />
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><nb-icon class="table-header" icon="hash-outline"></nb-icon></th>
+                    <th><span>Tên khuyến mãi</span></th>
+                    <th><span>Loại</span></th>
+                    <th><span>Giá trị</span></th>
+                    <th><span>Bắt đầu &ndash; kết thúc</span></th>
+                    <th><span>Tối đa</span></th>
+                    <th><span>Tình trạng</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr (click)="onEditCoupon(coupon.id)" *ngFor="let coupon of coupons | paginate: paging;let i = index">
+                    <td style="width: 5%;">
+                        <span style="font-size: 14px;">
+                            {{offset + i}}
+                        </span>
+                    </td>
+                    <td style="width: 13%;">
+                        <span style="font-size: 14px;">
+                            {{coupon.name}}
+                        </span>
+                    </td>
+                    <td style="width: 15%;">
+                        <span style="font-size: 14px;">
+                            {{coupon.discount_type}}
+                        </span>
+                    </td>
+                    <td style="width: 12%;">
+                        <span style="font-size: 14px;">
+                            {{coupon.discount_value}}
+                        </span>
+                    </td>
+                    <td style="width: 14%;">
+                        <span style="font-size: 14px;">
+                            {{coupon.valid_from}} &ndash; {{coupon.valid_to}}
+                        </span>
+                    </td>
+                    <td style="width: 14%;">
+                        <span style="font-size: 14px;">
+                            {{coupon.max_usage}}
+                        </span>
+                    </td>
+                    <td style="width: 14%;">
+                        <span style="font-size: 14px;" [ngClass]="{
+                            'text-green': coupon.status === couponStatus.ACTIVE,
+                            'text-red': coupon.status === couponStatus.EXPIRED
+                        }">
+                            {{transformCouponStatus(coupon.status)}}
+                        </span>
+                    </td>
+                    <td style="width: 10%;" (click)="$event.stopPropagation()">
+                        <div class="list-actions">
+                            <img class="common-icon" [src]="icon_edit" [nbTooltip]="'Chỉnh sửa'"
+                                nbTooltipPlacement="bottom" (click)="onEditCoupon(coupon.id)" />
+                            <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"
+                                nbTooltipPlacement="bottom" (click)="onConfirmDeleteCoupon(coupon, i)">
+                            </nb-icon>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="coupons.length === 0">
+                    <td class="table-no-data text-center" colspan="11">
+                        Không có dữ liệu
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <div class="total-items">
+            <span>Tổng số: {{ paging.totalItems }}</span>
+        </div>
+        <div class="pagination-flex">
+            <pagination-controls (pageChange)="onPageChange($event)" previousLabel="" nextLabel="">
+            </pagination-controls>
+        </div>
+    </div>
+</div>

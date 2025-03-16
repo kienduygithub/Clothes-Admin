@@ -1,4 +1,5 @@
 import { CategoryUrl } from "./category/category.routing";
+import { CouponUrl } from "./coupon/coupon.routing";
 import { EmployeeUrl } from "./employee/employee.routing";
 import { RegisterShopURL } from "./register-shop/register-shop.routing";
 import { ShopURL } from "./shop/shop.routing";
@@ -47,17 +48,17 @@ export const MENU_ITEMS: any[] = [
             },
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Đăng ký cửa hàng',
+                title: 'Danh sách xét duyệt',
                 link: RegisterShopURL.REGISTER_SHOP_URL,
                 pathMatch: 'prefix'
             },
         ],
     },
-    // {
-    //     title: 'VPN',
-    //     icon: { icon: 'vpn_icon', pack: 'mainIcon' },
-    //     link: '/vpn',
-    // },
+    {
+        title: 'Khuyến mãi',
+        icon: { icon: 'group_icon', pack: 'mainIcon' },
+        link: CouponUrl.COUPON_LIST_URL,
+    },
     // {
     //     title: 'Hệ thống',
     //     icon: { icon: 'system_icon', pack: 'mainIcon' },

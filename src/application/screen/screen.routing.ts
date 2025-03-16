@@ -12,6 +12,8 @@ import { CategoryComponent } from './category/category.component';
 import { AuthGuard } from '../common/config/guard.config';
 import { RegisterShopRouting, RegisterShopURL } from './register-shop/register-shop.routing';
 import { RegisterShopComponent } from './register-shop/register-shop.component';
+import { CouponRouting, CouponUrl } from './coupon/coupon.routing';
+import { CouponComponent } from './coupon/coupon.component';
 
 const routes: Routes = [
     {
@@ -21,6 +23,7 @@ const routes: Routes = [
         children: [
             ...ShopRouting,
             ...RegisterShopRouting,
+            ...CouponRouting,
             ...EmployeeRouting,
             ...ProductRouting,
             ...CategoryRouting,
@@ -54,7 +57,12 @@ const routes: Routes = [
             {
                 path: RegisterShopURL.REGISTER_SHOP_URL,
                 component: RegisterShopComponent,
-                title: 'Cửa hàng đăng ký'
+                title: 'Danh sách xét duyệt'
+            },
+            {
+                path: CouponUrl.COUPON_LIST_URL,
+                component: CouponComponent,
+                title: 'Khuyến mãi'
             },
             {
                 path: CategoryUrl.CATEGORY_URL,
