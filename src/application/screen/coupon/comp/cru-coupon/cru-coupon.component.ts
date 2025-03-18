@@ -1,8 +1,6 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { ShopManagement } from "../../../../data/management/shop.management";
-import { ShopService } from "../../../../data/service/shop.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NbButtonModule, NbDialogService, NbIconModule, NbInputModule, NbSelectModule, NbTooltipModule } from "@nebular/theme";
 import { ShopModel } from "../../../../data/model/shop.model";
@@ -10,11 +8,12 @@ import { actions } from "../../../../common/resource/actions";
 import { ImageResource } from "../../../../common/resource/image_resource";
 import { AppConfig } from "../../../../common/config/app.config";
 import { ValueValidators } from "../../../../common/utils/validate/value.validate";
-import { CKEditorComponent } from "../../../../common/utils/ckeditor/ckeditor.component";
-import { ErrorComponent } from "../../../../common/layout/notify/error/error.component";
 import { CouponUrl } from "../../coupon.routing";
 import { CouponManagement } from "../../../../data/management/coupon.management";
 import { CouponService } from "../../../../data/service/coupon.service";
+import { UuidService } from "../../../../common/service/uuid.service";
+import { DiscountType } from "../../../../common/resource/coupon";
+import { DatePickerComponent } from "../../../common/date-picker/custom-select.component";
 
 const NB_LIBS = [
     NbInputModule,
@@ -27,7 +26,6 @@ const NB_LIBS = [
 const ANGULAR_MODULES = [
     CommonModule,
     ReactiveFormsModule,
-    CKEditorComponent
 ]
 
 const PROVIDERS = [
@@ -43,6 +41,7 @@ const PROVIDERS = [
     imports: [
         ...NB_LIBS,
         ...ANGULAR_MODULES,
+        DatePickerComponent
     ],
     providers: [...PROVIDERS]
 })
@@ -65,15 +64,7 @@ export class CRUCouponComponent implements OnInit {
     action = this.actionWebs.CREATE;
     isSubmit: boolean = false;
     cruForm!: FormGroup;
-    updatedShop!: ShopModel;
-    updatedId!: number;
-    updatedName!: string;
-    selectedLogoFile!: File;
-    selectedBackgroundFile!: File;
-    typeFiles = {
-        LOGO: 'logo',
-        BACKGROUND: 'background'
-    };
+    discountType = DiscountType;
 
     constructor(
         private router: Router,
@@ -82,6 +73,7 @@ export class CRUCouponComponent implements OnInit {
         private formBuilder: FormBuilder,
         private dialogService: NbDialogService,
         private couponManagement: CouponManagement,
+        private uuidService: UuidService,
         private cdr: ChangeDetectorRef
     ) { }
 
@@ -94,7 +86,6 @@ export class CRUCouponComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe(async (params) => {
             if (params['id']) {
                 this.action = actions.UPDATE;
-                this.updatedId = +params['id'];
                 await this.initUpdateForm();
             } else {
                 this.action = actions.CREATE;
@@ -105,60 +96,39 @@ export class CRUCouponComponent implements OnInit {
 
     initCreateForm() {
         this.cruForm = this.formBuilder.group({
-            shop_name: ['', [ValueValidators.required]],
-            logo_url: ['', [ValueValidators.required]],
-            background_url: ['', [ValueValidators.required]],
-            contact_email: ['', [ValueValidators.required]],
-            contact_address: ['', [ValueValidators.required]],
-            description: ['']
+            coupon_name: ['', [ValueValidators.required]],
+            code: [{ value: this.uuidService.generateUuid(), disabled: true }, [ValueValidators.required]],
+            discount_type: [DiscountType.PERCENTAGE],
+            discount_value: ['', [ValueValidators.required]],
+            max_discount: ['', [ValueValidators.required]],
+            min_order_value: [''],
+            times_used: [''],
+            max_usage: [''],
+            valid_from: ['', [ValueValidators.required]],
+            valid_to: ['', [ValueValidators.required]]
         });
 
     }
 
     async initUpdateForm() {
         try {
-            // this.updatedShop = await this.shopManagement.fetchShopById(this.updatedId);
-            // this.updatedName = this.updatedShop.shop_name!;
+
         } catch (error) {
             console.log(error);
         }
-        if (!this.updatedShop) {
+        if (true) {
             this.action = actions.CREATE;
-            this.updatedId = 0;
+            // this.updatedId = 0;
             this.initCreateForm();
         } else {
-            this.updatedName = this.updatedShop.shop_name ?? '';
             this.cruForm = this.formBuilder.group({
-                shop_name: [this.updatedName, [ValueValidators.required]],
-                logo_url: [this.updatedShop.logo_url, [ValueValidators.required]],
-                background_url: [this.updatedShop.background_url, [ValueValidators.required]],
-                contact_email: [this.updatedShop.contact_email, [ValueValidators.required]],
-                contact_address: [this.updatedShop.contact_address, [ValueValidators.required]],
-                description: [this.updatedShop.description]
+
             });
         }
     }
 
-    onChangeLogoFile(files: any, typeFile: string) {
-        if (files && files.length > 0) {
-            if (typeFile === this.typeFiles.LOGO) {
-                this.selectedLogoFile = files[0];
-                this.cruForm.get('logo_url')?.patchValue(
-                    URL.createObjectURL(files[0]),
-                    { emitEvent: false }
-                );
-            } else if (typeFile === this.typeFiles.BACKGROUND) {
-                this.selectedBackgroundFile = files[0];
-                this.cruForm.get('background_url')?.patchValue(
-                    URL.createObjectURL(files[0]),
-                    { emitEvent: false }
-                )
-            }
-        }
-    }
-
     onCancel() {
-        this.router.navigate([CouponUrl.COUPON_LIST_URL]);
+        // this.router.navigate([CouponUrl.COUPON_LIST_URL]);
     }
 
     async onSave() {
@@ -173,18 +143,10 @@ export class CRUCouponComponent implements OnInit {
         this.isSubmit = true;
         console.log(this.cruForm.value);
 
-        if (this.cruForm.invalid) {
-            if (this.cruForm.get('logo_url')?.hasError('required') || this.cruForm.get('background_url')?.hasError('required')) {
-                this.dialogService.open(ErrorComponent, {
-                    context: {
-                        title: 'Không hợp lệ',
-                        content: 'Ảnh nền và logo không được để trống. Vui lòng thêm để hoàn tất thao tác.'
-                    }
-                })
-            }
-            console.log('INVALID FORM');
-            return;
-        }
+        // if (this.cruForm.invalid) {
+        //     console.log('INVALID FORM');
+        //     return;
+        // }
 
         try {
             const instance = this.convertValueFormToModel();
@@ -217,15 +179,16 @@ export class CRUCouponComponent implements OnInit {
         const model = new ShopModel();
 
         if (this.action === actions.UPDATE) {
-            model.id = this.updatedId;
+            // model.id = this.updatedId;
         }
-        model.shop_name = this.cruForm.getRawValue().shop_name === this.updatedName
-            ? undefined
-            : this.cruForm.getRawValue().shop_name;
-        model.contact_email = this.cruForm.getRawValue().contact_email;
-        model.contact_address = this.cruForm.getRawValue().contact_address;
-        model.description = this.cruForm.getRawValue().description;
+
 
         return model;
+    }
+
+    generateCode() {
+        this.cruForm.get('code')?.patchValue(
+            this.uuidService.generateUuid()
+        );
     }
 }

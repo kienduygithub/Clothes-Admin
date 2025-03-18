@@ -229,8 +229,11 @@ mat-form-field {
 
 .mdc-text-field--outlined .mat-mdc-form-field-infix,
 .mdc-text-field--no-label .mat-mdc-form-field-infix {
-  padding-top: 7px !important;
-  padding-bottom: 7px !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 ::placeholder {

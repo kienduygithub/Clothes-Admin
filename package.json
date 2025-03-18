@@ -17,6 +17,7 @@
     "@angular/core": "^18.2.0",
     "@angular/forms": "^18.2.0",
     "@angular/material": "^18.2.14",
+    "@angular/material-moment-adapter": "^19.2.3",
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
@@ -24,6 +25,7 @@
     "@datorama/akita": "^8.0.1",
     "@datorama/akita-ngdevtools": "^7.0.0",
     "@nebular/auth": "^14.0.2",
+    "@nebular/date-fns": "^15.0.0",
     "@nebular/eva-icons": "^14.0.2",
     "@nebular/theme": "^14.0.2",
     "@ngx-translate/core": "^16.0.4",
@@ -36,6 +38,7 @@
     "ngx-pagination": "^6.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "uuid": "^11.1.0",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {

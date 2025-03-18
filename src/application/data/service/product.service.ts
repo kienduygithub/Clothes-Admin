@@ -17,6 +17,8 @@ export class ProductService {
         variantFiles: any
     ): Promise<any> {
         try {
+            const userInfo = this.appConfig.getUserInfo();
+
             const domain = this.appConfig.getDomain();
             const basicInfo = new ProductModel().convertObjToAdd(data);
             const formData = new FormData();
@@ -29,7 +31,7 @@ export class ProductService {
             }
             const response = await this.serviceCore.POST(
                 `${domain}`,
-                `product/?shopId=${data.shopId}`,
+                `product/?shopId=${userInfo.shopId}`,
                 formData
             );
             return response;
@@ -47,8 +49,11 @@ export class ProductService {
         deletedIds: number[]
     ): Promise<any> {
         try {
+            const userInfo = this.appConfig.getUserInfo();
+
             const domain = this.appConfig.getDomain();
             const basicInfo = new ProductModel().convertObjToUpdate(data);
+            basicInfo.shopId = userInfo ? userInfo.shopId : 0;
             const formData = new FormData();
             formData.append('basicInfo', JSON.stringify(basicInfo));
             formData.append('updatedIds', JSON.stringify(updatedIds));
@@ -75,10 +80,11 @@ export class ProductService {
 
     async fetchAllProductByShopId(shopId: number): Promise<any> {
         try {
+            const userInfo = this.appConfig.getUserInfo();
             const domain = this.appConfig.getDomain();
             const response = await this.serviceCore.GET(
                 `${domain}`,
-                `product/?shopId=${shopId}`
+                `product/?shopId=${userInfo.shopId}`
             );
             return response;
         } catch (error) {
