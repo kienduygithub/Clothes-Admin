@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { NbAutocompleteModule, NbCardModule, NbCheckboxModule, NbDatepickerComponent, NbDatepickerModule, NbDateService, NbIconComponent, NbIconModule, NbInputModule, NbTimepickerModule } from '@nebular/theme';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
 import { CustomDateInputDirective } from '../../../common/layout/directives/customInputDate.directive';
-import { DefaultMatCalendarRangeStrategy, MatDatepickerModule, MatRangeDateSelectionModel } from '@angular/material/datepicker';
+import { DefaultMatCalendarRangeStrategy, MatDatepicker, MatDatepickerModule, MatRangeDateSelectionModel } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
@@ -55,8 +55,7 @@ const MY_DATE_FORMAT = {
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
   ]
 })
-export class DatePickerComponent implements OnInit {
-
+export class DatePickerComponent implements OnInit, AfterViewInit {
 
   @Input() group!: FormGroup
   @Input() controlName!: string
@@ -67,12 +66,15 @@ export class DatePickerComponent implements OnInit {
 
   @Input() inputDate: string = '';
   @Input() border: boolean = true;
-  @Input() isEdit = true
+  @Input() isEdit = true;
+  @Input() isDisableForm = false;
   @Output() valueChange = new EventEmitter();
   @Output() isDirty = new EventEmitter();
   date: string = '';
   today = new Date();
   time = new FormControl();
+
+  @ViewChild('picker') datepicker!: ElementRef<MatDatepicker<any>>;
 
   constructor(
     private elementRef: ElementRef,
@@ -81,20 +83,58 @@ export class DatePickerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // this.time.setValue((new Date().getTime() - 3888000000));
+    // this.date = this.formControl?.value ?? '';
+  }
+
+  ngAfterViewInit() {
+    // this.datepicker.nativeElement.select('20/02/2022');
+
+  }
+
+  get formControl() {
+    return this.controlName ? this.group.get(this.controlName) : null;
   }
 
   getDate(time: any) {
-    let month = time.getMonth() + 1;
-    let date = time.getDate();
-    if (month < 10) {
-      month = '0' + month;
+    console.log(time)
+    if (time === '') {
+      this.formControl?.setValue('');
+      this.formControl?.markAsDirty();
+      this.formControl?.updateValueAndValidity();
+      return;
     }
-    if (date < 10) {
-      date = '0' + date;
-    }
-    this.date = date + '/' + month + '/' + time.getFullYear();
-    this.valueChange.emit(this.date);
-    this.isDirty.emit(true);
-  }
 
+    if (!time) {
+      this.formControl?.markAsDirty();
+      this.formControl?.setErrors({ invalidDate: true });
+      return;
+    }
+
+    if (!/^(0[1-9]|[12]\d|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/.test(time)) {
+      this.formControl?.setValue(time);
+      this.formControl?.markAsDirty();
+      this.formControl?.setErrors({ invalidDate: true });
+      return;
+    }
+
+    let timeSplit = time.split('/');
+
+    let day = timeSplit[0];
+    let month = timeSplit[1];
+    let year = timeSplit[2];
+
+    if (+month < 10) {
+      month = '0' + (+month);
+    }
+    if (+day < 10) {
+      day = '0' + (+day);
+    }
+
+    this.date = day + '/' + month + '/' + year;
+    this.formControl?.setValue(this.date);
+    this.formControl?.setErrors(null);
+    this.formControl?.markAsDirty();
+    this.formControl?.updateValueAndValidity();
+  }
 }

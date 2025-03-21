@@ -1,4 +1,12 @@
 $text_hint_color: #8f9bb3;
+$text_disabled_color: #8f9bb37a;
+
+.custom-selects {
+  height: 36px;
+  border: 1px solid #e4e9f2;
+  border-radius: 3px;
+  overflow: hidden;
+}
 
 ::ng-deep .date-picker-field {
   .mat-mdc-form-field-subscript-wrapper {
@@ -25,10 +33,17 @@ input::placeholder {
   color: $text_hint_color !important;
 }
 
+input.disabled {
+  color: red !important;
+}
+
+input.disabled::placeholder {
+  color: $text_disabled_color !important;
+}
+
 ::ng-deep mat-form-field {
   height: 36px;
   border-radius: 3px;
-  border: 1px solid #e4e9f2;
 
   mat-mdc-form-field-flex {
     height: 100% !important;

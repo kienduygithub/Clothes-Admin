@@ -1,8 +1,8 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { NbButtonModule, NbDialogService, NbIconModule, NbInputModule, NbSelectModule, NbTooltipModule } from "@nebular/theme";
+import { NbButtonModule, NbCheckboxModule, NbDialogService, NbIconModule, NbInputModule, NbSelectModule, NbTooltipModule } from "@nebular/theme";
 import { ShopModel } from "../../../../data/model/shop.model";
 import { actions } from "../../../../common/resource/actions";
 import { ImageResource } from "../../../../common/resource/image_resource";
@@ -14,13 +14,15 @@ import { CouponService } from "../../../../data/service/coupon.service";
 import { UuidService } from "../../../../common/service/uuid.service";
 import { DiscountType } from "../../../../common/resource/coupon";
 import { DatePickerComponent } from "../../../common/date-picker/custom-select.component";
+import { CouponModel } from "../../../../data/model/coupon/coupon.model";
 
 const NB_LIBS = [
     NbInputModule,
     NbButtonModule,
     NbTooltipModule,
     NbSelectModule,
-    NbIconModule
+    NbIconModule,
+    NbCheckboxModule
 ]
 
 const ANGULAR_MODULES = [
@@ -66,6 +68,8 @@ export class CRUCouponComponent implements OnInit {
     cruForm!: FormGroup;
     discountType = DiscountType;
 
+    @ViewChild('fromTime') fromTime!: ElementRef<DatePickerComponent>;
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -96,18 +100,26 @@ export class CRUCouponComponent implements OnInit {
 
     initCreateForm() {
         this.cruForm = this.formBuilder.group({
+            id: [''],
             coupon_name: ['', [ValueValidators.required]],
             code: [{ value: this.uuidService.generateUuid(), disabled: true }, [ValueValidators.required]],
             discount_type: [DiscountType.PERCENTAGE],
-            discount_value: ['', [ValueValidators.required]],
-            max_discount: ['', [ValueValidators.required]],
-            min_order_value: [''],
+            discount_value: ['', [Validators.required, ValueValidators.isNumber, this.checkDiscountValueValid(DiscountType.PERCENTAGE)]],
+            max_discount: ['', [Validators.required, ValueValidators.isNumber, this.checkMinValueValid]],
+            min_order_value: ['', [Validators.required, ValueValidators.isNumber, this.checkMinValueValid]],
             times_used: [''],
-            max_usage: [''],
-            valid_from: ['', [ValueValidators.required]],
-            valid_to: ['', [ValueValidators.required]]
+            max_usage: [{ value: '', disabled: true }],
+            valid_from: [''],
+            valid_to: [''],
+            unlimited_time: [false],
+            unlimited_usage: [true]
+        }, {
+            validators: [this.checkFromToTimeValid]
         });
 
+        this.unlimitedUsageValueChanges();
+        this.unlimitedTimeValueChanges();
+        this.discountTypeValueChanges();
     }
 
     async initUpdateForm() {
@@ -118,7 +130,6 @@ export class CRUCouponComponent implements OnInit {
         }
         if (true) {
             this.action = actions.CREATE;
-            // this.updatedId = 0;
             this.initCreateForm();
         } else {
             this.cruForm = this.formBuilder.group({
@@ -127,8 +138,77 @@ export class CRUCouponComponent implements OnInit {
         }
     }
 
+    private unlimitedUsageValueChanges() {
+        this.cruForm.get('unlimited_usage')?.valueChanges.subscribe((value) => {
+            if (value === false) {
+                this.cruForm.get('max_usage')?.enable();
+                this.cruForm.get('max_usage')?.setValidators([
+                    Validators.required,
+                    ValueValidators.isNumber,
+                    this.checkMinValueValid
+                ])
+            } else {
+                this.cruForm.get('max_usage')?.disable();
+                this.cruForm.get('max_usage')?.patchValue('', { emitEvent: false });
+                this.cruForm.get('max_usage')?.markAsDirty();
+                this.cruForm.get('max_usage')?.clearValidators();
+                this.cruForm.get('max_usage')?.updateValueAndValidity();
+            }
+        })
+    }
+
+    private unlimitedTimeValueChanges() {
+        this.cruForm.get('unlimited_time')?.valueChanges.subscribe((value) => {
+            if (value === true) {
+                this.cruForm.get('valid_from')?.clearValidators();
+                this.cruForm.get('valid_from')?.updateValueAndValidity();
+                this.cruForm.get('valid_from')?.markAsPristine();
+
+                this.cruForm.get('valid_to')?.clearValidators();
+                this.cruForm.get('valid_to')?.updateValueAndValidity();
+                this.cruForm.get('valid_to')?.markAsPristine();
+                this.cruForm.clearValidators();
+                this.cruForm.updateValueAndValidity();
+            } else {
+                this.cruForm.get('valid_from')?.enable();
+                this.cruForm.get('valid_from')?.setValidators([Validators.required]);
+                this.cruForm.get('valid_from')?.updateValueAndValidity();
+                this.cruForm.get('valid_from')?.markAsPristine();
+
+                this.cruForm.get('valid_to')?.enable();
+                this.cruForm.get('valid_to')?.setValidators([Validators.required]);
+                this.cruForm.get('valid_to')?.updateValueAndValidity();
+                this.cruForm.get('valid_to')?.markAsPristine();
+
+                this.cruForm.setValidators([this.checkFromToTimeValid]);
+                this.cruForm.updateValueAndValidity();
+            }
+        })
+    }
+
+    private discountTypeValueChanges() {
+        this.cruForm.get('discount_type')?.valueChanges
+            .subscribe((value) => {
+                if (value === DiscountType.PERCENTAGE) {
+                    this.cruForm.get('discount_value')?.setValidators([
+                        Validators.required,
+                        ValueValidators.isNumber,
+                        this.checkDiscountValueValid(DiscountType.PERCENTAGE)
+                    ]);
+                    this.cruForm.get('discount_value')?.updateValueAndValidity();
+                } else if (value === DiscountType.FIXED) {
+                    this.cruForm.get('discount_value')?.setValidators([
+                        Validators.required,
+                        ValueValidators.isNumber,
+                        this.checkDiscountValueValid(DiscountType.FIXED)
+                    ]);
+                    this.cruForm.get('discount_value')?.updateValueAndValidity();
+                }
+            })
+    }
+
     onCancel() {
-        // this.router.navigate([CouponUrl.COUPON_LIST_URL]);
+        this.router.navigate([CouponUrl.COUPON_LIST_URL]);
     }
 
     async onSave() {
@@ -143,15 +223,15 @@ export class CRUCouponComponent implements OnInit {
         this.isSubmit = true;
         console.log(this.cruForm.value);
 
-        // if (this.cruForm.invalid) {
-        //     console.log('INVALID FORM');
-        //     return;
-        // }
+        if (this.cruForm.invalid) {
+            console.log('INVALID FORM');
+            return;
+        }
 
         try {
-            const instance = this.convertValueFormToModel();
-
-            this.onCancel();
+            const instance = new CouponModel().convertFormToModel(this.cruForm);
+            console.log(instance);
+            // this.onCancel();
         } catch (error) {
             console.log(error);
         }
@@ -191,4 +271,92 @@ export class CRUCouponComponent implements OnInit {
             this.uuidService.generateUuid()
         );
     }
+
+    checkFromToTimeValid(control: AbstractControl): ValidationErrors | null {
+        const fromTime = control.get('valid_from');
+        const toTime = control.get('valid_to');
+
+        if (!fromTime || !toTime) {
+            return null;
+        }
+
+        const fromTimeValue = fromTime.value?.trim() ?? '';
+        const toTimeValue = toTime.value?.trim() ?? '';
+
+        if (fromTimeValue === '' || toTimeValue === '') {
+            return null;
+        }
+
+        const parseDate = (dateStr: string): Date | null => {
+            if (!dateStr) return null;
+
+            const [day, month, year] = dateStr.split('/').map(Number);
+            return new Date(year, month - 1, day);
+        }
+
+        const parseFromTimeDate = parseDate(fromTimeValue);
+        const parseToTimeDate = parseDate(toTimeValue);
+
+        if (!parseFromTimeDate || !parseToTimeDate) {
+            return null;
+        }
+
+        if (parseFromTimeDate > parseToTimeDate) {
+            return {
+                invalidRangeDate: true
+            }
+        }
+
+        return null;
+    }
+
+    checkDiscountValueValid(discountType: 'percentage' | 'fixed'): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+
+            const value = control.value?.trim();
+
+            if (value === '' || value === undefined || value === '') {
+                return null;
+            }
+
+            if (isNaN(value)) {
+                return null;
+            }
+
+            if (+value <= 0) {
+                return {
+                    mustBeGreaterThanZero: true
+                }
+            }
+
+            if (discountType === 'percentage' && +value > 100) {
+                return {
+                    invalidValue: true
+                }
+            }
+
+            return null;
+        }
+    }
+
+    checkMinValueValid(control: AbstractControl): ValidationErrors | null {
+        const value = control.value?.trim();
+
+        if (value === '' || value === undefined || value === '') {
+            return null;
+        }
+
+        if (isNaN(value)) {
+            return null;
+        }
+
+        if (+value <= 0) {
+            return {
+                mustBeGreaterThanZero: true
+            }
+        }
+
+        return null;
+    }
+
 }

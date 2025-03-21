@@ -1,6 +1,8 @@
 <div class="custom-selects" [ngClass]="{'invalid-form': invalid}">
   <mat-form-field>
-    <input matInput placeholder="dd/MM/yyyy" [matDatepicker]="picker">
+    <input #inputMat matInput (blur)="getDate(inputMat.value)" [formControl]="time"
+      (dateInput)="getDate(inputMat.value)" (dateChange)="getDate(inputMat.value)" placeholder="dd/MM/yyyy"
+      [matDatepicker]="picker" [ngClass]="{'disabled': isDisableForm}">
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>

@@ -41,7 +41,14 @@
                         Tên khuyến mãi<span class="required">*</span>
                     </label>
                     <div class="input-container">
-                        <input nbInput type="text" formControlName="coupon_name" placeholder="Nhập tên khuyến mãi">
+                        <input nbInput type="text" formControlName="coupon_name" placeholder="Nhập tên khuyến mãi"
+                            [ngClass]="{'invalid-form': (cruForm.get('coupon_name')?.dirty || isSubmit) && cruForm.get('coupon_name')?.invalid}">
+                        <div
+                            *ngIf="(cruForm.get('coupon_name')?.dirty || isSubmit) && cruForm.get('coupon_name')?.invalid">
+                            <p class="vali-text-false" *ngIf="cruForm.get('coupon_name')?.hasError('required')">
+                                Tên khuyến mãi không được bỏ trống
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <!-- Mã khuyến mãi -->
@@ -75,7 +82,24 @@
                     </label>
                     <div class="input-container">
                         <input nbInput type="text" formControlName="discount_value"
-                            placeholder="Nhập giá trị khuyến mãi">
+                            placeholder="Nhập giá trị khuyến mãi"
+                            [ngClass]="{'invalid-form': (cruForm.get('discount_value')?.dirty || isSubmit) && cruForm.get('discount_value')?.invalid}">
+                        <div
+                            *ngIf="(cruForm.get('discount_value')?.dirty || isSubmit) && cruForm.get('discount_value')?.invalid">
+                            <p class="vali-text-false" *ngIf="cruForm.get('discount_value')?.hasError('required')">
+                                Giá trị khuyến mãi không được bỏ trống
+                            </p>
+                            <p class="vali-text-false"
+                                *ngIf="cruForm.get('discount_value')?.hasError('mustBeGreaterThanZero')">
+                                Giá trị khuyến mãi phải lớn hơn 0
+                            </p>
+                            <p class="vali-text-false" *ngIf="cruForm.get('discount_value')?.hasError('invalidValue')">
+                                Giá trị khuyến mãi không được lớn hơn 100%
+                            </p>
+                            <p class="vali-text-false" *ngIf="cruForm.get('discount_value')?.hasError('isNumber')">
+                                Chỉ được được phép nhập số
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <!-- Giá trị tối đa giảm -->
@@ -84,8 +108,21 @@
                         Tối đa giảm<span class="required">*</span>
                     </label>
                     <div class="input-container">
-                        <input nbInput type="text" formControlName="max_discount"
-                            placeholder="Nhập giá trị giảm tối đa">
+                        <input nbInput type="text" formControlName="max_discount" placeholder="Nhập giá trị giảm tối đa"
+                            [ngClass]="{'invalid-form': (cruForm.get('max_discount')?.dirty || isSubmit) && cruForm.get('max_discount')?.invalid}">
+                        <div
+                            *ngIf="(cruForm.get('max_discount')?.dirty || isSubmit) && cruForm.get('max_discount')?.invalid">
+                            <p class="vali-text-false" *ngIf="cruForm.get('max_discount')?.hasError('required')">
+                                Giá trị tối đa cho phép giảm không được bỏ trống
+                            </p>
+                            <p class="vali-text-false"
+                                *ngIf="cruForm.get('max_discount')?.hasError('mustBeGreaterThanZero')">
+                                Giá trị tối đa cho phép giảm phải lớn hơn 0
+                            </p>
+                            <p class="vali-text-false" *ngIf="cruForm.get('max_discount')?.hasError('isNumber')">
+                                Chỉ được được phép nhập số
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <!-- Giá trị tối thiểu áp dụng -->
@@ -95,18 +132,66 @@
                     </label>
                     <div class="input-container">
                         <input nbInput type="text" formControlName="min_order_value"
-                            placeholder="Nhập giá trị tối thiểu áp dụng">
+                            placeholder="Nhập giá trị tối thiểu áp dụng"
+                            [ngClass]="{'invalid-form': (cruForm.get('min_order_value')?.dirty || isSubmit) && cruForm.get('min_order_value')?.invalid}">
+                        <div
+                            *ngIf="(cruForm.get('min_order_value')?.dirty || isSubmit) && cruForm.get('min_order_value')?.invalid">
+                            <p class="vali-text-false" *ngIf="cruForm.get('min_order_value')?.hasError('required')">
+                                Giá trị tối thiểu áp dụng không được bỏ trống
+                            </p>
+                            <p class="vali-text-false"
+                                *ngIf="cruForm.get('min_order_value')?.hasError('mustBeGreaterThanZero')">
+                                Giá trị tối thiểu áp dụng phải lớn hơn 0
+                            </p>
+                            <p class="vali-text-false" *ngIf="cruForm.get('min_order_value')?.hasError('isNumber')">
+                                Chỉ được được phép nhập số
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="info-right">
-                <!-- Giới hạn sử dụng -->
+                <!-- Không giới hạn sử dụng -->
                 <div class="info">
                     <label>
                         Giới hạn sử dụng
                     </label>
+                    <div class="input-checkbox-container">
+                        <input type="checkbox" formControlName="unlimited_usage" id="unlimited_usage">
+                        <label for="unlimited_usage">Không giới hạn</label>
+                    </div>
+                </div>
+                <!-- Giới hạn sử dụng -->
+                <div class="info">
+                    <label>
+                        Sử dụng tối đa
+                    </label>
                     <div class="input-container">
-                        <input nbInput type="text" formControlName="max_usage" placeholder="Nhập giới hạn sử dụng">
+                        <input nbInput type="text" formControlName="max_usage" placeholder="Nhập giới hạn sử dụng"
+                            [ngClass]="{'invalid-form': (cruForm.get('max_usage')?.dirty || isSubmit) && cruForm.get('max_usage')?.invalid}">
+                        <ng-container
+                            *ngIf="(cruForm.get('max_usage')?.dirty || isSubmit) && cruForm.get('max_usage')?.invalid">
+                            <p class="vali-text-false" *ngIf="cruForm.get('max_usage')?.hasError('required')">
+                                Sử dụng tối đa không được bỏ trống
+                            </p>
+                            <p class="vali-text-false"
+                                *ngIf="cruForm.get('max_usage')?.hasError('mustBeGreaterThanZero')">
+                                Sử dụng tối đa phải lớn hơn 0
+                            </p>
+                            <p class="vali-text-false" *ngIf="cruForm.get('max_usage')?.hasError('isNumber')">
+                                Chỉ được được phép nhập số
+                            </p>
+                        </ng-container>
+                    </div>
+                </div>
+                <!-- Giới hạn thời gian -->
+                <div class="info">
+                    <label>
+                        Giới hạn áp dụng
+                    </label>
+                    <div class="input-checkbox-container">
+                        <input type="checkbox" id="unlimited_time" formControlName="unlimited_time" />
+                        <label for="unlimited_time">Không giới hạn</label>
                     </div>
                 </div>
                 <!-- Khoảng thời gian áp dụng -->
@@ -115,7 +200,22 @@
                         Bắt đầu
                     </label>
                     <div class="input-container">
-                        <app-datepicker [group]="cruForm" [controlName]="'valid_from'"></app-datepicker>
+                        <app-datepicker #fromTime [group]="cruForm" [controlName]="'valid_from'"
+                            [isDisableForm]="cruForm.get('unlimited_time')?.value"
+                            [invalid]="((cruForm.get('valid_from')?.dirty || isSubmit) && cruForm.get('valid_from')?.invalid!) || cruForm.hasError('invalidRangeDate')"></app-datepicker>
+                        <div
+                            *ngIf="((cruForm.get('valid_from')?.dirty || isSubmit) && cruForm.get('valid_from')?.invalid) || cruForm.hasError('invalidRangeDate')">
+
+                            <p class="vali-text-false" *ngIf="cruForm.get('valid_from')?.hasError('required')">
+                                Thời điểm bắt đầu không được bỏ trống
+                            </p>
+                            <p class="vali-text-false" *ngIf="cruForm.get('valid_from')?.hasError('invalidDate')">
+                                Thời điểm bắt đầu không đúng định dạng (dd/MM/yyyy)
+                            </p>
+                            <p class="vali-text-false" *ngIf="cruForm?.hasError('invalidRangeDate')">
+                                Thời điểm bắt đầu không lớn hơn thời điểm kết thúc
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="info">
@@ -123,7 +223,21 @@
                         Kết thúc
                     </label>
                     <div class="input-container">
-                        <app-datepicker [group]="cruForm" [controlName]="'valid_to'"></app-datepicker>
+                        <app-datepicker #toTime [group]="cruForm" [controlName]="'valid_to'"
+                            [isDisableForm]="cruForm.get('unlimited_time')?.value"
+                            [invalid]="((cruForm.get('valid_to')?.dirty || isSubmit) && cruForm.get('valid_to')?.invalid!) || cruForm.hasError('invalidRangeDate')"></app-datepicker>
+                        <div
+                            *ngIf="((cruForm.get('valid_to')?.dirty || isSubmit) && cruForm.get('valid_to')?.invalid || cruForm.hasError('invalidRangeDate'))">
+                            <p class="vali-text-false" *ngIf="cruForm.get('valid_to')?.hasError('required')">
+                                Thời điểm kết thúc không được bỏ trống
+                            </p>
+                            <p class="vali-text-false" *ngIf="cruForm.get('valid_to')?.hasError('invalidDate')">
+                                Thời điểm kết thúc không đúng định dạng (dd/MM/yyyy)
+                            </p>
+                            <p class="vali-text-false" *ngIf="cruForm?.hasError('invalidRangeDate')">
+                                Thời điểm bắt đầu không lớn hơn thời điểm kết thúc
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

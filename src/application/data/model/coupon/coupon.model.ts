@@ -15,6 +15,8 @@ export class CouponModel {
     max_usage: number;
     valid_from: string;
     valid_to: string;
+    unlimited_time: boolean;
+    unlimited_usage: boolean;
     status: number;
 
     constructor(
@@ -44,6 +46,8 @@ export class CouponModel {
         this.max_usage = max_usage ?? 0;
         this.valid_from = valid_from ?? '';
         this.valid_to = valid_to ?? '';
+        this.unlimited_time = valid_to === '' ? true : false;
+        this.unlimited_usage = max_usage === -1 ? true : false;
         this.status = status ?? CouponStatus.EXPIRED;
     }
 
@@ -59,6 +63,8 @@ export class CouponModel {
         model.min_order_value = data.min_order_value ?? 0;
         model.times_used = data.times_used ?? 0;
         model.max_usage = data.max_usage ?? 0;
+        model.unlimited_time = data?.valid_to === '' ? true : false;
+        model.unlimited_usage = data?.max_usage === -1 ? true : false;
         model.valid_from = DateUtils.formatDateToDDMMYYYY(data.valid_from);
         model.valid_to = DateUtils.formatDateToDDMMYYYY(data.valid_to);
         model.status = data.status ?? CouponStatus.EXPIRED;
@@ -76,9 +82,9 @@ export class CouponModel {
             max_discount: data.max_discount,
             min_order_value: data.min_order_value,
             times_used: data.times_used,
-            max_usage: data.max_usage,
-            valid_from: data.valid_from,
-            valid_to: data.valid_to,
+            max_usage: !data.unlimited_usage ? -1 : data.max_usage,
+            valid_from: !data.unlimited_time ? null : data.valid_from,
+            valid_to: !data.unlimited_time ? null : data.valid_to,
         }
     }
 
@@ -95,8 +101,9 @@ export class CouponModel {
         model.times_used = form.getRawValue().times_used;
         model.max_usage = form.getRawValue().max_usage;
         model.valid_from = DateUtils.convertDDMMYYYYToISOStartOfDay(form.getRawValue().valid_from);
-        model.valid_to = DateUtils.convertDDMMYYYYToISOStartOfDay(form.getRawValue().valid_to);
-
+        model.valid_to = DateUtils.convertDDMMYYYYToISOEndOfDay(form.getRawValue().valid_to);
+        model.unlimited_time = form.getRawValue().unlimited_time;
+        model.unlimited_usage = form.getRawValue().unlimited_usage;
         return model;
     }
 

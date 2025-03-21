@@ -66,10 +66,22 @@
                     }
                 }
             }
+
+            .input-checkbox-container {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                width: 100%;
+            }
         }
     }
 }
 
 nb-option {
     font-size: 13px !important;
+}
+
+
+label {
+    margin-bottom: 0px;
 }
