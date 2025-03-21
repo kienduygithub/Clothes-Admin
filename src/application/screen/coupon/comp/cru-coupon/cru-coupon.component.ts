@@ -111,7 +111,7 @@ export class CRUCouponComponent implements OnInit {
             max_usage: [{ value: '', disabled: true }],
             valid_from: [''],
             valid_to: [''],
-            unlimited_time: [false],
+            unlimited_time: [true],
             unlimited_usage: [true]
         }, {
             validators: [this.checkFromToTimeValid]

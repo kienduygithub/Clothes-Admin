@@ -1,16 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
-import { NbAutocompleteModule, NbCardModule, NbCheckboxModule, NbDatepickerComponent, NbDatepickerModule, NbDateService, NbIconComponent, NbIconModule, NbInputModule, NbTimepickerModule } from '@nebular/theme';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { NbAutocompleteModule, NbCardModule, NbCheckboxModule, NbDatepickerModule, NbDateService, NbIconModule, NbInputModule, NbTimepickerModule } from '@nebular/theme';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
-import { CustomDateInputDirective } from '../../../common/layout/directives/customInputDate.directive';
 import { DefaultMatCalendarRangeStrategy, MatDatepicker, MatDatepickerModule, MatRangeDateSelectionModel } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter } from '@angular/material/core';
-
+import _moment from 'moment';
 const MY_DATE_FORMAT = {
   parse: {
     dateInput: 'DD/MM/YYYY', // this is how your date will be parsed from Input
@@ -55,7 +54,7 @@ const MY_DATE_FORMAT = {
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
   ]
 })
-export class DatePickerComponent implements OnInit, AfterViewInit {
+export class DatePickerComponent implements OnInit {
 
   @Input() group!: FormGroup
   @Input() controlName!: string
@@ -73,7 +72,6 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   date: string = '';
   today = new Date();
   time = new FormControl();
-
   @ViewChild('picker') datepicker!: ElementRef<MatDatepicker<any>>;
 
   constructor(
@@ -83,13 +81,9 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    // this.time.setValue((new Date().getTime() - 3888000000));
-    // this.date = this.formControl?.value ?? '';
-  }
-
-  ngAfterViewInit() {
-    // this.datepicker.nativeElement.select('20/02/2022');
-
+    if (this.formControl?.value !== '') {
+      this.time.setValue(_moment(this.formControl?.value, "MM/DD/YYYY"));
+    }
   }
 
   get formControl() {
@@ -97,7 +91,6 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   }
 
   getDate(time: any) {
-    console.log(time)
     if (time === '') {
       this.formControl?.setValue('');
       this.formControl?.markAsDirty();
