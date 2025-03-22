@@ -16,6 +16,8 @@ import { CouponService } from "../../../../data/service/coupon.service";
 import { CouponModel } from "../../../../data/model/coupon/coupon.model";
 import { CouponStatus } from "../../../../common/resource/status";
 import { DiscountType } from "../../../../common/resource/coupon";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { debounceTime } from "rxjs";
 
 const NB_LIBS = [
     NbInputModule,
@@ -26,6 +28,7 @@ const NB_LIBS = [
 
 const ANGULAR_MODULES = [
     CommonModule,
+    ReactiveFormsModule,
     NgxPaginationModule
 ]
 
@@ -61,7 +64,9 @@ export class CouponListComponent implements OnInit {
 
     preImage: string = '';
     coupons: CouponModel[] = [];
+    displayCoupons: CouponModel[] = [];
     couponStatus = CouponStatus;
+    search = new FormControl('');
 
     constructor(
         private router: Router,
@@ -76,12 +81,14 @@ export class CouponListComponent implements OnInit {
         this.paging = new PagingModel();
         await this.fetchCoupons();
         this.resetPagination();
+        this.searchValueChanges();
         this.cdr.detectChanges();
     }
 
     async fetchCoupons() {
         try {
             this.coupons = await this.couponManagement.fetchCoupons();
+            this.displayCoupons = [...this.coupons];
         } catch (error) {
             console.log(error);
         }
@@ -143,8 +150,8 @@ export class CouponListComponent implements OnInit {
     resetPagination() {
         this.paging.currentPage = 1;
         this.paging.itemsPerPage = 10;
-        this.paging.totalItems = this.coupons.length;
-        this.paging.totalPage = Math.ceil(this.coupons.length / 3);
+        this.paging.totalItems = this.displayCoupons.length;
+        this.paging.totalPage = Math.ceil(this.displayCoupons.length / 3);
         this.paging.before = 0;
         this.paging.after = 0;
 
@@ -160,5 +167,29 @@ export class CouponListComponent implements OnInit {
             default:
                 return type;
         }
+    }
+
+    private searchValueChanges() {
+        this.search.valueChanges
+            .pipe(debounceTime(300))
+            .subscribe(value => {
+                if (value?.trim() === '') {
+                    this.displayCoupons = [...this.coupons];
+                    this.resetPagination();
+                    this.cdr.detectChanges();
+                    return;
+                }
+
+                this.displayCoupons = this.coupons.filter(coupon => coupon.name.toLowerCase().includes(value?.toLowerCase()?.trim() ?? ''))
+                this.resetPagination();
+                this.cdr.detectChanges();
+            });
+    }
+
+    async onRefreshTable() {
+        await this.fetchCoupons();
+        this.resetPagination();
+        this.search.setValue('', { emitEvent: false });
+        this.cdr.detectChanges();
     }
 }

@@ -48,6 +48,9 @@
                             <p class="vali-text-false" *ngIf="cruForm.get('coupon_name')?.hasError('required')">
                                 Tên khuyến mãi không được bỏ trống
                             </p>
+                            <p class="vali-text-false" *ngIf="cruForm.get('coupon_name')?.hasError('existedName')">
+                                Tên khuyến mãi đã tồn tại
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -57,7 +60,8 @@
                         Mã khuyến mãi<span class="required">*</span>
                     </label>
                     <div class="input-container" style="display: flex;align-items: center;gap: 5px;">
-                        <input nbInput type="text" formControlName="code" placeholder="Nhập mã khuyến mãi">
+                        <input nbInput type="text" formControlName="code" placeholder="Nhập mã khuyến mãi"
+                            [ngClass]="{'invalid-form': cruForm.get('code')?.invalid}">
                         <button nbButton class="button-submit-form ml-2" (click)="generateCode()">
                             Sinh mã
                         </button>

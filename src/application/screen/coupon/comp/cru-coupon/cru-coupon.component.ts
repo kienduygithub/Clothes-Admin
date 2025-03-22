@@ -15,6 +15,9 @@ import { UuidService } from "../../../../common/service/uuid.service";
 import { DiscountType } from "../../../../common/resource/coupon";
 import { DatePickerComponent } from "../../../common/date-picker/custom-select.component";
 import { CouponModel } from "../../../../data/model/coupon/coupon.model";
+import { ErrorModel } from "../../../../common/model/error";
+import { HttpCode } from "../../../../common/resource/http-code";
+import { WarningComponent } from "../../../../common/layout/notify/warning/warnimg.component";
 
 const NB_LIBS = [
     NbInputModule,
@@ -301,6 +304,9 @@ export class CRUCouponComponent implements OnInit {
             this.onCancel();
         } catch (error) {
             console.log(error);
+            if (error instanceof ErrorModel) {
+                this.handleError(error);
+            }
         }
 
     }
@@ -409,4 +415,33 @@ export class CRUCouponComponent implements OnInit {
         return null;
     }
 
+    handleError(error: ErrorModel) {
+        const status = error.code;
+        const msg = error.message;
+        if (status === HttpCode.BAD_REQUEST) {
+            if (msg.includes('Tên Coupon đã tồn tại')) {
+                this.cruForm.get('coupon_name')?.setErrors({
+                    existedName: true
+                });
+            } else if (msg.includes('Mã Coupon đã tồn tại')) {
+                this.cruForm.get('code')?.setErrors({
+                    existedCode: true
+                });
+            } else if (msg.includes('Không tìm thấy Coupon')) {
+                this.dialogService.open(WarningComponent, {
+                    context: {
+                        title: 'Không tìm thấy',
+                        content: 'Coupon không tồn tại'
+                    }
+                });
+            } else if (msg.includes('Thiếu trường cần thiết')) {
+                this.dialogService.open(WarningComponent, {
+                    context: {
+                        title: 'Không hợp lệ',
+                        content: 'Coupon không đủ thông tin để thao tác'
+                    }
+                });
+            }
+        }
+    }
 }

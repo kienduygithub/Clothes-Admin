@@ -1,13 +1,13 @@
 <div class="router-static">
     <div class="search-and-filter">
         <div class="search-input-container">
-            <input nbInput type="text" placeholder="Nhập mã khuyến mãi">
+            <input nbInput type="text" placeholder="Nhập tên khuyến mãi" [formControl]="search">
         </div>
         <button nbButton class="util-box">
             <img class="common-icon" [src]="icon_filter" />
         </button>
         <button nbButton class="util-box">
-            <img class="common-icon" [src]="icon_refresh" />
+            <img class="common-icon" [src]="icon_refresh" (click)="onRefreshTable()" />
         </button>
     </div>
     <div class="table-responsive">
@@ -25,7 +25,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr (click)="onEditCoupon(coupon.id)" *ngFor="let coupon of coupons | paginate: paging;let i = index">
+                <tr (click)="onEditCoupon(coupon.id)"
+                    *ngFor="let coupon of displayCoupons | paginate: paging;let i = index">
                     <td style="width: 5%;">
                         <span style="font-size: 14px;">
                             {{offset + i}}
@@ -47,11 +48,11 @@
                         </span>
                     </td>
                     <td style="width: 14%;">
-                        <span style="font-size: 14px;">
+                        <span style="font-size: 14px;white-space: nowrap;">
                             {{
                             coupon.unlimited_time
                             ? "Không giới hạn"
-                            : (coupon.valid_from + '&ndash;' + coupon.valid_to)
+                            : (coupon.valid_from + ' &ndash; ' + coupon.valid_to)
                             }}
                         </span>
                     </td>
@@ -78,7 +79,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr *ngIf="coupons.length === 0">
+                <tr *ngIf="displayCoupons.length === 0">
                     <td class="table-no-data text-center" colspan="11">
                         Không có dữ liệu
                     </td>
