@@ -68,6 +68,15 @@ export class CouponListComponent implements OnInit {
     couponStatus = CouponStatus;
     search = new FormControl('');
 
+    isFilterOpen = false;
+    selectedFilters: string[] = [];
+    filterOptions = [
+        { label: 'Loại phần trăm', value: '1' },
+        { label: 'Loại cố định', value: '2' },
+        { label: 'Chưa hết hạn', value: '3' },
+        { label: 'Đã quá hạn', value: '4' }
+    ];
+
     constructor(
         private router: Router,
         private appConfig: AppConfig,
@@ -173,16 +182,7 @@ export class CouponListComponent implements OnInit {
         this.search.valueChanges
             .pipe(debounceTime(300))
             .subscribe(value => {
-                if (value?.trim() === '') {
-                    this.displayCoupons = [...this.coupons];
-                    this.resetPagination();
-                    this.cdr.detectChanges();
-                    return;
-                }
-
-                this.displayCoupons = this.coupons.filter(coupon => coupon.name.toLowerCase().includes(value?.toLowerCase()?.trim() ?? ''))
-                this.resetPagination();
-                this.cdr.detectChanges();
+                this.onFilter();
             });
     }
 
@@ -190,6 +190,61 @@ export class CouponListComponent implements OnInit {
         await this.fetchCoupons();
         this.resetPagination();
         this.search.setValue('', { emitEvent: false });
+        this.selectedFilters = [];
+        this.cdr.detectChanges();
+    }
+
+    onToggleOpenFilter() {
+        this.isFilterOpen = !this.isFilterOpen;
+        this.cdr.detectChanges();
+    }
+
+    onFilterToggle(value: string) {
+        if (this.selectedFilters.includes(value)) {
+            this.selectedFilters = this.selectedFilters.filter(item => item !== value);
+        } else {
+            this.selectedFilters.push(value);
+        }
+    }
+
+    onFilter() {
+        this.isFilterOpen = false;
+        const searchValue = this.search.value?.trim() ?? '';
+        const selectedSet = new Set(this.selectedFilters);
+        const conditions = {
+            isPercentage: selectedSet.has('1'),
+            isFixed: selectedSet.has('2'),
+            isNotExpired: selectedSet.has('3'),
+            isExpired: selectedSet.has('4')
+        };
+        if (selectedSet.size === 0) {
+            if (searchValue === '') {
+                this.displayCoupons = [...this.coupons];
+            } else {
+                this.displayCoupons = this.coupons.filter(
+                    coupon => coupon.name.toLowerCase().includes(searchValue.toLowerCase())
+                );
+            }
+        } else {
+            this.displayCoupons = this.coupons.filter(coupon => {
+                const isPercentage = conditions.isPercentage && coupon.discount_type === DiscountType.PERCENTAGE;
+                const isFixed = conditions.isFixed && coupon.discount_type === DiscountType.FIXED;
+                const isNotExpired = conditions.isNotExpired && coupon.status === CouponStatus.ACTIVE;
+                const isExpired = conditions.isExpired && coupon.status === CouponStatus.EXPIRED;
+
+                return (isPercentage || isFixed || isNotExpired || isExpired)
+                    && coupon.name.toLowerCase().includes(searchValue.toLowerCase());
+            })
+        }
+        this.resetPagination();
+        this.cdr.detectChanges();
+    }
+
+    onCancelFilter() {
+        this.isFilterOpen = false;
+        this.selectedFilters = [];
+        this.onFilter();
+        this.resetPagination();
         this.cdr.detectChanges();
     }
 }

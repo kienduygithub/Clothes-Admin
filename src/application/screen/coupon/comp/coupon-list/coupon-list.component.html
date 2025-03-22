@@ -4,7 +4,23 @@
             <input nbInput type="text" placeholder="Nhập tên khuyến mãi" [formControl]="search">
         </div>
         <button nbButton class="util-box">
-            <img class="common-icon" [src]="icon_filter" />
+            <img class="common-icon" [src]="icon_filter" (click)="onToggleOpenFilter()" />
+            <div class="filter-box" [ngClass]="{'open': isFilterOpen}">
+                <h3>Filter</h3>
+                <label *ngFor="let option of filterOptions">
+                    <input type="checkbox" [checked]="selectedFilters.includes(option.value)"
+                        (change)="onFilterToggle(option.value)" />
+                    {{ option.label }}
+                </label>
+                <div class="footer">
+                    <button class="btn-filter-box cancel" (click)="onCancelFilter()">
+                        Hủy
+                    </button>
+                    <button class="btn-filter-box filter" (click)="onFilter()">
+                        Lọc
+                    </button>
+                </div>
+            </div>
         </button>
         <button nbButton class="util-box">
             <img class="common-icon" [src]="icon_refresh" (click)="onRefreshTable()" />
