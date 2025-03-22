@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ProductListComponent } from "./product-list/product-list.component";
 import { NbButtonModule, NbInputModule } from "@nebular/theme";
 import { Router } from "@angular/router";
+import { ProductUrl } from "./product.routing";
 
 const NB_LIBS = [
     NbInputModule,
@@ -32,6 +33,6 @@ export class ProductComponent implements OnInit {
     }
 
     onCreate() {
-        this.router.navigate(['/shop/product/products/create'])
+        this.router.navigate([ProductUrl.PRODUCT_CREATE]);
     }
 }

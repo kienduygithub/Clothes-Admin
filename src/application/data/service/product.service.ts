@@ -78,7 +78,7 @@ export class ProductService {
         }
     }
 
-    async fetchAllProductByShopId(shopId: number): Promise<any> {
+    async fetchAllProductByShopId(): Promise<any> {
         try {
             const userInfo = this.appConfig.getUserInfo();
             const domain = this.appConfig.getDomain();

@@ -24,7 +24,7 @@ import { CKEditorComponent } from "../../../../common/utils/ckeditor/ckeditor.co
 import { CategoryModel } from "../../../../data/model/category.model";
 import { CategoryManagement } from "../../../../data/management/category.management";
 import { CategoryService } from "../../../../data/service/category.service";
-import { debounceTime } from "rxjs";
+import { ProductUrl } from "../../product.routing";
 
 const NB_LIBS = [
     NbInputModule,
@@ -58,7 +58,7 @@ const PIPES = [
         CategoryManagement,
         CategoryService
     ],
-    // changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class CRUProductComponent implements OnInit {
@@ -235,6 +235,8 @@ export class CRUProductComponent implements OnInit {
                     this.childCategories = this.parentCategories.find(cate => cate.id === response)
                         ?.sub_categories ?? [];
                 })
+
+            this.cdr.detectChanges();
         }
     }
 
@@ -266,7 +268,7 @@ export class CRUProductComponent implements OnInit {
     }
 
     onCancel() {
-        this.router.navigate(['/shop/product/products']);
+        this.router.navigate([ProductUrl.PRODUCT_LIST]);
     }
 
     async onSave() {
@@ -296,7 +298,7 @@ export class CRUProductComponent implements OnInit {
                 this.selectedVariantFiles
             );
 
-            this.router.navigate(['/shop/product/products']);
+            this.router.navigate([ProductUrl.PRODUCT_LIST]);
         } catch (error) {
             console.log(error);
         }
@@ -331,7 +333,7 @@ export class CRUProductComponent implements OnInit {
                 this.deletedVariantId
             );
 
-            this.router.navigate(['/shop/product/products']);
+            this.router.navigate([ProductUrl.PRODUCT_LIST]);
         } catch (error) {
             console.log(error);
         }
@@ -436,6 +438,7 @@ export class CRUProductComponent implements OnInit {
             })
         )
         this.variantImageUrls.set(this.timeSKU, null);
+        this.cdr.detectChanges();
     }
 
     onConfirmDeleteVariant(id: number, isTemp: boolean) {
@@ -465,5 +468,7 @@ export class CRUProductComponent implements OnInit {
             variants.splice(variantIndex, 1);
             this.product_variants.patchValue(variants);
         }
+
+        this.cdr.detectChanges();
     }
 }

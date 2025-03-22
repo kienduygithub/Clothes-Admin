@@ -1,7 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { ScreenComponent } from './screen.component';
-import { ProductRouting } from './product/product.routing';
+import { ProductRouting, ProductUrl } from './product/product.routing';
 import { ProductComponent } from './product/product.component';
 import { EmployeeRouting, EmployeeUrl } from './employee/employee.routing';
 import { EmployeeComponent } from './employee/employee.component';
@@ -28,12 +28,12 @@ const routes: Routes = [
             ...ProductRouting,
             ...CategoryRouting,
             {
-                path: 'shop/product',
-                redirectTo: '/shop/product/products',
+                path: 'owner/products',
+                redirectTo: ProductUrl.PRODUCT_LIST,
                 pathMatch: 'full'
             },
             {
-                path: 'shop/product/products',
+                path: ProductUrl.PRODUCT_LIST,
                 title: 'Sản phẩm',
                 component: ProductComponent,
                 pathMatch: 'prefix'
@@ -42,7 +42,6 @@ const routes: Routes = [
                 path: EmployeeUrl.EMPLOYEE_LIST,
                 title: 'Nhân sự',
                 component: EmployeeComponent,
-                pathMatch: 'prefix'
             },
             {
                 path: 'shop',

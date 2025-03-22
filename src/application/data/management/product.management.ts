@@ -34,9 +34,9 @@ export class ProductManagement {
         }
     }
 
-    async fetchAllProductsByShopId(shopId: number) {
+    async fetchAllProductsByShopId() {
         try {
-            const result = await this.productService.fetchAllProductByShopId(shopId);
+            const result = await this.productService.fetchAllProductByShopId();
             const response = result?.body?.products?.map((product: any) => new ProductModel().convertObj(product));
             return response;
         } catch (error) {

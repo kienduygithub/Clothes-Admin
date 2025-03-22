@@ -1,6 +1,7 @@
 import { CategoryUrl } from "./category/category.routing";
 import { CouponUrl } from "./coupon/coupon.routing";
 import { EmployeeUrl } from "./employee/employee.routing";
+import { ProductUrl } from "./product/product.routing";
 import { RegisterShopURL } from "./register-shop/register-shop.routing";
 import { ShopURL } from "./shop/shop.routing";
 
@@ -19,19 +20,19 @@ export const MENU_ITEMS: any[] = [
     {
         title: 'Sản phẩm',
         icon: { icon: 'network_icon', pack: 'mainIcon' },
-        link: '/shop/product',
+        link: 'owner/products',
+        pathMatch: 'prefix',
         children: [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh sách sản phẩm',
-                link: '/shop/product/products',
+                link: ProductUrl.PRODUCT_LIST,
                 pathMatch: 'prefix'
             },
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh mục sản phẩm',
                 link: CategoryUrl.CATEGORY_URL,
-                pathMatch: 'prefix'
             },
         ],
     },

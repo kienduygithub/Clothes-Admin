@@ -69,7 +69,7 @@
                             <img class="common-icon" [src]="icon_edit" [nbTooltip]="'Chỉnh sửa'"
                                 nbTooltipPlacement="bottom" (click)="onUpdateProduct(product.id!)" />
                             <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"
-                                nbTooltipPlacement="bottom" (click)="onConfirmDeleteProduct(product)">
+                                nbTooltipPlacement="bottom" (click)="onConfirmDeleteProduct(product, i)">
                             </nb-icon>
                         </div>
                     </td>

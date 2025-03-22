@@ -10,6 +10,7 @@ import { ImageResource } from "../../../common/resource/image_resource";
 import { WarningComponent } from "../../../common/layout/notify/warning/warnimg.component";
 import { NgxPaginationModule } from "ngx-pagination";
 import { PagingModel } from "../../../common/model/paging.model";
+import { ProductUrl } from "../product.routing";
 
 const NB_LIBS = [
     NbInputModule,
@@ -67,41 +68,40 @@ export class ProductListComponent implements OnInit {
 
     async fetchAllProducts() {
         try {
-            let shopId: any = this.appConfig.getShopId();
-            shopId = 1; // Nhớ sửa sau
-            this.allProducts = await this.productManagement.fetchAllProductsByShopId(shopId);
+            this.allProducts = await this.productManagement.fetchAllProductsByShopId();
         } catch (error) {
             console.log(error);
         }
     }
 
     onUpdateProduct(id: number) {
-        this.router.navigate(['shop/product/products/view'], { queryParams: { id: id } });
+        this.router.navigate([ProductUrl.PRODUCT_VIEW], { queryParams: { id: id } });
     }
 
-    onConfirmDeleteProduct(product: ProductModel) {
+    onConfirmDeleteProduct(product: ProductModel, index: number) {
         this.dialogService.open(WarningComponent, {
             context: {
                 title: 'Xóa',
                 content: 'Bạn có chắc muốn xóa sản phẩm ' + product.product_name + '?',
-                acceptFunc: this.handleDeleteProduct.bind(this, product.id!)
+            }
+        }).onClose.subscribe(async (response) => {
+            if (response === true) {
+                try {
+                    await this.productManagement.deleteProductById(product.id ?? 0);
+                    this.allProducts.splice(index, 1)
+                    this.paging.totalItems = this.allProducts.length;
+                    this.paging.totalPage = Math.ceil(this.allProducts.length / this.paging.itemsPerPage);
+                    if (this.paging.currentPage === this.paging.totalPage + 1) {
+                        this.onPageChange(this.paging.currentPage - 1);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
             }
         })
     }
 
-    async handleDeleteProduct(productId: number) {
-        try {
-            await this.productManagement.deleteProductById(productId);
-            this.allProducts = this.allProducts.filter(product => product.id !== productId);
-            this.paging.totalItems = this.allProducts.length;
-            this.paging.totalPage = Math.ceil(this.allProducts.length / this.paging.itemsPerPage);
-            if (this.paging.currentPage === this.paging.totalPage + 1) {
-                this.onPageChange(this.paging.currentPage - 1);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
+
 
     onPageChange(currentPage: number) {
         this.paging.currentPage = currentPage;
