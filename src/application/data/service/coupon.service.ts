@@ -14,7 +14,13 @@ export class CouponService {
     async createCoupon(coupon: CouponModel): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
-
+            const userInfo = this.appConfig.getUserInfo();
+            const response = this.serviceCore.POST(
+                `${domain}`,
+                `owner/coupon/${userInfo.shopId}`,
+                coupon
+            );
+            return response;
         } catch (error) {
             throw error;
         }
@@ -32,7 +38,12 @@ export class CouponService {
     async fetchCoupons(): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
-
+            const userInfo = this.appConfig.getUserInfo();
+            const response = this.serviceCore.GET(
+                `${domain}`,
+                `owner/coupon/${userInfo.shopId}/shop`,
+            );
+            return response;
         } catch (error) {
             throw error;
         }

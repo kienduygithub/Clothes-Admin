@@ -1,6 +1,7 @@
 import { FormGroup } from "@angular/forms";
 import { DateUtils } from "../../../common/utils/convert-date";
 import { CouponStatus } from "../../../common/resource/status";
+import { DiscountType } from "../../../common/resource/coupon";
 
 export class CouponModel {
     id: number;
@@ -63,10 +64,12 @@ export class CouponModel {
         model.min_order_value = data.min_order_value ?? 0;
         model.times_used = data.times_used ?? 0;
         model.max_usage = data.max_usage ?? 0;
-        model.unlimited_time = data?.valid_to === '' ? true : false;
+        model.unlimited_time = data?.valid_to === '*' ? true : false;
         model.unlimited_usage = data?.max_usage === -1 ? true : false;
-        model.valid_from = DateUtils.formatDateToDDMMYYYY(data.valid_from);
-        model.valid_to = DateUtils.formatDateToDDMMYYYY(data.valid_to);
+        model.valid_from = data?.valid_from === '*'
+            ? '' : DateUtils.formatDateToDDMMYYYY(data.valid_from);
+        model.valid_to = data?.valid_to === '*'
+            ? '' : DateUtils.formatDateToDDMMYYYY(data.valid_to);
         model.status = data.status ?? CouponStatus.EXPIRED;
 
         return model;
@@ -82,28 +85,38 @@ export class CouponModel {
             max_discount: data.max_discount,
             min_order_value: data.min_order_value,
             times_used: data.times_used,
-            max_usage: !data.unlimited_usage ? -1 : data.max_usage,
-            valid_from: !data.unlimited_time ? null : data.valid_from,
-            valid_to: !data.unlimited_time ? null : data.valid_to,
+            max_usage: data.max_usage,
+            valid_from: data.valid_from,
+            valid_to: data.valid_to,
         }
     }
 
     convertFormToModel(form: FormGroup) {
+        let unlimited_time = form.getRawValue().unlimited_time;
+        let unlimited_usage = form.getRawValue().unlimited_usage;
+        let discount_type = form.getRawValue().discount_type;
+
         const model = new CouponModel();
         model.id = form.getRawValue().id;
         model.shop_id = form.getRawValue().shop_id;
-        model.name = form.getRawValue().name;
+        model.name = form.getRawValue().coupon_name;
         model.code = form.getRawValue().code;
-        model.discount_type = form.getRawValue().discount_type;
+        model.discount_type = discount_type;
         model.discount_value = form.getRawValue().discount_value;
-        model.max_discount = form.getRawValue().max_discount;
-        model.min_order_value = form.getRawValue().min_order_value;
+        model.max_discount = discount_type === DiscountType.PERCENTAGE
+            ? form.getRawValue().max_discount : form.getRawValue().discount_value;
+        model.min_order_value = discount_type === DiscountType.PERCENTAGE
+            ? form.getRawValue().min_order_value : -1;
         model.times_used = form.getRawValue().times_used;
-        model.max_usage = form.getRawValue().max_usage;
-        model.valid_from = DateUtils.convertDDMMYYYYToISOStartOfDay(form.getRawValue().valid_from);
-        model.valid_to = DateUtils.convertDDMMYYYYToISOEndOfDay(form.getRawValue().valid_to);
-        model.unlimited_time = form.getRawValue().unlimited_time;
-        model.unlimited_usage = form.getRawValue().unlimited_usage;
+        model.max_usage = unlimited_usage
+            ? -1 : form.getRawValue().max_usage;
+        model.valid_from = unlimited_time
+            ? '*' : DateUtils.convertDDMMYYYYToISOStartOfDay(form.getRawValue().valid_from);
+        model.valid_to = unlimited_time
+            ? '*' : DateUtils.convertDDMMYYYYToISOEndOfDay(form.getRawValue().valid_to);
+        model.unlimited_time = unlimited_time;
+        model.unlimited_usage = unlimited_usage;
+
         return model;
     }
 

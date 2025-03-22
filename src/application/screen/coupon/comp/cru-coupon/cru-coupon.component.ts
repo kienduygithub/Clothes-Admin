@@ -212,17 +212,8 @@ export class CRUCouponComponent implements OnInit {
     }
 
     async onSave() {
-        if (this.action === actions.CREATE) {
-            await this.handleCreate();
-        } else if (this.action === actions.UPDATE) {
-            await this.handleUpdate();
-        }
-    }
-
-    async handleCreate() {
         this.isSubmit = true;
         console.log(this.cruForm.value);
-
         if (this.cruForm.invalid) {
             console.log('INVALID FORM');
             return;
@@ -230,29 +221,14 @@ export class CRUCouponComponent implements OnInit {
 
         try {
             const instance = new CouponModel().convertFormToModel(this.cruForm);
-            console.log(instance);
-            // this.onCancel();
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async handleUpdate() {
-        this.isSubmit = true;
-
-        if (this.cruForm.invalid) {
-            console.log('INVALID FORM');
-            console.log(this.cruForm.value);
-            return;
-        }
-
-        try {
-            const instance = this.convertValueFormToModel();
-
+            this.action === actions.CREATE
+                ? await this.couponManagement.createCoupon(instance)
+                : await this.couponManagement.updateCoupon(instance);
             this.onCancel();
         } catch (error) {
             console.log(error);
         }
+
     }
 
     convertValueFormToModel() {

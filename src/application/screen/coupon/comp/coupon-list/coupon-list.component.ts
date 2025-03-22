@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { ShopManagement } from "../../../../data/management/shop.management";
 import { ShopService } from "../../../../data/service/shop.service";
 import { CommonModule } from "@angular/common";
@@ -15,6 +15,7 @@ import { CouponManagement } from "../../../../data/management/coupon.management"
 import { CouponService } from "../../../../data/service/coupon.service";
 import { CouponModel } from "../../../../data/model/coupon/coupon.model";
 import { CouponStatus } from "../../../../common/resource/status";
+import { DiscountType } from "../../../../common/resource/coupon";
 
 const NB_LIBS = [
     NbInputModule,
@@ -66,7 +67,8 @@ export class CouponListComponent implements OnInit {
         private router: Router,
         private appConfig: AppConfig,
         private dialogService: NbDialogService,
-        private couponManagement: CouponManagement
+        private couponManagement: CouponManagement,
+        private cdr: ChangeDetectorRef
     ) { }
 
     async ngOnInit() {
@@ -74,11 +76,12 @@ export class CouponListComponent implements OnInit {
         this.paging = new PagingModel();
         await this.fetchCoupon();
         this.resetPagination();
+        this.cdr.detectChanges();
     }
 
     async fetchCoupon() {
         try {
-
+            this.coupons = await this.couponManagement.fetchCoupons();
         } catch (error) {
             console.log(error);
         }
@@ -96,23 +99,19 @@ export class CouponListComponent implements OnInit {
             }
         }).onClose.subscribe(async (response) => {
             if (response === true) {
-                await this.handleDeleteCoupon(coupon.id ?? 0, index);
+                try {
+                    // await this.shopManagement.deleteShopById(shopId);
+                    this.coupons.splice(index, 1);
+                    this.paging.totalItems = this.coupons.length;
+                    this.paging.totalPage = Math.ceil(this.coupons.length / this.paging.itemsPerPage);
+                    if (this.paging.currentPage === this.paging.totalPage + 1) {
+                        this.onPageChange(this.paging.currentPage - 1);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
             }
         })
-    }
-
-    async handleDeleteCoupon(couponId: number, index: number) {
-        try {
-            // await this.shopManagement.deleteShopById(shopId);
-            this.coupons.splice(index, 1);
-            this.paging.totalItems = this.coupons.length;
-            this.paging.totalPage = Math.ceil(this.coupons.length / this.paging.itemsPerPage);
-            if (this.paging.currentPage === this.paging.totalPage + 1) {
-                this.onPageChange(this.paging.currentPage - 1);
-            }
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     transformCouponStatus(status: number) {
@@ -149,5 +148,16 @@ export class CouponListComponent implements OnInit {
         this.paging.after = 0;
 
         this.offset = (this.paging.currentPage - 1) * this.paging.itemsPerPage + 1;
+    }
+
+    convertDiscountType(type: string) {
+        switch (type) {
+            case DiscountType.FIXED:
+                return 'Cố định';
+            case DiscountType.PERCENTAGE:
+                return 'Phần trăm';
+            default:
+                return type;
+        }
     }
 }

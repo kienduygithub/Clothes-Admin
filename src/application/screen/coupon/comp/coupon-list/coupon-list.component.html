@@ -38,7 +38,7 @@
                     </td>
                     <td style="width: 15%;">
                         <span style="font-size: 14px;">
-                            {{coupon.discount_type}}
+                            {{convertDiscountType(coupon.discount_type)}}
                         </span>
                     </td>
                     <td style="width: 12%;">
@@ -48,12 +48,16 @@
                     </td>
                     <td style="width: 14%;">
                         <span style="font-size: 14px;">
-                            {{coupon.valid_from}} &ndash; {{coupon.valid_to}}
+                            {{
+                            coupon.unlimited_time
+                            ? "Không giới hạn"
+                            : (coupon.valid_from + '&ndash;' + coupon.valid_to)
+                            }}
                         </span>
                     </td>
                     <td style="width: 14%;">
                         <span style="font-size: 14px;">
-                            {{coupon.max_usage}}
+                            {{coupon.max_usage === -1 ? 'Không giới hạn' : coupon.max_usage}}
                         </span>
                     </td>
                     <td style="width: 14%;">
