@@ -52,7 +52,11 @@ export class CouponService {
     async fetchCouponById(couponId: number): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
-
+            const response = this.serviceCore.GET(
+                `${domain}`,
+                `owner/coupon/${couponId}`,
+            );
+            return response;
         } catch (error) {
             throw error;
         }

@@ -3,7 +3,7 @@
     <input #inputMat matInput (blur)="getDate(inputMat.value)" [formControl]="time"
       (dateInput)="getDate(inputMat.value)" [min]="today" (dateChange)="getDate(inputMat.value)"
       placeholder="dd/MM/yyyy" [matDatepicker]="picker" [ngClass]="{'disabled': isDisableForm}">
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker-toggle matIconSuffix [for]="picker" [disabled]="isDisableForm"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 </div>

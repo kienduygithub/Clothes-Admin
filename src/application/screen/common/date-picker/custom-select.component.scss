@@ -34,7 +34,7 @@ input::placeholder {
 }
 
 input.disabled {
-  color: red !important;
+  color: $text_disabled_color !important;
 }
 
 input.disabled::placeholder {

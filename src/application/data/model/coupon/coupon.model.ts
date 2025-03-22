@@ -105,8 +105,7 @@ export class CouponModel {
         model.discount_value = form.getRawValue().discount_value;
         model.max_discount = discount_type === DiscountType.PERCENTAGE
             ? form.getRawValue().max_discount : form.getRawValue().discount_value;
-        model.min_order_value = discount_type === DiscountType.PERCENTAGE
-            ? form.getRawValue().min_order_value : -1;
+        model.min_order_value = form.getRawValue().min_order_value;
         model.times_used = form.getRawValue().times_used;
         model.max_usage = unlimited_usage
             ? -1 : form.getRawValue().max_usage;

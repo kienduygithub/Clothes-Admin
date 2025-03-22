@@ -9,7 +9,7 @@
                     {{
                     action === actionWebs.CREATE
                     ? "Thêm cửa hàng"
-                    : 'Tên khuyến mãi'
+                    : updatedCoupon ? updatedCoupon.name : 'UNKNOWN'
                     }}
                 </label>
             </div>
@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <!-- Giá trị tối đa giảm -->
-                <div class="info">
+                <div class="info" *ngIf="cruForm.get('discount_type')?.value === discountType.PERCENTAGE">
                     <label>
                         Tối đa giảm<span class="required">*</span>
                     </label>

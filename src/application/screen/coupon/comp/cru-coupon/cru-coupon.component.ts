@@ -66,6 +66,8 @@ export class CRUCouponComponent implements OnInit {
     action = this.actionWebs.CREATE;
     isSubmit: boolean = false;
     cruForm!: FormGroup;
+    updatedId!: number;
+    updatedCoupon!: CouponModel | undefined;
     discountType = DiscountType;
 
     @ViewChild('fromTime') fromTime!: ElementRef<DatePickerComponent>;
@@ -90,6 +92,7 @@ export class CRUCouponComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe(async (params) => {
             if (params['id']) {
                 this.action = actions.UPDATE;
+                this.updatedId = params['id'];
                 await this.initUpdateForm();
             } else {
                 this.action = actions.CREATE;
@@ -124,17 +127,78 @@ export class CRUCouponComponent implements OnInit {
 
     async initUpdateForm() {
         try {
-
+            this.updatedCoupon = await this.couponManagement.fetchCouponById(this.updatedId)
         } catch (error) {
             console.log(error);
         }
-        if (true) {
+        if (!this.updatedCoupon) {
             this.action = actions.CREATE;
             this.initCreateForm();
         } else {
+            console.log(this.updatedCoupon);
             this.cruForm = this.formBuilder.group({
-
+                id: [this.updatedCoupon.id],
+                coupon_name: [this.updatedCoupon.name, [ValueValidators.required]],
+                code: [{ value: this.updatedCoupon.code, disabled: true }, [ValueValidators.required]],
+                discount_type: [this.updatedCoupon.discount_type],
+                discount_value: [
+                    this.updatedCoupon.discount_value,
+                    this.updatedCoupon.discount_type === DiscountType.PERCENTAGE
+                        ? [Validators.required, ValueValidators.isNumber, this.checkDiscountValueValid(DiscountType.PERCENTAGE)]
+                        : [Validators.required, ValueValidators.isNumber, this.checkDiscountValueValid(DiscountType.FIXED)]
+                ],
+                max_discount: [
+                    this.updatedCoupon.max_discount === -1
+                        ? ''
+                        : `${this.updatedCoupon.max_discount}`,
+                    this.updatedCoupon.discount_type === DiscountType.PERCENTAGE
+                        ? [Validators.required, ValueValidators.isNumber, this.checkMinValueValid]
+                        : []
+                ],
+                min_order_value: [
+                    `${this.updatedCoupon.min_order_value}`,
+                    [Validators.required, ValueValidators.isNumber, this.checkMinValueValid]
+                ],
+                times_used: [''],
+                max_usage: [
+                    {
+                        value: this.updatedCoupon.unlimited_usage ? '' : `${this.updatedCoupon.max_usage}`,
+                        disabled: this.updatedCoupon.unlimited_usage
+                    },
+                    this.updatedCoupon.unlimited_usage
+                        ? []
+                        : [Validators.required, ValueValidators.isNumber, this.checkMinValueValid]
+                ],
+                valid_from: [
+                    {
+                        value: this.updatedCoupon.valid_from,
+                        disabled: this.updatedCoupon.unlimited_time
+                    },
+                    this.updatedCoupon.unlimited_time
+                        ? []
+                        : [Validators.required]
+                ],
+                valid_to: [
+                    {
+                        value: this.updatedCoupon.valid_to,
+                        disabled: this.updatedCoupon.unlimited_time
+                    },
+                    this.updatedCoupon.unlimited_time
+                        ? []
+                        : [Validators.required]
+                ],
+                unlimited_time: [this.updatedCoupon.unlimited_time],
+                unlimited_usage: [this.updatedCoupon.unlimited_usage]
+            }, {
+                validators: this.updatedCoupon.unlimited_time
+                    ? []
+                    : [this.checkFromToTimeValid]
             });
+
+            this.unlimitedUsageValueChanges();
+            this.unlimitedTimeValueChanges();
+            this.discountTypeValueChanges();
+            this.cdr.detectChanges();
         }
     }
 
@@ -196,6 +260,13 @@ export class CRUCouponComponent implements OnInit {
                         this.checkDiscountValueValid(DiscountType.PERCENTAGE)
                     ]);
                     this.cruForm.get('discount_value')?.updateValueAndValidity();
+
+                    this.cruForm.get('max_discount')?.setValidators([
+                        Validators.required,
+                        ValueValidators.isNumber,
+                        this.checkMinValueValid
+                    ]);
+                    this.cruForm.get('max_discount')?.updateValueAndValidity();
                 } else if (value === DiscountType.FIXED) {
                     this.cruForm.get('discount_value')?.setValidators([
                         Validators.required,
@@ -203,6 +274,9 @@ export class CRUCouponComponent implements OnInit {
                         this.checkDiscountValueValid(DiscountType.FIXED)
                     ]);
                     this.cruForm.get('discount_value')?.updateValueAndValidity();
+
+                    this.cruForm.get('max_discount')?.clearValidators();
+                    this.cruForm.get('max_discount')?.updateValueAndValidity();
                 }
             })
     }

@@ -82,7 +82,7 @@ export class DatePickerComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.formControl?.value !== '') {
-      this.time.setValue(_moment(this.formControl?.value, "MM/DD/YYYY"));
+      this.time.setValue(_moment(`${this.formControl?.value}`, "DD/MM/YYYY"));
     }
   }
 
