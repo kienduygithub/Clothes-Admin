@@ -14,19 +14,19 @@ export const MENU_ITEMS: any[] = [
     {
         title: 'Nhân sự',
         icon: { icon: 'group_icon', pack: 'mainIcon' },
-        link: EmployeeUrl.EMPLOYEE_LIST,
-        pathMatch: 'full',
+        link: '/' + EmployeeUrl.EMPLOYEE_LIST,
+        pathMatch: 'prefix',
     },
     {
         title: 'Sản phẩm',
         icon: { icon: 'network_icon', pack: 'mainIcon' },
-        link: 'owner/products',
+        link: '/owner/products',
         pathMatch: 'prefix',
         children: [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh sách sản phẩm',
-                link: ProductUrl.PRODUCT_LIST,
+                link: '/' + ProductUrl.PRODUCT_LIST,
                 pathMatch: 'prefix'
             },
         ],
@@ -34,25 +34,25 @@ export const MENU_ITEMS: any[] = [
     {
         icon: { icon: 'network_icon', pack: 'mainIcon' },
         title: 'Danh mục',
-        link: CategoryUrl.CATEGORY_URL,
+        link: '/' + CategoryUrl.CATEGORY_URL,
         patchMatch: 'prefix'
     },
     {
         title: 'Cửa hàng',
         icon: { icon: 'firewall_icon', pack: 'mainIcon' },
-        link: 'admin/shop',
-        patchMatch: 'prefix',
+        link: '/admin/shop',
+        pathMatch: 'prefix',
         children: [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh sách cửa hàng',
-                link: ShopURL.SHOP_URL,
+                link: '/admin/shop/applied/list',
                 pathMatch: 'prefix'
             },
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh sách xét duyệt',
-                link: RegisterShopURL.REGISTER_SHOP_URL,
+                link: '/' + RegisterShopURL.REGISTER_SHOP_URL,
                 pathMatch: 'prefix'
             },
         ],
@@ -60,7 +60,8 @@ export const MENU_ITEMS: any[] = [
     {
         title: 'Khuyến mãi',
         icon: { icon: 'group_icon', pack: 'mainIcon' },
-        link: CouponUrl.COUPON_LIST_URL,
+        link: '/' + CouponUrl.COUPON_LIST_URL,
+        pathMatch: 'prefix'
     },
     // {
     //     title: 'Hệ thống',

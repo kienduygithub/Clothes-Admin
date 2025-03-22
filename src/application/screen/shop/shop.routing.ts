@@ -10,10 +10,12 @@ export const ShopURL = {
 export const ShopRouting: Routes = [
     {
         path: ShopURL.CREATE_SHOP_URL,
-        component: CRUShopComponent
+        component: CRUShopComponent,
+        pathMatch: 'prefix'
     },
     {
         path: ShopURL.EDIT_SHOP_URL,
-        component: CRUShopComponent
+        component: CRUShopComponent,
+        pathMatch: 'prefix'
     }
 ];
