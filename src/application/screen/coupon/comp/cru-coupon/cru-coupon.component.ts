@@ -311,17 +311,6 @@ export class CRUCouponComponent implements OnInit {
 
     }
 
-    convertValueFormToModel() {
-        const model = new ShopModel();
-
-        if (this.action === actions.UPDATE) {
-            // model.id = this.updatedId;
-        }
-
-
-        return model;
-    }
-
     generateCode() {
         this.cruForm.get('code')?.patchValue(
             this.uuidService.generateUuid()

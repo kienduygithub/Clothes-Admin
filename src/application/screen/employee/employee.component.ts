@@ -3,6 +3,7 @@ import { EmployeeListComponent } from "./employee-list/employee-list.component";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
 import { NbButtonModule } from "@nebular/theme";
+import { EmployeeUrl } from "./employee.routing";
 
 const NB_LIBS = [
     NbButtonModule,
@@ -30,6 +31,6 @@ export class EmployeeComponent {
     ) { }
 
     onCreate() {
-        this.router.navigate(['/employee/list/create']);
+        this.router.navigate([EmployeeUrl.CREATE_EMPLOYEE]);
     }
 }

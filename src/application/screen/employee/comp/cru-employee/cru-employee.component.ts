@@ -10,6 +10,7 @@ import { UserManagement } from "../../../../data/management/user.management";
 import { UserService } from "../../../../data/service/user.service";
 import { AppConfig } from "../../../../common/config/app.config";
 import { ValueValidators } from "../../../../common/utils/validate/value.validate";
+import { EmployeeUrl } from "../../employee.routing";
 
 const NB_LIBS = [
     NbInputModule,
@@ -131,7 +132,7 @@ export class CRUEmployeeComponent implements OnInit {
     }
 
     onCancel() {
-        this.router.navigate(['/employee/list']);
+        this.router.navigate([EmployeeUrl.EMPLOYEE_LIST]);
     }
 
     async onSave() {

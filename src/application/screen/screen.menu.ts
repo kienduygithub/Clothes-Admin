@@ -15,7 +15,7 @@ export const MENU_ITEMS: any[] = [
         title: 'Nhân sự',
         icon: { icon: 'group_icon', pack: 'mainIcon' },
         link: EmployeeUrl.EMPLOYEE_LIST,
-        pathMatch: 'prefix',
+        pathMatch: 'full',
     },
     {
         title: 'Sản phẩm',
@@ -29,17 +29,19 @@ export const MENU_ITEMS: any[] = [
                 link: ProductUrl.PRODUCT_LIST,
                 pathMatch: 'prefix'
             },
-            {
-                icon: { icon: 'dot_icon', pack: 'mainIcon' },
-                title: 'Danh mục sản phẩm',
-                link: CategoryUrl.CATEGORY_URL,
-            },
         ],
+    },
+    {
+        icon: { icon: 'network_icon', pack: 'mainIcon' },
+        title: 'Danh mục',
+        link: CategoryUrl.CATEGORY_URL,
+        patchMatch: 'prefix'
     },
     {
         title: 'Cửa hàng',
         icon: { icon: 'firewall_icon', pack: 'mainIcon' },
-        link: '/shop',
+        link: 'admin/shop',
+        patchMatch: 'prefix',
         children: [
             {
                 icon: { icon: 'dot_icon', pack: 'mainIcon' },

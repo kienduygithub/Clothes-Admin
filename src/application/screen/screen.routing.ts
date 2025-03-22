@@ -36,7 +36,11 @@ const routes: Routes = [
                 path: ProductUrl.PRODUCT_LIST,
                 title: 'Sản phẩm',
                 component: ProductComponent,
-                pathMatch: 'prefix'
+            },
+            {
+                path: 'admin/employee',
+                redirectTo: EmployeeUrl.EMPLOYEE_LIST,
+                pathMatch: 'full'
             },
             {
                 path: EmployeeUrl.EMPLOYEE_LIST,
@@ -44,8 +48,8 @@ const routes: Routes = [
                 component: EmployeeComponent,
             },
             {
-                path: 'shop',
-                redirectTo: '/shop/applied/list',
+                path: 'admin/shop',
+                redirectTo: ShopURL.SHOP_URL,
                 pathMatch: 'full'
             },
             {
@@ -59,9 +63,19 @@ const routes: Routes = [
                 title: 'Danh sách xét duyệt'
             },
             {
+                path: 'owner/coupon',
+                redirectTo: CouponUrl.COUPON_LIST_URL,
+                pathMatch: 'full',
+            },
+            {
                 path: CouponUrl.COUPON_LIST_URL,
                 component: CouponComponent,
                 title: 'Khuyến mãi'
+            },
+            {
+                path: 'admin/category',
+                redirectTo: CategoryUrl.CATEGORY_URL,
+                pathMatch: 'full'
             },
             {
                 path: CategoryUrl.CATEGORY_URL,

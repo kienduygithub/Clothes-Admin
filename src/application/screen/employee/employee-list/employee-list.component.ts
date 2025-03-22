@@ -10,6 +10,7 @@ import { UserManagement } from "../../../data/management/user.management";
 import { UserService } from "../../../data/service/user.service";
 import { NgxPaginationModule } from "ngx-pagination";
 import { WarningComponent } from "../../../common/layout/notify/warning/warnimg.component";
+import { EmployeeUrl } from "../employee.routing";
 
 const NB_LIBS = [
     NbInputModule,
@@ -74,7 +75,7 @@ export class EmployeeListComponent implements OnInit {
     }
 
     onUpdateUser(id: number) {
-        this.router.navigate(['/employee/list/view'], { queryParams: { id: id } });
+        this.router.navigate([EmployeeUrl.VIEW_EMPLOYEE], { queryParams: { id: id } });
     }
 
     onConfirmDeleteUser(user: UserModel) {

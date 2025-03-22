@@ -2,9 +2,9 @@ import { Routes } from "@angular/router";
 import { CRUShopComponent } from "./admin/cru-shop/cru-shop.component";
 
 export const ShopURL = {
-    SHOP_URL: 'shop/applied/list',
-    CREATE_SHOP_URL: 'shop/applied/list/create',
-    EDIT_SHOP_URL: 'shop/applied/list/view'
+    SHOP_URL: 'admin/shop/applied/list',
+    CREATE_SHOP_URL: 'admin/shop/applied/create',
+    EDIT_SHOP_URL: 'admin/shop/applied/view'
 }
 
 export const ShopRouting: Routes = [
