@@ -10,6 +10,8 @@ import { ErrorModel } from "../../../common/model/error";
 import { HttpCode } from "../../../common/resource/http-code";
 import { EmployeeUrl } from "../../employee/employee.routing";
 import { AuthUrl } from "../auth.routing";
+import { Roles } from "../../../common/resource/roles";
+import { OverviewUrl } from "../../overview/overview.routing";
 
 @Component({
     standalone: true,
@@ -66,8 +68,13 @@ export class SignInComponent implements OnInit {
             const email = this.authForm.getRawValue().email;
             const password = this.authForm.getRawValue().password;
             const auth = new AuthModel(email, password);
-            await this.authManagement.signIn(auth);
-            this.router.navigate([EmployeeUrl.EMPLOYEE_LIST]);
+            const response = await this.authManagement.signIn(auth);
+            const info = response?.body?.info;
+            if (info?.roles === Roles.ADMIN) {
+                this.router.navigate([OverviewUrl.ADMIN_OVERVIEW]);
+            } else if (info?.roles === Roles.OWNER) {
+                this.router.navigate([OverviewUrl.OWNER_OVERVIEW]);
+            }
         } catch (error) {
             console.log(error);
             if (error instanceof ErrorModel) {

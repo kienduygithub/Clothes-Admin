@@ -1,9 +1,10 @@
 import { Component } from "@angular/core";
 import { NbIconLibraries, NbMenuItem } from "@nebular/theme";
 import { ImageResource } from "../common/resource/image_resource";
-import { MENU_ITEMS } from "./screen.menu";
+import { ADMIN_MENU_ITEMS, OWNER_MENU_ITEMS } from "./screen.menu";
 import { AuthManagement } from "../data/management/auth.management";
 import { AppConfig } from "../common/config/app.config";
+import { Roles } from "../common/resource/roles";
 
 @Component({
     selector: 'app-root',
@@ -41,7 +42,12 @@ export class ScreenComponent {
     }
 
     async ngOnInit() {
-        this.menu = MENU_ITEMS;
+        const info = this.appConfig.getUserInfo();
+        if (info) {
+            this.menu = info.roles === Roles.ADMIN
+                ? ADMIN_MENU_ITEMS
+                : OWNER_MENU_ITEMS;
+        }
         await this.fetchDetailUser();
     }
 
