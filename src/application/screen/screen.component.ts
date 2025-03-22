@@ -2,15 +2,13 @@ import { Component } from "@angular/core";
 import { NbIconLibraries, NbMenuItem } from "@nebular/theme";
 import { ImageResource } from "../common/resource/image_resource";
 import { MENU_ITEMS } from "./screen.menu";
-import { BaseLayoutComponent } from "../common/layout/base/base.layout";
 import { AuthManagement } from "../data/management/auth.management";
 import { AppConfig } from "../common/config/app.config";
-import { Router } from "@angular/router";
 
 @Component({
     selector: 'app-root',
     template: `
-        <base-layout [menu]="menu">
+        <base-layout [menu]="menu" windowMode>
             <nb-menu id="nb-menu" [items]="menu"></nb-menu>
             <router-outlet></router-outlet>
         </base-layout>
@@ -26,7 +24,6 @@ export class ScreenComponent {
         private iconLibrary: NbIconLibraries,
         private authManagement: AuthManagement,
         private appConfig: AppConfig,
-        private router: Router
     ) {
         this.iconLibrary.registerSvgPack('mainIcon', {
             dashboard_icon: ImageResource.icon_dasb,
@@ -52,7 +49,7 @@ export class ScreenComponent {
         try {
             const info = this.appConfig.getUserInfo();
             const id = info.id;
-            const response = await this.authManagement.fetchUserDetails(id);
+            await this.authManagement.fetchUserDetails(id);
         } catch (error) {
             console.log(error);
         }

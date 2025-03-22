@@ -7,16 +7,19 @@ import { BaseLayoutComponent } from "../common/layout/base/base.layout";
 import { ScreenRouting } from "./screen.routing";
 import { AuthInterceptor } from "../common/utils/auth.interceptor";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
+
 const NB_LIB = [
     NbMenuModule,
     NbEvaIconsModule
 ];
 
+const ANGULAR_LIB = [ReactiveFormsModule];
+
 @NgModule({
     declarations: [ScreenComponent],
     imports: [
         ...NB_LIB,
-        ReactiveFormsModule,
+        ...ANGULAR_LIB,
         ScreenRouting,
         BaseLayoutComponent,
     ],
