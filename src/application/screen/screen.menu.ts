@@ -6,11 +6,11 @@ import { RegisterShopURL } from "./register-shop/register-shop.routing";
 import { ShopURL } from "./shop/shop.routing";
 
 export const MENU_ITEMS: any[] = [
-    {
-        title: 'Tổng quan',
-        icon: { icon: 'dashboard_icon', pack: 'mainIcon' },
-        link: '/overview',
-    },
+    // {
+    //     title: 'Tổng quan',
+    //     icon: { icon: 'dashboard_icon', pack: 'mainIcon' },
+    //     link: '/overview',
+    // },
     {
         title: 'Nhân sự',
         icon: { icon: 'group_icon', pack: 'mainIcon' },
