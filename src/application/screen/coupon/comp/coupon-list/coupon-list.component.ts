@@ -74,12 +74,12 @@ export class CouponListComponent implements OnInit {
     async ngOnInit() {
         this.preImage = this.appConfig.getPreImage() ?? "";
         this.paging = new PagingModel();
-        await this.fetchCoupon();
+        await this.fetchCoupons();
         this.resetPagination();
         this.cdr.detectChanges();
     }
 
-    async fetchCoupon() {
+    async fetchCoupons() {
         try {
             this.coupons = await this.couponManagement.fetchCoupons();
         } catch (error) {
@@ -100,13 +100,14 @@ export class CouponListComponent implements OnInit {
         }).onClose.subscribe(async (response) => {
             if (response === true) {
                 try {
-                    // await this.shopManagement.deleteShopById(shopId);
+                    await this.couponManagement.deleteCouponById(coupon.id);
                     this.coupons.splice(index, 1);
                     this.paging.totalItems = this.coupons.length;
                     this.paging.totalPage = Math.ceil(this.coupons.length / this.paging.itemsPerPage);
                     if (this.paging.currentPage === this.paging.totalPage + 1) {
                         this.onPageChange(this.paging.currentPage - 1);
                     }
+                    this.cdr.detectChanges();
                 } catch (error) {
                     console.log(error);
                 }

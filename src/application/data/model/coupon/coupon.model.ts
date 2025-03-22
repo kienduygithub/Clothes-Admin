@@ -70,7 +70,11 @@ export class CouponModel {
             ? '' : DateUtils.formatDateToDDMMYYYY(data.valid_from);
         model.valid_to = data?.valid_to === '*'
             ? '' : DateUtils.formatDateToDDMMYYYY(data.valid_to);
-        model.status = data.status ?? CouponStatus.EXPIRED;
+        model.status = data?.valid_to === '*'
+            ? CouponStatus.ACTIVE
+            : DateUtils.compareDateIOSToToday(data?.valid_to) < 0
+                ? CouponStatus.EXPIRED
+                : CouponStatus.ACTIVE;
 
         return model;
     }
