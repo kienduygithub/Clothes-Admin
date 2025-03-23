@@ -53,7 +53,7 @@ export class AuthService {
         }
     }
 
-    async fetchDetailUser(id: string): Promise<any> {
+    async fetchDetailUser(id: number): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
             const response = await this.serviceCore.GET(

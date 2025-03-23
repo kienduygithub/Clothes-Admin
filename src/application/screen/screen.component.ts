@@ -1,10 +1,11 @@
-import { Component } from "@angular/core";
+import { Component, HostListener } from "@angular/core";
 import { NbIconLibraries, NbMenuItem } from "@nebular/theme";
 import { ImageResource } from "../common/resource/image_resource";
 import { ADMIN_MENU_ITEMS, OWNER_MENU_ITEMS } from "./screen.menu";
 import { AuthManagement } from "../data/management/auth.management";
 import { AppConfig } from "../common/config/app.config";
 import { Roles } from "../common/resource/roles";
+import { WebSocketService } from "../common/service/websocket.service";
 
 @Component({
     selector: 'app-root',
@@ -25,6 +26,7 @@ export class ScreenComponent {
         private iconLibrary: NbIconLibraries,
         private authManagement: AuthManagement,
         private appConfig: AppConfig,
+        private wsService: WebSocketService
     ) {
         this.iconLibrary.registerSvgPack('mainIcon', {
             dashboard_icon: ImageResource.icon_dasb,
@@ -48,13 +50,27 @@ export class ScreenComponent {
                 ? ADMIN_MENU_ITEMS
                 : OWNER_MENU_ITEMS;
         }
-        await this.fetchDetailUser();
+        info.roles === Roles.ADMIN
+            ? this.wsService.connectWebSocket(info.id)
+            : this.wsService.connectWebSocketShop(info.shopId);
+
+        await this.fetchDetailUser(info.id);
     }
 
-    async fetchDetailUser() {
+    @HostListener('window:beforeunload', ['$event'])
+    unloadHandler(event: Event) {
+        const info = this.appConfig.getUserInfo();
+        if (info) {
+            if (info.roles === Roles.ADMIN) {
+                this.wsService.disconnect(info.id);
+            } else if (info.roles === Roles.OWNER) {
+                this.wsService.disconnectShop(info.shopId);
+            }
+        }
+    }
+
+    async fetchDetailUser(id: number) {
         try {
-            const info = this.appConfig.getUserInfo();
-            const id = info.id;
             await this.authManagement.fetchUserDetails(id);
         } catch (error) {
             console.log(error);

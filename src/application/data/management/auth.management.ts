@@ -69,7 +69,7 @@ export class AuthManagement {
         }
     }
 
-    async fetchUserDetails(id: string) {
+    async fetchUserDetails(id: number) {
         try {
             const result = await this.authService.fetchDetailUser(id);
             const response: UserModel[] = result?.body?.users.map(

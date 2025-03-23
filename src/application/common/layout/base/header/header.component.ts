@@ -15,13 +15,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
 import { debounceTime, Observable, Subject, Subscription } from 'rxjs';
 import { AuthUrl } from '../../../../screen/auth/auth.routing';
-import { UserModel } from '../../../../data/model/user/user.model';
 import { AuthService } from '../../../../data/service/auth.service';
 import { AuthManagement } from '../../../../data/management/auth.management';
 import { UserStoreModel } from '../../../../data/model/user/user.store.model';
-// import { AuthManagement } from '../../../../data/management/auth.management';
-// import { EndDeviceService } from '../../../../data/service/end-device.service';
-// import { EndDeviceManagement } from '../../../../data/management/end-device.management';
+import { WebSocketService } from '../../../service/websocket.service';
+import { Roles } from '../../../resource/roles';
 
 @Component({
   selector: 'app-header',
@@ -41,8 +39,6 @@ import { UserStoreModel } from '../../../../data/model/user/user.store.model';
   providers: [
     AuthManagement,
     AuthService
-    // EndDeviceManagement, 
-    // EndDeviceService
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
@@ -68,7 +64,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private appConfig: AppConfig,
     private router: Router,
-    private authManagement: AuthManagement
+    private authManagement: AuthManagement,
+    private wsService: WebSocketService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -99,6 +96,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   async logOut() {
     try {
       this.appConfig.clear();
+      this.userInfo.roles === Roles.ADMIN
+        ? this.wsService.disconnect(this.userInfo.id)
+        : this.wsService.disconnectShop(this.userInfo.shopId);
       this.router.navigate([AuthUrl.SIGNIN]);
     } catch (error) {
       console.log(error);

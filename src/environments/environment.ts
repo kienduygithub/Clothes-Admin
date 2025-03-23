@@ -2,4 +2,5 @@ export const environment = {
     production: true,
     LICENSE_KEY: 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NzIzMjMxOTksImp0aSI6IjQ1OTkwOGE2LTIxODItNDgyOS04NWNkLTk4MDYxYWZhMWM1ZCIsImxpY2Vuc2VkSG9zdHMiOlsiMTI3LjAuMC4xIiwibG9jYWxob3N0IiwiMTkyLjE2OC4qLioiLCIxMC4qLiouKiIsIjE3Mi4qLiouKiIsIioudGVzdCIsIioubG9jYWxob3N0IiwiKi5sb2NhbCJdLCJ1c2FnZUVuZHBvaW50IjoiaHR0cHM6Ly9wcm94eS1ldmVudC5ja2VkaXRvci5jb20iLCJkaXN0cmlidXRpb25DaGFubmVsIjpbImNsb3VkIiwiZHJ1cGFsIl0sImxpY2Vuc2VUeXBlIjoiZGV2ZWxvcG1lbnQiLCJmZWF0dXJlcyI6WyJEUlVQIiwiQk9YIl0sInZjIjoiODNhMDc5NDIifQ.qjlLFiUunn6pLQvUbafPFhf6evz1dXdFjzJf4UKxUnYAPB3biBERayyLibEQxbBnBARxZ03nVWWCOuFW81FVdQ',
     // CLOUD_SERVICES_TOKEN_URL: 'https://6jg3m4vvxnt6.cke-cs.com/token/dev/6d903de3cba3a38532a504987cf31f5d73d47d2436778cd976bc80622dc0?limit=10',
+    SOCKET_SERVER: 'http://localhost:3001'
 };  
