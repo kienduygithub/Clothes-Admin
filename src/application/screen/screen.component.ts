@@ -1,11 +1,12 @@
 import { Component, HostListener } from "@angular/core";
-import { NbIconLibraries, NbMenuItem } from "@nebular/theme";
+import { NbIconLibraries, NbMenuItem, NbMenuService } from "@nebular/theme";
 import { ImageResource } from "../common/resource/image_resource";
 import { ADMIN_MENU_ITEMS, OWNER_MENU_ITEMS } from "./screen.menu";
 import { AuthManagement } from "../data/management/auth.management";
 import { AppConfig } from "../common/config/app.config";
 import { Roles } from "../common/resource/roles";
 import { WebSocketService } from "../common/service/websocket.service";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'app-root',
@@ -26,7 +27,9 @@ export class ScreenComponent {
         private iconLibrary: NbIconLibraries,
         private authManagement: AuthManagement,
         private appConfig: AppConfig,
-        private wsService: WebSocketService
+        private wsService: WebSocketService,
+        private router: Router,
+        private menuService: NbMenuService
     ) {
         this.iconLibrary.registerSvgPack('mainIcon', {
             dashboard_icon: ImageResource.icon_dasb,
@@ -43,7 +46,8 @@ export class ScreenComponent {
             account_setting: ImageResource.account_icon,
             branches: ImageResource.branch_icon,
             app_internet_icon: ImageResource.app_internet_icon,
-            tools_icon: ImageResource.tool_icon
+            tools_icon: ImageResource.tool_icon,
+            icon_groups: ImageResource.icon_groups,
         });
     }
 
@@ -58,6 +62,21 @@ export class ScreenComponent {
             ? this.wsService.connectWebSocket(info.id)
             : this.wsService.connectWebSocketShop(info.shopId);
 
+        this.menuService.onSubmenuToggle().subscribe((event: { tag: string, item: NbMenuItem }) => {
+            let selectedTabParent = event.item;
+            let subMenuItems = event.item.children;
+
+            if (
+                subMenuItems &&
+                subMenuItems.length > 0 &&
+                !this.router.url.startsWith(`${selectedTabParent.link}`)
+            ) {
+                const firstTabMenuChild = subMenuItems[0];
+                if (firstTabMenuChild.link) {
+                    this.router.navigate([firstTabMenuChild.link]);
+                }
+            }
+        })
         await this.fetchDetailUser(info.id);
     }
 

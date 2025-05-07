@@ -63,7 +63,8 @@ nb-layout-column {
   &.icon_vpn,
   &.icon_system,
   &.icon_tool,
-  &.icon_app_internet {
+  &.icon_app_internet,
+  &.icon_groups {
     &.active {
       display: none;
     }
@@ -79,7 +80,8 @@ nb-layout-column {
   &.icon_vpn,
   &.icon_system,
   &.icon_tool,
-  &.icon_app_internet {
+  &.icon_app_internet,
+  &.icon_groups {
     &.inactive {
       display: none;
     }

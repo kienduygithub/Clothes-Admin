@@ -14,7 +14,7 @@ export const ADMIN_MENU_ITEMS: any[] = [
     },
     {
         title: 'Nhân sự',
-        icon: { icon: 'system_icon', pack: 'mainIcon' },
+        icon: { icon: 'icon_groups', pack: 'mainIcon' },
         link: '/' + EmployeeUrl.EMPLOYEE_LIST,
         pathMatch: 'prefix',
     },
