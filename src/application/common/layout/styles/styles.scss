@@ -23,21 +23,29 @@
   @include nb-overrides();
 
   nb-menu .menu-item>.menu-items>.menu-item a.active {
-    color: #3366ff;
+    color: #1890FF;
   }
 
   nb-menu .menu-item a {
-    font-weight: 500;
+    font-weight: 400 !important;
   }
 
   nb-menu .menu-item a.active {
     color: #006cb5;
-    font-weight: 500;
+    font-weight: 400;
   }
 
   nb-menu .menu-item a.active .menu-icon {
-    color: #006cb5;
-    font-weight: 500;
+    color: #006cb5 !important;
+    font-weight: 400 !important;
+  }
+
+  nb-menu .menu-item a:hover {
+    color: #1890FF !important;
+  }
+
+  nb-menu .menu-item>.menu-items>.menu-item a:hover {
+    color: #1890FF !important;
   }
 
   h5 {
@@ -49,8 +57,8 @@
   }
 
   nb-menu .menu-item>.menu-items>.menu-item>a {
-    margin-left: 20px;
-    font-weight: 500;
+    margin-left: 30px !important;
+    font-weight: 400 !important;
   }
 
   .menu-icon {
@@ -493,6 +501,56 @@ li {
 
 nb-menu .menu-item .menu-icon {
   margin: unset !important;
+}
+
+nb-menu .menu-items .menu-item {
+  border: none !important;
+  position: relative;
+}
+
+.menu-item a .menu-title {
+  padding-left: 6px;
+}
+
+nb-sidebar.menu-sidebar.compacted nb-menu ul.menu-items {
+  width: 3.9375rem !important;
+}
+
+nb-sidebar.menu-sidebar.compacted nb-menu ul.menu-items li.menu-item {
+  width: 56px !important;
+}
+
+nb-sidebar.menu-sidebar.expanded nb-menu ul.menu-items {
+  width: 16.4375rem !important;
+}
+
+nb-sidebar.menu-sidebar.compacted nb-menu .menu-item a.active::before {
+  background-color: #40A9FF !important;
+}
+
+nb-sidebar.menu-sidebar.expanded nb-menu>.menu-items>.menu-item a.active nb-icon {
+  color: #40A9FF;
+}
+
+nb-sidebar.menu-sidebar.expanded nb-menu>.menu-items>.menu-item a.active {
+  background-color: transparent !important;
+}
+
+nb-sidebar.menu-sidebar.expanded nb-menu>.menu-items>.menu-item a.active::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  width: 5px;
+  height: 48px;
+  background-color: #40A9FF;
+}
+
+nb-sidebar.menu-sidebar.expanded nb-menu .menu-items li.menu-item .menu-items li.menu-item a.active::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  width: 0;
+  height: 0;
 }
 
 .sub-title {

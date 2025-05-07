@@ -8,13 +8,13 @@ import { RegisterShopURL } from "./register-shop/register-shop.routing";
 export const ADMIN_MENU_ITEMS: any[] = [
     {
         title: 'Tổng quan',
-        icon: { icon: 'firewall_icon', pack: 'mainIcon' },
+        icon: { icon: 'dashboard_icon', pack: 'mainIcon' },
         link: '/' + OverviewUrl.ADMIN_OVERVIEW,
         pathMatch: 'prefix',
     },
     {
         title: 'Nhân sự',
-        icon: { icon: 'group_icon', pack: 'mainIcon' },
+        icon: { icon: 'system_icon', pack: 'mainIcon' },
         link: '/' + EmployeeUrl.EMPLOYEE_LIST,
         pathMatch: 'prefix',
     },
@@ -26,18 +26,16 @@ export const ADMIN_MENU_ITEMS: any[] = [
     },
     {
         title: 'Cửa hàng',
-        icon: { icon: 'firewall_icon', pack: 'mainIcon' },
+        icon: { icon: 'reports_icon', pack: 'mainIcon' },
         link: '/admin/shop',
         pathMatch: 'prefix',
         children: [
             {
-                icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh sách cửa hàng',
                 link: '/admin/shop/applied/list',
                 pathMatch: 'prefix'
             },
             {
-                icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh sách xét duyệt',
                 link: '/' + RegisterShopURL.REGISTER_SHOP_URL,
                 pathMatch: 'prefix'
@@ -60,7 +58,6 @@ export const OWNER_MENU_ITEMS: any[] = [
         pathMatch: 'prefix',
         children: [
             {
-                icon: { icon: 'dot_icon', pack: 'mainIcon' },
                 title: 'Danh sách sản phẩm',
                 link: '/' + ProductUrl.PRODUCT_LIST,
                 pathMatch: 'prefix'

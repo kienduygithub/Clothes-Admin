@@ -39,7 +39,11 @@ export class ScreenComponent {
             system_icon: ImageResource.icon_system,
             vpn_icon: ImageResource.icon_vpn,
             dot_icon: ImageResource.dot_icon,
-            group_icon: ImageResource.icon_group
+            network_appliances: ImageResource.network_appliances_icon,
+            account_setting: ImageResource.account_icon,
+            branches: ImageResource.branch_icon,
+            app_internet_icon: ImageResource.app_internet_icon,
+            tools_icon: ImageResource.tool_icon
         });
     }
 

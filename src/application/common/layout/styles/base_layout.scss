@@ -24,26 +24,70 @@ nb-layout-column {
   overflow-y: auto;
 }
 
+::ng-deep nb-menu ul.menu-items {
+  overflow-y: scroll !important;
+  max-height: calc(100vh - 120px);
+
+  li ul.menu-items {
+    overflow: hidden !important;
+  }
+}
+
 ::ng-deep nb-menu .menu-item a.active {
-  background-color: white;
-  color: #3366ff;
+  background-color: #E6F7FF !important;
+  color: #1890FF !important;
 }
 
 ::ng-deep nb-menu .menu-item a.active .menu-icon {
-  color: #3366ff;
+  color: #1890FF !important;
+}
+
+// ::ng-deep nb-menu .menu-item a.active .menu-icon * {
+//   stroke: #3366ff;
+//   fill: none;
+
+//   &.icon_firewall,
+//   &.dot_icon {
+//     path {
+//       stroke-width: 0;
+//       fill: #3366ff;
+//     }
+//   }
+// }
+::ng-deep nb-menu .menu-item a:not(.active) .menu-icon * {
+
+  &.icon_dasb,
+  &.icon_reports,
+  &.icon_network,
+  &.icon_firewall,
+  &.icon_vpn,
+  &.icon_system,
+  &.icon_tool,
+  &.icon_app_internet {
+    &.active {
+      display: none;
+    }
+  }
 }
 
 ::ng-deep nb-menu .menu-item a.active .menu-icon * {
-  stroke: #3366ff;
-  fill: none;
 
+  &.icon_dasb,
+  &.icon_reports,
+  &.icon_network,
   &.icon_firewall,
-  &.dot_icon {
-    path {
-      stroke-width: 0;
-      fill: #3366ff;
+  &.icon_vpn,
+  &.icon_system,
+  &.icon_tool,
+  &.icon_app_internet {
+    &.inactive {
+      display: none;
     }
   }
+}
+
+nb-menu .menu-item>.menu-items>.menu-item a.active {
+  color: #1890FF !important;
 }
 
 ::ng-deep {
@@ -92,7 +136,7 @@ nb-layout-column {
 }
 
 .sidebar-toggle:hover .collapse-text {
-  color: var(--menu-item-hover-text-color);
+  color: #1890FF !important;
 }
 
 .collapse-text {
