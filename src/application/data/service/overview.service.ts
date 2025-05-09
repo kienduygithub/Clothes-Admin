@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { AppConfig } from "../../common/config/app.config";
 import { ServiceCore } from "../../common/service/service-core";
+import { GroupDate } from "../../common/resource/group-date";
+import { OrderStatus } from "../../common/resource/status";
 
 @Injectable()
 export class OverviewService {
@@ -27,4 +29,143 @@ export class OverviewService {
             throw error;
         }
     }
+
+    async fetchRevenueOvertime(
+        startDate: Date,
+        endDate: Date,
+        groupBy: GroupDate = GroupDate.DAY
+    ): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `overview/stats/by-period`,
+                {
+                    startDate,
+                    endDate,
+                    groupBy
+                }
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchOrderStats(
+        startDate: Date,
+        endDate: Date,
+        groupBy: GroupDate = GroupDate.DAY,
+        status?: OrderStatus
+    ): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `overview/stats/order/by-status-or-period`,
+                {
+                    startDate,
+                    endDate,
+                    groupBy,
+                    status
+                }
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchTopSellingProducts(
+        startDate: Date,
+        endDate: Date,
+        limit = 10
+    ): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `overview/stats/product/top-selling`,
+                {
+                    startDate,
+                    endDate,
+                    limit
+                }
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchCustomerStats(
+        startDate: Date,
+        endDate: Date,
+        limit = 5
+    ): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `overview/stats/customer/total-and-top-rank`,
+                {
+                    startDate,
+                    endDate,
+                    limit
+                }
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchLowStockProducts(
+        minStock = 10
+    ): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `overview/stats/product/low-stock`,
+                {
+                    minStock
+                }
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchOrderCompletionStats(
+        startDate: Date,
+        endDate: Date,
+        groupBy: GroupDate = GroupDate.DAY,
+        status?: OrderStatus
+    ): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `overview/stats/order/completion-rate`,
+                {
+                    startDate,
+                    endDate,
+                    groupBy,
+                    status
+                }
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
