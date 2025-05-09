@@ -13,6 +13,8 @@ import { AuthRouting } from "./screen/auth/auth.routing";
 import { AuthService } from "./data/service/auth.service";
 import { AuthInterceptor } from "./common/utils/auth.interceptor";
 import { AkitaNgDevtools } from "@datorama/akita-ngdevtools";
+import { NgxEchartsModule } from "ngx-echarts";
+import * as echarts from 'echarts/core';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -49,6 +51,7 @@ const ANGULAR_LIB = [
     AkitaNgDevtools.forRoot({
         maxAge: 25,
     }),
+    NgxEchartsModule.forRoot({ echarts }),
 ];
 
 @NgModule({

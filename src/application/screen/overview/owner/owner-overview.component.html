@@ -1,3 +1,46 @@
-<div>
-    Owner Overview
+<div class="screen">
+    <div class="layout-size">
+        <div class="d-flex align-items-center mb-2 header-form">
+            <span class="header-title-text">Tổng quan</span>
+        </div>
+        <!-- Overview Stats -->
+        <div class="row-container">
+            <div class="box-overview-stats">
+                <div class="overview-stats">
+                    <div class="title">Tổng doanh thu</div>
+                    <div class="value">{{overviewStats.totalRevenue || 0}} VND</div>
+                </div>
+                <div class="icon-stats revenue">
+                    <img [src]="icon_money_bag" />
+                </div>
+            </div>
+            <div class="box-overview-stats">
+                <div class="overview-stats">
+                    <div class="title">Tổng đơn hàng</div>
+                    <div class="value">{{overviewStats.totalOrders || 0}}</div>
+                </div>
+                <div class="icon-stats order">
+                    <img [src]="icon_complete_order" />
+                </div>
+            </div>
+            <div class="box-overview-stats">
+                <div class="overview-stats">
+                    <div class="title">Sản phẩm bán</div>
+                    <div class="value">{{overviewStats.totalSoldProducts || 0}}</div>
+                </div>
+                <div class="icon-stats sold-product">
+                    <img [src]="icon_product_widge" />
+                </div>
+            </div>
+            <div class="box-overview-stats">
+                <div class="overview-stats">
+                    <div class="title">Khách hàng</div>
+                    <div class="value">{{overviewStats.totalCustomers || 0}}</div>
+                </div>
+                <div class="icon-stats customer">
+                    <img [src]="icon_group_customer" />
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

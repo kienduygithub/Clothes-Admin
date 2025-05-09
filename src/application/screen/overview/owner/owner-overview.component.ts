@@ -6,21 +6,46 @@ import { OverviewService } from "../../../data/service/overview.service";
 import { LowStockProductModel, OrderCompletionRateModel, OrderStatsModel, OverviewStatsModel, RevenueStatsModel, TopCustomerModel, TopSellingProductModel } from "../../../data/model/overview/overview.model";
 import { GroupDate } from "../../../common/resource/group-date";
 import { OrderStatus } from "../../../common/resource/status";
+import { NbProgressBarModule } from '@nebular/theme';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+import * as echarts from 'echarts/core';
+import { BarChart, LineChart, LinesChart } from 'echarts/charts';
+import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+import { EChartsCoreOption } from 'echarts/core';
+import { Router } from "@angular/router";
+import { TranslateModule } from "@ngx-translate/core";
+import { ImageResource } from "../../../common/resource/image_resource";
+echarts.use([
+    BarChart,
+    LineChart,
+    LinesChart,
+    GridComponent,
+    LegendComponent,
+    TitleComponent,
+    ToolboxComponent,
+    TooltipComponent,
+    CanvasRenderer
+]);
 
 const NB_LIBS = [
     NbIconModule,
     NbInputModule,
     NbButtonModule,
     NbTooltipModule,
+    NbProgressBarModule
 ]
 
 const ANGULAR_MODULES = [
     CommonModule,
+    TranslateModule,
+    // NgxEchartsDirective
 ]
 
 const PROVIDERS = [
     OverviewManagement,
-    OverviewService
+    OverviewService,
+    provideEchartsCore({ echarts })
 ]
 
 @Component({
@@ -36,6 +61,11 @@ const PROVIDERS = [
 })
 
 export class OwnerOverviewComponent implements OnInit {
+    icon_money_bag: string = ImageResource.icon_money_bag;
+    icon_complete_order: string = ImageResource.icon_complete_order;
+    icon_product_widge: string = ImageResource.icon_product_widge;
+    icon_group_customer: string = ImageResource.icon_group_customer;
+
     overviewStats!: OverviewStatsModel;
     revenueStats!: RevenueStatsModel;
     orderStats!: OrderStatsModel;
@@ -48,6 +78,7 @@ export class OwnerOverviewComponent implements OnInit {
     past14Days = new Date();
 
     constructor(
+        private router: Router,
         private overviewMana: OverviewManagement
     ) { }
 

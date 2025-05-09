@@ -165,7 +165,10 @@ export class ImageResource {
   static icon_edit_white_with_line: string = 'assets/icon/icon_edit_white_with_line.svg';
   static icon_close_refuse: string = 'assets/icon/icon_close_refuse.svg';
   static icon_tick_accept: string = 'assets/icon/icon_tick_accept.svg';
-
+  static icon_money_bag: string = 'assets/icon/icon_money_bag.svg';
+  static icon_group_customer: string = 'assets/icon/icon_group_customer.svg';
+  static icon_product_widge: string = 'assets/icon/icon_product_widge.svg';
+  static icon_complete_order: string = 'assets/icon/icon_complete_order.svg';
 
   static image_not_found: string = 'assets/image/image_not_found.jpg';
   static image_no_avatar: string = 'assets/image/no_avatar.png';
