@@ -63,7 +63,7 @@ const PROVIDERS = [
     imports: [
         ...NB_LIBS,
         ...ANGULAR_MODULES,
-        ...PIPES,
+        // ...PIPES,
     ],
     providers: [...PROVIDERS]
 })
