@@ -185,7 +185,7 @@ export class OwnerOverviewComponent implements OnInit {
             this.revenueChartOptions = {
                 xAxis: { show: false },
                 yAxis: { show: false },
-                series: [{ type: 'line', data: [], show: false }]
+                series: [{ type: 'bar', data: [], show: false }]
             };
             return;
         }
@@ -200,7 +200,7 @@ export class OwnerOverviewComponent implements OnInit {
                     color: '#515151',
                 },
                 axisLine: { show: true },
-                axisTick: { show: false }
+                axisTick: { show: true }
             },
             yAxis: {
                 type: 'value',
@@ -216,40 +216,33 @@ export class OwnerOverviewComponent implements OnInit {
                         type: 'dashed'
                     }
                 },
-                min: 0 // Đảm bảo trục Y bắt đầu từ 0
+                min: 0
             },
             series: [{
-                type: 'line',
+                type: 'bar',
                 data: this.revenueStats.revenues.map(item => item.revenue),
-                lineStyle: {
-                    color: '#69C0FF',
-                    width: 2
+                itemStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        { offset: 0, color: '#69C0FF' },
+                        { offset: 1, color: '#F5F5F5' }
+                    ]),
+                    borderRadius: [5, 5, 0, 0] // Bo góc trên cùng
                 },
-                areaStyle: {
-                    color: {
-                        type: 'linear',
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [
-                            { offset: 0, color: 'rgba(105, 192, 255, 0.3)' },
-                            { offset: 1, color: 'rgba(105, 192, 255, 0)' }
-                        ]
-                    }
-                },
+                barWidth: '30%', // Độ rộng cột
                 label: {
                     show: true,
                     position: 'top',
                     formatter: '{c} VNĐ',
                     fontSize: 12,
                     color: '#515151'
-                },
-                smooth: true
+                }
             }],
             tooltip: {
                 trigger: 'axis',
-                formatter: '{b}: {c} VNĐ',
+                formatter: (params: any) => `<div style="padding: 5px; background: #fff; border: 1px solid #ccc; border-radius: 3px;">
+                    <strong>${params[0].name}</strong><br/>
+                    Doanh thu: <span style="color: #69C0FF">${params[0].value} VNĐ</span>
+                </div>`,
                 textStyle: { fontSize: 12 }
             },
             grid: {
