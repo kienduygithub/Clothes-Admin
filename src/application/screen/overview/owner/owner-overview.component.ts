@@ -196,7 +196,6 @@ export class OwnerOverviewComponent implements OnInit {
                 // OrderStatus.PENDING
             );
             this.orderCompletionRate = response;
-            console.log(this.orderCompletionRate)
         } catch (error) {
             console.log(error);
         }
@@ -397,9 +396,14 @@ export class OwnerOverviewComponent implements OnInit {
 
     initOrderCompletionChart() {
         if (!this.orderCompletionRate || !this.orderCompletionRate.summary) {
-
             return;
         }
+
+        // Tính các trạng thái khác dựa trên total (giả định total bao gồm tất cả các trạng thái)
+        const total = this.orderCompletionRate.summary.total || 0;
+        const completed = this.orderCompletionRate.summary.completed || 0;
+        const canceled = this.orderCompletionRate.summary.canceled || 0;
+        const pending = total - completed - canceled; // Giả định pending là phần còn lại
 
         this.orderCompletionChartOptions = {
             tooltip: {
@@ -408,19 +412,19 @@ export class OwnerOverviewComponent implements OnInit {
             },
             legend: {
                 orient: 'horizontal',
-                bottom: '5%',
+                bottom: '0',
                 left: 'center',
                 type: 'scroll',
                 itemWidth: 20,
-                itemHeight: 14,
+                itemHeight: 10,
                 textStyle: { color: '#515151', fontSize: 12 }
             },
             series: [{
                 name: 'Tỉ lệ hoàn thành',
                 type: 'pie',
-                radius: ['40%', '70%'],
-                center: ['50%', '50%'],
+                radius: ['30%', '60%'],
                 avoidLabelOverlap: false,
+                minAngle: 20,
                 label: {
                     show: true,
                     formatter: '{b}: {d}%',
@@ -432,17 +436,18 @@ export class OwnerOverviewComponent implements OnInit {
                 },
                 labelLine: { show: true },
                 data: [
-                    { value: this.orderCompletionRate.summary.completed || 0, name: 'Hoàn thành' },
-                    { value: this.orderCompletionRate.summary.canceled || 0, name: 'Hủy bỏ' }
+                    { value: completed, name: 'Hoàn thành' },
+                    { value: pending > 0 ? pending : 0, name: 'Đang chờ' },
+                    { value: canceled, name: 'Hủy bỏ' }
                 ],
                 itemStyle: {
                     color: function (params: any) {
-                        const colors = ['#4BC0C0', '#9966FF'];
+                        const colors = ['#4BC0C0', '#69C0FF', '#9966FF'];
                         return colors[params.dataIndex % colors.length];
                     }
                 }
             }],
-            grid: { left: '0', right: '0', bottom: '15%', top: '15%', containLabel: true }
+            grid: { left: '0', right: '0', bottom: '0', top: '15%', containLabel: true }
         };
     }
 

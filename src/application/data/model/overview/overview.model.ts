@@ -346,6 +346,8 @@ export class OrderCompletionRateModel {
     }
 
     convertObj(data: any) {
+        console.log(data);
+        console.log(data.summary);
         const model = new OrderCompletionRateModel();
         model.byPeriod = data?.byPeriod?.map((item: any) => new CompletionRatePeriodModel().convertObj(item)) ?? [];
         model.summary = data?.summary ? new CompletionRateSummaryModel().convertObj(data.summary) : new CompletionRateSummaryModel();

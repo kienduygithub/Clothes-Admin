@@ -128,8 +128,8 @@ export class OverviewManagement {
     ): Promise<OrderCompletionRateModel> {
         try {
             const result = await this.overviewService.fetchOrderCompletionStats(startDate, endDate, groupBy, status);
-            const response: OrderCompletionRateModel = new OrderCompletionRateModel(result?.body)
-
+            const response: OrderCompletionRateModel = new OrderCompletionRateModel().convertObj(result?.body)
+            console.log('>>>', response);
             return response;
         } catch (error) {
             throw error;
