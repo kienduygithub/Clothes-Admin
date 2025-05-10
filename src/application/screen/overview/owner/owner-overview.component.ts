@@ -16,6 +16,7 @@ import { EChartsCoreOption } from 'echarts/core';
 import { Router } from "@angular/router";
 import { TranslateModule } from "@ngx-translate/core";
 import { ImageResource } from "../../../common/resource/image_resource";
+import { AppConfig } from "../../../common/config/app.config";
 echarts.use([
     BarChart,
     PieChart,
@@ -71,6 +72,7 @@ export class OwnerOverviewComponent implements OnInit {
     image_chart_pie: string = ImageResource.image_chart_pie;
     image_chart_bar: string = ImageResource.image_chart_bar;
 
+    preImage = '';
     overviewStats!: OverviewStatsModel;
     revenueStats!: RevenueStatsModel;
     orderStats!: OrderStatsModel;
@@ -89,10 +91,12 @@ export class OwnerOverviewComponent implements OnInit {
 
     constructor(
         private router: Router,
+        private appConfig: AppConfig,
         private overviewMana: OverviewManagement
     ) { }
 
     async ngOnInit(): Promise<any> {
+        this.preImage = this.appConfig.getPreImage() ?? '';
         this.past14Days.setDate(this.today.getDate() - 14)
         await this.fetchShopOverviewStats();
         await this.fetchRevenueOvertime();
@@ -102,7 +106,6 @@ export class OwnerOverviewComponent implements OnInit {
         await this.fetchLowStockProducts();
         await this.fetchOrderCompletionStats();
         this.initRevenueChart();
-        this.initTopSellingChart();
         this.initOrderPieChart();
     }
 
@@ -256,76 +259,6 @@ export class OwnerOverviewComponent implements OnInit {
                 left: '3%',
                 right: '3%',
                 bottom: '0',
-                top: '10%',
-                containLabel: true
-            }
-        };
-    }
-
-    initTopSellingChart() {
-        if (!this.topSellingProducts || this.topSellingProducts.length === 0) {
-            return;
-        }
-
-        this.topSellingChartOptions = {
-            xAxis: {
-                type: 'category',
-                data: this.topSellingProducts.map(item => item.product?.product_name || `Sản phẩm ${item.id}`),
-                axisLabel: {
-                    rotate: 45, // Xoay nhãn nếu tên sản phẩm dài
-                    fontSize: 12,
-                    color: '#515151'
-                },
-                axisLine: { show: true },
-                axisTick: { show: false }
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}',
-                    fontSize: 12,
-                    color: '#515151'
-                },
-                axisLine: { show: false },
-                splitLine: {
-                    lineStyle: {
-                        color: '#E0E0E0',
-                        type: 'dashed'
-                    }
-                },
-                min: 0
-            },
-            series: [{
-                type: 'bar',
-                data: this.topSellingProducts.map(item => item.totalQuantity),
-                itemStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        { offset: 0, color: '#69C0FF' },
-                        { offset: 1, color: '#A3DAFF' }
-                    ]),
-                    borderRadius: [5, 5, 0, 0]
-                },
-                barWidth: '40%',
-                label: {
-                    show: true,
-                    position: 'top',
-                    formatter: '{c}',
-                    fontSize: 12,
-                    color: '#515151'
-                }
-            }],
-            tooltip: {
-                trigger: 'axis',
-                formatter: (params: any) => `<div style="padding: 5px; background: #fff; border: 1px solid #ccc; border-radius: 3px;">
-                    <strong>${params[0].name}</strong><br/>
-                    Số lượng: <span style="color: #69C0FF">${params[0].value}</span>
-                </div>`,
-                textStyle: { fontSize: 12 }
-            },
-            grid: {
-                left: '3%',
-                right: '3%',
-                bottom: '15%', // Tăng bottom để chứa nhãn xoay
                 top: '10%',
                 containLabel: true
             }

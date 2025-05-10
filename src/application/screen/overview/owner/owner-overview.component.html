@@ -61,10 +61,33 @@
                 <div class="box-chart-title">
                     Sản phẩm bán chạy
                 </div>
-                <div class="no-data-wrapper">
+                <div *ngIf="topSellingProducts.length === 0" class="no-data-wrapper">
                     <img [src]="image_chart_bar" />
                     <span class="no-data-text">Không có dữ liệu</span>
                 </div>
+                <table *ngIf="topSellingProducts.length > 0" class="top-selling-table">
+                    <thead>
+                        <tr>
+                            <th>Ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Màu sắc</th>
+                            <th>Kích thước</th>
+                            <th>Số lượng bán</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let product of topSellingProducts">
+                            <td>
+                                <img src="{{preImage + '/' + product.image_url}}"
+                                    alt="{{product.product?.product_name}}" style="width: 60px; height: 60px;">
+                            </td>
+                            <td>{{product.product?.product_name }}</td>
+                            <td>{{product.color?.color_name}}</td>
+                            <td>{{product.size?.size_code }}</td>
+                            <td>{{product.totalQuantity}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="box-chart status-order">
                 <div class="box-chart-title">

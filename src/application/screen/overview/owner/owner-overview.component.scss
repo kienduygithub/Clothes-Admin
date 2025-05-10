@@ -167,3 +167,31 @@
     text-align: center;
     color: #828282;
 }
+
+
+.top-selling-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f5f5f5;
+        font-weight: bold;
+    }
+
+    img {
+        border-radius: 4px;
+        object-fit: cover;
+    }
+
+    tr:hover {
+        background-color: #f9f9f9;
+    }
+}
