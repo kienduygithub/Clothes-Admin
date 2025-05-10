@@ -191,11 +191,6 @@ export class OwnerOverviewComponent implements OnInit {
 
     initRevenueChart() {
         if (!this.revenueStats || !this.revenueStats.revenues) {
-            this.revenueChartOptions = {
-                xAxis: { show: false },
-                yAxis: { show: false },
-                series: [{ type: 'bar', data: [], show: false }]
-            };
             return;
         }
 
@@ -269,11 +264,6 @@ export class OwnerOverviewComponent implements OnInit {
 
     initTopSellingChart() {
         if (!this.topSellingProducts || this.topSellingProducts.length === 0) {
-            this.topSellingChartOptions = {
-                xAxis: { show: false },
-                yAxis: { show: false },
-                series: [{ type: 'bar', data: [], show: false }]
-            };
             return;
         }
 
@@ -350,12 +340,14 @@ export class OwnerOverviewComponent implements OnInit {
         this.orderPieChartOptions = {
             tooltip: {
                 trigger: 'item',
-                formatter: '{b}: {c} ({d}%)',
+                formatter: '{b}: {c} ({d}%)'
             },
             legend: {
-                orient: 'vertical',
-                left: 'center',
+                orient: 'horizontal',
                 bottom: 'bottom',
+                type: 'scroll',
+                itemWidth: 20,
+                itemHeight: 14,
                 textStyle: {
                     color: '#515151',
                     fontSize: 12
@@ -364,8 +356,9 @@ export class OwnerOverviewComponent implements OnInit {
             series: [{
                 name: 'Trạng thái đơn hàng',
                 type: 'pie',
-                radius: ['30%', '70%'],
+                radius: ['30%', '60%'],
                 avoidLabelOverlap: false,
+                minAngle: 5,
                 label: {
                     show: true,
                     formatter: '{b}: {c}',
@@ -391,15 +384,15 @@ export class OwnerOverviewComponent implements OnInit {
                 ],
                 itemStyle: {
                     color: function (params: any) {
-                        const colors = ['#69C0FF', '#FF6384', '#FFCD56', '#4BC0C0', '#9966FF']; // Màu rõ ràng: xanh, hồng, vàng, xanh lá, tím
+                        const colors = ['#69C0FF', '#FF6384', '#FFCD56', '#4BC0C0', '#9966FF'];
                         return colors[params.dataIndex % colors.length];
                     }
                 }
             }],
             grid: {
-                left: '0%',
+                left: '0',
                 right: '0',
-                bottom: '0%',
+                bottom: '15%',
                 top: '0',
                 containLabel: true
             }

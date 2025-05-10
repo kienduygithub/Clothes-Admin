@@ -14,7 +14,6 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: wrap;
     margin-bottom: 20px;
 }
 
@@ -89,7 +88,6 @@
 }
 
 .box-chart {
-    gap: 16px;
     border-radius: 16px;
     padding: 16px;
     background-color: #FFFFFF;
@@ -105,12 +103,12 @@
 
 .box-chart.status-order {
     flex: 1;
-    height: 300px;
+    height: 320px;
 }
 
 .box-chart.top-selling {
     flex: 2;
-    height: 300px;
+    height: 320px;
 }
 
 .box-chart.top-customer {
