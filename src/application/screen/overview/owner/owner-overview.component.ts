@@ -9,7 +9,7 @@ import { OrderStatus } from "../../../common/resource/status";
 import { NbProgressBarModule } from '@nebular/theme';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
-import { BarChart, LineChart, LinesChart } from 'echarts/charts';
+import { BarChart, LineChart, LinesChart, PieChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { EChartsCoreOption } from 'echarts/core';
@@ -18,6 +18,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { ImageResource } from "../../../common/resource/image_resource";
 echarts.use([
     BarChart,
+    PieChart,
     LineChart,
     LinesChart,
     GridComponent,
@@ -83,6 +84,8 @@ export class OwnerOverviewComponent implements OnInit {
 
     /** Echarts options **/
     revenueChartOptions: any;
+    topSellingChartOptions: any;
+    orderPieChartOptions: any;
 
     constructor(
         private router: Router,
@@ -99,6 +102,8 @@ export class OwnerOverviewComponent implements OnInit {
         await this.fetchLowStockProducts();
         await this.fetchOrderCompletionStats();
         this.initRevenueChart();
+        this.initTopSellingChart();
+        this.initOrderPieChart();
     }
 
     async fetchShopOverviewStats() {
@@ -257,6 +262,145 @@ export class OwnerOverviewComponent implements OnInit {
                 right: '3%',
                 bottom: '0',
                 top: '10%',
+                containLabel: true
+            }
+        };
+    }
+
+    initTopSellingChart() {
+        if (!this.topSellingProducts || this.topSellingProducts.length === 0) {
+            this.topSellingChartOptions = {
+                xAxis: { show: false },
+                yAxis: { show: false },
+                series: [{ type: 'bar', data: [], show: false }]
+            };
+            return;
+        }
+
+        this.topSellingChartOptions = {
+            xAxis: {
+                type: 'category',
+                data: this.topSellingProducts.map(item => item.product?.product_name || `Sản phẩm ${item.id}`),
+                axisLabel: {
+                    rotate: 45, // Xoay nhãn nếu tên sản phẩm dài
+                    fontSize: 12,
+                    color: '#515151'
+                },
+                axisLine: { show: true },
+                axisTick: { show: false }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}',
+                    fontSize: 12,
+                    color: '#515151'
+                },
+                axisLine: { show: false },
+                splitLine: {
+                    lineStyle: {
+                        color: '#E0E0E0',
+                        type: 'dashed'
+                    }
+                },
+                min: 0
+            },
+            series: [{
+                type: 'bar',
+                data: this.topSellingProducts.map(item => item.totalQuantity),
+                itemStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        { offset: 0, color: '#69C0FF' },
+                        { offset: 1, color: '#A3DAFF' }
+                    ]),
+                    borderRadius: [5, 5, 0, 0]
+                },
+                barWidth: '40%',
+                label: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{c}',
+                    fontSize: 12,
+                    color: '#515151'
+                }
+            }],
+            tooltip: {
+                trigger: 'axis',
+                formatter: (params: any) => `<div style="padding: 5px; background: #fff; border: 1px solid #ccc; border-radius: 3px;">
+                    <strong>${params[0].name}</strong><br/>
+                    Số lượng: <span style="color: #69C0FF">${params[0].value}</span>
+                </div>`,
+                textStyle: { fontSize: 12 }
+            },
+            grid: {
+                left: '3%',
+                right: '3%',
+                bottom: '15%', // Tăng bottom để chứa nhãn xoay
+                top: '10%',
+                containLabel: true
+            }
+        };
+    }
+
+    initOrderPieChart() {
+        if (!this.orderStats || !this.orderStats.statusCounts) {
+            return;
+        }
+
+        this.orderPieChartOptions = {
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: {c} ({d}%)',
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'center',
+                bottom: 'bottom',
+                textStyle: {
+                    color: '#515151',
+                    fontSize: 12
+                }
+            },
+            series: [{
+                name: 'Trạng thái đơn hàng',
+                type: 'pie',
+                radius: ['30%', '70%'],
+                avoidLabelOverlap: false,
+                label: {
+                    show: true,
+                    formatter: '{b}: {c}',
+                    fontSize: 12,
+                    color: '#515151'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: 14,
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: true
+                },
+                data: [
+                    { value: this.orderStats.statusCounts.pending, name: 'Đang chờ' },
+                    { value: this.orderStats.statusCounts.paid, name: 'Đã thanh toán' },
+                    { value: this.orderStats.statusCounts.shipped, name: 'Đã vận chuyển' },
+                    { value: this.orderStats.statusCounts.completed, name: 'Hoàn thành' },
+                    { value: this.orderStats.statusCounts.canceled, name: 'Hủy bỏ' }
+                ],
+                itemStyle: {
+                    color: function (params: any) {
+                        const colors = ['#69C0FF', '#FF6384', '#FFCD56', '#4BC0C0', '#9966FF']; // Màu rõ ràng: xanh, hồng, vàng, xanh lá, tím
+                        return colors[params.dataIndex % colors.length];
+                    }
+                }
+            }],
+            grid: {
+                left: '0%',
+                right: '0',
+                bottom: '0%',
+                top: '0',
                 containLabel: true
             }
         };

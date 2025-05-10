@@ -8,7 +8,7 @@
             <div class="box-overview-stats">
                 <div class="overview-stats">
                     <div class="title">Tổng doanh thu</div>
-                    <div class="value">{{overviewStats && overviewStats.totalRevenue || 0}} VNĐ</div>
+                    <div class="value">{{(overviewStats && overviewStats.totalRevenue) || 0}} VNĐ</div>
                 </div>
                 <div class="icon-stats revenue">
                     <img [src]="icon_money_bag" />
@@ -17,7 +17,7 @@
             <div class="box-overview-stats">
                 <div class="overview-stats">
                     <div class="title">Tổng đơn hàng</div>
-                    <div class="value">{{ overviewStats && overviewStats.totalOrders || 0}}</div>
+                    <div class="value">{{(overviewStats && overviewStats.totalOrders)|| 0}}</div>
                 </div>
                 <div class="icon-stats order">
                     <img [src]="icon_complete_order" />
@@ -26,7 +26,7 @@
             <div class="box-overview-stats">
                 <div class="overview-stats">
                     <div class="title">Sản phẩm bán</div>
-                    <div class="value">{{ overviewStats && overviewStats.totalSoldProducts || 0}}</div>
+                    <div class="value">{{ (overviewStats && overviewStats.totalSoldProducts) || 0}}</div>
                 </div>
                 <div class="icon-stats sold-product">
                     <img [src]="icon_product_widge" />
@@ -35,7 +35,7 @@
             <div class="box-overview-stats">
                 <div class="overview-stats">
                     <div class="title">Khách hàng</div>
-                    <div class="value">{{overviewStats && overviewStats.totalCustomers || 0}}</div>
+                    <div class="value">{{(overviewStats && overviewStats.totalCustomers) || 0}}</div>
                 </div>
                 <div class="icon-stats customer">
                     <img [src]="icon_group_customer" />
@@ -68,12 +68,13 @@
             </div>
             <div class="box-chart status-order">
                 <div class="box-chart-title">
-                    Trạng thái đơn hàng
+                    Trạng thái đơn hàng (Tổng: {{ (orderStats && orderStats.totalOrders) || 0 }})
                 </div>
-                <div class="no-data-wrapper">
+                <div *ngIf="!orderPieChartOptions" class="no-data-wrapper">
                     <img [src]="image_chart_pie" />
                     <span class="no-data-text">Không có dữ liệu</span>
                 </div>
+                <div echarts [options]="orderPieChartOptions" class="chart-container"></div>
             </div>
         </div>
 
