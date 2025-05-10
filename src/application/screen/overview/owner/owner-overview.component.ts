@@ -39,7 +39,7 @@ const NB_LIBS = [
 const ANGULAR_MODULES = [
     CommonModule,
     TranslateModule,
-    // NgxEchartsDirective
+    NgxEchartsDirective
 ]
 
 const PROVIDERS = [
@@ -77,6 +77,9 @@ export class OwnerOverviewComponent implements OnInit {
     today = new Date();
     past14Days = new Date();
 
+    /** Echarts options **/
+    revenueChartOptions: any;
+
     constructor(
         private router: Router,
         private overviewMana: OverviewManagement
@@ -91,6 +94,7 @@ export class OwnerOverviewComponent implements OnInit {
         await this.fetchCustomerStats();
         await this.fetchLowStockProducts();
         await this.fetchOrderCompletionStats();
+        this.initRevenueChart();
     }
 
     async fetchShopOverviewStats() {
@@ -176,5 +180,85 @@ export class OwnerOverviewComponent implements OnInit {
         }
     }
 
+    initRevenueChart() {
+        if (!this.revenueStats || !this.revenueStats.revenues) {
+            this.revenueChartOptions = {
+                xAxis: { show: false },
+                yAxis: { show: false },
+                series: [{ type: 'line', data: [], show: false }]
+            };
+            return;
+        }
 
+        this.revenueChartOptions = {
+            xAxis: {
+                type: 'category',
+                data: this.revenueStats.revenues.map(item => this.revenueStats.formatPeriod(item.period, GroupDate.DAY)),
+                axisLabel: {
+                    rotate: 0,
+                    fontSize: 12,
+                    color: '#515151',
+                },
+                axisLine: { show: true },
+                axisTick: { show: false }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value} VNĐ',
+                    fontSize: 12,
+                    color: '#515151'
+                },
+                axisLine: { show: false },
+                splitLine: {
+                    lineStyle: {
+                        color: '#E0E0E0',
+                        type: 'dashed'
+                    }
+                },
+                min: 0 // Đảm bảo trục Y bắt đầu từ 0
+            },
+            series: [{
+                type: 'line',
+                data: this.revenueStats.revenues.map(item => item.revenue),
+                lineStyle: {
+                    color: '#69C0FF',
+                    width: 2
+                },
+                areaStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [
+                            { offset: 0, color: 'rgba(105, 192, 255, 0.3)' },
+                            { offset: 1, color: 'rgba(105, 192, 255, 0)' }
+                        ]
+                    }
+                },
+                label: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{c} VNĐ',
+                    fontSize: 12,
+                    color: '#515151'
+                },
+                smooth: true
+            }],
+            tooltip: {
+                trigger: 'axis',
+                formatter: '{b}: {c} VNĐ',
+                textStyle: { fontSize: 12 }
+            },
+            grid: {
+                left: '3%',
+                right: '3%',
+                bottom: '0',
+                top: '10%',
+                containLabel: true
+            }
+        };
+    }
 }
