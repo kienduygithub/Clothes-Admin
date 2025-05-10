@@ -176,7 +176,9 @@ export class ImageResource {
   static image_fashion_logo: string = 'assets/image/Fashion logo.png';
   static image_fashion_logo_big: string = 'assets/image/fashion_big_logo.png';
   static image_store_logo_upload: string = 'assets/image/store_logo_upload.svg';
-
+  static image_chart_line: string = 'assets/image/image_chart_line.svg';
+  static image_chart_pie: string = 'assets/image/image_chart_pie.svg';
+  static image_chart_bar: string = 'assets/image/image_chart_bar.svg';
 
   // ICON SIDEBAR
   static tool_icon: string = `

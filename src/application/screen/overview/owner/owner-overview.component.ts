@@ -66,6 +66,10 @@ export class OwnerOverviewComponent implements OnInit {
     icon_product_widge: string = ImageResource.icon_product_widge;
     icon_group_customer: string = ImageResource.icon_group_customer;
 
+    image_chart_line: string = ImageResource.image_chart_line;
+    image_chart_pie: string = ImageResource.image_chart_pie;
+    image_chart_bar: string = ImageResource.image_chart_bar;
+
     overviewStats!: OverviewStatsModel;
     revenueStats!: RevenueStatsModel;
     orderStats!: OrderStatsModel;

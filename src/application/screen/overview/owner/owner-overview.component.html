@@ -48,7 +48,11 @@
                 <div class="box-chart-title">
                     Doanh số theo thời gian
                 </div>
-                <div echarts [options]="revenueChartOptions" class="chart-container"></div>
+                <div *ngIf="!revenueChartOptions" class="no-data-wrapper">
+                    <img [src]="image_chart_bar" />
+                    <span class="no-data-text">Không có dữ liệu</span>
+                </div>
+                <div *ngIf="revenueChartOptions" echarts [options]="revenueChartOptions" class="chart-container"></div>
             </div>
         </div>
 
@@ -57,10 +61,18 @@
                 <div class="box-chart-title">
                     Sản phẩm bán chạy
                 </div>
+                <div class="no-data-wrapper">
+                    <img [src]="image_chart_bar" />
+                    <span class="no-data-text">Không có dữ liệu</span>
+                </div>
             </div>
             <div class="box-chart status-order">
                 <div class="box-chart-title">
                     Trạng thái đơn hàng
+                </div>
+                <div class="no-data-wrapper">
+                    <img [src]="image_chart_pie" />
+                    <span class="no-data-text">Không có dữ liệu</span>
                 </div>
             </div>
         </div>
@@ -71,16 +83,28 @@
                     <div class="box-chart-title">
                         Top khách hàng chi tiêu
                     </div>
+                    <div class="no-data-wrapper">
+                        <img [src]="image_chart_line" />
+                        <span class="no-data-text">Không có dữ liệu</span>
+                    </div>
                 </div>
                 <div class="box-chart low-stock">
                     <div class="box-chart-title">
                         Sản phẩm tồn kho thấp
+                    </div>
+                    <div class="no-data-wrapper">
+                        <img [src]="image_chart_bar" />
+                        <span class="no-data-text">Không có dữ liệu</span>
                     </div>
                 </div>
             </div>
             <div class="box-chart complete-rate-order">
                 <div class="box-chart-title">
                     Tỉ lệ hoàn thành đơn hàng
+                </div>
+                <div class="no-data-wrapper">
+                    <img [src]="image_chart_pie" />
+                    <span class="no-data-text">Không có dữ liệu</span>
                 </div>
             </div>
         </div>

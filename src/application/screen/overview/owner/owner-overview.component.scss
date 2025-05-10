@@ -152,9 +152,18 @@
     height: 140px;
 }
 
+.no-data-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
 .no-data-text {
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 16.63px;
     letter-spacing: 0px;
     text-align: center;
