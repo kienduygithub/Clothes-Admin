@@ -239,10 +239,13 @@ export class OwnerOverviewComponent implements OnInit {
             }],
             tooltip: {
                 trigger: 'axis',
-                formatter: (params: any) => `<div style="padding: 5px; background: #fff; border: 1px solid #ccc; border-radius: 3px;">
-                    <strong>${params[0].name}</strong><br/>
-                    Doanh thu: <span style="color: #69C0FF">${params[0].value} VNĐ</span>
-                </div>`,
+                formatter: (params: any) => `
+                    <div style="padding: 5px; background: #fff; border: 1px solid #ccc; border-radius: 3px;">
+                        <strong>${params[0].name}</strong><br/>
+                        Doanh thu: <span style="color: #69C0FF">${params[0].value} VNĐ</span><br/>
+                        Tổng: <span style="color: #515151">${this.revenueStats.totalRevenue} VNĐ</span>
+                    </div>
+                `,
                 textStyle: { fontSize: 12 }
             },
             grid: {
