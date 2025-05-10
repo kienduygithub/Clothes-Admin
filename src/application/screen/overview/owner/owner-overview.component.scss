@@ -195,3 +195,22 @@
         background-color: #f9f9f9;
     }
 }
+
+::ng-deep nb-progress-bar .progress-container {
+    border-radius: 20px;
+    height: 8px !important;
+    background-color: #BAE7FF;
+}
+
+::ng-deep nb-progress-bar .progress-value {
+    border-radius: 20px;
+    transition-duration: 1000ms;
+}
+
+::ng-deep nb-progress-bar.status-info .progress-container .progress-value {
+    background-color: #40A9FF;
+}
+
+::ng-deep nb-progress-bar.status-danger .progress-container .progress-value {
+    background-color: rgba(207, 19, 34, 1);
+}

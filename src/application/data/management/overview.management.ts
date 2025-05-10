@@ -88,7 +88,12 @@ export class OverviewManagement {
             const result = await this.overviewService.fetchCustomerStats(startDate, endDate, limit);
             const totalCustomers = result?.body?.totalCustomers || 0;
             const topCustomers: TopCustomerModel[] = result?.body?.topCustomers?.map(
-                (topCustomer: any) => new TopCustomerModel(topCustomer?.userId, topCustomer?.name, topCustomer?.email, topCustomer?.totalSpent)
+                (topCustomer: any) => new TopCustomerModel(
+                    topCustomer?.userId,
+                    topCustomer?.name,
+                    topCustomer?.email,
+                    topCustomer?.image_url,
+                    topCustomer?.totalSpent)
             ) ?? [];
             const response = new Map<string, any>([]);
             response.set('totalCustomers', totalCustomers);

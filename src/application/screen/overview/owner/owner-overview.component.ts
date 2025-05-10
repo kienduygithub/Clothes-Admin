@@ -17,6 +17,7 @@ import { Router } from "@angular/router";
 import { TranslateModule } from "@ngx-translate/core";
 import { ImageResource } from "../../../common/resource/image_resource";
 import { AppConfig } from "../../../common/config/app.config";
+import { ShortenNumberPipe } from "../../../common/layout/pipes/shortenNumber";
 echarts.use([
     BarChart,
     PieChart,
@@ -44,6 +45,10 @@ const ANGULAR_MODULES = [
     NgxEchartsDirective
 ]
 
+const PIPES = [
+    ShortenNumberPipe
+]
+
 const PROVIDERS = [
     OverviewManagement,
     OverviewService,
@@ -57,7 +62,8 @@ const PROVIDERS = [
     styleUrl: './owner-overview.component.scss',
     imports: [
         ...NB_LIBS,
-        ...ANGULAR_MODULES
+        ...ANGULAR_MODULES,
+        ...PIPES,
     ],
     providers: [...PROVIDERS]
 })
@@ -88,6 +94,7 @@ export class OwnerOverviewComponent implements OnInit {
     revenueChartOptions: any;
     topSellingChartOptions: any;
     orderPieChartOptions: any;
+    topCustomerChartOptions: any;
 
     constructor(
         private router: Router,
@@ -107,6 +114,7 @@ export class OwnerOverviewComponent implements OnInit {
         await this.fetchOrderCompletionStats();
         this.initRevenueChart();
         this.initOrderPieChart();
+        this.initTopCustomerChart();
     }
 
     async fetchShopOverviewStats() {
@@ -330,5 +338,77 @@ export class OwnerOverviewComponent implements OnInit {
                 containLabel: true
             }
         };
+    }
+
+    initTopCustomerChart() {
+        if (!this.topCustomers || this.topCustomers.length === 0) {
+            this.topCustomerChartOptions = { series: [{ type: 'bar', data: [], show: false }] };
+            return;
+        }
+        this.topCustomerChartOptions = {
+            xAxis: {
+                type: 'category',
+                data: this.topCustomers.map(customer => customer.name),
+                axisLabel: { rotate: 0, fontSize: 12, color: '#515151' },
+                axisLine: { show: true },
+                axisTick: { show: false }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: { formatter: '{value}', fontSize: 12, color: '#515151' },
+                axisLine: { show: false },
+                splitLine: { lineStyle: { color: '#E0E0E0', type: 'dashed' } },
+                min: 0
+            },
+            series: [{
+                type: 'bar',
+                data: this.topCustomers.map(customer => customer.totalSpent),
+                itemStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        { offset: 0, color: '#69C0FF' },
+                        { offset: 1, color: '#F5F5F5' }
+                    ]),
+                    borderRadius: [5, 5, 0, 0]
+                },
+                barWidth: '30%',
+                label: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{c}',
+                    fontSize: 12,
+                    color: '#515151'
+                }
+            }],
+            tooltip: {
+                trigger: 'axis',
+                formatter: (params: any) => `
+                    <div style="padding: 5px; background: #fff; border: 1px solid #ccc; border-radius: 3px;">
+                        <strong>${params[0].name}</strong><br/>
+                        Tổng chi tiêu: <span style="color: #4a90e2">${this.shortenNumber(params[0].value)} VNĐ</span>
+                    </div>
+                `,
+                textStyle: { fontSize: 12 }
+            },
+            grid: { left: '3%', right: '3%', bottom: '0', top: '15%', containLabel: true }
+        };
+    }
+
+    private shortenNumber(value: number | string) {
+        const num = typeof value === 'string' ? parseFloat(value) : value;
+
+        if (isNaN(num) || num === 0) return '0';
+
+        const absNum = Math.abs(num);
+        let result: string;
+
+        if (absNum >= 1000000) {
+            result = (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+        } else if (absNum >= 1000) {
+            result = (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+        } else {
+            result = num.toString();
+        }
+
+        return result;
     }
 }

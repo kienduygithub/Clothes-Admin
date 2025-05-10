@@ -213,17 +213,20 @@ export class TopCustomerModel {
     userId: number;
     name: string;
     email: string;
+    image_url: string;
     totalSpent: number;
 
     constructor(
         userId: number,
         name: string,
         email: string,
+        image_url: string,
         totalSpent: number,
     ) {
         this.userId = userId;
         this.name = name;
         this.email = email;
+        this.image_url = image_url;
         this.totalSpent = totalSpent;
     }
 }

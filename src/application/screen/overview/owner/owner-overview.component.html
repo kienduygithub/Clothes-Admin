@@ -107,10 +107,12 @@
                     <div class="box-chart-title">
                         Top khách hàng chi tiêu
                     </div>
-                    <div class="no-data-wrapper">
-                        <img [src]="image_chart_line" />
+                    <div *ngIf="topCustomers.length === 0" class="no-data-wrapper">
+                        <img [src]="image_chart_bar" />
                         <span class="no-data-text">Không có dữ liệu</span>
                     </div>
+                    <div *ngIf="topCustomers.length > 0" echarts [options]="topCustomerChartOptions"
+                        class="chart-container"></div>
                 </div>
                 <div class="box-chart low-stock">
                     <div class="box-chart-title">
