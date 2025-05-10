@@ -118,10 +118,27 @@
                     <div class="box-chart-title">
                         Sản phẩm tồn kho thấp
                     </div>
-                    <div class="no-data-wrapper">
+                    <div *ngIf="lowStockProducts.length === 0" class="no-data-wrapper">
                         <img [src]="image_chart_bar" />
                         <span class="no-data-text">Không có dữ liệu</span>
                     </div>
+                    <table *ngIf="lowStockProducts.length > 0" class="low-stock-table">
+                        <thead>
+                            <tr>
+                                <th>Tên sản phẩm</th>
+                                <th>Tồn kho</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let product of lowStockProducts">
+                                <td>
+                                    {{product.product?.product_name}}
+                                    ({{product.color?.color_name}}, {{product.size?.size_code}})
+                                </td>
+                                <td>{{product.stock_quantity}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="box-chart complete-rate-order">
