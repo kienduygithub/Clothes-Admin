@@ -92,9 +92,9 @@ export class OwnerOverviewComponent implements OnInit {
 
     /** Echarts options **/
     revenueChartOptions: any;
-    topSellingChartOptions: any;
     orderPieChartOptions: any;
     topCustomerChartOptions: any;
+    orderCompletionChartOptions: any;
 
     constructor(
         private router: Router,
@@ -115,6 +115,7 @@ export class OwnerOverviewComponent implements OnInit {
         this.initRevenueChart();
         this.initOrderPieChart();
         this.initTopCustomerChart();
+        this.initOrderCompletionChart();
     }
 
     async fetchShopOverviewStats() {
@@ -195,6 +196,7 @@ export class OwnerOverviewComponent implements OnInit {
                 // OrderStatus.PENDING
             );
             this.orderCompletionRate = response;
+            console.log(this.orderCompletionRate)
         } catch (error) {
             console.log(error);
         }
@@ -390,6 +392,57 @@ export class OwnerOverviewComponent implements OnInit {
                 textStyle: { fontSize: 12 }
             },
             grid: { left: '3%', right: '3%', bottom: '0', top: '15%', containLabel: true }
+        };
+    }
+
+    initOrderCompletionChart() {
+        if (!this.orderCompletionRate || !this.orderCompletionRate.summary) {
+
+            return;
+        }
+
+        this.orderCompletionChartOptions = {
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: {c} ({d}%)'
+            },
+            legend: {
+                orient: 'horizontal',
+                bottom: '5%',
+                left: 'center',
+                type: 'scroll',
+                itemWidth: 20,
+                itemHeight: 14,
+                textStyle: { color: '#515151', fontSize: 12 }
+            },
+            series: [{
+                name: 'Tỉ lệ hoàn thành',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                center: ['50%', '50%'],
+                avoidLabelOverlap: false,
+                label: {
+                    show: true,
+                    formatter: '{b}: {d}%',
+                    fontSize: 12,
+                    color: '#515151'
+                },
+                emphasis: {
+                    label: { show: true, fontSize: 14, fontWeight: 'bold' }
+                },
+                labelLine: { show: true },
+                data: [
+                    { value: this.orderCompletionRate.summary.completed || 0, name: 'Hoàn thành' },
+                    { value: this.orderCompletionRate.summary.canceled || 0, name: 'Hủy bỏ' }
+                ],
+                itemStyle: {
+                    color: function (params: any) {
+                        const colors = ['#4BC0C0', '#9966FF'];
+                        return colors[params.dataIndex % colors.length];
+                    }
+                }
+            }],
+            grid: { left: '0', right: '0', bottom: '15%', top: '15%', containLabel: true }
         };
     }
 

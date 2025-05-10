@@ -145,10 +145,12 @@
                 <div class="box-chart-title">
                     Tỉ lệ hoàn thành đơn hàng
                 </div>
-                <div class="no-data-wrapper">
+                <div class="no-data-wrapper" *ngIf="!orderCompletionChartOptions">
                     <img [src]="image_chart_pie" />
                     <span class="no-data-text">Không có dữ liệu</span>
                 </div>
+                <div *ngIf="orderCompletionChartOptions" echarts [options]="orderCompletionChartOptions"
+                    class="completion-chart"></div>
             </div>
         </div>
     </div>
