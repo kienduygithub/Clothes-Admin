@@ -99,8 +99,8 @@ export class OwnerOverviewComponent implements OnInit {
     topCustomerChartOptions: any;
     orderCompletionChartOptions: any;
 
-    offsetTopSelling: number = 0;
-    pagingTopSelling!: PagingModel;
+    offsetLowStock: number = 0;
+    pagingLowStock!: PagingModel;
 
     constructor(
         private router: Router,
@@ -110,7 +110,8 @@ export class OwnerOverviewComponent implements OnInit {
 
     async ngOnInit(): Promise<any> {
         this.preImage = this.appConfig.getPreImage() ?? '';
-        this.past14Days.setDate(this.today.getDate() - 14)
+        this.pagingLowStock = new PagingModel();
+        this.past14Days.setDate(this.today.getDate() - 14);
         await this.fetchShopOverviewStats();
         await this.fetchRevenueOvertime();
         await this.fetchOrderStats();
@@ -122,6 +123,7 @@ export class OwnerOverviewComponent implements OnInit {
         this.initOrderPieChart();
         this.initTopCustomerChart();
         this.initOrderCompletionChart();
+        this.resetPageLowStock();
     }
 
     async fetchShopOverviewStats() {
@@ -458,18 +460,29 @@ export class OwnerOverviewComponent implements OnInit {
     }
 
     onPageTopSellingChange(currentPage: number) {
-        this.pagingTopSelling.currentPage = currentPage;
-        this.offsetTopSelling = (currentPage - 1) * this.pagingTopSelling.itemsPerPage + 1;
+        this.pagingLowStock.currentPage = currentPage;
+        this.offsetLowStock = (currentPage - 1) * this.pagingLowStock.itemsPerPage + 1;
         if (currentPage === 1) {
-            this.pagingTopSelling.before = currentPage;
-            this.pagingTopSelling.after = currentPage + 1;
-        } else if (currentPage === this.pagingTopSelling.totalPage) {
-            this.pagingTopSelling.before = currentPage - 1;
-            this.pagingTopSelling.after = currentPage;
-        } else if (currentPage > 1 || currentPage < this.pagingTopSelling.totalPage) {
-            this.pagingTopSelling.before = currentPage - 1;
-            this.pagingTopSelling.after = currentPage + 1;
+            this.pagingLowStock.before = currentPage;
+            this.pagingLowStock.after = currentPage + 1;
+        } else if (currentPage === this.pagingLowStock.totalPage) {
+            this.pagingLowStock.before = currentPage - 1;
+            this.pagingLowStock.after = currentPage;
+        } else if (currentPage > 1 || currentPage < this.pagingLowStock.totalPage) {
+            this.pagingLowStock.before = currentPage - 1;
+            this.pagingLowStock.after = currentPage + 1;
         }
+    }
+
+    resetPageLowStock() {
+        this.pagingLowStock.currentPage = 1;
+        this.pagingLowStock.itemsPerPage = 5;
+        this.pagingLowStock.totalItems = this.lowStockProducts.length;
+        this.pagingLowStock.totalPage = Math.ceil(this.lowStockProducts.length / 5);
+        this.pagingLowStock.before = 0;
+        this.pagingLowStock.after = 0;
+
+        this.offsetLowStock = (this.pagingLowStock.currentPage - 1) * this.pagingLowStock.itemsPerPage + 1;
     }
 
     private shortenNumber(value: number | string) {

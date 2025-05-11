@@ -122,7 +122,7 @@
 .box-chart.low-stock {
     flex: 1;
     min-height: 320px;
-    max-height: 380px;
+    max-height: 400px;
 }
 
 .box-chart.complete-rate-order {
@@ -189,4 +189,26 @@
 
 ::ng-deep nb-progress-bar.status-danger .progress-container .progress-value {
     background-color: rgba(207, 19, 34, 1);
+}
+
+.pagination-flex {
+    margin-top: auto;
+
+    ::ng-deep pagination-controls {
+
+        .ngx-pagination {
+            margin-bottom: 0px !important;
+
+            li.current {
+                border-radius: 50%;
+            }
+
+            li.pagination-previous,
+            li.pagination-next {
+                span {
+                    display: none;
+                }
+            }
+        }
+    }
 }
