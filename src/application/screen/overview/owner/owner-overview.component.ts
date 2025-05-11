@@ -20,6 +20,7 @@ import { AppConfig } from "../../../common/config/app.config";
 import { ShortenNumberPipe } from "../../../common/layout/pipes/shortenNumber";
 import { NgxPaginationModule } from "ngx-pagination";
 import { PagingModel } from "../../../common/model/paging.model";
+import { ProductUrl } from "../../product/product.routing";
 echarts.use([
     BarChart,
     PieChart,
@@ -76,6 +77,7 @@ export class OwnerOverviewComponent implements OnInit {
     icon_complete_order: string = ImageResource.icon_complete_order;
     icon_product_widge: string = ImageResource.icon_product_widge;
     icon_group_customer: string = ImageResource.icon_group_customer;
+    icon_edit: string = ImageResource.icon_edit;
 
     image_chart_line: string = ImageResource.image_chart_line;
     image_chart_pie: string = ImageResource.image_chart_pie;
@@ -457,6 +459,10 @@ export class OwnerOverviewComponent implements OnInit {
             }],
             grid: { left: '0', right: '0', bottom: '0', top: '15%', containLabel: true }
         };
+    }
+
+    onViewProduct(id: number) {
+        this.router.navigate([ProductUrl.PRODUCT_VIEW], { queryParams: { id: id } });
     }
 
     onPageTopSellingChange(currentPage: number) {

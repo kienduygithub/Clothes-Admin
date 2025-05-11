@@ -139,6 +139,7 @@
                                 <th>SKU</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Tồn kho</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -149,6 +150,13 @@
                                     ({{product.color?.color_name}}, {{product.size?.size_code}})
                                 </td>
                                 <td>{{product.stock_quantity}}</td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-end">
+                                        <img class="common-icon" [src]="icon_edit" [nbTooltip]="'Xem chi tiết'"
+                                            nbTooltipPlacement="bottom"
+                                            (click)="onViewProduct(product.product?.id ?? 0)" />
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
