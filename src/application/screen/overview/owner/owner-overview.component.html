@@ -65,29 +65,26 @@
                     <img [src]="image_chart_bar" />
                     <span class="no-data-text">Không có dữ liệu</span>
                 </div>
-                <table *ngIf="topSellingProducts.length > 0" class="top-selling-table">
-                    <thead>
-                        <tr>
-                            <th>Ảnh</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Màu sắc</th>
-                            <th>Kích thước</th>
-                            <th>Số lượng bán</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let product of topSellingProducts">
-                            <td>
-                                <img src="{{preImage + '/' + product.image_url}}"
-                                    alt="{{product.product?.product_name}}" style="width: 60px; height: 60px;">
-                            </td>
-                            <td>{{product.product?.product_name }}</td>
-                            <td>{{product.color?.color_name}}</td>
-                            <td>{{product.size?.size_code }}</td>
-                            <td>{{product.totalQuantity}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive mt-1" *ngIf="topSellingProducts.length > 0">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>SKU</th>
+                                <th>Sản phẩm</th>
+                                <th>Số lượng bán</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let product of topSellingProducts">
+                                <td>{{product.sku}}</td>
+                                <td>
+                                    {{product.product?.product_name}}({{product.color?.color_name}},{{product.size?.size_code}})
+                                </td>
+                                <td>{{product.totalQuantity}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="box-chart status-order">
                 <div class="box-chart-title">
@@ -114,32 +111,7 @@
                     <div *ngIf="topCustomers.length > 0" echarts [options]="topCustomerChartOptions"
                         class="chart-container"></div>
                 </div>
-                <div class="box-chart low-stock">
-                    <div class="box-chart-title">
-                        Sản phẩm tồn kho thấp
-                    </div>
-                    <div *ngIf="lowStockProducts.length === 0" class="no-data-wrapper">
-                        <img [src]="image_chart_bar" />
-                        <span class="no-data-text">Không có dữ liệu</span>
-                    </div>
-                    <table *ngIf="lowStockProducts.length > 0" class="low-stock-table">
-                        <thead>
-                            <tr>
-                                <th>Tên sản phẩm</th>
-                                <th>Tồn kho</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let product of lowStockProducts">
-                                <td>
-                                    {{product.product?.product_name}}
-                                    ({{product.color?.color_name}}, {{product.size?.size_code}})
-                                </td>
-                                <td>{{product.stock_quantity}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+
             </div>
             <div class="box-chart complete-rate-order">
                 <div class="box-chart-title">
@@ -151,6 +123,39 @@
                 </div>
                 <div *ngIf="orderCompletionChartOptions" echarts [options]="orderCompletionChartOptions"
                     class="completion-chart"></div>
+            </div>
+        </div>
+
+        <div class="row-container">
+            <div class="box-chart low-stock">
+                <div class="box-chart-title">
+                    Sản phẩm tồn kho thấp
+                </div>
+                <div *ngIf="lowStockProducts.length === 0" class="no-data-wrapper">
+                    <img [src]="image_chart_bar" />
+                    <span class="no-data-text">Không có dữ liệu</span>
+                </div>
+                <div class="table-responsive mt-1" *ngIf="lowStockProducts.length > 0">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>SKU</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Tồn kho</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let product of lowStockProducts">
+                                <td>{{product.sku}}</td>
+                                <td>
+                                    {{product.product?.product_name}}
+                                    ({{product.color?.color_name}}, {{product.size?.size_code}})
+                                </td>
+                                <td>{{product.stock_quantity}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

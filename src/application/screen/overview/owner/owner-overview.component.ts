@@ -18,6 +18,8 @@ import { TranslateModule } from "@ngx-translate/core";
 import { ImageResource } from "../../../common/resource/image_resource";
 import { AppConfig } from "../../../common/config/app.config";
 import { ShortenNumberPipe } from "../../../common/layout/pipes/shortenNumber";
+import { NgxPaginationModule } from "ngx-pagination";
+import { PagingModel } from "../../../common/model/paging.model";
 echarts.use([
     BarChart,
     PieChart,
@@ -42,7 +44,8 @@ const NB_LIBS = [
 const ANGULAR_MODULES = [
     CommonModule,
     TranslateModule,
-    NgxEchartsDirective
+    NgxEchartsDirective,
+    NgxPaginationModule
 ]
 
 const PIPES = [
@@ -95,6 +98,9 @@ export class OwnerOverviewComponent implements OnInit {
     orderPieChartOptions: any;
     topCustomerChartOptions: any;
     orderCompletionChartOptions: any;
+
+    offsetTopSelling: number = 0;
+    pagingTopSelling!: PagingModel;
 
     constructor(
         private router: Router,
@@ -449,6 +455,21 @@ export class OwnerOverviewComponent implements OnInit {
             }],
             grid: { left: '0', right: '0', bottom: '0', top: '15%', containLabel: true }
         };
+    }
+
+    onPageTopSellingChange(currentPage: number) {
+        this.pagingTopSelling.currentPage = currentPage;
+        this.offsetTopSelling = (currentPage - 1) * this.pagingTopSelling.itemsPerPage + 1;
+        if (currentPage === 1) {
+            this.pagingTopSelling.before = currentPage;
+            this.pagingTopSelling.after = currentPage + 1;
+        } else if (currentPage === this.pagingTopSelling.totalPage) {
+            this.pagingTopSelling.before = currentPage - 1;
+            this.pagingTopSelling.after = currentPage;
+        } else if (currentPage > 1 || currentPage < this.pagingTopSelling.totalPage) {
+            this.pagingTopSelling.before = currentPage - 1;
+            this.pagingTopSelling.after = currentPage + 1;
+        }
     }
 
     private shortenNumber(value: number | string) {

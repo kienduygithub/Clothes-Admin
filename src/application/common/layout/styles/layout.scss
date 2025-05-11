@@ -210,14 +210,15 @@ table>thead>tr>th {
 }
 
 table>thead {
-  border: 1px solid #dee2e6;
-  border-bottom: none;
-  background-color: #ededed !important;
+  border: none;
+  background-color: #fafafa !important;
 }
 
 table>tbody {
-  border: 1px solid #dee2e6;
+  border: 1px solid rgb(222 226 230 / 50%);
   border-top: none;
+  border-left: none;
+  border-right: none;
 }
 
 table nb-checkbox {
@@ -352,6 +353,7 @@ textarea:focus {
   height: 48px;
   vertical-align: middle;
   font-size: 14px;
+  border-top: 1px solid rgb(222 226 230 / 50%);
 }
 
 .search-filter {
