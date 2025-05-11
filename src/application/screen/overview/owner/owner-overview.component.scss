@@ -10,6 +10,53 @@
     color: #00427D;
 }
 
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+
+    .criteria-selector {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        width: fit-content;
+        border-radius: 12px;
+        background-color: white;
+        box-shadow: 0px 10px 24px 0px #0000001A;
+        overflow: hidden;
+    }
+
+    .criteria-item {
+        padding: 0 5px;
+        height: 100%;
+        width: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: #00000073;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: #f0faff;
+            color: #40A9FF;
+        }
+
+        &.active {
+            background-color: #40A9FF;
+            color: white;
+            font-weight: 500;
+        }
+
+        &.active:hover {
+            background-color: #3399FF;
+        }
+    }
+}
+
 .row-container {
     display: flex;
     align-items: center;

@@ -21,6 +21,7 @@ import { ShortenNumberPipe } from "../../../common/layout/pipes/shortenNumber";
 import { NgxPaginationModule } from "ngx-pagination";
 import { PagingModel } from "../../../common/model/paging.model";
 import { ProductUrl } from "../../product/product.routing";
+import { Option } from "../../../common/resource/option.interface";
 echarts.use([
     BarChart,
     PieChart,
@@ -103,6 +104,14 @@ export class OwnerOverviewComponent implements OnInit {
 
     offsetLowStock: number = 0;
     pagingLowStock!: PagingModel;
+
+    selectedCriterial: string = 'ALL';
+    CriteriaOptions: Option[] = [
+        { label: 'Tất cả', value: 'ALL' },
+        { label: 'Ngày', value: 'DAY' },
+        { label: 'Tháng', value: 'MONTH' },
+        { label: 'Năm', value: 'YEAR' }
+    ];
 
     constructor(
         private router: Router,
@@ -459,6 +468,10 @@ export class OwnerOverviewComponent implements OnInit {
             }],
             grid: { left: '0', right: '0', bottom: '0', top: '15%', containLabel: true }
         };
+    }
+
+    onSelectCriteria(criterial: string) {
+        this.selectedCriterial = criterial;
     }
 
     onViewProduct(id: number) {

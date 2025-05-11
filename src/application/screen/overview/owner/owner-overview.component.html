@@ -3,6 +3,20 @@
         <div class="d-flex align-items-center mb-2 header-form">
             <span class="header-title-text">Tổng quan</span>
         </div>
+        <div class="filter-container">
+            <div class="criteria-selector">
+                <div (click)="onSelectCriteria(criteria.value)" class="criteria-item"
+                    [ngClass]="{'active': selectedCriterial === criteria.value}"
+                    *ngFor="let criteria of CriteriaOptions">
+                    {{criteria.label}}
+                </div>
+            </div>
+            <div class="schedule-selector">
+                <div class="schedule-item">
+
+                </div>
+            </div>
+        </div>
         <!-- Overview Stats -->
         <div class="row-container">
             <div class="box-overview-stats">
