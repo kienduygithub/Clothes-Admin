@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { NbButtonModule, NbIconModule, NbInputModule, NbTooltipModule } from "@nebular/theme";
+import { NbButtonModule, NbDatepickerModule, NbDateService, NbIconModule, NbInputModule, NbTooltipModule } from "@nebular/theme";
 import { OverviewManagement } from "../../../data/management/overview.management";
 import { OverviewService } from "../../../data/service/overview.service";
 import { LowStockProductModel, OrderCompletionRateModel, OrderStatsModel, OverviewStatsModel, RevenueStatsModel, TopCustomerModel, TopSellingProductModel } from "../../../data/model/overview/overview.model";
@@ -22,6 +22,7 @@ import { NgxPaginationModule } from "ngx-pagination";
 import { PagingModel } from "../../../common/model/paging.model";
 import { ProductUrl } from "../../product/product.routing";
 import { Option } from "../../../common/resource/option.interface";
+import { FilterStatsComponent } from "../../../common/utils/filter-stats/filter-stats.component";
 echarts.use([
     BarChart,
     PieChart,
@@ -47,7 +48,12 @@ const ANGULAR_MODULES = [
     CommonModule,
     TranslateModule,
     NgxEchartsDirective,
-    NgxPaginationModule
+    NgxPaginationModule,
+    FilterStatsComponent
+]
+
+const MAT_MODULES = [
+    NbDatepickerModule,
 ]
 
 const PIPES = [
@@ -68,6 +74,7 @@ const PROVIDERS = [
     imports: [
         ...NB_LIBS,
         ...ANGULAR_MODULES,
+        ...MAT_MODULES
         // ...PIPES,
     ],
     providers: [...PROVIDERS]
@@ -105,49 +112,13 @@ export class OwnerOverviewComponent implements OnInit {
     offsetLowStock: number = 0;
     pagingLowStock!: PagingModel;
 
-    selectedCriterial: string = 'ALL';
-    CriteriaOptions: Option[] = [
-        { label: 'Tất cả', value: 'ALL' },
-        { label: 'Ngày', value: 'DAY' },
-        { label: 'Tháng', value: 'MONTH' },
-        { label: 'Năm', value: 'YEAR' }
-    ];
-
-    months: Option[] = [
-        { label: 'Tháng 1', value: '1' },
-        { label: 'Tháng 2', value: '2' },
-        { label: 'Tháng 3', value: '3' },
-        { label: 'Tháng 4', value: '4' },
-        { label: 'Tháng 5', value: '5' },
-        { label: 'Tháng 6', value: '6' },
-        { label: 'Tháng 7', value: '7' },
-        { label: 'Tháng 8', value: '8' },
-        { label: 'Tháng 9', value: '9' },
-        { label: 'Tháng 10', value: '10' },
-        { label: 'Tháng 11', value: '11' },
-        { label: 'Tháng 12', value: '12' }
-    ];
-
-    years: Option[] = Array.from({ length: 11 }, (_, i) => ({
-        label: `Năm ${2020 + i}`,
-        value: `${2020 + i}`
-    }));
-
-    selectedMonth: string = '';
-    selectedYear: string = '';
-
     constructor(
         private router: Router,
         private appConfig: AppConfig,
-        private overviewMana: OverviewManagement
+        private overviewMana: OverviewManagement,
     ) { }
 
     async ngOnInit(): Promise<any> {
-        const currentMonth = new Date().getMonth() + 1;
-        const currentYear = new Date().getFullYear();
-        this.selectedMonth = currentMonth.toString();
-        this.selectedYear = currentYear.toString();
-
         this.preImage = this.appConfig.getPreImage() ?? '';
         this.pagingLowStock = new PagingModel();
         this.past14Days.setDate(this.today.getDate() - 14);
@@ -496,31 +467,6 @@ export class OwnerOverviewComponent implements OnInit {
             }],
             grid: { left: '0', right: '0', bottom: '0', top: '15%', containLabel: true }
         };
-    }
-
-    onSelectCriteria(criterial: string) {
-        this.selectedCriterial = criterial;
-        if (criterial === 'MONTH') {
-            const currentMonth = new Date().getMonth() + 1;
-            this.selectedMonth = currentMonth.toString();
-        } else {
-            this.selectedMonth = '';
-        }
-        if (criterial === 'YEAR') {
-            const currentYear = new Date().getFullYear();
-            this.selectedYear = currentYear.toString();
-        } else {
-            this.selectedYear = '';
-        }
-    }
-
-    onSelectMonth(month: string) {
-        this.selectedMonth = month;
-    }
-
-
-    onSelectYear(year: string) {
-        this.selectedYear = year;
     }
 
     onViewProduct(id: number) {

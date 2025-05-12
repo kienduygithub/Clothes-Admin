@@ -1,0 +1,43 @@
+<div class="filter-container">
+    <div class="criteria-selector">
+        <div (click)="onSelectCriteria(criteria.value)" class="criteria-item"
+            [ngClass]="{'active': selectedCriterial === criteria.value}" *ngFor="let criteria of CriteriaOptions">
+            {{criteria.label}}
+        </div>
+    </div>
+    <div class="schedule-selector">
+        <div class="schedule-item">
+            <div class="date-pick-container">
+                <img (click)="datePicker.focus()" src="{{ calendar_icon }}" alt="" />
+                <input placeholder="Chọn ngày" nbInput [nbDatepicker]="rangepicker" #datePicker readonly />
+                <nb-rangepicker [max]="max" #rangepicker></nb-rangepicker>
+            </div>
+        </div>
+        <div class="schedule-item">
+            <div class="dropdown-container month-dropdown" *ngIf="selectedCriterial === 'MONTH'">
+                <div class="dropdown-toggle">
+                    Chọn tháng
+                </div>
+                <div class="dropdown-menu">
+                    <div class="dropdown-item" *ngFor="let month of months" (click)="onSelectMonth(month.value)"
+                        [ngClass]="{'active': selectedMonth === month.value}">
+                        {{ month.label }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="schedule-item">
+            <div class="dropdown-container year-dropdown" *ngIf="selectedCriterial === 'YEAR'">
+                <div class="dropdown-toggle">
+                    Chọn năm
+                </div>
+                <div class="dropdown-menu">
+                    <div class="dropdown-item" *ngFor="let year of years" (click)="onSelectYear(year.value)"
+                        [ngClass]="{'active': selectedYear === year.value}">
+                        {{ year.label }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
