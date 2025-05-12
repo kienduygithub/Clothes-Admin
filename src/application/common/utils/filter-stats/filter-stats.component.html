@@ -8,10 +8,21 @@
     <div class="schedule-selector">
         <!-- Ngày: Hai Dropdown -->
         <div class="schedule-item" *ngIf="selectedCriterial === 'DAY'">
-            <div class="date-pick-container">
-                <img (click)="datePicker.focus()" src="{{ calendar_icon }}" alt="" />
-                <input placeholder="Chọn ngày" nbInput [nbDatepicker]="rangepicker" #datePicker readonly />
-                <nb-rangepicker [max]="max" #rangepicker></nb-rangepicker>
+            <div class="day-selector">
+                <label>Bắt đầu: </label>
+                <div class="date-pick-container">
+                    <img (click)="datePicker.focus()" src="{{ calendar_icon }}" alt="" />
+                    <input placeholder="Chọn ngày bắt đầu" nbInput [nbDatepicker]="rangepicker" #datePicker readonly />
+                    <nb-rangepicker [max]="maxDate" #rangepicker></nb-rangepicker>
+                </div>
+            </div>
+            <div class="day-selector">
+                <label>Kết thúc: </label>
+                <div class="date-pick-container">
+                    <img (click)="datePicker.focus()" src="{{ calendar_icon }}" alt="" />
+                    <input placeholder="Chọn ngày kết thúc" nbInput [nbDatepicker]="rangepicker" #datePicker readonly />
+                    <nb-rangepicker [max]="maxDate" #rangepicker></nb-rangepicker>
+                </div>
             </div>
         </div>
         <!-- Tuần: Ba Dropdown -->

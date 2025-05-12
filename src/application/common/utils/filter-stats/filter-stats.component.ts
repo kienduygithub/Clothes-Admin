@@ -70,8 +70,7 @@ export class FilterStatsComponent implements OnInit {
     calendar_icon = ImageResource.icon_calendar_v2;
     icon_dropdown_arrow_left = ImageResource.icon_dropdown_arrow_left;
 
-    max: Date;
-    selectedCriterial: string = 'WEEK';
+    selectedCriterial: string = 'DAY';
     CriteriaOptions: Option[] = [
         { label: 'Tất cả', value: 'ALL' },
         { label: 'Ngày', value: 'DAY' },
@@ -108,9 +107,7 @@ export class FilterStatsComponent implements OnInit {
 
     constructor(
         private dateService: NbDateService<Date>
-    ) {
-        this.max = this.dateService.today();
-    }
+    ) { }
 
     ngOnInit(): void {
         const currentMonth = new Date().getMonth() + 1;
