@@ -9,6 +9,7 @@ import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import _moment from 'moment';
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { GetLabelPipe } from "../../layout/pipes/getLabel";
+import { VIETNAMESE_LOCALE } from "../../resource/vietname-locale";
 
 export interface Option {
     label: string;
@@ -96,15 +97,15 @@ export class FilterStatsComponent implements OnInit {
     selectedYear: string = '';
     selectedWeek: string = '';
     weekRange: string = ''; /** Lưu trữ range của tuần **/
-    selectedStartDay: Date | null = null;
-    selectedEndDay: Date | null = null;
     weekMonth: string = '';
     weekYear: string = '';
     maxDate: Date = new Date();
-    time = new FormControl();
-    @ViewChild('picker') datepicker!: ElementRef<MatDatepicker<any>>; /** Chưa dùng tới **/
 
     openDropdown: string | null = null; /** Lưu ID của dropdown đang mở **/
+
+    dateError: string | null = null;
+    startDate = new FormControl<Date | null>(null);
+    endDate = new FormControl<Date | null>(null);
 
     constructor(
         private dateService: NbDateService<Date>
@@ -113,18 +114,19 @@ export class FilterStatsComponent implements OnInit {
     ngOnInit(): void {
         const currentMonth = new Date().getMonth() + 1;
         const currentYear = new Date().getFullYear();
+
         this.selectedMonth = currentMonth.toString();
         this.selectedYear = currentYear.toString();
         this.weekMonth = currentMonth.toString();
         this.weekYear = currentYear.toString();
-        this.selectedStartDay = new Date(currentYear, currentMonth - 1, 1);
-        this.selectedEndDay = new Date();
+        this.startDate.setValue(new Date(currentYear, currentMonth - 1, 1)); // Ngày bắt đầu mặc định
+        this.endDate.setValue(new Date()); // Ngày kết thúc mặc định
         this.updateWeeks(currentMonth, currentYear);
         this.selectedWeek = this.getWeekNumber(new Date()).toString();
         this.weekRange = this.weeks.find(w => w.value === this.selectedWeek)?.range || 'Range';
-        // if (this.formControl?.value !== '') {
-        //     this.time.setValue(_moment(`${this.formControl?.value}`, "DD/MM/YYYY"));
-        // }
+
+        this.startDate.valueChanges.subscribe(() => this.validateDates());
+        this.endDate.valueChanges.subscribe(() => this.validateDates());
     }
 
     onSelectCriteria(value: string) {
@@ -151,8 +153,8 @@ export class FilterStatsComponent implements OnInit {
         }
 
         if (value === 'DAY') {
-            this.selectedStartDay = new Date(currentYear, currentMonth - 1, 1);
-            this.selectedEndDay = new Date();
+            this.startDate.setValue(new Date(currentYear, currentMonth - 1, 1)); // Ngày bắt đầu mặc định
+            this.endDate.setValue(new Date()); // Ngày kết thúc mặc định
         }
     }
 
@@ -191,11 +193,7 @@ export class FilterStatsComponent implements OnInit {
         this.openDropdown = null; // Đóng dropdown
     }
 
-    onSelectDay(type: 'start' | 'end', date: Date) {
-        if (type === 'start') this.selectedStartDay = date;
-        if (type === 'end') this.selectedEndDay = date;
-        this.validateDates();
-    }
+
 
     onConfirm() {
         if (this.isValidSelection()) {
@@ -211,7 +209,7 @@ export class FilterStatsComponent implements OnInit {
     isValidSelection(): boolean {
         switch (this.selectedCriterial) {
             case 'DAY':
-                return !!this.selectedStartDay && !!this.selectedEndDay;
+                return !!this.startDate.value && !!this.endDate.value;
             case 'WEEK':
                 return !!this.weekYear && !!this.weekMonth && !!this.selectedWeek;
             case 'MONTH':
@@ -226,18 +224,7 @@ export class FilterStatsComponent implements OnInit {
     }
 
     isConfirmDisabled(): boolean {
-        return !this.isValidSelection();
-    }
-
-    private validateDates() {
-        if (this.selectedStartDay && this.selectedEndDay) {
-            if (this.selectedEndDay < this.selectedStartDay) {
-                this.selectedEndDay = this.selectedStartDay;
-            }
-            if (this.selectedEndDay > this.maxDate) {
-                this.selectedEndDay = this.maxDate;
-            }
-        }
+        return !this.isValidSelection() || !!this.dateError;
     }
 
     private updateWeeks(month: number, year: number) {
@@ -286,6 +273,22 @@ export class FilterStatsComponent implements OnInit {
         return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
     }
 
+    private validateDates() {
+        const start = this.startDate.value;
+        const end = this.endDate.value;
+
+        this.dateError = null; // Reset lỗi
+
+        if (start && end) {
+            if (start > end) {
+                this.dateError = 'Ngày bắt đầu không được lớn hơn ngày kết thúc';
+            }
+            if (end > this.maxDate) {
+                this.endDate.setValue(this.maxDate);
+            }
+        }
+    }
+
     private resetSelections() {
         this.selectedMonth = '';
         this.selectedYear = '';
@@ -293,13 +296,13 @@ export class FilterStatsComponent implements OnInit {
         this.weekRange = '';
         this.weekMonth = '';
         this.weekYear = '';
-        this.selectedStartDay = null;
-        this.selectedEndDay = null;
+        this.startDate.setValue(null);
+        this.endDate.setValue(null);
         this.openDropdown = null;
     }
 
     private updateDashboardData() {
-        console.log(`Filter: ${this.selectedCriterial}, Month: ${this.selectedMonth}, Year: ${this.selectedYear}, Week: ${this.selectedWeek}, WeekRange: ${this.weekRange}, StartDay: ${this.selectedStartDay?.toISOString()}, EndDay: ${this.selectedEndDay?.toISOString()}`);
+        console.log(`Filter: ${this.selectedCriterial}, Month: ${this.selectedMonth}, Year: ${this.selectedYear}, Week: ${this.selectedWeek}, WeekRange: ${this.weekRange}}`);
     }
 
     @HostListener('document:click', ['$event'])

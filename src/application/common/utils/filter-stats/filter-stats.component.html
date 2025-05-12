@@ -7,20 +7,23 @@
     </div>
     <div class="schedule-selector">
         <!-- Ngày: Hai Dropdown -->
-        <div class="schedule-item" *ngIf="selectedCriterial === 'DAY'">
+        <div class="schedule-item flex-column align-items-start" *ngIf="selectedCriterial === 'DAY'">
             <div class="date-selector">
                 <div class="date-pick-container start">
                     <img (click)="startDatePicker.focus()" src="{{ calendar_icon }}" alt="" />
-                    <input placeholder="Ngày bắt đầu" nbInput [nbDatepicker]="startPicker" #startDatePicker readonly />
+                    <input placeholder="Ngày bắt đầu" [formControl]="startDate" nbInput [nbDatepicker]="startPicker"
+                        #startDatePicker readonly />
                     <nb-datepicker [max]="maxDate" #startPicker></nb-datepicker>
                 </div>
                 <img [src]="icon_arrow_right" style="margin-right: 13px;" />
                 <div class="date-pick-container end">
                     <img (click)="endDatePicker.focus()" src="{{ calendar_icon }}" alt="" />
-                    <input placeholder="Ngày kết thúc" nbInput [nbDatepicker]="endPicker" #endDatePicker readonly />
+                    <input placeholder="Ngày kết thúc" [formControl]="endDate" nbInput [nbDatepicker]="endPicker"
+                        #endDatePicker readonly />
                     <nb-datepicker [max]="maxDate" #endPicker></nb-datepicker>
                 </div>
             </div>
+            <div class="required" style="font-size: 13px;" *ngIf="dateError">{{ dateError }}</div>
         </div>
         <!-- Tuần: Ba Dropdown -->
         <div class="schedule-item" *ngIf="selectedCriterial === 'WEEK'">
