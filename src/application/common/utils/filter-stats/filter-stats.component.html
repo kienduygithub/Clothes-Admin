@@ -53,5 +53,53 @@
                 </div>
             </div>
         </div>
+        <!-- Tháng: Hai Dropdown -->
+        <div class="schedule-item" *ngIf="selectedCriterial === 'MONTH'">
+            <div class="dropdown-container month-dropdown" *ngIf="selectedCriterial === 'MONTH'">
+                <div class="dropdown-container-inner month">
+                    <div class="dropdown-toggle" (click)="toggleDropdown('month')">
+                        Chọn tháng
+                    </div>
+                    <div class="dropdown-menu" [ngClass]="{'open': openDropdown === 'month'}">
+                        <div class="dropdown-item" *ngFor="let month of months" (click)="onSelectMonth(month.value)"
+                            [ngClass]="{'active': selectedMonth === month.value}">
+                            {{ month.label }}
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown-container-inner year">
+                    <div class="dropdown-toggle" (click)="toggleDropdown('month-year')">
+                        Chọn năm
+                    </div>
+                    <div class="dropdown-menu" [ngClass]="{'open': openDropdown === 'month-year'}">
+                        <div class="dropdown-item" *ngFor="let year of years"
+                            (click)="onSelectYear(year.value, 'month')"
+                            [ngClass]="{'active': selectedYear === year.value}">
+                            {{ year.label }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Năm: Một Dropdown -->
+        <div class="schedule-item" *ngIf="selectedCriterial === 'YEAR'">
+            <div class="dropdown-container year-dropdown" *ngIf="selectedCriterial === 'YEAR'">
+                <div class="dropdown-container-inner">
+                    <div class="dropdown-toggle" (click)="toggleDropdown('year')">
+                        Chọn năm
+                    </div>
+                    <div class="dropdown-menu" [ngClass]="{'open': openDropdown === 'year'}">
+                        <div class="dropdown-item" *ngFor="let year of years" (click)="onSelectYear(year.value, 'year')"
+                            [ngClass]="{'active': selectedYear === year.value}">
+                            {{ year.label }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Nút Xác nhận -->
+        <button class="confirm-button" (click)="onConfirm()" [disabled]="isConfirmDisabled()">
+            Thống kê
+        </button>
     </div>
 </div>
