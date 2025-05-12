@@ -8,20 +8,17 @@
     <div class="schedule-selector">
         <!-- Ngày: Hai Dropdown -->
         <div class="schedule-item" *ngIf="selectedCriterial === 'DAY'">
-            <div class="day-selector">
-                <label>Bắt đầu: </label>
-                <div class="date-pick-container">
-                    <img (click)="datePicker.focus()" src="{{ calendar_icon }}" alt="" />
-                    <input placeholder="Chọn ngày bắt đầu" nbInput [nbDatepicker]="rangepicker" #datePicker readonly />
-                    <nb-rangepicker [max]="maxDate" #rangepicker></nb-rangepicker>
+            <div class="date-selector">
+                <div class="date-pick-container start">
+                    <img (click)="startDatePicker.focus()" src="{{ calendar_icon }}" alt="" />
+                    <input placeholder="Ngày bắt đầu" nbInput [nbDatepicker]="startPicker" #startDatePicker readonly />
+                    <nb-datepicker [max]="maxDate" #startPicker></nb-datepicker>
                 </div>
-            </div>
-            <div class="day-selector">
-                <label>Kết thúc: </label>
-                <div class="date-pick-container">
-                    <img (click)="datePicker.focus()" src="{{ calendar_icon }}" alt="" />
-                    <input placeholder="Chọn ngày kết thúc" nbInput [nbDatepicker]="rangepicker" #datePicker readonly />
-                    <nb-rangepicker [max]="maxDate" #rangepicker></nb-rangepicker>
+                <img [src]="icon_arrow_right" style="margin-right: 13px;" />
+                <div class="date-pick-container end">
+                    <img (click)="endDatePicker.focus()" src="{{ calendar_icon }}" alt="" />
+                    <input placeholder="Ngày kết thúc" nbInput [nbDatepicker]="endPicker" #endDatePicker readonly />
+                    <nb-datepicker [max]="maxDate" #endPicker></nb-datepicker>
                 </div>
             </div>
         </div>

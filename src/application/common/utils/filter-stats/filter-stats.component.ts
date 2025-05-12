@@ -69,6 +69,7 @@ const PIPES = [
 export class FilterStatsComponent implements OnInit {
     calendar_icon = ImageResource.icon_calendar_v2;
     icon_dropdown_arrow_left = ImageResource.icon_dropdown_arrow_left;
+    icon_arrow_right: string = ImageResource.arrow_right;
 
     selectedCriterial: string = 'DAY';
     CriteriaOptions: Option[] = [
