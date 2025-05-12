@@ -19,7 +19,7 @@
             <div class="dropdown-container week-dropdown">
                 <div class="dropdown-container-inner year">
                     <div class="dropdown-toggle" (click)="toggleDropdown('week-year')">
-                        <span>Chọn năm</span>
+                        <span>{{weekYear | getLabel: years}}</span>
                     </div>
                     <div class="dropdown-menu" [ngClass]="{'open': openDropdown === 'week-year'}">
                         <div class="dropdown-item" *ngFor="let year of years" (click)="onSelectYear(year.value, 'week')"
@@ -30,7 +30,7 @@
                 </div>
                 <div class="dropdown-container-inner month">
                     <div class="dropdown-toggle" (click)="toggleDropdown('week-month')">
-                        Chọn tháng
+                        {{weekMonth | getLabel: months}}
                     </div>
                     <div class="dropdown-menu" [ngClass]="{'open': openDropdown === 'week-month'}">
                         <div class="dropdown-item" *ngFor="let month of months" (click)="onSelectWeekMonth(month.value)"
@@ -41,8 +41,8 @@
                 </div>
                 <div class="dropdown-container-inner week">
                     <div class="dropdown-toggle" (click)="toggleDropdown('week')">
-                        Chọn tuần
-                        <span class="week-range">{{ 'Range' }}</span>
+                        {{selectedWeek | getLabel: weeks}}
+                        <span class="week-range">{{ weekRange }}</span>
                     </div>
                     <div class="dropdown-menu" [ngClass]="{'open': openDropdown === 'week'}">
                         <div class="dropdown-item" *ngFor="let week of weeks" (click)="onSelectWeek(week.value)"

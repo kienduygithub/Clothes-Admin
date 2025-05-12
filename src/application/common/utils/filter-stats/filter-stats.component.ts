@@ -8,8 +8,9 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from "@angular/materia
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import _moment from 'moment';
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { GetLabelPipe } from "../../layout/pipes/getLabel";
 
-interface Option {
+export interface Option {
     label: string;
     value: string;
     range?: string;
@@ -48,6 +49,10 @@ const PROVIDERS = [
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
 ]
 
+const PIPES = [
+    GetLabelPipe
+]
+
 @Component({
     standalone: true,
     selector: 'filter-stats-component',
@@ -55,9 +60,10 @@ const PROVIDERS = [
     styleUrl: 'filter-stats.component.scss',
     imports: [
         ...ANGULAR_MODULES,
-        ...MAT_MODULES
+        ...MAT_MODULES,
+        ...PIPES
     ],
-    providers: []
+    providers: [...PROVIDERS]
 })
 
 export class FilterStatsComponent implements OnInit {
@@ -89,6 +95,7 @@ export class FilterStatsComponent implements OnInit {
     selectedMonth: string = '';
     selectedYear: string = '';
     selectedWeek: string = '';
+    weekRange: string = ''; /** Lưu trữ range của tuần **/
     selectedStartDay: Date | null = null;
     selectedEndDay: Date | null = null;
     weekMonth: string = '';
@@ -116,6 +123,7 @@ export class FilterStatsComponent implements OnInit {
         this.selectedEndDay = new Date();
         this.updateWeeks(currentMonth, currentYear);
         this.selectedWeek = this.getWeekNumber(new Date()).toString();
+        this.weekRange = this.weeks.find(w => w.value === this.selectedWeek)?.range || 'Range';
         // if (this.formControl?.value !== '') {
         //     this.time.setValue(_moment(`${this.formControl?.value}`, "DD/MM/YYYY"));
         // }
@@ -141,6 +149,7 @@ export class FilterStatsComponent implements OnInit {
             this.weekYear = currentYear.toString();
             this.updateWeeks(currentMonth, currentYear);
             this.selectedWeek = this.getWeekNumber(new Date()).toString();
+            this.weekRange = this.weeks.find(w => w.value === this.selectedWeek)?.range || 'Range';
         }
 
         if (value === 'DAY') {
@@ -163,6 +172,8 @@ export class FilterStatsComponent implements OnInit {
         if (type === 'week') {
             this.weekYear = year;
             this.updateWeeks(+this.weekMonth, +year);
+            this.selectedWeek = this.weeks[0]?.value || '';
+            this.weekRange = this.weeks.find(w => w.value === this.selectedWeek)?.range || 'Range';
         }
         if (type === 'year') this.selectedYear = year;
         this.openDropdown = null; // Đóng dropdown
@@ -172,11 +183,13 @@ export class FilterStatsComponent implements OnInit {
         this.weekMonth = month;
         this.updateWeeks(+month, +this.weekYear);
         this.selectedWeek = this.weeks[0]?.value || '';
+        this.weekRange = this.weeks.find(w => w.value === this.selectedWeek)?.range || 'Range';
         this.openDropdown = null; // Đóng dropdown
     }
 
     onSelectWeek(week: string) {
         this.selectedWeek = week;
+        this.weekRange = this.weeks.find(w => w.value === week)?.range || 'Range';
         this.openDropdown = null; // Đóng dropdown
     }
 
@@ -239,14 +252,31 @@ export class FilterStatsComponent implements OnInit {
         while (weekStart <= lastDay) {
             const weekEnd = new Date(weekStart);
             weekEnd.setDate(weekStart.getDate() + 6);
-            if (weekEnd > lastDay) weekEnd.setDate(lastDay.getDate());
+
+            // Đảm bảo weekEnd không vượt quá lastDay của tháng
+            if (weekEnd > lastDay) {
+                weekEnd.setTime(lastDay.getTime()); // Đặt weekEnd chính xác bằng lastDay
+            }
+
             this.weeks.push({
                 label: `Tuần ${weekNumber}`,
                 value: `${weekNumber}`,
-                range: `${weekStart.getDate()}/${weekStart.getMonth() + 1} - ${weekEnd.getDate()}/${weekEnd.getMonth() + 1}`
+                range: `${weekStart.getDate()}/${weekStart.getMonth() + 1} - ${weekEnd.getDate()}/${weekEnd.getMonth() + 1}`,
             });
+
+            // Chuyển đến ngày đầu của tuần tiếp theo
             weekStart.setDate(weekStart.getDate() + 7);
             weekNumber++;
+        }
+
+        /**
+         * Kiểm tra xem selectedWeek hiện tại có tồn tại trong danh sách
+         * weeks mới không. Nếu không thì thực hiên cập nhật
+         * Example: Tháng thay đổi, tuần trước không còn hợp lệ
+         */
+        if (!this.weeks.find(w => w.value === this.selectedWeek)) {
+            this.selectedWeek = this.weeks[0]?.value || '';
+            this.weekRange = this.weeks[0]?.range || 'Range';
         }
     }
 
@@ -262,6 +292,7 @@ export class FilterStatsComponent implements OnInit {
         this.selectedMonth = '';
         this.selectedYear = '';
         this.selectedWeek = '';
+        this.weekRange = '';
         this.weekMonth = '';
         this.weekYear = '';
         this.selectedStartDay = null;
@@ -270,7 +301,7 @@ export class FilterStatsComponent implements OnInit {
     }
 
     private updateDashboardData() {
-        console.log(`Filter: ${this.selectedCriterial}, Month: ${this.selectedMonth}, Year: ${this.selectedYear}, Week: ${this.selectedWeek}, StartDay: ${this.selectedStartDay?.toISOString()}, EndDay: ${this.selectedEndDay?.toISOString()}`);
+        console.log(`Filter: ${this.selectedCriterial}, Month: ${this.selectedMonth}, Year: ${this.selectedYear}, Week: ${this.selectedWeek}, WeekRange: ${this.weekRange}, StartDay: ${this.selectedStartDay?.toISOString()}, EndDay: ${this.selectedEndDay?.toISOString()}`);
     }
 
     @HostListener('document:click', ['$event'])
