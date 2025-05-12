@@ -1,4 +1,4 @@
-<div class="filter-container">
+<div class="filter-container" [ngClass]="{'d-flex flex-row align-items-center': selectedCriterial === 'ALL'}">
     <div class="criteria-selector">
         <div (click)="onSelectCriteria(criteria.value)" class="criteria-item"
             [ngClass]="{'active': selectedCriterial === criteria.value}" *ngFor="let criteria of CriteriaOptions">
