@@ -171,6 +171,7 @@ export class ImageResource {
   static icon_complete_order: string = 'assets/icon/icon_complete_order.svg';
   static icon_calendar: string = 'assets/icon/icon_calendar.svg';
   static icon_calendar_v2: string = 'assets/icon/calendar.svg';
+  static icon_dropdown_arrow_left: string = 'assets/icon/icon_dropdown_arrow_left.svg';
 
   static image_not_found: string = 'assets/image/image_not_found.jpg';
   static image_no_avatar: string = 'assets/image/no_avatar.png';

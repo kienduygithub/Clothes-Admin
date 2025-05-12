@@ -6,35 +6,49 @@
         </div>
     </div>
     <div class="schedule-selector">
-        <div class="schedule-item">
+        <!-- Ngày: Hai Dropdown -->
+        <div class="schedule-item" *ngIf="selectedCriterial === 'DAY'">
             <div class="date-pick-container">
                 <img (click)="datePicker.focus()" src="{{ calendar_icon }}" alt="" />
                 <input placeholder="Chọn ngày" nbInput [nbDatepicker]="rangepicker" #datePicker readonly />
                 <nb-rangepicker [max]="max" #rangepicker></nb-rangepicker>
             </div>
         </div>
-        <div class="schedule-item">
-            <div class="dropdown-container month-dropdown" *ngIf="selectedCriterial === 'MONTH'">
-                <div class="dropdown-toggle">
-                    Chọn tháng
-                </div>
-                <div class="dropdown-menu">
-                    <div class="dropdown-item" *ngFor="let month of months" (click)="onSelectMonth(month.value)"
-                        [ngClass]="{'active': selectedMonth === month.value}">
-                        {{ month.label }}
+        <!-- Tuần: Ba Dropdown -->
+        <div class="schedule-item" *ngIf="selectedCriterial === 'WEEK'">
+            <div class="dropdown-container week-dropdown">
+                <div class="dropdown-container-inner year">
+                    <div class="dropdown-toggle" (click)="toggleDropdown('week-year')">
+                        <span>Chọn năm</span>
+                    </div>
+                    <div class="dropdown-menu" [ngClass]="{'open': openDropdown === 'week-year'}">
+                        <div class="dropdown-item" *ngFor="let year of years" (click)="onSelectYear(year.value, 'week')"
+                            [ngClass]="{'active': weekYear === year.value}">
+                            {{ year.label }}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="schedule-item">
-            <div class="dropdown-container year-dropdown" *ngIf="selectedCriterial === 'YEAR'">
-                <div class="dropdown-toggle">
-                    Chọn năm
+                <div class="dropdown-container-inner month">
+                    <div class="dropdown-toggle" (click)="toggleDropdown('week-month')">
+                        Chọn tháng
+                    </div>
+                    <div class="dropdown-menu" [ngClass]="{'open': openDropdown === 'week-month'}">
+                        <div class="dropdown-item" *ngFor="let month of months" (click)="onSelectWeekMonth(month.value)"
+                            [ngClass]="{'active': weekMonth === month.value}">
+                            {{ month.label }}
+                        </div>
+                    </div>
                 </div>
-                <div class="dropdown-menu">
-                    <div class="dropdown-item" *ngFor="let year of years" (click)="onSelectYear(year.value)"
-                        [ngClass]="{'active': selectedYear === year.value}">
-                        {{ year.label }}
+                <div class="dropdown-container-inner week">
+                    <div class="dropdown-toggle" (click)="toggleDropdown('week')">
+                        Chọn tuần
+                        <span class="week-range">{{ 'Range' }}</span>
+                    </div>
+                    <div class="dropdown-menu" [ngClass]="{'open': openDropdown === 'week'}">
+                        <div class="dropdown-item" *ngFor="let week of weeks" (click)="onSelectWeek(week.value)"
+                            [ngClass]="{'active': selectedWeek === week.value}">
+                            {{ week.label }} ({{ week.range }})
+                        </div>
                     </div>
                 </div>
             </div>
