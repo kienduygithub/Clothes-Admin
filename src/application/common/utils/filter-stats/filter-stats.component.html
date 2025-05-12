@@ -58,7 +58,7 @@
             <div class="dropdown-container month-dropdown" *ngIf="selectedCriterial === 'MONTH'">
                 <div class="dropdown-container-inner month">
                     <div class="dropdown-toggle" (click)="toggleDropdown('month')">
-                        Chọn tháng
+                        {{selectedMonth | getLabel: months}}
                     </div>
                     <div class="dropdown-menu" [ngClass]="{'open': openDropdown === 'month'}">
                         <div class="dropdown-item" *ngFor="let month of months" (click)="onSelectMonth(month.value)"
@@ -69,7 +69,7 @@
                 </div>
                 <div class="dropdown-container-inner year">
                     <div class="dropdown-toggle" (click)="toggleDropdown('month-year')">
-                        Chọn năm
+                        {{selectedYear | getLabel: years}}
                     </div>
                     <div class="dropdown-menu" [ngClass]="{'open': openDropdown === 'month-year'}">
                         <div class="dropdown-item" *ngFor="let year of years"
@@ -86,7 +86,7 @@
             <div class="dropdown-container year-dropdown" *ngIf="selectedCriterial === 'YEAR'">
                 <div class="dropdown-container-inner">
                     <div class="dropdown-toggle" (click)="toggleDropdown('year')">
-                        Chọn năm
+                        {{selectedYear | getLabel: years}}
                     </div>
                     <div class="dropdown-menu" [ngClass]="{'open': openDropdown === 'year'}">
                         <div class="dropdown-item" *ngFor="let year of years" (click)="onSelectYear(year.value, 'year')"
