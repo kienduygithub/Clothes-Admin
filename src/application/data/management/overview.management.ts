@@ -78,12 +78,11 @@ export class OverviewManagement {
     }
 
     async fetchCustomerStats(
-        startDate: Date,
-        endDate: Date,
+        dateRanges: DateRange[],
         limit = 10
     ): Promise<Map<string, any>> {
         try {
-            const result = await this.overviewService.fetchCustomerStats(startDate, endDate, limit);
+            const result = await this.overviewService.fetchCustomerStats(dateRanges, limit);
             const totalCustomers = result?.body?.totalCustomers || 0;
             const topCustomers: TopCustomerModel[] = result?.body?.topCustomers?.map(
                 (topCustomer: any) => new TopCustomerModel(

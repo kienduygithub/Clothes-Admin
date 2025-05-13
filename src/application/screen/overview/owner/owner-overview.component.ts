@@ -154,9 +154,11 @@ export class OwnerOverviewComponent implements OnInit {
         await this.fetchRevenueOvertime(groupBy);
         await this.fetchOrderStats(groupBy);
         await this.fetchTopSellingProducts();
+        await this.fetchCustomerStats();
 
         this.initRevenueChart(groupBy);
         this.initOrderPieChart(groupBy);
+        this.initTopCustomerChart();
     }
 
     async fetchShopOverviewStats() {
@@ -204,8 +206,7 @@ export class OwnerOverviewComponent implements OnInit {
     async fetchCustomerStats() {
         try {
             const response = await this.overviewMana.fetchCustomerStats(
-                this.past14Days,
-                this.today,
+                this.initDateRanges,
                 10
             );
             this.totalCustomers = response.get('totalCustomers') ?? 0;
@@ -389,6 +390,7 @@ export class OwnerOverviewComponent implements OnInit {
             this.topCustomerChartOptions = { series: [{ type: 'bar', data: [], show: false }] };
             return;
         }
+
         this.topCustomerChartOptions = {
             xAxis: {
                 type: 'category',

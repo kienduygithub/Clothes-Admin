@@ -96,8 +96,7 @@ export class OverviewService {
     }
 
     async fetchCustomerStats(
-        startDate: Date,
-        endDate: Date,
+        dateRanges: DateRange[],
         limit = 5
     ): Promise<any> {
         try {
@@ -107,8 +106,7 @@ export class OverviewService {
                 `${domain}`,
                 `overview/stats/customer/total-and-top-rank`,
                 {
-                    startDate,
-                    endDate,
+                    dateRanges,
                     limit
                 }
             );
