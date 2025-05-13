@@ -10,6 +10,7 @@ import _moment from 'moment';
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { GetLabelPipe } from "../../layout/pipes/getLabel";
 import { VIETNAMESE_LOCALE } from "../../resource/vietname-locale";
+import { adjustToUTCWithOffset } from "../../resource/time";
 
 export interface Option {
     label: string;
@@ -325,19 +326,24 @@ export class FilterStatsComponent implements OnInit {
                 const startDateDay = this.startDate.value ? new Date(this.startDate.value) : null;
                 const endDateDay = this.endDate.value ? new Date(this.endDate.value) : null;
                 if (startDateDay && endDateDay) {
-                    startDateDay.setHours(0, 0, 0, 0); // 00:00:00.000
-                    endDateDay.setHours(23, 59, 59, 999); // 23:59:59.999
-                    dateRanges.push({ startDate: startDateDay, endDate: endDateDay });
+                    startDateDay.setHours(0, 0, 0, 0);
+                    endDateDay.setHours(23, 59, 59, 999);
+                    dateRanges.push({
+                        startDate: adjustToUTCWithOffset(startDateDay),
+                        endDate: adjustToUTCWithOffset(endDateDay)
+                    });
                 }
                 break;
             case 'MONTH':
                 if (this.selectedMonth && this.selectedYear) {
                     const startDateMonth = new Date(+this.selectedYear, +this.selectedMonth - 1, 1);
                     const endDateMonth = new Date(+this.selectedYear, +this.selectedMonth, 0);
-
-                    startDateMonth.setHours(0, 0, 0, 0); // 00:00:00.000
-                    endDateMonth.setHours(23, 59, 59, 999); // 23:59:59.999
-                    dateRanges.push({ startDate: startDateMonth, endDate: endDateMonth });
+                    startDateMonth.setHours(0, 0, 0, 0);
+                    endDateMonth.setHours(23, 59, 59, 999);
+                    dateRanges.push({
+                        startDate: adjustToUTCWithOffset(startDateMonth),
+                        endDate: adjustToUTCWithOffset(endDateMonth)
+                    });
                 }
                 break;
             case 'WEEK':
@@ -346,10 +352,12 @@ export class FilterStatsComponent implements OnInit {
                         const [day, month] = dateStr.split('/');
                         return new Date(+this.weekYear, +month - 1, +day);
                     });
-
-                    start.setHours(0, 0, 0, 0); // 00:00:00.000
-                    end.setHours(23, 59, 59, 999); // 23:59:59.999
-                    dateRanges.push({ startDate: start, endDate: end });
+                    start.setHours(0, 0, 0, 0);
+                    end.setHours(23, 59, 59, 999);
+                    dateRanges.push({
+                        startDate: adjustToUTCWithOffset(start),
+                        endDate: adjustToUTCWithOffset(end)
+                    });
                 }
                 break;
             case 'YEAR':
@@ -357,10 +365,13 @@ export class FilterStatsComponent implements OnInit {
                     for (let month = 1; month <= 12; month++) {
                         const startDateMonth = new Date(+this.selectedYear, month - 1, 1);
                         const endDateMonth = new Date(+this.selectedYear, month, 0);
-
-                        startDateMonth.setHours(0, 0, 0, 0); // 00:00:00.000
-                        endDateMonth.setHours(23, 59, 59, 999); // 23:59:59.999
-                        dateRanges.push({ startDate: startDateMonth, endDate: endDateMonth, month });
+                        startDateMonth.setHours(0, 0, 0, 0);
+                        endDateMonth.setHours(23, 59, 59, 999);
+                        dateRanges.push({
+                            startDate: adjustToUTCWithOffset(startDateMonth),
+                            endDate: adjustToUTCWithOffset(endDateMonth),
+                            month
+                        });
                     }
                 }
                 break;

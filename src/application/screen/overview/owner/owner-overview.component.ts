@@ -282,7 +282,7 @@ export class OwnerOverviewComponent implements OnInit {
                 },
                 barWidth: '30%', // Độ rộng cột
                 label: {
-                    show: true,
+                    show: false,
                     position: 'top',
                     formatter: '{c} VNĐ',
                     fontSize: 12,
