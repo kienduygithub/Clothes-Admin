@@ -193,8 +193,6 @@ export class FilterStatsComponent implements OnInit {
         this.openDropdown = null; // Đóng dropdown
     }
 
-
-
     onConfirm() {
         if (this.isValidSelection()) {
             this.updateDashboardData();
@@ -302,7 +300,47 @@ export class FilterStatsComponent implements OnInit {
     }
 
     private updateDashboardData() {
-        console.log(`Filter: ${this.selectedCriterial}, Month: ${this.selectedMonth}, Year: ${this.selectedYear}, Week: ${this.selectedWeek}, WeekRange: ${this.weekRange}}`);
+        let startDateValue: string | null = null;
+        let endDateValue: string | null = null;
+
+        switch (this.selectedCriterial) {
+            case 'DAY':
+                startDateValue = this.startDate.value ? _moment(this.startDate.value).format('DD/MM/YYYY') : null;
+                endDateValue = this.endDate.value ? _moment(this.endDate.value).format('DD/MM/YYYY') : null;
+                break;
+            case 'MONTH':
+                if (this.selectedMonth && this.selectedYear) {
+                    const start = new Date(+this.selectedYear, +this.selectedMonth - 1, 1);
+                    const end = new Date(+this.selectedYear, +this.selectedMonth, 0); // Ngày cuối tháng
+                    startDateValue = _moment(start).format('DD/MM/YYYY');
+                    endDateValue = _moment(end).format('DD/MM/YYYY');
+                }
+                break;
+            case 'WEEK':
+                if (this.weekRange) {
+                    const [start, end] = this.weekRange.split(' - ').map(dateStr => {
+                        const [day, month] = dateStr.split('/');
+                        return new Date(+this.weekYear, +month - 1, +day);
+                    });
+                    startDateValue = _moment(start).format('DD/MM/YYYY');
+                    endDateValue = _moment(end).format('DD/MM/YYYY');
+                }
+                break;
+            case 'YEAR':
+            case 'ALL':
+                // Để sau theo yêu cầu
+                break;
+        }
+
+        console.log({
+            filter: this.selectedCriterial,
+            month: this.selectedMonth,
+            year: this.selectedYear,
+            week: this.selectedWeek,
+            weekRange: this.weekRange,
+            startDate: startDateValue,
+            endDate: endDateValue
+        });
     }
 
     @HostListener('document:click', ['$event'])
