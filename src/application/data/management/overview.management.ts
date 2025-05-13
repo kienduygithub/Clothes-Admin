@@ -118,15 +118,13 @@ export class OverviewManagement {
     }
 
     async fetchOrderCompletionStats(
-        startDate: Date,
-        endDate: Date,
+        dateRanges: DateRange[],
         groupBy: GroupDate = GroupDate.DAY,
         status?: OrderStatus
     ): Promise<OrderCompletionRateModel> {
         try {
-            const result = await this.overviewService.fetchOrderCompletionStats(startDate, endDate, groupBy, status);
+            const result = await this.overviewService.fetchOrderCompletionStats(dateRanges, groupBy, status);
             const response: OrderCompletionRateModel = new OrderCompletionRateModel().convertObj(result?.body)
-            console.log('>>>', response);
             return response;
         } catch (error) {
             throw error;

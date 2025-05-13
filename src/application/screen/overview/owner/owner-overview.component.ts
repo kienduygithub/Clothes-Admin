@@ -147,7 +147,6 @@ export class OwnerOverviewComponent implements OnInit {
     }
 
     async onFilterStats(filter: FilterParams) {
-        console.log(filter);
         let groupBy = filter.filter === 'YEAR' ? GroupDate.MONTH : GroupDate.DAY;
         this.initDateRanges = filter.dateRanges;
         await this.fetchShopOverviewStats();
@@ -155,10 +154,12 @@ export class OwnerOverviewComponent implements OnInit {
         await this.fetchOrderStats(groupBy);
         await this.fetchTopSellingProducts();
         await this.fetchCustomerStats();
+        await this.fetchOrderCompletionStats();
 
         this.initRevenueChart(groupBy);
         this.initOrderPieChart(groupBy);
         this.initTopCustomerChart();
+        this.initOrderCompletionChart();
     }
 
     async fetchShopOverviewStats() {
@@ -229,10 +230,8 @@ export class OwnerOverviewComponent implements OnInit {
     async fetchOrderCompletionStats() {
         try {
             const response = await this.overviewMana.fetchOrderCompletionStats(
-                this.past14Days,
-                this.today,
+                this.initDateRanges,
                 GroupDate.DAY,
-                // OrderStatus.PENDING
             );
             this.orderCompletionRate = response;
         } catch (error) {
@@ -241,7 +240,6 @@ export class OwnerOverviewComponent implements OnInit {
     }
 
     initRevenueChart(groupBy: GroupDate) {
-        console.log(this.revenueStats);
         if (!this.revenueStats || !this.revenueStats.revenues) {
             return;
         }
@@ -387,10 +385,10 @@ export class OwnerOverviewComponent implements OnInit {
 
     initTopCustomerChart() {
         if (!this.topCustomers || this.topCustomers.length === 0) {
-            this.topCustomerChartOptions = { series: [{ type: 'bar', data: [], show: false }] };
             return;
         }
 
+        this.topCustomerChartOptions = null;
         this.topCustomerChartOptions = {
             xAxis: {
                 type: 'category',

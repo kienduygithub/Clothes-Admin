@@ -136,8 +136,7 @@ export class OverviewService {
     }
 
     async fetchOrderCompletionStats(
-        startDate: Date,
-        endDate: Date,
+        dateRanges: DateRange[],
         groupBy: GroupDate = GroupDate.DAY,
         status?: OrderStatus
     ): Promise<any> {
@@ -148,8 +147,7 @@ export class OverviewService {
                 `${domain}`,
                 `overview/stats/order/completion-rate`,
                 {
-                    startDate,
-                    endDate,
+                    dateRanges,
                     groupBy,
                     status
                 }
