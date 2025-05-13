@@ -47,13 +47,12 @@ export class OverviewManagement {
     }
 
     async fetchOrderStats(
-        startDate: Date,
-        endDate: Date,
+        dateRanges: DateRange[],
         groupBy: GroupDate = GroupDate.DAY,
         status?: OrderStatus
     ): Promise<OrderStatsModel> {
         try {
-            const result = await this.overviewService.fetchOrderStats(startDate, endDate, groupBy, status);
+            const result = await this.overviewService.fetchOrderStats(dateRanges, groupBy, status);
             const response: OrderStatsModel = new OrderStatsModel(result?.body)
 
             return response;

@@ -52,8 +52,7 @@ export class OverviewService {
     }
 
     async fetchOrderStats(
-        startDate: Date,
-        endDate: Date,
+        dateRanges: DateRange[],
         groupBy: GroupDate = GroupDate.DAY,
         status?: OrderStatus
     ): Promise<any> {
@@ -64,8 +63,7 @@ export class OverviewService {
                 `${domain}`,
                 `overview/stats/order/by-status-or-period`,
                 {
-                    startDate,
-                    endDate,
+                    dateRanges,
                     groupBy,
                     status
                 }

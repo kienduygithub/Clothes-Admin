@@ -134,13 +134,13 @@ export class OwnerOverviewComponent implements OnInit {
         })
         await this.fetchShopOverviewStats();
         await this.fetchRevenueOvertime(GroupDate.DAY);
-        await this.fetchOrderStats();
+        await this.fetchOrderStats(GroupDate.DAY);
         await this.fetchTopSellingProducts();
         await this.fetchCustomerStats();
         await this.fetchLowStockProducts();
         await this.fetchOrderCompletionStats();
         this.initRevenueChart(GroupDate.DAY);
-        this.initOrderPieChart();
+        this.initOrderPieChart(GroupDate.DAY);
         this.initTopCustomerChart();
         this.initOrderCompletionChart();
         this.resetPageLowStock();
@@ -152,8 +152,10 @@ export class OwnerOverviewComponent implements OnInit {
         this.initDateRanges = filter.dateRanges;
         await this.fetchShopOverviewStats();
         await this.fetchRevenueOvertime(groupBy);
+        await this.fetchOrderStats(groupBy);
 
         this.initRevenueChart(groupBy);
+        this.initOrderPieChart(groupBy);
     }
 
     async fetchShopOverviewStats() {
@@ -174,13 +176,11 @@ export class OwnerOverviewComponent implements OnInit {
         }
     }
 
-    async fetchOrderStats() {
+    async fetchOrderStats(groupBy: GroupDate) {
         try {
             const response = await this.overviewMana.fetchOrderStats(
-                this.past14Days,
-                this.today,
-                GroupDate.DAY,
-                // OrderStatus.PENDING
+                this.initDateRanges,
+                groupBy,
             );
             this.orderStats = response;
         } catch (error) {
@@ -315,10 +315,12 @@ export class OwnerOverviewComponent implements OnInit {
         };
     }
 
-    initOrderPieChart() {
+    initOrderPieChart(groupBy: GroupDate) { // Có vẻ không dùng
         if (!this.orderStats || !this.orderStats.statusCounts) {
             return;
         }
+
+        this.orderPieChartOptions = null;
 
         this.orderPieChartOptions = {
             tooltip: {
