@@ -47,26 +47,19 @@ export const ADMIN_MENU_ITEMS: any[] = [
 export const OWNER_MENU_ITEMS: any[] = [
     {
         title: 'Tổng quan',
-        icon: { icon: 'firewall_icon', pack: 'mainIcon' },
+        icon: { icon: 'dashboard_icon', pack: 'mainIcon' },
         link: '/' + OverviewUrl.OWNER_OVERVIEW,
         pathMatch: 'prefix',
     },
     {
         title: 'Sản phẩm',
         icon: { icon: 'network_icon', pack: 'mainIcon' },
-        link: '/owner/products',
+        link: '/' + ProductUrl.PRODUCT_LIST,
         pathMatch: 'prefix',
-        children: [
-            {
-                title: 'Danh sách sản phẩm',
-                link: '/' + ProductUrl.PRODUCT_LIST,
-                pathMatch: 'prefix'
-            },
-        ],
     },
     {
         title: 'Khuyến mãi',
-        icon: { icon: 'group_icon', pack: 'mainIcon' },
+        icon: { icon: 'firewall_icon', pack: 'mainIcon' },
         link: '/' + CouponUrl.COUPON_LIST_URL,
         pathMatch: 'prefix'
     },
