@@ -3,7 +3,7 @@
         <div class="d-flex align-items-center mb-2 header-form">
             <span class="header-title-text">Tổng quan</span>
         </div>
-        <filter-stats-component></filter-stats-component>
+        <filter-stats-component (OnFilter)="onFilterStats($event)"></filter-stats-component>
         <!-- Overview Stats -->
         <div class="row-container">
             <div class="box-overview-stats">

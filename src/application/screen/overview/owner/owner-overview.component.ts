@@ -22,7 +22,7 @@ import { NgxPaginationModule } from "ngx-pagination";
 import { PagingModel } from "../../../common/model/paging.model";
 import { ProductUrl } from "../../product/product.routing";
 import { Option } from "../../../common/resource/option.interface";
-import { FilterStatsComponent } from "../../../common/utils/filter-stats/filter-stats.component";
+import { FilterParams, FilterStatsComponent } from "../../../common/utils/filter-stats/filter-stats.component";
 echarts.use([
     BarChart,
     PieChart,
@@ -134,6 +134,10 @@ export class OwnerOverviewComponent implements OnInit {
         this.initTopCustomerChart();
         this.initOrderCompletionChart();
         this.resetPageLowStock();
+    }
+
+    async onFilterStats(filter: FilterParams) {
+        console.log(filter);
     }
 
     async fetchShopOverviewStats() {

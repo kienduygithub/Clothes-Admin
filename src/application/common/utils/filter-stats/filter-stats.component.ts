@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild } from "@angular/core";
 import { ImageResource } from "../../resource/image_resource";
 import { NbDatepickerModule, NbDateService } from "@nebular/theme";
 import { TranslateModule } from "@ngx-translate/core";
@@ -15,6 +15,16 @@ export interface Option {
     label: string;
     value: string;
     range?: string;
+}
+
+export interface FilterParams {
+    filter: string,
+    month: string,
+    year: string,
+    week: string,
+    weekRange: string,
+    startDate: string | null,
+    endDate: string | null
 }
 
 const MY_DATE_FORMAT = {
@@ -106,6 +116,8 @@ export class FilterStatsComponent implements OnInit {
     dateError: string | null = null;
     startDate = new FormControl<Date | null>(null);
     endDate = new FormControl<Date | null>(null);
+
+    @Output() OnFilter = new EventEmitter<FilterParams>();
 
     constructor(
         private dateService: NbDateService<Date>
@@ -332,7 +344,7 @@ export class FilterStatsComponent implements OnInit {
                 break;
         }
 
-        console.log({
+        this.OnFilter.emit({
             filter: this.selectedCriterial,
             month: this.selectedMonth,
             year: this.selectedYear,
@@ -340,7 +352,7 @@ export class FilterStatsComponent implements OnInit {
             weekRange: this.weekRange,
             startDate: startDateValue,
             endDate: endDateValue
-        });
+        })
     }
 
     @HostListener('document:click', ['$event'])
