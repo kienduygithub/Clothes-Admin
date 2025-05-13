@@ -18,6 +18,7 @@ import { ValueValidators } from '../../../../common/utils/validate/value.validat
 import { AuthManagement } from '../../../../data/management/auth.management';
 import { AuthService } from '../../../../data/service/auth.service';
 import { ErrorModel } from '../../../../common/model/error';
+import { ToastNotification } from '../../../common/toast/toast.component';
 
 const NB_LIBS = [
   NbTooltipModule,
@@ -100,7 +101,7 @@ export class OwnerChangePassswordComponent implements OnInit {
         newPassword: this.form.getRawValue().newPassword,
       }
       await this.authMana.changePassword(payload);
-      console.log('Đổi mật khẩu thành công');
+      ToastNotification.success('Đổi mật khẩu thành công');
     } catch (error) {
       console.log(error);
       if (error instanceof ErrorModel) {

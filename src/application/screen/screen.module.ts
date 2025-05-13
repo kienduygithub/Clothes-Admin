@@ -7,6 +7,7 @@ import { BaseLayoutComponent } from "../common/layout/base/base.layout";
 import { ScreenRouting } from "./screen.routing";
 import { AuthInterceptor } from "../common/utils/auth.interceptor";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { ToastNotification } from "./common/toast/toast.component";
 
 const NB_LIB = [
     NbMenuModule,
@@ -22,6 +23,7 @@ const ANGULAR_LIB = [ReactiveFormsModule];
         ...ANGULAR_LIB,
         ScreenRouting,
         BaseLayoutComponent,
+        ToastNotification
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

@@ -11,6 +11,7 @@ import { Router } from "@angular/router";
 @Component({
     selector: 'app-root',
     template: `
+        <app-toast-notification></app-toast-notification>
         <base-layout [menu]="menu" windowMode>
             <nb-menu id="nb-menu" [items]="menu"></nb-menu>
             <router-outlet></router-outlet>

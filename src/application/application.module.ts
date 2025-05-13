@@ -15,6 +15,7 @@ import { AuthInterceptor } from "./common/utils/auth.interceptor";
 import { AkitaNgDevtools } from "@datorama/akita-ngdevtools";
 import { NgxEchartsModule } from "ngx-echarts";
 import * as echarts from 'echarts/core';
+import { ToastNotification } from "./screen/common/toast/toast.component";
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -63,6 +64,7 @@ const ANGULAR_LIB = [
         ...ANGULAR_LIB,
         AuthRouting,
         ApplicationRouting,
+        ToastNotification
     ],
     bootstrap: [ApplicationComponent],
     providers: [
