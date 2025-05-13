@@ -23,6 +23,7 @@ import { PagingModel } from "../../../common/model/paging.model";
 import { ProductUrl } from "../../product/product.routing";
 import { Option } from "../../../common/resource/option.interface";
 import { DateRange, FilterParams, FilterStatsComponent } from "../../../common/utils/filter-stats/filter-stats.component";
+import { adjustToUTCWithOffset } from "../../../common/resource/time";
 echarts.use([
     BarChart,
     PieChart,
@@ -122,10 +123,14 @@ export class OwnerOverviewComponent implements OnInit {
     async ngOnInit(): Promise<any> {
         this.preImage = this.appConfig.getPreImage() ?? '';
         this.pagingLowStock = new PagingModel();
-        this.past14Days.setDate(this.today.getDate() - 14);
+        const startOfMonth = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
+        startOfMonth.setHours(0, 0, 0, 0);
+        const todayEnd = new Date(this.today);
+        todayEnd.setHours(23, 59, 59, 999);
+
         this.initDateRanges.push({
-            startDate: this.past14Days,
-            endDate: this.today
+            startDate: adjustToUTCWithOffset(startOfMonth),
+            endDate: adjustToUTCWithOffset(todayEnd)
         })
         await this.fetchShopOverviewStats();
         await this.fetchRevenueOvertime(GroupDate.DAY);
