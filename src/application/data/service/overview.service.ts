@@ -3,6 +3,7 @@ import { AppConfig } from "../../common/config/app.config";
 import { ServiceCore } from "../../common/service/service-core";
 import { GroupDate } from "../../common/resource/group-date";
 import { OrderStatus } from "../../common/resource/status";
+import { DateRange } from "../../common/utils/filter-stats/filter-stats.component";
 
 @Injectable()
 export class OverviewService {
@@ -12,7 +13,7 @@ export class OverviewService {
         private serviceCore: ServiceCore,
     ) { }
 
-    async fetchShopOverviewStats(startDate: Date, endDate: Date): Promise<any> {
+    async fetchShopOverviewStats(dateRanges: DateRange[]): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
 
@@ -20,8 +21,7 @@ export class OverviewService {
                 `${domain}`,
                 `overview/stats`,
                 {
-                    startDate,
-                    endDate
+                    dateRanges: dateRanges
                 }
             );
             return response;

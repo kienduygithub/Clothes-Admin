@@ -3,6 +3,7 @@ import { OverviewService } from "../service/overview.service";
 import { LowStockProductModel, OrderCompletionRateModel, OrderStatsModel, OverviewStatsModel, RevenueStatsModel, TopCustomerModel, TopSellingProductModel } from "../model/overview/overview.model";
 import { GroupDate } from "../../common/resource/group-date";
 import { OrderStatus } from "../../common/resource/status";
+import { DateRange } from "../../common/utils/filter-stats/filter-stats.component";
 
 @Injectable()
 export class OverviewManagement {
@@ -11,9 +12,9 @@ export class OverviewManagement {
         private overviewService: OverviewService
     ) { }
 
-    async fetchShopOverviewStats(startDate: Date, endDate: Date): Promise<OverviewStatsModel> {
+    async fetchShopOverviewStats(dateRanges: DateRange[]): Promise<OverviewStatsModel> {
         try {
-            const result = await this.overviewService.fetchShopOverviewStats(startDate, endDate);
+            const result = await this.overviewService.fetchShopOverviewStats(dateRanges);
             const response: OverviewStatsModel = new OverviewStatsModel(
                 result?.body?.overview?.totalRevenue,
                 result?.body?.overview?.totalOrders,

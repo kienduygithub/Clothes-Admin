@@ -22,7 +22,7 @@ import { NgxPaginationModule } from "ngx-pagination";
 import { PagingModel } from "../../../common/model/paging.model";
 import { ProductUrl } from "../../product/product.routing";
 import { Option } from "../../../common/resource/option.interface";
-import { FilterParams, FilterStatsComponent } from "../../../common/utils/filter-stats/filter-stats.component";
+import { DateRange, FilterParams, FilterStatsComponent } from "../../../common/utils/filter-stats/filter-stats.component";
 echarts.use([
     BarChart,
     PieChart,
@@ -111,6 +111,7 @@ export class OwnerOverviewComponent implements OnInit {
 
     offsetLowStock: number = 0;
     pagingLowStock!: PagingModel;
+    initDateRanges: DateRange[] = [];
 
     constructor(
         private router: Router,
@@ -122,7 +123,10 @@ export class OwnerOverviewComponent implements OnInit {
         this.preImage = this.appConfig.getPreImage() ?? '';
         this.pagingLowStock = new PagingModel();
         this.past14Days.setDate(this.today.getDate() - 14);
-        console.log(this.past14Days);
+        this.initDateRanges.push({
+            startDate: this.past14Days,
+            endDate: this.today
+        })
         await this.fetchShopOverviewStats();
         await this.fetchRevenueOvertime();
         await this.fetchOrderStats();
@@ -139,11 +143,13 @@ export class OwnerOverviewComponent implements OnInit {
 
     async onFilterStats(filter: FilterParams) {
         console.log(filter);
+        this.initDateRanges = filter.dateRanges;
+        this.fetchShopOverviewStats();
     }
 
     async fetchShopOverviewStats() {
         try {
-            const response = await this.overviewMana.fetchShopOverviewStats(this.past14Days, this.today);
+            const response = await this.overviewMana.fetchShopOverviewStats(this.initDateRanges);
             this.overviewStats = response;
         } catch (error) {
             console.log(error);
