@@ -153,6 +153,7 @@ export class OwnerOverviewComponent implements OnInit {
         await this.fetchShopOverviewStats();
         await this.fetchRevenueOvertime(groupBy);
         await this.fetchOrderStats(groupBy);
+        await this.fetchTopSellingProducts();
 
         this.initRevenueChart(groupBy);
         this.initOrderPieChart(groupBy);
@@ -191,8 +192,7 @@ export class OwnerOverviewComponent implements OnInit {
     async fetchTopSellingProducts() {
         try {
             const response = await this.overviewMana.fetchTopSellingProducts(
-                this.past14Days,
-                this.today,
+                this.initDateRanges,
                 10
             );
             this.topSellingProducts = response;

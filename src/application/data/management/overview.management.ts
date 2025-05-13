@@ -62,12 +62,11 @@ export class OverviewManagement {
     }
 
     async fetchTopSellingProducts(
-        startDate: Date,
-        endDate: Date,
+        dateRanges: DateRange[],
         limit = 10
     ): Promise<TopSellingProductModel[]> {
         try {
-            const result = await this.overviewService.fetchTopSellingProducts(startDate, endDate, limit);
+            const result = await this.overviewService.fetchTopSellingProducts(dateRanges, limit);
             const response: TopSellingProductModel[] = result?.body?.products?.map(
                 (product: any) => new TopSellingProductModel().convertObj(product)
             ) ?? [];

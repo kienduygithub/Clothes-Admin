@@ -75,8 +75,7 @@ export class OverviewService {
     }
 
     async fetchTopSellingProducts(
-        startDate: Date,
-        endDate: Date,
+        dateRanges: DateRange[],
         limit = 10
     ): Promise<any> {
         try {
@@ -86,8 +85,7 @@ export class OverviewService {
                 `${domain}`,
                 `overview/stats/product/top-selling`,
                 {
-                    startDate,
-                    endDate,
+                    dateRanges,
                     limit
                 }
             );
