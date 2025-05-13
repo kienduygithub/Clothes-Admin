@@ -66,7 +66,6 @@ export class AuthService {
         }
     }
 
-
     async getNewAccessToken(): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
@@ -78,6 +77,21 @@ export class AuthService {
                     refreshToken: refreshToken
                 }
             );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async changePassword(payload: any): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                'account/change-password',
+                payload
+            );
+
             return response;
         } catch (error) {
             throw error;

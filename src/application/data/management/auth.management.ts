@@ -93,4 +93,13 @@ export class AuthManagement {
             throw error;
         }
     }
+
+    async changePassword(payload: any): Promise<any> {
+        try {
+            await this.authService.changePassword(payload);
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

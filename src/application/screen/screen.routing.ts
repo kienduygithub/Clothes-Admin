@@ -17,6 +17,9 @@ import { CouponComponent } from './coupon/coupon.component';
 import { OverviewUrl } from './overview/overview.routing';
 import { AdminOverviewComponent } from './overview/admin/admin-overview.component';
 import { OwnerOverviewComponent } from './overview/owner/owner-overview.component';
+import { AccountUrl } from './account/account.routing';
+import { OwnerChangePassswordComponent } from './account/owner/change-password/change-password.component';
+import { OwnerAccountInfoComponent } from './account/owner/account-info/account-info.component';
 
 const routes: Routes = [
     {
@@ -104,6 +107,21 @@ const routes: Routes = [
                 path: CategoryUrl.CATEGORY_URL,
                 component: CategoryComponent,
                 title: 'Danh mục'
+            },
+            {
+                path: AccountUrl.OWNER_ACCOUNT,
+                redirectTo: '/' + AccountUrl.OWNER_ACCOUNT_INFO,
+                pathMatch: 'full'
+            },
+            {
+                path: AccountUrl.OWNER_ACCOUNT_INFO,
+                component: OwnerAccountInfoComponent,
+                title: 'Quản lý tài khoản'
+            },
+            {
+                path: AccountUrl.OWNER_ACCOUNT_CHANGE_PASSWORD,
+                component: OwnerChangePassswordComponent,
+                title: 'Đổi mật khẩu'
             }
         ],
     },

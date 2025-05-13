@@ -1,0 +1,24 @@
+<div class="screen">
+  <div class="layout-size">
+    <form>
+      <div class="d-flex align-items-center mb-4 header-form">
+        <div>
+          <label class="header-title">
+            {{ "menu.account_info" | translate }}
+          </label>
+        </div>
+      </div>
+
+      <div class="container d-flex justify-content-center">
+        <div class="section-bg">
+
+          <div class="button-container">
+            <button (click)="submitProfileInfo()" nbButton class="primary" type="submit">
+              {{ "common.update" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

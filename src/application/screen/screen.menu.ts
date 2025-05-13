@@ -1,3 +1,4 @@
+import { AccountUrl } from "./account/account.routing";
 import { CategoryUrl } from "./category/category.routing";
 import { CouponUrl } from "./coupon/coupon.routing";
 import { EmployeeUrl } from "./employee/employee.routing";
@@ -62,5 +63,23 @@ export const OWNER_MENU_ITEMS: any[] = [
         icon: { icon: 'firewall_icon', pack: 'mainIcon' },
         link: '/' + CouponUrl.COUPON_LIST_URL,
         pathMatch: 'prefix'
+    },
+    {
+        title: 'Quản lý tài khoản',
+        icon: { icon: 'reports_icon', pack: 'mainIcon' },
+        link: '/' + AccountUrl.OWNER_ACCOUNT,
+        pathMatch: 'prefix',
+        children: [
+            {
+                title: 'Thông tin tài khoản',
+                link: '/' + AccountUrl.OWNER_ACCOUNT_INFO,
+                pathMatch: 'prefix'
+            },
+            {
+                title: 'Đổi mật khẩu',
+                link: '/' + AccountUrl.OWNER_ACCOUNT_CHANGE_PASSWORD,
+                pathMatch: 'prefix'
+            },
+        ],
     },
 ];
