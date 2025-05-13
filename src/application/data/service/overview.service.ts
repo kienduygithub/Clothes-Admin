@@ -31,8 +31,7 @@ export class OverviewService {
     }
 
     async fetchRevenueOvertime(
-        startDate: Date,
-        endDate: Date,
+        dateRanges: DateRange[],
         groupBy: GroupDate = GroupDate.DAY
     ): Promise<any> {
         try {
@@ -42,8 +41,7 @@ export class OverviewService {
                 `${domain}`,
                 `overview/stats/by-period`,
                 {
-                    startDate,
-                    endDate,
+                    dateRanges,
                     groupBy
                 }
             );

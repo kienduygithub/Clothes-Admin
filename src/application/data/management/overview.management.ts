@@ -30,15 +30,14 @@ export class OverviewManagement {
     }
 
     async fetchRevenueOvertime(
-        startDate: Date,
-        endDate: Date,
+        dateRanges: DateRange[],
         groupBy: GroupDate = GroupDate.DAY
     ): Promise<RevenueStatsModel> {
         try {
-            const result = await this.overviewService.fetchRevenueOvertime(startDate, endDate, groupBy);
+            const result = await this.overviewService.fetchRevenueOvertime(dateRanges, groupBy);
             const response: RevenueStatsModel = new RevenueStatsModel(
-                result?.body?.revenues,
-                result?.body?.totalRevenue
+                result?.body?.overview?.revenues,
+                result?.body?.overview?.totalRevenue
             )
 
             return response;

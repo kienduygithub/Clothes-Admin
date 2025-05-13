@@ -44,7 +44,7 @@ export class OverviewStatsModel {
 
 // API 2
 export class RevenuePeriodModel {
-    period: string; // YYYY-MM-DD (ngày) hoặc YYYY-WW/YYYY-MM (tuần/tháng)
+    period: string;
     revenue: number;
 
     constructor(

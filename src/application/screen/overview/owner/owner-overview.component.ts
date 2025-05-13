@@ -128,7 +128,7 @@ export class OwnerOverviewComponent implements OnInit {
             endDate: this.today
         })
         await this.fetchShopOverviewStats();
-        await this.fetchRevenueOvertime();
+        await this.fetchRevenueOvertime(GroupDate.DAY);
         await this.fetchOrderStats();
         await this.fetchTopSellingProducts();
         await this.fetchCustomerStats();
@@ -143,8 +143,12 @@ export class OwnerOverviewComponent implements OnInit {
 
     async onFilterStats(filter: FilterParams) {
         console.log(filter);
+        let groupBy = filter.filter === 'YEAR' ? GroupDate.MONTH : GroupDate.DAY;
         this.initDateRanges = filter.dateRanges;
-        this.fetchShopOverviewStats();
+        await this.fetchShopOverviewStats();
+        await this.fetchRevenueOvertime(groupBy);
+
+        this.initRevenueChart();
     }
 
     async fetchShopOverviewStats() {
@@ -156,9 +160,9 @@ export class OwnerOverviewComponent implements OnInit {
         }
     }
 
-    async fetchRevenueOvertime() {
+    async fetchRevenueOvertime(groupBy: GroupDate) {
         try {
-            const response = await this.overviewMana.fetchRevenueOvertime(this.past14Days, this.today, GroupDate.DAY);
+            const response = await this.overviewMana.fetchRevenueOvertime(this.initDateRanges, groupBy);
             this.revenueStats = response;
         } catch (error) {
             console.log(error);
@@ -231,9 +235,12 @@ export class OwnerOverviewComponent implements OnInit {
     }
 
     initRevenueChart() {
+        console.log(this.revenueStats);
         if (!this.revenueStats || !this.revenueStats.revenues) {
             return;
         }
+
+        this.revenueChartOptions = null;
 
         this.revenueChartOptions = {
             xAxis: {
