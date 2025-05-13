@@ -134,7 +134,7 @@ export class OwnerOverviewComponent implements OnInit {
         await this.fetchCustomerStats();
         await this.fetchLowStockProducts();
         await this.fetchOrderCompletionStats();
-        this.initRevenueChart();
+        this.initRevenueChart(GroupDate.DAY);
         this.initOrderPieChart();
         this.initTopCustomerChart();
         this.initOrderCompletionChart();
@@ -148,7 +148,7 @@ export class OwnerOverviewComponent implements OnInit {
         await this.fetchShopOverviewStats();
         await this.fetchRevenueOvertime(groupBy);
 
-        this.initRevenueChart();
+        this.initRevenueChart(groupBy);
     }
 
     async fetchShopOverviewStats() {
@@ -234,7 +234,7 @@ export class OwnerOverviewComponent implements OnInit {
         }
     }
 
-    initRevenueChart() {
+    initRevenueChart(groupBy: GroupDate) {
         console.log(this.revenueStats);
         if (!this.revenueStats || !this.revenueStats.revenues) {
             return;
@@ -245,7 +245,7 @@ export class OwnerOverviewComponent implements OnInit {
         this.revenueChartOptions = {
             xAxis: {
                 type: 'category',
-                data: this.revenueStats.revenues.map(item => this.revenueStats.formatPeriod(item.period, GroupDate.DAY)),
+                data: this.revenueStats.revenues.map(item => this.revenueStats.formatPeriod(item.period, groupBy)),
                 axisLabel: {
                     rotate: 0,
                     fontSize: 12,

@@ -74,7 +74,7 @@ export class RevenueStatsModel {
         } else if (groupBy === 'week') {
             return `Tuần ${period.split('-')[1]} ${period.split('-')[0]}`; // Ví dụ: Tuần 18 2025
         } else {
-            return `Tháng ${period.split('-')[1]} ${period.split('-')[0]}`; // Ví dụ: Tháng 05 2025
+            return `${parseInt(period.split('-')[1], 10)}/${period.split('-')[0]}`; // Ví dụ: Tháng 05 2025
         }
     }
 }
