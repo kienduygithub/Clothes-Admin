@@ -9,7 +9,8 @@
             <div class="box-overview-stats">
                 <div class="overview-stats">
                     <div class="title">Tổng doanh thu</div>
-                    <div class="value">{{(overviewStats && overviewStats.totalRevenue) || 0}} VNĐ</div>
+                    <div class="value">{{(overviewStats && overviewStats.totalRevenue.toLocaleString('vi-VN')) || 0}}
+                        VNĐ</div>
                 </div>
                 <div class="icon-stats revenue">
                     <img [src]="icon_money_bag" />
