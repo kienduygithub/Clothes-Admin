@@ -122,6 +122,7 @@ export class OwnerOverviewComponent implements OnInit {
         this.preImage = this.appConfig.getPreImage() ?? '';
         this.pagingLowStock = new PagingModel();
         this.past14Days.setDate(this.today.getDate() - 14);
+        console.log(this.past14Days);
         await this.fetchShopOverviewStats();
         await this.fetchRevenueOvertime();
         await this.fetchOrderStats();

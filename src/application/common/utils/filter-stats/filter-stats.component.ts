@@ -18,6 +18,12 @@ export interface Option {
 }
 
 export interface DateRange {
+    startDate: Date;
+    endDate: Date;
+    month?: number;
+}
+
+export interface DateRangeISO {
     startDate: string;
     endDate: string;
     month?: number;
@@ -29,7 +35,8 @@ export interface FilterParams {
     year: string,
     week: string,
     weekRange: string,
-    dateRanges: DateRange[]
+    dateRanges: DateRange[],
+    dateRangeISOs: DateRangeISO[]
 }
 
 const MY_DATE_FORMAT = {
@@ -315,16 +322,21 @@ export class FilterStatsComponent implements OnInit {
 
         switch (this.selectedCriterial) {
             case 'DAY':
-                const startDateDay = this.startDate.value ? _moment(this.startDate.value).startOf('day').format('YYYY-MM-DD') : null;
-                const endDateDay = this.endDate.value ? _moment(this.endDate.value).endOf('day').format('YYYY-MM-DD') : null;
+                const startDateDay = this.startDate.value ? new Date(this.startDate.value) : null;
+                const endDateDay = this.endDate.value ? new Date(this.endDate.value) : null;
                 if (startDateDay && endDateDay) {
+                    startDateDay.setHours(0, 0, 0, 0); // 00:00:00.000
+                    endDateDay.setHours(23, 59, 59, 999); // 23:59:59.999
                     dateRanges.push({ startDate: startDateDay, endDate: endDateDay });
                 }
                 break;
             case 'MONTH':
                 if (this.selectedMonth && this.selectedYear) {
-                    const startDateMonth = _moment(new Date(+this.selectedYear, +this.selectedMonth - 1, 1)).startOf('day').format('YYYY-MM-DD');
-                    const endDateMonth = _moment(new Date(+this.selectedYear, +this.selectedMonth, 0)).endOf('day').format('YYYY-MM-DD');
+                    const startDateMonth = new Date(+this.selectedYear, +this.selectedMonth - 1, 1);
+                    const endDateMonth = new Date(+this.selectedYear, +this.selectedMonth, 0);
+
+                    startDateMonth.setHours(0, 0, 0, 0); // 00:00:00.000
+                    endDateMonth.setHours(23, 59, 59, 999); // 23:59:59.999
                     dateRanges.push({ startDate: startDateMonth, endDate: endDateMonth });
                 }
                 break;
@@ -334,17 +346,20 @@ export class FilterStatsComponent implements OnInit {
                         const [day, month] = dateStr.split('/');
                         return new Date(+this.weekYear, +month - 1, +day);
                     });
-                    const startDateWeek = _moment(start).startOf('day').format('YYYY-MM-DD');
-                    const endDateWeek = _moment(end).endOf('day').format('YYYY-MM-DD');
-                    dateRanges.push({ startDate: startDateWeek, endDate: endDateWeek });
+
+                    start.setHours(0, 0, 0, 0); // 00:00:00.000
+                    end.setHours(23, 59, 59, 999); // 23:59:59.999
+                    dateRanges.push({ startDate: start, endDate: end });
                 }
                 break;
             case 'YEAR':
                 if (this.selectedYear) {
-                    // Tạo 12 khoảng thời gian cho 12 tháng
                     for (let month = 1; month <= 12; month++) {
-                        const startDateMonth = _moment(new Date(+this.selectedYear, month - 1, 1)).startOf('day').format('YYYY-MM-DD');
-                        const endDateMonth = _moment(new Date(+this.selectedYear, month, 0)).endOf('day').format('YYYY-MM-DD');
+                        const startDateMonth = new Date(+this.selectedYear, month - 1, 1);
+                        const endDateMonth = new Date(+this.selectedYear, month, 0);
+
+                        startDateMonth.setHours(0, 0, 0, 0); // 00:00:00.000
+                        endDateMonth.setHours(23, 59, 59, 999); // 23:59:59.999
                         dateRanges.push({ startDate: startDateMonth, endDate: endDateMonth, month });
                     }
                 }
@@ -357,7 +372,12 @@ export class FilterStatsComponent implements OnInit {
             year: this.selectedYear,
             week: this.selectedWeek,
             weekRange: this.weekRange,
-            dateRanges: dateRanges
+            dateRanges: dateRanges,
+            dateRangeISOs: dateRanges.map(r => ({
+                startDate: r.startDate.toISOString(),
+                endDate: r.endDate.toISOString(),
+                month: r.month
+            }))
         })
     }
 
