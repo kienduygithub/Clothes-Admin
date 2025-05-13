@@ -17,14 +17,19 @@ export interface Option {
     range?: string;
 }
 
+export interface DateRange {
+    startDate: string;
+    endDate: string;
+    month?: number;
+}
+
 export interface FilterParams {
     filter: string,
     month: string,
     year: string,
     week: string,
     weekRange: string,
-    startDate: string | null,
-    endDate: string | null
+    dateRanges: DateRange[]
 }
 
 const MY_DATE_FORMAT = {
@@ -84,7 +89,6 @@ export class FilterStatsComponent implements OnInit {
 
     selectedCriterial: string = 'DAY';
     CriteriaOptions: Option[] = [
-        { label: 'Tất cả', value: 'ALL' },
         { label: 'Ngày', value: 'DAY' },
         { label: 'Tuần', value: 'WEEK' },
         { label: 'Tháng', value: 'MONTH' },
@@ -209,10 +213,7 @@ export class FilterStatsComponent implements OnInit {
         if (this.isValidSelection()) {
             this.updateDashboardData();
         } else {
-            // this.snackBar.open('Vui lòng chọn đầy đủ các trường!', 'Đóng', {
-            //     duration: 3000,
-            //     verticalPosition: 'top'
-            // });
+            console.warn('Vui lòng chọn đầy đủ các trường!');
         }
     }
 
@@ -226,8 +227,6 @@ export class FilterStatsComponent implements OnInit {
                 return !!this.selectedMonth && !!this.selectedYear;
             case 'YEAR':
                 return !!this.selectedYear;
-            case 'ALL':
-                return true;
             default:
                 return false;
         }
@@ -312,20 +311,21 @@ export class FilterStatsComponent implements OnInit {
     }
 
     private updateDashboardData() {
-        let startDateValue: string | null = null;
-        let endDateValue: string | null = null;
+        let dateRanges: DateRange[] = [];
 
         switch (this.selectedCriterial) {
             case 'DAY':
-                startDateValue = this.startDate.value ? _moment(this.startDate.value).format('DD/MM/YYYY') : null;
-                endDateValue = this.endDate.value ? _moment(this.endDate.value).format('DD/MM/YYYY') : null;
+                const startDateDay = this.startDate.value ? _moment(this.startDate.value).startOf('day').format('YYYY-MM-DD') : null;
+                const endDateDay = this.endDate.value ? _moment(this.endDate.value).endOf('day').format('YYYY-MM-DD') : null;
+                if (startDateDay && endDateDay) {
+                    dateRanges.push({ startDate: startDateDay, endDate: endDateDay });
+                }
                 break;
             case 'MONTH':
                 if (this.selectedMonth && this.selectedYear) {
-                    const start = new Date(+this.selectedYear, +this.selectedMonth - 1, 1);
-                    const end = new Date(+this.selectedYear, +this.selectedMonth, 0); // Ngày cuối tháng
-                    startDateValue = _moment(start).format('DD/MM/YYYY');
-                    endDateValue = _moment(end).format('DD/MM/YYYY');
+                    const startDateMonth = _moment(new Date(+this.selectedYear, +this.selectedMonth - 1, 1)).startOf('day').format('YYYY-MM-DD');
+                    const endDateMonth = _moment(new Date(+this.selectedYear, +this.selectedMonth, 0)).endOf('day').format('YYYY-MM-DD');
+                    dateRanges.push({ startDate: startDateMonth, endDate: endDateMonth });
                 }
                 break;
             case 'WEEK':
@@ -334,13 +334,20 @@ export class FilterStatsComponent implements OnInit {
                         const [day, month] = dateStr.split('/');
                         return new Date(+this.weekYear, +month - 1, +day);
                     });
-                    startDateValue = _moment(start).format('DD/MM/YYYY');
-                    endDateValue = _moment(end).format('DD/MM/YYYY');
+                    const startDateWeek = _moment(start).startOf('day').format('YYYY-MM-DD');
+                    const endDateWeek = _moment(end).endOf('day').format('YYYY-MM-DD');
+                    dateRanges.push({ startDate: startDateWeek, endDate: endDateWeek });
                 }
                 break;
             case 'YEAR':
-            case 'ALL':
-                // Để sau theo yêu cầu
+                if (this.selectedYear) {
+                    // Tạo 12 khoảng thời gian cho 12 tháng
+                    for (let month = 1; month <= 12; month++) {
+                        const startDateMonth = _moment(new Date(+this.selectedYear, month - 1, 1)).startOf('day').format('YYYY-MM-DD');
+                        const endDateMonth = _moment(new Date(+this.selectedYear, month, 0)).endOf('day').format('YYYY-MM-DD');
+                        dateRanges.push({ startDate: startDateMonth, endDate: endDateMonth, month });
+                    }
+                }
                 break;
         }
 
@@ -350,8 +357,7 @@ export class FilterStatsComponent implements OnInit {
             year: this.selectedYear,
             week: this.selectedWeek,
             weekRange: this.weekRange,
-            startDate: startDateValue,
-            endDate: endDateValue
+            dateRanges: dateRanges
         })
     }
 
