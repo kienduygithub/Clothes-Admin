@@ -97,4 +97,37 @@ export class AuthService {
             throw error;
         }
     }
+
+    async fetchAccountDetails(): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.GET(
+                `${domain}`,
+                `auth/user-details`,
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async editAccountDetails(
+        userModel: UserModel,
+        adminOwnerFile: any,
+    ): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const formData = new FormData();
+            formData.append('userInfo', JSON.stringify(userModel));
+            formData.append('adminOwnerFile', adminOwnerFile);
+            const response = await this.serviceCore.PATCH(
+                `${domain}`,
+                `auth/edit-details`,
+                formData
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

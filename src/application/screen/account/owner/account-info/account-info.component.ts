@@ -12,6 +12,12 @@ import { AppConfig } from '../../../../common/config/app.config';
 import { ImageResource } from '../../../../common/resource/image_resource';
 import { ValueValidators } from '../../../../common/utils/validate/value.validate';
 import { UserModel } from '../../../../data/model/user/user.model';
+import { AuthManagement } from '../../../../data/management/auth.management';
+import { AuthService } from '../../../../data/service/auth.service';
+import { ToastNotification } from '../../../common/toast/toast.component';
+import { AuthModel } from '../../../../common/model/auth.model';
+import { Router } from '@angular/router';
+import { AccountUrl } from '../../account.routing';
 
 const NB_LIBS = [
   NbTooltipModule,
@@ -22,19 +28,25 @@ const NB_LIBS = [
   NbIconModule
 ]
 
+const ANGULAR_MODULE = [
+  CommonModule,
+  TranslateModule,
+  ReactiveFormsModule,
+  FormsModule,
+]
+
+const PROVIDERS = [
+  AuthManagement,
+  AuthService
+]
+
 @Component({
-  selector: 'app-owner-account-info',
   standalone: true,
-  imports: [
-    ...NB_LIBS,
-    CommonModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    FormsModule,
-  ],
-  providers: [],
+  selector: 'app-owner-account-info',
   templateUrl: './account-info.component.html',
   styleUrls: ['./account-info.component.scss'],
+  imports: [...NB_LIBS, ...ANGULAR_MODULE],
+  providers: [...PROVIDERS],
 })
 export class OwnerAccountInfoComponent implements OnInit {
   icon_camera_upload: string = ImageResource.icon_camera_upload;
@@ -44,36 +56,46 @@ export class OwnerAccountInfoComponent implements OnInit {
   isSubmit = false;
   userInfo!: UserModel;
   infoForm!: FormGroup;
-  uploadImageFile!: File;
+  uploadImageFile: File | undefined;
+  isChanged = false;
+  originalForm: any;
 
   constructor(
+    private router: Router,
     private fb: FormBuilder,
     private appConfig: AppConfig,
+    private authMana: AuthManagement
   ) { }
 
   async ngOnInit() {
     this.preImage = this.appConfig.getPreImage() ?? '';
 
-    await this.initProfileInfoForm()
-    await this.fetchData()
+    await this.fetchData();
+    this.initProfileInfoForm();
   }
 
   async fetchData() {
     try {
-
+      this.userInfo = await this.authMana.fetchAccountDetails();
+      console.log(this.userInfo);
     } catch (error) {
-
+      console.log(error);
     }
   }
 
-  async initProfileInfoForm() {
+  initProfileInfoForm() {
     this.infoForm = this.fb.group({
-      id: this.fb.control(''),
-      name: this.fb.control('', [ValueValidators.required]),
-      gender: this.fb.control('1'),
-      email: this.fb.control({ value: '', disabled: true }),
-      phone: this.fb.control('', [ValueValidators.required, ValueValidators.isNumber]),
-      image_url: this.fb.control('')
+      id: this.fb.control(this.userInfo?.id ?? ''),
+      name: this.fb.control(this.userInfo?.name ?? '', [ValueValidators.required]),
+      gender: this.fb.control(this.userInfo?.gender?.toString() ?? 1),
+      email: this.fb.control({ value: this.userInfo?.email ?? '', disabled: true }),
+      phone: this.fb.control(this.userInfo?.phone ?? '', [ValueValidators.required, ValueValidators.isNumber]),
+      image_url: this.fb.control(this.userInfo?.image_url ?? '')
+    })
+
+    this.originalForm = this.infoForm.value;
+    this.infoForm.valueChanges.subscribe((response) => {
+      this.isChanged = JSON.stringify(this.originalForm) !== JSON.stringify(response);
     })
   }
 
@@ -82,13 +104,37 @@ export class OwnerAccountInfoComponent implements OnInit {
       this.uploadImageFile = files[0];
       this.infoForm.get('image_url')?.patchValue(
         URL.createObjectURL(files[0]),
-        { emitEvent: false }
       );
     }
   }
 
   async submitProfileInfo() {
+    this.isSubmit = true;
+    console.log(this.infoForm.value);
+    if (this.infoForm.invalid) {
+      console.log('INVALID FORM');
+      return;
+    }
 
+    try {
+      const model = new AuthModel('', '').convertFormToModel(this.infoForm);
+      const image_url = await this.authMana.editAccountDetails(model, this.uploadImageFile);
+      this.userInfo.name = model.name;
+      this.userInfo.phone = model.phone;
+      this.userInfo.gender = model.gender;
+      this.userInfo.image_url = image_url;
+      this.uploadImageFile = undefined;
+      this.initProfileInfoForm();
+      this.isChanged = false;
+      ToastNotification.success('Lưu thông tin thành công');
+    } catch (error) {
+      console.log(error);
+      ToastNotification.error('Lưu thông tin thất bại');
+    }
+  }
+
+  navigateChangePassword() {
+    this.router.navigateByUrl(AccountUrl.OWNER_ACCOUNT_CHANGE_PASSWORD)
   }
 
   async reduceSizeImage(file: any) {

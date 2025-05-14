@@ -102,4 +102,25 @@ export class AuthManagement {
             throw error;
         }
     }
+
+    async fetchAccountDetails() {
+        try {
+            const result = await this.authService.fetchAccountDetails();
+            return new UserModel().convertObj(result?.body?.users[0]);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async editAccountDetails(userModel: UserModel, adminOwnerFile: any) {
+        try {
+            const result = await this.authService.editAccountDetails(
+                userModel,
+                adminOwnerFile
+            );
+            return result?.body?.image_url;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

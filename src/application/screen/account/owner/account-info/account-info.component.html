@@ -67,9 +67,18 @@
                 <input nbInput type="text" formControlName="email" placeholder="Nhập Email" />
               </div>
             </div>
+            <div class="form-input">
+              <label class="label-form">Mật khẩu</label>
+              <div class="box box-password">
+                <input nbInput type="password" value="***********" />
+                <button class="change-password" (click)="navigateChangePassword()">
+                  Đổi mật khẩu
+                </button>
+              </div>
+            </div>
           </div>
           <div class="button-container">
-            <button (click)="submitProfileInfo()" nbButton class="button-submit-form" type="submit">
+            <button [disabled]="!isChanged" (click)="submitProfileInfo()" nbButton class="button-submit-form">
               Lưu
             </button>
           </div>
