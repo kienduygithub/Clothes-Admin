@@ -2,6 +2,7 @@ import { AccountUrl } from "./account/account.routing";
 import { CategoryUrl } from "./category/category.routing";
 import { CouponUrl } from "./coupon/coupon.routing";
 import { EmployeeUrl } from "./employee/employee.routing";
+import { OrderURL } from "./order/order.routing";
 import { OverviewUrl } from "./overview/overview.routing";
 import { ProductUrl } from "./product/product.routing";
 import { RegisterShopURL } from "./register-shop/register-shop.routing";
@@ -80,6 +81,12 @@ export const OWNER_MENU_ITEMS: any[] = [
         title: 'Khuyến mãi',
         icon: { icon: 'app_internet_icon', pack: 'mainIcon' },
         link: '/' + CouponUrl.COUPON_LIST_URL,
+        pathMatch: 'prefix'
+    },
+    {
+        title: 'Đơn hàng',
+        icon: { icon: 'icon_orders', pack: 'mainIcon' },
+        link: '/' + OrderURL.ORDER,
         pathMatch: 'prefix'
     },
     {

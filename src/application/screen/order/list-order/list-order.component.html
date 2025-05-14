@@ -1,0 +1,96 @@
+<div class="router-static">
+    <div class="search-and-filter">
+        <div class="search-input-container">
+            <input nbInput type="text" placeholder="Nhập mã đơn hàng" [formControl]="search">
+        </div>
+        <button nbButton class="util-box">
+            <img class="common-icon" [src]="icon_filter" (click)="onToggleOpenFilter()" />
+            <div class="filter-box" [ngClass]="{'open': isFilterOpen}">
+                <h3>Filter</h3>
+                <label *ngFor="let option of filterOptions">
+                    <input type="checkbox" [checked]="selectedFilters.includes(option.value)"
+                        (change)="onFilterToggle(option.value)" />
+                    {{ option.label }}
+                </label>
+                <div class="footer">
+                    <button class="btn-filter-box cancel" (click)="onCancelFilter()">
+                        Hủy
+                    </button>
+                    <button class="btn-filter-box filter" (click)="onFilter()">
+                        Lọc
+                    </button>
+                </div>
+            </div>
+        </button>
+        <button nbButton class="util-box">
+            <img class="common-icon" [src]="icon_refresh" (click)="onRefreshTable()" />
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><nb-icon class="table-header" icon="hash-outline"></nb-icon></th>
+                    <th>Mã đơn hàng</th>
+                    <th>Mã khách hàng</th>
+                    <th>Tổng giá trị</th>
+                    <th>Thời điểm khởi tạo</th>
+                    <th>Tình trạng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr (click)="onDetailOrder(order.id)"
+                    *ngFor="let order of displayListOrder | paginate: paging;let i = index">
+                    <td>
+                        <span>
+                            {{offset + i}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            #{{order.id}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            #{{order.user?.id}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{order.total_price}} VNĐ
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{order.created_at}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{order.status}}
+                        </span>
+                    </td>
+                </tr>
+                <tr *ngIf="displayListOrder.length === 0">
+                    <td class="table-no-data text-center" colspan="11">
+                        Không có dữ liệu
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <div class="total-items">
+            <span>Tổng số: {{ paging.totalItems }}</span>
+        </div>
+        <div class="pagination-flex">
+            <pagination-controls (pageChange)="onPageChange($event)" previousLabel="" nextLabel="">
+            </pagination-controls>
+        </div>
+    </div>
+</div>

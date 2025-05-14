@@ -49,6 +49,7 @@ export class ScreenComponent {
             app_internet_icon: ImageResource.app_internet_icon,
             tools_icon: ImageResource.tool_icon,
             icon_groups: ImageResource.icon_groups,
+            icon_orders: ImageResource.icon_orders,
         });
     }
 

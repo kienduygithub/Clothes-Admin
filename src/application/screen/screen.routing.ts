@@ -22,6 +22,8 @@ import { OwnerChangePassswordComponent } from './account/owner/change-password/c
 import { OwnerAccountInfoComponent } from './account/owner/account-info/account-info.component';
 import { AdminAccountInfoComponent } from './account/admin/account-info/account-info.component';
 import { AdminChangePassswordComponent } from './account/admin/change-password/change-password.component';
+import { OrderRouting, OrderURL } from './order/order.routing';
+import { OrderComponent } from './order/order.component';
 
 const routes: Routes = [
     {
@@ -35,6 +37,7 @@ const routes: Routes = [
             ...EmployeeRouting,
             ...ProductRouting,
             ...CategoryRouting,
+            ...OrderRouting,
             {
                 path: 'admin',
                 redirectTo: OverviewUrl.ADMIN_OVERVIEW,
@@ -139,6 +142,16 @@ const routes: Routes = [
                 path: AccountUrl.ADMIN_ACCOUNT_CHANGE_PASSWORD,
                 component: AdminChangePassswordComponent,
                 title: 'Đổi mật khẩu'
+            },
+            {
+                path: OrderURL.ORDER,
+                redirectTo: '/' + OrderURL.LIST_ORDER,
+                pathMatch: 'full'
+            },
+            {
+                path: OrderURL.LIST_ORDER,
+                component: OrderComponent,
+                title: 'Đơn hàng cửa hàng'
             }
         ],
     },

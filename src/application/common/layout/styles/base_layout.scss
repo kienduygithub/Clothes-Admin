@@ -65,7 +65,8 @@ nb-layout-column {
   &.icon_tool,
   &.icon_app_internet,
   &.icon_groups,
-  &.icon_account {
+  &.icon_account,
+  &.icon_orders {
     &.active {
       display: none;
     }
@@ -83,7 +84,8 @@ nb-layout-column {
   &.icon_tool,
   &.icon_app_internet,
   &.icon_groups,
-  &.icon_account {
+  &.icon_account,
+  &.icon_orders {
     &.inactive {
       display: none;
     }
