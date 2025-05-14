@@ -8,7 +8,6 @@ import {
   ReactiveFormsModule,
   ValidationErrors,
   ValidatorFn,
-  Validators,
 } from '@angular/forms';
 import { NbButtonModule, NbDialogModule, NbIconModule, NbInputModule, NbRadioModule, NbSelectModule, NbTooltipModule } from '@nebular/theme';
 import { TranslateModule } from '@ngx-translate/core';
@@ -37,7 +36,7 @@ const PROVIDERS = [
 
 @Component({
   standalone: true,
-  selector: 'app-change-password-owner',
+  selector: 'app-change-password-admin',
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.scss'],
   imports: [
@@ -49,7 +48,7 @@ const PROVIDERS = [
   ],
   providers: [...PROVIDERS],
 })
-export class OwnerChangePassswordComponent implements OnInit {
+export class AdminChangePassswordComponent implements OnInit {
   icon_eye: string = ImageResource.icon_eye;
   icon_eye_off: string = ImageResource.icon_eye_off;
 

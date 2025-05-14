@@ -1,0 +1,121 @@
+.section-bg {
+  width: 760px;
+  min-width: 760px;
+  height: 560px;
+  background-color: #FFF;
+  padding: 80px 0;
+}
+
+.header-title {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 18px;
+  margin-top: 5px;
+  letter-spacing: 0%;
+  color: #00427D;
+}
+
+.avatar {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 50px;
+  position: relative;
+  cursor: pointer;
+
+  .image-account {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+
+  .icon-upload {
+    position: absolute;
+    background-color: #F0F0F0;
+    border-radius: 50%;
+    z-index: 99999;
+    top: 60px;
+    right: -6px;
+    padding: 3px;
+
+    img {
+      height: 20px;
+      width: 20px;
+    }
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 0 60px;
+}
+
+.form-input {
+  width: 100%;
+  display: flex;
+  margin-bottom: 15px;
+
+  label.label-form {
+    line-height: 36px;
+    margin-bottom: 0px;
+    width: 200px;
+    white-space: nowrap;
+  }
+}
+
+.box {
+  width: 100%;
+
+  input {
+    width: 100%;
+    max-width: 1000px !important;
+  }
+}
+
+::ng-deep nb-select.gender-select {
+  width: 100%;
+  max-width: 1000px !important;
+
+  .select-button {
+    width: 100% !important;
+    max-width: 1000px !important;
+    display: flex;
+    align-items: center;
+    background-color: white !important;
+  }
+}
+
+.button-container {
+  margin-top: auto;
+  padding: 0 60px;
+  display: flex;
+  justify-content: end;
+}
+
+button:disabled {
+  color: white !important;
+  opacity: 0.5;
+}
+
+.box.box-password {
+  position: relative;
+
+  button.change-password {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 120px;
+    border: none;
+    background-color: transparent;
+    color: #1890FF;
+    font-size: 13px;
+  }
+}

@@ -20,6 +20,8 @@ import { OwnerOverviewComponent } from './overview/owner/owner-overview.componen
 import { AccountUrl } from './account/account.routing';
 import { OwnerChangePassswordComponent } from './account/owner/change-password/change-password.component';
 import { OwnerAccountInfoComponent } from './account/owner/account-info/account-info.component';
+import { AdminAccountInfoComponent } from './account/admin/account-info/account-info.component';
+import { AdminChangePassswordComponent } from './account/admin/change-password/change-password.component';
 
 const routes: Routes = [
     {
@@ -121,6 +123,21 @@ const routes: Routes = [
             {
                 path: AccountUrl.OWNER_ACCOUNT_CHANGE_PASSWORD,
                 component: OwnerChangePassswordComponent,
+                title: 'Đổi mật khẩu'
+            },
+            {
+                path: AccountUrl.ADMIN_ACCOUNT,
+                redirectTo: '/' + AccountUrl.ADMIN_ACCOUNT_INFO,
+                pathMatch: 'full'
+            },
+            {
+                path: AccountUrl.ADMIN_ACCOUNT_INFO,
+                component: AdminAccountInfoComponent,
+                title: 'Quản lý tài khoản'
+            },
+            {
+                path: AccountUrl.ADMIN_ACCOUNT_CHANGE_PASSWORD,
+                component: AdminChangePassswordComponent,
                 title: 'Đổi mật khẩu'
             }
         ],

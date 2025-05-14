@@ -43,6 +43,24 @@ export const ADMIN_MENU_ITEMS: any[] = [
             },
         ],
     },
+    {
+        title: 'Quản lý tài khoản',
+        icon: { icon: 'account_setting', pack: 'mainIcon' },
+        link: '/' + AccountUrl.ADMIN_ACCOUNT,
+        pathMatch: 'prefix',
+        children: [
+            {
+                title: 'Thông tin tài khoản',
+                link: '/' + AccountUrl.ADMIN_ACCOUNT_INFO,
+                pathMatch: 'prefix'
+            },
+            {
+                title: 'Đổi mật khẩu',
+                link: '/' + AccountUrl.ADMIN_ACCOUNT_CHANGE_PASSWORD,
+                pathMatch: 'prefix'
+            },
+        ],
+    },
 ]
 
 export const OWNER_MENU_ITEMS: any[] = [
