@@ -60,13 +60,13 @@ export const OWNER_MENU_ITEMS: any[] = [
     },
     {
         title: 'Khuyến mãi',
-        icon: { icon: 'firewall_icon', pack: 'mainIcon' },
+        icon: { icon: 'app_internet_icon', pack: 'mainIcon' },
         link: '/' + CouponUrl.COUPON_LIST_URL,
         pathMatch: 'prefix'
     },
     {
         title: 'Quản lý tài khoản',
-        icon: { icon: 'reports_icon', pack: 'mainIcon' },
+        icon: { icon: 'account_setting', pack: 'mainIcon' },
         link: '/' + AccountUrl.OWNER_ACCOUNT,
         pathMatch: 'prefix',
         children: [
