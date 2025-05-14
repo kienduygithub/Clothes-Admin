@@ -4,20 +4,76 @@
       <div class="d-flex align-items-center mb-4 header-form">
         <div>
           <label class="header-title">
-            {{ "menu.account_info" | translate }}
+            Thông tin tài khoản
           </label>
         </div>
       </div>
 
       <div class="container d-flex justify-content-center">
-        <div class="section-bg">
-
+        <form class="section-bg" *ngIf="infoForm" [formGroup]="infoForm">
+          <label for="upload-file" class="avatar">
+            <input #infoImageFile [hidden]="true" type="file" id="upload-file" accept=".png, .jpg, .jpeg"
+              (change)="onChangeImageFile(infoImageFile.files)" />
+            <img *ngIf="infoForm.get('image_url')?.value === '' && !uploadImageFile" class="image-account"
+              [src]="image_upload_person" />
+            <img *ngIf="uploadImageFile" class="image-account" [src]="infoForm.get('image_url')?.value" />
+            <img *ngIf="infoForm.get('image_url')?.value !== '' && !uploadImageFile" class="image-account"
+              src="{{preImage}}/{{infoForm.get('image_url')?.value}}" />
+            <div class="icon-upload">
+              <img [src]="icon_camera_upload" />
+            </div>
+          </label>
+          <div class="form">
+            <div class="form-input">
+              <label class="label-form">Họ tên</label>
+              <div class="box">
+                <input nbInput type="text" formControlName="name" placeholder="Nhập họ tên"
+                  [ngClass]="{'invalid-form': (infoForm.get('name')?.dirty || isSubmit) && infoForm.get('name')?.invalid}" />
+                <div *ngIf="(infoForm.get('name')?.dirty || isSubmit) && infoForm.get('name')?.invalid">
+                  <small class="vali-text-false" *ngIf="infoForm.get('name')?.hasError('required')">
+                    Họ tên không được bỏ trống
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="form-input">
+              <label class="label-form">Giới tính</label>
+              <div class="box">
+                <nb-select formControlName="gender" class="gender-select">
+                  <nb-option value="1">Nam</nb-option>
+                  <nb-option value="2">Nữ</nb-option>
+                  <nb-option value="0">Khác</nb-option>
+                </nb-select>
+              </div>
+            </div>
+            <div class="form-input">
+              <label class="label-form">Số điện thoại</label>
+              <div class="box">
+                <input nbInput type="text" formControlName="phone" placeholder="Nhập số điện thoại"
+                  [ngClass]="{'invalid-form': (infoForm.get('phone')?.dirty || isSubmit) && infoForm.get('phone')?.invalid}" />
+                <div *ngIf="(infoForm.get('phone')?.dirty || isSubmit) && infoForm.get('phone')?.invalid">
+                  <small class="vali-text-false" *ngIf="infoForm.get('phone')?.hasError('required')">
+                    Số điện thoại không được bỏ trống
+                  </small>
+                  <small class="vali-text-false" *ngIf="infoForm.get('phone')?.hasError('isNumber')">
+                    Số điện thoại chỉ chứa ký tự số
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="form-input">
+              <label class="label-form">Email</label>
+              <div class="box">
+                <input nbInput type="text" formControlName="email" placeholder="Nhập Email" />
+              </div>
+            </div>
+          </div>
           <div class="button-container">
-            <button (click)="submitProfileInfo()" nbButton class="primary" type="submit">
-              {{ "common.update" | translate }}
+            <button (click)="submitProfileInfo()" nbButton class="button-submit-form" type="submit">
+              Lưu
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </form>
   </div>

@@ -9,6 +9,9 @@ import {
 import { NbButtonModule, NbDialogModule, NbIconModule, NbInputModule, NbSelectModule, NbTooltipModule } from '@nebular/theme';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppConfig } from '../../../../common/config/app.config';
+import { ImageResource } from '../../../../common/resource/image_resource';
+import { ValueValidators } from '../../../../common/utils/validate/value.validate';
+import { UserModel } from '../../../../data/model/user/user.model';
 
 const NB_LIBS = [
   NbTooltipModule,
@@ -34,8 +37,14 @@ const NB_LIBS = [
   styleUrls: ['./account-info.component.scss'],
 })
 export class OwnerAccountInfoComponent implements OnInit {
+  icon_camera_upload: string = ImageResource.icon_camera_upload;
+  image_upload_person: string = ImageResource.image_upload_person;
+  preImage: string = '';
+
+  isSubmit = false;
+  userInfo!: UserModel;
   infoForm!: FormGroup;
-  avatarBlob: any
+  uploadImageFile!: File;
 
   constructor(
     private fb: FormBuilder,
@@ -43,6 +52,8 @@ export class OwnerAccountInfoComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.preImage = this.appConfig.getPreImage() ?? '';
+
     await this.initProfileInfoForm()
     await this.fetchData()
   }
@@ -56,23 +67,28 @@ export class OwnerAccountInfoComponent implements OnInit {
   }
 
   async initProfileInfoForm() {
+    this.infoForm = this.fb.group({
+      id: this.fb.control(''),
+      name: this.fb.control('', [ValueValidators.required]),
+      gender: this.fb.control('1'),
+      email: this.fb.control({ value: '', disabled: true }),
+      phone: this.fb.control('', [ValueValidators.required, ValueValidators.isNumber]),
+      image_url: this.fb.control('')
+    })
+  }
 
+  onChangeImageFile(files: any) {
+    if (files && files[0]) {
+      this.uploadImageFile = files[0];
+      this.infoForm.get('image_url')?.patchValue(
+        URL.createObjectURL(files[0]),
+        { emitEvent: false }
+      );
+    }
   }
 
   async submitProfileInfo() {
 
-  }
-
-  changeAvatar(blob: any) {
-    this.avatarBlob = blob
-  }
-
-  async uploadAvatar(avatarBlob: any) {
-    try {
-
-    } catch (error) {
-      throw error
-    }
   }
 
   async reduceSizeImage(file: any) {

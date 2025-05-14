@@ -175,6 +175,7 @@ export class ImageResource {
   static arrow_right: string = 'assets/icon/arrow-right.svg';
   static icon_eye: string = 'assets/icon/icon_eye.svg';
   static icon_eye_off: string = 'assets/icon/icon_eye_off.svg';
+  static icon_camera_upload: string = 'assets/icon/icon_camera_upload.svg';
 
   static image_not_found: string = 'assets/image/image_not_found.jpg';
   static image_no_avatar: string = 'assets/image/no_avatar.png';
@@ -185,6 +186,7 @@ export class ImageResource {
   static image_chart_line: string = 'assets/image/image_chart_line.svg';
   static image_chart_pie: string = 'assets/image/image_chart_pie.svg';
   static image_chart_bar: string = 'assets/image/image_chart_bar.svg';
+  static image_upload_person: string = 'assets/image/image_upload_person.svg';
 
   // ICON SIDEBAR
   static tool_icon: string = `
