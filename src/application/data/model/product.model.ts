@@ -1,3 +1,5 @@
+import { ColorModel } from "./attribute/color.model";
+import { SizeModel } from "./attribute/size.model";
 import { CategoryModel } from "./category.model";
 
 export class ProductModel {
@@ -127,12 +129,16 @@ export class ProductVariantModel {
     image_url?: string;
     sku?: string;
     stock_quantity?: number;
+    color: ColorModel | undefined;
+    size: SizeModel | undefined;
 
     constructor(
         id?: number,
         productId?: number,
         colorId?: number,
         sizeId?: number,
+        color?: ColorModel,
+        size?: SizeModel,
         image_url?: string,
         sku?: string,
         stock_quantity?: number,
@@ -141,6 +147,8 @@ export class ProductVariantModel {
         this.productId = productId ?? 0;
         this.colorId = colorId ?? 0;
         this.sizeId = sizeId ?? 0;
+        this.color = color ?? undefined;
+        this.size = size ?? undefined;
         this.image_url = image_url ?? '';
         this.sku = sku ?? '';
         this.stock_quantity = stock_quantity ?? 0;
@@ -152,6 +160,8 @@ export class ProductVariantModel {
         model.productId = data.productId;
         model.colorId = data.colorId;
         model.sizeId = data.sizeId;
+        model.color = data?.color ? new ColorModel().convertObj(data?.color) : undefined;
+        model.size = data?.size ? new SizeModel().convertObj(data?.size) : undefined;
         model.image_url = data.image_url;
         model.sku = data.sku;
         model.stock_quantity = data.stock_quantity;

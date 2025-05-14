@@ -10,9 +10,12 @@ export enum CouponStatus {
 }
 
 export enum OrderStatus {
-    PENDING = 'pending',
-    PAID = 'paid',
-    SHIPPED = 'shipped',
-    COMPLETED = 'completed',
-    CANCELED = 'canceled'
+    ALL = 'all',
+    PENDING = "pending",
+    PAID = "paid",
+    SHIPPED = "shipped",
+    COMPLETED = "completed",
+    CANCELED = "canceled",
+    PROCESSING = 'processing'
 }
+

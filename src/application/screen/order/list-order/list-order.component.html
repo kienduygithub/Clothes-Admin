@@ -32,7 +32,7 @@
                 <tr>
                     <th><nb-icon class="table-header" icon="hash-outline"></nb-icon></th>
                     <th>Mã đơn hàng</th>
-                    <th>Mã khách hàng</th>
+                    <th>Tên khách hàng</th>
                     <th>Tổng giá trị</th>
                     <th>Thời điểm khởi tạo</th>
                     <th>Tình trạng</th>
@@ -53,16 +53,12 @@
                     </td>
                     <td>
                         <span>
+                            {{order.user?.name}}
                         </span>
                     </td>
                     <td>
                         <span>
-                            #{{order.user?.id}}
-                        </span>
-                    </td>
-                    <td>
-                        <span>
-                            {{order.total_price}} VNĐ
+                            {{order.final_total.toLocaleString('vi-VN')}} VNĐ
                         </span>
                     </td>
                     <td>
@@ -71,7 +67,7 @@
                         </span>
                     </td>
                     <td>
-                        <span>
+                        <span class="text {{order.status}}">
                             {{order.status}}
                         </span>
                     </td>

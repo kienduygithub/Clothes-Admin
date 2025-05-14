@@ -10,6 +10,9 @@ import { PagingModel } from "../../../common/model/paging.model";
 import { AppConfig } from "../../../common/config/app.config";
 import { OrderURL } from "../order.routing";
 import { OrderModel } from "../../../data/model/order/order.model";
+import { OrderManagement } from "../../../data/management/order.management";
+import { OrderService } from "../../../data/service/order.service";
+import { OrderStatusColorPipe } from "../../../common/layout/pipes/orderStatusColor";
 
 const NB_LIBS = [
     NbInputModule,
@@ -25,7 +28,12 @@ const ANGULAR_MODULES = [
 ]
 
 const PROVIDERS = [
+    OrderManagement,
+    OrderService
+]
 
+const PIPES = [
+    OrderStatusColorPipe
 ]
 
 @Component({
@@ -36,10 +44,11 @@ const PROVIDERS = [
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         ...NB_LIBS,
-        ...ANGULAR_MODULES
+        ...ANGULAR_MODULES,
+        // ...PIPES
     ],
     providers: [
-        // ...PROVIDERS
+        ...PROVIDERS
     ]
 })
 
@@ -72,22 +81,24 @@ export class ListOrderComponent implements OnInit {
         private router: Router,
         private appConfig: AppConfig,
         private dialogService: NbDialogService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private orderMana: OrderManagement
     ) { }
 
     async ngOnInit() {
         this.preImage = this.appConfig.getPreImage() ?? "";
         this.paging = new PagingModel();
-        await this.fetchCoupons();
+        await this.fetchListShopOrder();
         this.resetPagination();
         this.searchValueChanges();
         this.cdr.detectChanges();
     }
 
-    async fetchCoupons() {
+    async fetchListShopOrder() {
         try {
-            // this.coupons = await this.couponManagement.fetchCoupons();
-            // this.displayCoupons = [...this.coupons];
+            this.listOrder = await this.orderMana.fetchListOrderShop();
+            this.displayListOrder = [...this.listOrder];
+            console.log(this.listOrder);
         } catch (error) {
             console.log(error);
         }
@@ -115,8 +126,8 @@ export class ListOrderComponent implements OnInit {
     resetPagination() {
         this.paging.currentPage = 1;
         this.paging.itemsPerPage = 10;
-        // this.paging.totalItems = this.displayCoupons.length;
-        // this.paging.totalPage = Math.ceil(this.displayCoupons.length / 3);
+        this.paging.totalItems = this.displayListOrder.length;
+        this.paging.totalPage = Math.ceil(this.displayListOrder.length / 10);
         this.paging.before = 0;
         this.paging.after = 0;
 
@@ -132,7 +143,7 @@ export class ListOrderComponent implements OnInit {
     }
 
     async onRefreshTable() {
-        await this.fetchCoupons();
+        await this.fetchListShopOrder();
         this.resetPagination();
         this.search.setValue('', { emitEvent: false });
         this.selectedFilters = [];
