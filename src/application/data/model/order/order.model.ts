@@ -11,6 +11,7 @@ export class OrderModel {
     order_shop_id: number;
     user: UserModel | undefined;
     address: AddressModel | undefined;
+    coupon: CouponModel | undefined;
     subtotal: number;
     discount: number;
     final_total: number;
@@ -23,8 +24,9 @@ export class OrderModel {
     constructor(
         id?: number,
         order_shop_id?: number,
-        user?: UserModel | undefined,
-        address?: AddressModel | undefined,
+        user?: UserModel,
+        address?: AddressModel,
+        coupon?: CouponModel,
         subtotal?: number,
         discount?: number,
         final_total?: number,
@@ -38,6 +40,7 @@ export class OrderModel {
         this.order_shop_id = order_shop_id ?? 0;
         this.user = user ?? undefined;
         this.address = address ?? undefined;
+        this.coupon = coupon ?? undefined;
         this.subtotal = subtotal ?? 0;
         this.discount = discount ?? 0;
         this.final_total = final_total ?? 0;
@@ -54,6 +57,7 @@ export class OrderModel {
         model.order_shop_id = data?.order_shop_id ?? 0;
         model.user = data?.user ? new UserModel().convertObj(data.user) : undefined;
         model.address = data?.address ? new AddressModel().convertObj(data.address) : undefined;
+        model.coupon = data?.coupon ? new CouponModel().fromJson(data.coupon) : undefined;
         model.subtotal = data?.subtotal ?? 0;
         model.discount = data?.discount ?? 0;
         model.final_total = data?.final_total ?? 0;
