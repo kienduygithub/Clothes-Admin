@@ -83,9 +83,8 @@ export class ListOrderComponent implements OnInit {
 
     OrderStatus = OrderStatus;
     OrderStatusOptions: Option[] = [
-        { label: 'Đang giao hàng', value: OrderStatus.SHIPPED },
+        { label: 'Đã giao hàng', value: OrderStatus.SHIPPED },
         { label: 'Đang xử lý', value: OrderStatus.PROCESSING },
-        { label: 'Đã hoàn thành', value: OrderStatus.COMPLETED },
     ]
 
     constructor(
@@ -214,20 +213,19 @@ export class ListOrderComponent implements OnInit {
         this.cdr.detectChanges();
     }
 
-    async onChangeStatus(orderId: number, newStatus: string, index: number) {
-        console.log(orderId)
-        const order = this.listOrder.find(o => o.id === orderId);
+    async onChangeStatus(order_shop_id: number, newStatus: string, index: number) {
+        const order = this.listOrder.find(o => o.order_shop_id === order_shop_id);
 
         if (!order) {
             return;
         }
 
         try {
-            await this.orderMana.updateStatusOrderShop(orderId, newStatus);
+            await this.orderMana.updateStatusOrderShop(order_shop_id, newStatus);
             order.status = newStatus;
             this.displayListOrder[index] = order;
             this.cdr.detectChanges();
-            ToastNotification.success("Đổi trạng thái đơn hàng " + orderId + " thành công")
+            ToastNotification.success("Đổi trạng thái đơn hàng thành công")
         } catch (error) {
             console.error('Lỗi khi cập nhật trạng thái:', error);
         }

@@ -36,6 +36,7 @@
                     <th>Tổng giá trị</th>
                     <th>Thời điểm khởi tạo</th>
                     <th>Tình trạng</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -47,7 +48,7 @@
                     </td>
                     <td (click)="onDetailOrder(order.id, order.order_shop_id)">
                         <span>
-                            #{{order.id}}
+                            #{{order.id}}<span class="order-shop-title">({{order.order_shop_id}})</span>
                         </span>
                     </td>
                     <td (click)="onDetailOrder(order.id, order.order_shop_id)">
@@ -66,13 +67,14 @@
                         </span>
                     </td>
                     <td>
-                        <span class="text {{order.status}}"
-                            *ngIf="order.status === OrderStatus.COMPLETED || order.status === OrderStatus.CANCELED">
+                        <span class="text {{order.status}}">
                             {{(order.status | OrderStatusColor).text}}
                         </span>
-                        <nb-select class="order-status-select"
-                            *ngIf="order.status !== OrderStatus.COMPLETED && order.status !== OrderStatus.CANCELED"
-                            placeholder="Chọn trạng thái" (selectedChange)="onChangeStatus(order.id, $event, i)">
+                    </td>
+                    <td>
+                        <nb-select class="order-status-select" placeholder="Chọn trạng thái"
+                            (selectedChange)="onChangeStatus(order.order_shop_id, $event, i)"
+                            *ngIf="order.status !== OrderStatus.COMPLETED && order.status !== OrderStatus.CANCELED && order.status !== OrderStatus.SHIPPED">
                             <nb-option *ngFor="let option of OrderStatusOptions"
                                 [value]="option.value">{{option.label}}</nb-option>
                         </nb-select>

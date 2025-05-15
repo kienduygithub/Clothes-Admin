@@ -30,7 +30,7 @@ export class OrderService {
                 `${domain}`,
                 `order/shop`,
                 {
-                    order_id: order_shop_id,
+                    order_shop_id: order_shop_id,
                     status: status
                 }
             );
