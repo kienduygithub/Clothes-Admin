@@ -228,6 +228,7 @@ export class ListOrderComponent implements OnInit {
             ToastNotification.success("Đổi trạng thái đơn hàng thành công")
         } catch (error) {
             console.error('Lỗi khi cập nhật trạng thái:', error);
+            ToastNotification.error("Đổi trạng thái đơn hàng thất bại")
         }
     }
 }
