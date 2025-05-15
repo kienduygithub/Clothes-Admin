@@ -40,27 +40,27 @@
             </thead>
             <tbody>
                 <tr *ngFor="let order of displayListOrder | paginate: paging;let i = index">
-                    <td (click)="onDetailOrder(order.id)">
+                    <td (click)="onDetailOrder(order.id, order.order_shop_id)">
                         <span>
                             {{offset + i}}
                         </span>
                     </td>
-                    <td (click)="onDetailOrder(order.id)">
+                    <td (click)="onDetailOrder(order.id, order.order_shop_id)">
                         <span>
                             #{{order.id}}
                         </span>
                     </td>
-                    <td (click)="onDetailOrder(order.id)">
+                    <td (click)="onDetailOrder(order.id, order.order_shop_id)">
                         <span>
                             {{order.user?.name}}
                         </span>
                     </td>
-                    <td (click)="onDetailOrder(order.id)">
+                    <td (click)="onDetailOrder(order.id, order.order_shop_id)">
                         <span>
                             {{order.final_total.toLocaleString('vi-VN')}} VNĐ
                         </span>
                     </td>
-                    <td (click)="onDetailOrder(order.id)">
+                    <td (click)="onDetailOrder(order.id, order.order_shop_id)">
                         <span>
                             {{order.created_at}}
                         </span>

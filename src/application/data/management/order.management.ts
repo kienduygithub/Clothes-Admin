@@ -29,4 +29,13 @@ export class OrderManagement {
             throw error;
         }
     }
+
+    async fetchOrderShopDetail(order_id: number, order_shop_id: number) {
+        try {
+            const resultAPI = await this.orderService.fetchOrderShopDetail(order_id, order_shop_id);
+            return new OrderModel().convertObj(resultAPI?.body?.orders[0]);
+        } catch (error) {
+            throw error;
+        }
+    }
 }

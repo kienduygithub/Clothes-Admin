@@ -114,8 +114,8 @@ export class ListOrderComponent implements OnInit {
         }
     }
 
-    onDetailOrder(id: number) {
-        this.router.navigate([OrderURL.DETAIL_ORDER], { queryParams: { id: id } });
+    async onDetailOrder(order_id: number, order_shop_id: number) {
+        this.router.navigate([OrderURL.DETAIL_ORDER], { queryParams: { order_id: order_id, order_shop_id: order_shop_id } });
     }
 
     onPageChange(currentPage: number) {
