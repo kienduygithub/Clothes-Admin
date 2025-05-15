@@ -124,6 +124,7 @@ export class ProductImagesModel {
 export class ProductVariantModel {
     id?: number;
     productId?: number;
+    product: ProductModel | undefined;
     colorId?: number;
     sizeId?: number;
     image_url?: string;
@@ -142,9 +143,11 @@ export class ProductVariantModel {
         image_url?: string,
         sku?: string,
         stock_quantity?: number,
+        product?: ProductModel
     ) {
         this.id = id ?? 0;
         this.productId = productId ?? 0;
+        this.product = product ?? undefined;
         this.colorId = colorId ?? 0;
         this.sizeId = sizeId ?? 0;
         this.color = color ?? undefined;
@@ -160,6 +163,7 @@ export class ProductVariantModel {
         model.productId = data.productId;
         model.colorId = data.colorId;
         model.sizeId = data.sizeId;
+        model.product = data?.product ? new ProductModel().convertObj(data?.product) : undefined;
         model.color = data?.color ? new ColorModel().convertObj(data?.color) : undefined;
         model.size = data?.size ? new SizeModel().convertObj(data?.size) : undefined;
         model.image_url = data.image_url;

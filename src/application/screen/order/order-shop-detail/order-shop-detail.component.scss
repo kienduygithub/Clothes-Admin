@@ -1,0 +1,115 @@
+.screen {
+    padding: 20px;
+    background-color: #f5f7fa;
+}
+
+.layout-size {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header-form {
+    .icon-back {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+    }
+
+    .header-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #333;
+    }
+}
+
+.body-form {
+    margin-top: 20px;
+
+    nb-card {
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        nb-card-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e8ecef;
+        }
+
+        nb-card-body {
+            padding: 20px;
+            background-color: #ffffff;
+
+            p {
+                margin: 0 0 10px;
+                font-size: 0.95rem;
+
+                strong {
+                    color: #555;
+                }
+            }
+
+            nb-select {
+                width: 150px;
+            }
+        }
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+
+            th,
+            td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #e8ecef;
+            }
+
+            th {
+                background-color: #f8f9fa;
+                font-weight: 600;
+                color: #333;
+            }
+
+            .product-image {
+                width: 60px;
+                height: 60px;
+                object-fit: cover;
+                border-radius: 4px;
+            }
+        }
+    }
+
+    .text {
+        &.canceled {
+            color: #dc3545;
+            font-weight: 500;
+        }
+
+        &.completed {
+            color: #28a745;
+            font-weight: 500;
+        }
+
+        &.processing {
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        &.shipped {
+            color: #ff9800;
+            font-weight: 500;
+        }
+
+        &.pending,
+        &.paid {
+            color: #6c757d;
+            font-weight: 500;
+        }
+    }
+}

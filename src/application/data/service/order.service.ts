@@ -45,11 +45,7 @@ export class OrderService {
             const domain = this.appConfig.getDomain();
             const response = this.serviceCore.GET(
                 `${domain}`,
-                `order/shop`,
-                {
-                    order_id: order_id,
-                    order_shop_id: order_shop_id,
-                }
+                `order/shop/detail?order_id=${order_id}&order_shop_id=${order_shop_id}`,
             );
             return response;
         } catch (error) {

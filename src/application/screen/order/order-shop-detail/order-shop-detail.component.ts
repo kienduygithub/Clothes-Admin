@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { NbButtonModule, NbCheckboxModule, NbDialogService, NbInputModule, NbSelectModule, NbTooltipModule } from "@nebular/theme";
+import { NbButtonModule, NbCardModule, NbCheckboxModule, NbDialogService, NbInputModule, NbSelectModule, NbTooltipModule } from "@nebular/theme";
 import { OrderManagement } from "../../../data/management/order.management";
 import { OrderService } from "../../../data/service/order.service";
 import { ImageResource } from "../../../common/resource/image_resource";
@@ -9,6 +9,9 @@ import { OrderModel } from "../../../data/model/order/order.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AppConfig } from "../../../common/config/app.config";
 import { OrderURL } from "../order.routing";
+import { OrderStatusColorPipe } from "../../../common/layout/pipes/orderStatusColor";
+import { OrderStatus } from "../../../common/resource/status";
+import { Option } from "../../../common/utils/filter-stats/filter-stats.component";
 
 
 const NB_LIBS = [
@@ -16,7 +19,8 @@ const NB_LIBS = [
     NbButtonModule,
     NbSelectModule,
     NbCheckboxModule,
-    NbTooltipModule
+    NbTooltipModule,
+    NbCardModule
 ]
 
 const ANGULAR_MODULES = [
@@ -25,7 +29,7 @@ const ANGULAR_MODULES = [
 ]
 
 const PIPES = [
-    // TransformColorId
+    OrderStatusColorPipe
 ]
 
 const PROVIDERS = [
@@ -41,7 +45,7 @@ const PROVIDERS = [
     imports: [
         ...NB_LIBS,
         ...ANGULAR_MODULES,
-        // ...PIPES,
+        ...PIPES,
     ],
     providers: [...PROVIDERS],
 })
@@ -56,6 +60,11 @@ export class OrderShopDetailComponent implements OnInit {
     preImage: string = '';
 
     detailOrderShop!: OrderModel;
+    OrderStatus = OrderStatus;
+    OrderStatusOptions: Option[] = [
+        { label: 'Đang xử lý', value: OrderStatus.PROCESSING },
+        { label: 'Đã giao hàng', value: OrderStatus.SHIPPED },
+    ];
 
     constructor(
         private router: Router,
@@ -68,9 +77,7 @@ export class OrderShopDetailComponent implements OnInit {
     async ngOnInit() {
         this.preImage = this.appConfig.getPreImage() ?? "";
         this.checkCreateOrUpdate();
-        this.detailOrderShop.order_shop_id
     }
-
 
     checkCreateOrUpdate() {
         this.activatedRoute.queryParams.subscribe(async (params) => {
@@ -90,9 +97,35 @@ export class OrderShopDetailComponent implements OnInit {
         }
     }
 
-    async onSave() {
+    getUnitPrice(price?: string): number {
+        if (!price) {
+            return 0;
+        }
 
+        return parseFloat(price);
     }
+
+    async onChangeStatus(orderId: number, newStatus: OrderStatus) {
+        const validStatuses = [
+            OrderStatus.PENDING,
+            OrderStatus.PAID,
+            OrderStatus.PROCESSING,
+            OrderStatus.SHIPPED
+        ];
+
+        if (!validStatuses.includes(this.detailOrderShop.status as OrderStatus)) {
+            console.warn(`Không thể chuyển trạng thái từ ${this.detailOrderShop.status} sang ${newStatus}`);
+            return;
+        }
+
+        try {
+            await this.orderMana.updateStatusOrderShop(orderId, newStatus);
+            this.detailOrderShop.status = newStatus;
+        } catch (error) {
+            console.error('Lỗi khi cập nhật trạng thái:', error);
+        }
+    }
+
 
     onCancel() {
         this.router.navigate([OrderURL.LIST_ORDER]);
