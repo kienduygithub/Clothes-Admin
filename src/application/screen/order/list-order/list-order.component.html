@@ -3,21 +3,33 @@
         <div class="search-input-container">
             <input nbInput type="text" placeholder="Nhập mã đơn hàng hoặc tên khách hàng" [formControl]="search">
         </div>
-        <nb-select class="sort-container" [formControl]="sortControl" placeholder="Sắp xếp">
-            <nb-option *ngFor="let option of sortOptions" [value]="option.value">{{ option.label }}</nb-option>
-        </nb-select>
         <button nbButton class="util-box">
             <img class="common-icon" [src]="icon_filter" (click)="onToggleOpenFilter()" />
             <div class="filter-box" [ngClass]="{'open': isFilterOpen}">
-                <h3>Lọc theo trạng thái</h3>
-                <label *ngFor="let option of filterOptions">
-                    <input type="checkbox" [checked]="selectedFilters.includes(option.value)"
-                        (change)="onFilterToggle(option.value)" />
-                    {{ option.label }}
-                </label>
+                <div class="filter-header">
+                    <h3>Lọc & Sắp xếp</h3>
+                </div>
+                <div class="filter-section">
+                    <h4>Lọc theo trạng thái</h4>
+                    <div class="filter-options">
+                        <label *ngFor="let option of filterOptions" class="filter-item">
+                            <input type="checkbox" [checked]="selectedFilters.includes(option.value)"
+                                (change)="onFilterToggle(option.value)" />
+                            <span>{{ option.label }}</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="sort-section">
+                    <h4>Sắp xếp</h4>
+                    <nb-select class="sort-container" [formControl]="sortControl" placeholder="Chọn cách sắp xếp">
+                        <nb-option *ngFor="let option of sortOptions" [value]="option.value">
+                            {{ option.label}}
+                        </nb-option>
+                    </nb-select>
+                </div>
                 <div class="footer">
-                    <button class="btn-filter-box cancel" (click)="onCancelFilter()">Hủy</button>
-                    <button class="btn-filter-box filter" (click)="onFilter()">Lọc</button>
+                    <button class="btn-filter-box reset" (click)="onCancelFilter()">Đặt lại</button>
+                    <button class="btn-filter-box apply" (click)="onFilter()">Áp dụng</button>
                 </div>
             </div>
         </button>

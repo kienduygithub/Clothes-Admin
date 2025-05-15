@@ -83,7 +83,7 @@ export class ListOrderComponent implements OnInit {
         const toggleButton = document.querySelector('.util-box img'); // Nút mở filter
         if (this.isFilterOpen && filterElement && !filterElement.contains(event.target as Node) && !toggleButton?.contains(event.target as Node)) {
             this.isFilterOpen = false;
-            this.cdr.detectChanges();
+            // this.cdr.detectChanges();
         }
     }
 
