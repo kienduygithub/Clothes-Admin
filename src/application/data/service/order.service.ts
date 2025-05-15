@@ -23,6 +23,21 @@ export class OrderService {
         }
     }
 
-
+    async updateStatusOrderShop(order_shop_id: number, status: string): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = this.serviceCore.PATCH(
+                `${domain}`,
+                `order/shop`,
+                {
+                    order_id: order_shop_id,
+                    status: status
+                }
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }

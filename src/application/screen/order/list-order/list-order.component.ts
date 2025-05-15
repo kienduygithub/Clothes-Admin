@@ -223,7 +223,7 @@ export class ListOrderComponent implements OnInit {
         }
 
         try {
-            // await this.orderMana.updateOrderStatus(orderId, newStatus);
+            await this.orderMana.updateStatusOrderShop(orderId, newStatus);
             order.status = newStatus;
             this.displayListOrder[index] = order;
             this.cdr.detectChanges();

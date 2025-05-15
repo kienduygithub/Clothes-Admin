@@ -20,4 +20,13 @@ export class OrderManagement {
             throw error;
         }
     }
+
+    async updateStatusOrderShop(order_shop_id: number, status: string) {
+        try {
+            await this.orderService.updateStatusOrderShop(order_shop_id, status);
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
