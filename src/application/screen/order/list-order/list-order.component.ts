@@ -48,15 +48,17 @@ export class ListOrderComponent implements OnInit {
     isFilterOpen = false;
     selectedFilters: string[] = [];
     filterOptions: Option[] = [
+        { label: 'Chờ xác nhận', value: OrderStatus.PENDING },
+        { label: 'Đã thanh toán', value: OrderStatus.PAID },
         { label: 'Đang xử lý', value: OrderStatus.PROCESSING },
-        { label: 'Đã giao hàng', value: OrderStatus.SHIPPED },
-        { label: 'Hoàn thành', value: OrderStatus.COMPLETED },
+        { label: 'Đã vận chuyển', value: OrderStatus.SHIPPED },
+        { label: 'Đã hoàn thành', value: OrderStatus.COMPLETED },
         { label: 'Đã hủy', value: OrderStatus.CANCELED }
     ];
 
     OrderStatus = OrderStatus;
     OrderStatusOptions: Option[] = [
-        { label: 'Đã giao hàng', value: OrderStatus.SHIPPED },
+        { label: 'Đã vận chuyển', value: OrderStatus.SHIPPED },
         { label: 'Đang xử lý', value: OrderStatus.PROCESSING }
     ];
 
@@ -77,10 +79,10 @@ export class ListOrderComponent implements OnInit {
 
     @HostListener('document:click', ['$event'])
     onDocumentClick(event: MouseEvent) {
-        console.log('aaa');
         const filterElement = document.querySelector('.filter-box');
-        if (this.isFilterOpen && filterElement && !filterElement.contains(event.target as Node)) {
-            // this.isFilterOpen = false;
+        const toggleButton = document.querySelector('.util-box img'); // Nút mở filter
+        if (this.isFilterOpen && filterElement && !filterElement.contains(event.target as Node) && !toggleButton?.contains(event.target as Node)) {
+            this.isFilterOpen = false;
             this.cdr.detectChanges();
         }
     }
