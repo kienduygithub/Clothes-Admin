@@ -68,6 +68,7 @@ export class OrderShopDetailComponent implements OnInit {
     async ngOnInit() {
         this.preImage = this.appConfig.getPreImage() ?? "";
         this.checkCreateOrUpdate();
+        this.detailOrderShop.order_shop_id
     }
 
 
