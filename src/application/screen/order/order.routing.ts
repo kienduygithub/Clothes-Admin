@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import { OrderShopDetailComponent } from "./order-shop-detail/order-shop-detail.component";
 
 export const OrderURL = {
     ORDER: 'owner/order',
@@ -7,5 +8,5 @@ export const OrderURL = {
 }
 
 export const OrderRouting: Routes = [
-
+    { path: OrderURL.DETAIL_ORDER, component: OrderShopDetailComponent, title: 'Chi tiết đơn hàng' }
 ];
