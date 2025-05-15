@@ -1,24 +1,23 @@
 <div class="router-static">
     <div class="search-and-filter">
         <div class="search-input-container">
-            <input nbInput type="text" placeholder="Nhập mã đơn hàng" [formControl]="search">
+            <input nbInput type="text" placeholder="Nhập mã đơn hàng hoặc tên khách hàng" [formControl]="search">
         </div>
+        <nb-select class="sort-container" [formControl]="sortControl" placeholder="Sắp xếp">
+            <nb-option *ngFor="let option of sortOptions" [value]="option.value">{{ option.label }}</nb-option>
+        </nb-select>
         <button nbButton class="util-box">
             <img class="common-icon" [src]="icon_filter" (click)="onToggleOpenFilter()" />
             <div class="filter-box" [ngClass]="{'open': isFilterOpen}">
-                <h3>Filter</h3>
+                <h3>Lọc theo trạng thái</h3>
                 <label *ngFor="let option of filterOptions">
                     <input type="checkbox" [checked]="selectedFilters.includes(option.value)"
                         (change)="onFilterToggle(option.value)" />
                     {{ option.label }}
                 </label>
                 <div class="footer">
-                    <button class="btn-filter-box cancel" (click)="onCancelFilter()">
-                        Hủy
-                    </button>
-                    <button class="btn-filter-box filter" (click)="onFilter()">
-                        Lọc
-                    </button>
+                    <button class="btn-filter-box cancel" (click)="onCancelFilter()">Hủy</button>
+                    <button class="btn-filter-box filter" (click)="onFilter()">Lọc</button>
                 </div>
             </div>
         </button>
@@ -40,50 +39,36 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let order of displayListOrder | paginate: paging;let i = index">
+                <tr *ngFor="let order of displayListOrder | paginate: paging; let i = index">
                     <td (click)="onDetailOrder(order.id, order.order_shop_id)">
-                        <span>
-                            {{offset + i}}
-                        </span>
+                        <span>{{ offset + i }}</span>
                     </td>
                     <td (click)="onDetailOrder(order.id, order.order_shop_id)">
-                        <span>
-                            #{{order.id}}<span class="order-shop-title">({{order.order_shop_id}})</span>
-                        </span>
+                        <span>#{{ order.id }}<span class="order-shop-title">({{ order.order_shop_id }})</span></span>
                     </td>
                     <td (click)="onDetailOrder(order.id, order.order_shop_id)">
-                        <span>
-                            {{order.user?.name}}
-                        </span>
+                        <span>{{ order.user?.name }}</span>
                     </td>
                     <td (click)="onDetailOrder(order.id, order.order_shop_id)">
-                        <span>
-                            {{order.final_total.toLocaleString('vi-VN')}} VNĐ
-                        </span>
+                        <span>{{ order.final_total.toLocaleString('vi-VN') }} VNĐ</span>
                     </td>
                     <td (click)="onDetailOrder(order.id, order.order_shop_id)">
-                        <span>
-                            {{order.created_at}}
-                        </span>
+                        <span>{{ order.created_at }}</span>
                     </td>
                     <td>
-                        <span class="text {{order.status}}">
-                            {{(order.status | OrderStatusColor).text}}
-                        </span>
+                        <span class="text {{ order.status }}">{{ (order.status | OrderStatusColor).text }}</span>
                     </td>
                     <td>
                         <nb-select class="order-status-select" placeholder="Chọn trạng thái"
                             (selectedChange)="onChangeStatus(order.order_shop_id, $event, i)"
                             *ngIf="order.status !== OrderStatus.COMPLETED && order.status !== OrderStatus.CANCELED && order.status !== OrderStatus.SHIPPED">
-                            <nb-option *ngFor="let option of OrderStatusOptions"
-                                [value]="option.value">{{option.label}}</nb-option>
+                            <nb-option *ngFor="let option of OrderStatusOptions" [value]="option.value">{{ option.label
+                                }}</nb-option>
                         </nb-select>
                     </td>
                 </tr>
                 <tr *ngIf="displayListOrder.length === 0">
-                    <td class="table-no-data text-center" colspan="11">
-                        Không có dữ liệu
-                    </td>
+                    <td class="table-no-data text-center" colspan="7">Không có dữ liệu</td>
                 </tr>
             </tbody>
         </table>
@@ -93,8 +78,8 @@
             <span>Tổng số: {{ paging.totalItems }}</span>
         </div>
         <div class="pagination-flex">
-            <pagination-controls (pageChange)="onPageChange($event)" previousLabel="" nextLabel="">
-            </pagination-controls>
+            <pagination-controls (pageChange)="onPageChange($event)" previousLabel=""
+                nextLabel=""></pagination-controls>
         </div>
     </div>
 </div>

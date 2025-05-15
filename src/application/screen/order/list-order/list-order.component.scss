@@ -4,54 +4,182 @@
     align-items: center;
     gap: 10px;
 
-    .input-container {
-        width: 500px;
-        max-width: 500px !important;
+    .search-input-container {
+        width: 300px;
+        max-width: 300px;
 
         input {
             width: 100%;
-            max-width: 500px !important;
-            font-size: 13px !important;
+            font-size: 13px;
+            border-radius: 4px;
 
             &::placeholder {
-                font-size: 13px !important;
+                font-size: 13px;
+                color: #aaa;
             }
         }
     }
 
-    button.util-box {
+    ::ng-deep nb-select {
+        width: 200px;
+        font-size: 13px;
+        margin-right: 10px;
+
+        button {
+            display: flex;
+            align-items: center;
+            border-radius: 4px;
+            background-color: white !important;
+            border: 1px solid #edf1f7 !important;
+        }
+    }
+
+    .util-box {
         background-color: white;
         width: 36px;
+        height: 36px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #edf1f7;
+        position: relative;
 
-        &:active {
+        &:hover {
             border-color: #42aaff;
+        }
+
+        .common-icon {
+            width: 20px;
+            height: 20px;
         }
     }
 }
 
-.list-actions {
-    display: flex;
-    align-items: center;
-    justify-content: right;
-    gap: 10px;
+.filter-box {
+    position: absolute;
+    background-color: white;
+    top: 40px;
+    left: 0;
+    min-width: 200px;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: none;
 
-    nb-icon {
-        margin-bottom: 0;
+    &.open {
+        display: block;
+    }
+
+    h3 {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        padding: 0 10px;
+        color: #222b45;
+    }
+
+    label {
         display: flex;
         align-items: center;
-        justify-content: center;
+        padding: 8px 10px;
+        gap: 8px;
+        font-size: 13px;
+        color: #222b45;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #f5f7fa;
+        }
+
+        input {
+            margin: 0;
+        }
+    }
+
+    .footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        padding: 10px;
+        border-top: 1px solid #edf1f7;
+
+        button {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+
+            &.cancel {
+                background-color: #f5f7fa;
+                color: #222b45;
+            }
+
+            &.filter {
+                background-color: #42aaff;
+                color: white;
+            }
+        }
     }
 }
 
-.image-container {
-    height: 80px;
-    width: 80px;
-    padding: 10px;
+.table-responsive {
+    overflow-x: auto;
 
-    img {
+    table {
         width: 100%;
-        height: 100%;
-        overflow: hidden;
+        border-collapse: collapse;
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+            border-bottom: 1px solid #edf1f7;
+        }
+
+        th {
+            font-weight: 600;
+            color: #222b45;
+        }
+
+        td {
+            &:nth-child(1) {
+                width: 5%;
+            }
+
+            &:nth-child(2) {
+                width: 15%;
+            }
+
+            &:nth-child(3) {
+                width: 20%;
+            }
+
+            &:nth-child(4) {
+                width: 15%;
+            }
+
+            &:nth-child(5) {
+                width: 20%;
+            }
+
+            &:nth-child(6) {
+                width: 15%;
+            }
+
+            &:nth-child(7) {
+                min-width: 200px;
+            }
+        }
+
+        .order-shop-title {
+            margin-left: 5px;
+            font-size: 12px;
+            color: #666;
+        }
     }
 }
 
@@ -75,122 +203,17 @@
     }
 }
 
-$hover-background-color: #8f9bb329;
-$text-color: #222b45;
-$border-color: #edf1f7;
-
-.util-box {
-    position: relative;
-
-    .filter-box {
-        position: absolute;
-        background-color: white;
-        top: 40px;
-        left: 0;
-        min-width: 150px;
-        padding: 10px 0;
-        border-radius: 3px;
-        box-shadow: 0 0 1px rgba(0, 0, 0, 0.4);
-        display: none;
-
-        h3 {
-            font-size: 14px !important;
-            text-align: left;
-            padding: 0 10px;
-        }
-
-        label {
-            height: 36px;
-            display: flex;
-            align-items: center;
-            padding: 0 10px;
-            gap: 5px;
-            color: $text-color;
-
-            &:hover {
-                background-color: $hover-background-color;
-            }
-        }
-
-        .footer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 10px;
-            gap: 10px;
-
-            button {
-                width: 60px;
-                height: 24px;
-                border-radius: 3px;
-                outline: none;
-                font-size: 13px;
-
-                &.cancel {
-                    border: 1px solid #ccc;
-                    background-color: $hover-background-color;
-                }
-
-                &.filter {
-                    background-color: #42aaff;
-                    color: white;
-                    border: 1px solid transparent;
-                }
-            }
-        }
-
-        &.open {
-            display: block;
-        }
-    }
-}
-
-nb-icon.table-header {
-    scale: 0.8;
+.total-items {
+    font-size: 13px;
+    color: #222b45;
+    margin-right: 20px;
 }
 
 ::ng-deep nb-select.order-status-select {
     button {
-        display: flex;
-        align-items: center !important;
-        background-color: white !important;
+        font-size: 13px;
+        border-radius: 4px;
+        background-color: white;
+        border: 1px solid #edf1f7;
     }
-}
-
-.table-responsive {
-
-    td {
-        &:nth-child(1) {
-            width: 5%;
-        }
-
-        &:nth-child(2) {
-            width: 15%;
-        }
-
-        &:nth-child(3) {
-            width: 20%;
-        }
-
-        &:nth-child(4) {
-            width: 15%;
-        }
-
-        &:nth-child(5) {
-            width: 20%;
-        }
-
-        &:nth-child(6) {
-            width: 15%;
-        }
-
-        &:nth-child(7) {
-            min-width: 200px;
-        }
-    }
-}
-
-.order-shop-title {
-    margin-left: 3px;
-    font-size: 12px;
 }
