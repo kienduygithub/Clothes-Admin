@@ -39,37 +39,43 @@
                 </tr>
             </thead>
             <tbody>
-                <tr (click)="onDetailOrder(order.id)"
-                    *ngFor="let order of displayListOrder | paginate: paging;let i = index">
-                    <td>
+                <tr *ngFor="let order of displayListOrder | paginate: paging;let i = index">
+                    <td (click)="onDetailOrder(order.id)">
                         <span>
                             {{offset + i}}
                         </span>
                     </td>
-                    <td>
+                    <td (click)="onDetailOrder(order.id)">
                         <span>
                             #{{order.id}}
                         </span>
                     </td>
-                    <td>
+                    <td (click)="onDetailOrder(order.id)">
                         <span>
                             {{order.user?.name}}
                         </span>
                     </td>
-                    <td>
+                    <td (click)="onDetailOrder(order.id)">
                         <span>
                             {{order.final_total.toLocaleString('vi-VN')}} VNĐ
                         </span>
                     </td>
-                    <td>
+                    <td (click)="onDetailOrder(order.id)">
                         <span>
                             {{order.created_at}}
                         </span>
                     </td>
                     <td>
-                        <span class="text {{order.status}}">
-                            {{order.status}}
+                        <span class="text {{order.status}}"
+                            *ngIf="order.status === OrderStatus.COMPLETED || order.status === OrderStatus.CANCELED">
+                            {{(order.status | OrderStatusColor).text}}
                         </span>
+                        <nb-select class="order-status-select"
+                            *ngIf="order.status !== OrderStatus.COMPLETED && order.status !== OrderStatus.CANCELED"
+                            placeholder="Chọn trạng thái" (selectedChange)="onChangeStatus(order.id, $event, i)">
+                            <nb-option *ngFor="let option of OrderStatusOptions"
+                                [value]="option.value">{{option.label}}</nb-option>
+                        </nb-select>
                     </td>
                 </tr>
                 <tr *ngIf="displayListOrder.length === 0">

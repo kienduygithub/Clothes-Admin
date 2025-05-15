@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
-import { NbButtonModule, NbDialogService, NbIconModule, NbInputModule, NbTooltipModule } from "@nebular/theme";
+import { NbButtonModule, NbDialogService, NbIconModule, NbInputModule, NbSelectModule, NbTooltipModule } from "@nebular/theme";
 import { NgxPaginationModule } from "ngx-pagination";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { debounceTime } from "rxjs";
@@ -13,12 +13,16 @@ import { OrderModel } from "../../../data/model/order/order.model";
 import { OrderManagement } from "../../../data/management/order.management";
 import { OrderService } from "../../../data/service/order.service";
 import { OrderStatusColorPipe } from "../../../common/layout/pipes/orderStatusColor";
+import { Option } from "../../../common/utils/filter-stats/filter-stats.component";
+import { OrderStatus } from "../../../common/resource/status";
+import { ToastNotification } from "../../common/toast/toast.component";
 
 const NB_LIBS = [
     NbInputModule,
     NbButtonModule,
     NbIconModule,
-    NbTooltipModule
+    NbTooltipModule,
+    NbSelectModule
 ]
 
 const ANGULAR_MODULES = [
@@ -45,7 +49,7 @@ const PIPES = [
     imports: [
         ...NB_LIBS,
         ...ANGULAR_MODULES,
-        // ...PIPES
+        ...PIPES
     ],
     providers: [
         ...PROVIDERS
@@ -77,6 +81,13 @@ export class ListOrderComponent implements OnInit {
         { label: 'Đã quá hạn', value: '4' }
     ];
 
+    OrderStatus = OrderStatus;
+    OrderStatusOptions: Option[] = [
+        { label: 'Đang giao hàng', value: OrderStatus.SHIPPED },
+        { label: 'Đang xử lý', value: OrderStatus.PROCESSING },
+        { label: 'Đã hoàn thành', value: OrderStatus.COMPLETED },
+    ]
+
     constructor(
         private router: Router,
         private appConfig: AppConfig,
@@ -98,7 +109,6 @@ export class ListOrderComponent implements OnInit {
         try {
             this.listOrder = await this.orderMana.fetchListOrderShop();
             this.displayListOrder = [...this.listOrder];
-            console.log(this.listOrder);
         } catch (error) {
             console.log(error);
         }
@@ -202,5 +212,24 @@ export class ListOrderComponent implements OnInit {
         this.onFilter();
         this.resetPagination();
         this.cdr.detectChanges();
+    }
+
+    async onChangeStatus(orderId: number, newStatus: string, index: number) {
+        console.log(orderId)
+        const order = this.listOrder.find(o => o.id === orderId);
+
+        if (!order) {
+            return;
+        }
+
+        try {
+            // await this.orderMana.updateOrderStatus(orderId, newStatus);
+            order.status = newStatus;
+            this.displayListOrder[index] = order;
+            this.cdr.detectChanges();
+            ToastNotification.success("Đổi trạng thái đơn hàng " + orderId + " thành công")
+        } catch (error) {
+            console.error('Lỗi khi cập nhật trạng thái:', error);
+        }
     }
 }

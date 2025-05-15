@@ -148,3 +148,11 @@ $border-color: #edf1f7;
 nb-icon.table-header {
     scale: 0.8;
 }
+
+::ng-deep nb-select.order-status-select {
+    button {
+        display: flex;
+        align-items: center !important;
+        background-color: white !important;
+    }
+}

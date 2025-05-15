@@ -18,9 +18,9 @@ export class OrderStatusColorPipe implements PipeTransform {
             case OrderStatus.CANCELED:
                 return { text: 'Đã hủy', color: '#9CA3AF' }
             case OrderStatus.SHIPPED:
-                return { text: 'Đang giao', color: '#10B981' };
+                return { text: 'Đang giao hàng', color: '#10B981' };
             case OrderStatus.COMPLETED:
-                return { text: 'Hoàn thành', color: '#22C55E' };
+                return { text: 'Đã hoàn thành', color: '#22C55E' };
             case OrderStatus.ALL:
                 return { text: 'Tất cả', color: '#000' }
             default:
