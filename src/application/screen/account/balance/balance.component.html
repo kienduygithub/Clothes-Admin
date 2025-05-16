@@ -11,9 +11,55 @@
 
             <div class="container d-flex justify-content-center">
                 <form class="section-bg">
-
-                    <div class="button-container">
-
+                    <div class="balance-content">
+                        <!-- Left Section -->
+                        <div class="left-section">
+                            <!-- Top-left: Image -->
+                            <div class="image-container">
+                                <img [src]="image_upload_person" alt="Shop Image" class="shop-image">
+                            </div>
+                            <!-- Bottom-left: Balance -->
+                            <div class="balance-display">
+                                <h3 class="balance-title">Số dư hiện tại</h3>
+                                <p class="balance-amount">{{ balance | currency:'VND':'symbol' }}</p>
+                            </div>
+                        </div>
+                        <!-- Right Section -->
+                        <div class="right-section">
+                            <!-- Top-right: Withdrawal History -->
+                            <div class="history-container">
+                                <h3 class="history-title">Lịch sử rút tiền</h3>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Số tiền</th>
+                                                <th>Ngày</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let withdrawal of withdrawalHistories">
+                                                <td>{{ withdrawal.id }}</td>
+                                                <td>{{ withdrawal.amount | currency:'VND':'symbol' }}</td>
+                                                <td>{{ withdrawal.created_at | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div *ngIf="withdrawalHistories.length === 0"
+                                        class="d-flex flex-column align-items-center justify-content-center">
+                                        <img [src]="image_not_found" />
+                                        <span class="text-no-data mt-2 d-block">
+                                            Không có dữ liệu
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Bottom-right: Withdraw Button -->
+                            <div class="button-container">
+                                <button nbButton status="primary" (click)="openWithdrawPopup()">Rút tiền</button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

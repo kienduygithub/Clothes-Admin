@@ -150,4 +150,49 @@ export class ShopService {
             throw error;
         }
     }
+
+    async withdrawalByOwner(amount: string, password: string) {
+        try {
+            const domain = this.appConfig.getDomain();
+            const shopId = this.appConfig.getShopId();
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `shop/withdrawal`,
+                {
+                    shop_id: shopId,
+                    amount: parseInt(amount, 10),
+                    password: password
+                }
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchListWithdrawalHistories() {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.GET(
+                `${domain}`,
+                `shop/withdrawal/history`,
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchBalanceShop() {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.GET(
+                `${domain}`,
+                `shop/balance/get`,
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

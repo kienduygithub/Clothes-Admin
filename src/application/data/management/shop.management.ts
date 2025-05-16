@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ShopModel } from "../model/shop.model";
 import { ShopService } from "../service/shop.service";
+import { Withdrawal } from "../../screen/account/balance/balance.component";
 
 @Injectable()
 export class ShopManagement {
@@ -97,4 +98,44 @@ export class ShopManagement {
             throw error;
         }
     }
+
+    async withdrawalByOwner(amount: string, password: string) {
+        try {
+            await this.shopService.withdrawalByOwner(amount, password);
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchListWithdrawalHistories() {
+        try {
+            const result = await this.shopService.fetchListWithdrawalHistories();
+            const response: Withdrawal[] = result?.body?.withdrawals?.map(
+                (withdrawal: any) => {
+                    const item: Withdrawal = {
+                        id: withdrawal?.id ?? 0,
+                        shop_id: withdrawal?.shop_id ?? 0,
+                        amount: withdrawal?.amount ?? 0,
+                        created_at: withdrawal?.createdAt ? new Date(withdrawal.createdAt) : null
+                    }
+                    return item;
+                }
+            )
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchBalanceShop() {
+        try {
+            const result = await this.shopService.fetchBalanceShop();
+            return result?.body?.balance ? parseFloat(result?.body?.balance) : 0;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
 }

@@ -33,6 +33,13 @@ const PROVIDERS = [
     ShopService
 ]
 
+export interface Withdrawal {
+    id: number;
+    shop_id: number;
+    amount: number;
+    created_at: Date | null;
+}
+
 @Component({
     standalone: true,
     selector: 'app-balance-account',
@@ -44,21 +51,40 @@ const PROVIDERS = [
 export class BalanceComponent implements OnInit {
     icon_camera_upload: string = ImageResource.icon_camera_upload;
     image_upload_person: string = ImageResource.image_upload_person;
+    image_not_found: string = ImageResource.image_chart_bar;
 
+    balance: number = 0;
+    withdrawalHistories: Withdrawal[] = [];
     constructor(
         private fb: FormBuilder,
         private shopMana: ShopManagement
     ) { }
 
     async ngOnInit() {
-        await this.fetchData();
+        await this.fetchBalanceShop();
+        await this.fetchWithdrawalHistories();
     }
 
-    async fetchData() {
+    async fetchBalanceShop() {
         try {
+            this.balance = await this.shopMana.fetchBalanceShop();
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async fetchWithdrawalHistories() {
+        try {
+            this.withdrawalHistories = await this.shopMana.fetchListWithdrawalHistories();
+            console.log(this.withdrawalHistories);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    openWithdrawPopup() {
+        // Placeholder for your popup logic
+        console.log('Open withdraw popup');
     }
 
 }
