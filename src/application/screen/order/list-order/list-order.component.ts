@@ -67,7 +67,6 @@ export class ListOrderComponent implements OnInit {
         { label: 'Giá giảm dần', value: 'price_desc' },
         { label: 'Mới nhất', value: 'created_at_desc' },
         { label: 'Cũ nhất', value: 'created_at_asc' },
-        { label: 'Trạng thái (A-Z)', value: 'status_asc' }
     ];
 
     constructor(
@@ -91,7 +90,11 @@ export class ListOrderComponent implements OnInit {
         this.paging = new PagingModel();
         await this.fetchListShopOrder();
         this.resetPagination();
-        this.setupFormControls();
+
+        this.search.valueChanges
+            .pipe(debounceTime(300))
+            .subscribe(() => this.onFilter());
+
         this.cdr.detectChanges();
     }
 
@@ -102,11 +105,6 @@ export class ListOrderComponent implements OnInit {
         } catch (error) {
             console.error(error);
         }
-    }
-
-    setupFormControls() {
-        this.search.valueChanges.pipe(debounceTime(300)).subscribe(() => this.onFilter());
-        this.sortControl.valueChanges.subscribe(() => this.onFilter());
     }
 
     applyFilterAndSort() {
@@ -144,6 +142,7 @@ export class ListOrderComponent implements OnInit {
         });
 
         this.displayListOrder = filteredList;
+        this.isFilterOpen = false;
         this.resetPagination();
         this.cdr.detectChanges();
     }
@@ -186,16 +185,13 @@ export class ListOrderComponent implements OnInit {
         } else {
             this.selectedFilters.push(value);
         }
-        this.cdr.detectChanges();
     }
 
     onSortToggle(value: string) {
-        this.sortControl.setValue(value);
-        this.cdr.detectChanges();
+        this.sortControl.setValue(value, { emitEvent: false });
     }
 
     onFilter() {
-        this.isFilterOpen = false;
         this.applyFilterAndSort();
     }
 

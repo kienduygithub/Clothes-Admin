@@ -30,7 +30,7 @@
                         <div class="sort-buttons">
                             <button *ngFor="let option of sortOptions" class="sort-button"
                                 [ngClass]="{'active': sortControl.value === option.value}"
-                                (click)="onSortToggle(option.value)">
+                                (click)="$event.stopPropagation(); onSortToggle(option.value)">
                                 {{ option.label }}
                             </button>
                         </div>
