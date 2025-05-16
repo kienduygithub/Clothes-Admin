@@ -9,9 +9,6 @@
             <div class="filter-box" [ngClass]="{'open': isFilterOpen}">
                 <div class="filter-header">
                     <h3><img class="common-icon" [src]="icon_filter" /> Lọc & Sắp xếp</h3>
-                    <button class="close-btn" (click)="onCancelFilter()">
-                        <nb-icon icon="close-outline"></nb-icon>
-                    </button>
                 </div>
                 <div class="section-body">
                     <div class="filter-section">
@@ -37,8 +34,12 @@
                     </div>
                 </div>
                 <div class="footer">
-                    <button class="btn-filter-box reset" (click)="onCancelFilter()">Đặt lại</button>
-                    <button class="btn-filter-box apply" (click)="onFilter()">Áp dụng</button>
+                    <button class="btn-filter-box reset" (click)="$event.stopPropagation();onCancelFilter()">
+                        Đặt lại
+                    </button>
+                    <button class="btn-filter-box apply" (click)="$event.stopPropagation();onFilter()">
+                        Áp dụng
+                    </button>
                 </div>
             </div>
         </div>
