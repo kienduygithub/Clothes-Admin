@@ -8,30 +8,32 @@
             <img class="common-icon" [src]="icon_filter" />
             <div class="filter-box" [ngClass]="{'open': isFilterOpen}">
                 <div class="filter-header">
-                    <h3><nb-icon icon="funnel-outline"></nb-icon> Lọc & Sắp xếp</h3>
+                    <h3><img class="common-icon" [src]="icon_filter" /> Lọc & Sắp xếp</h3>
                     <button class="close-btn" (click)="onCancelFilter()">
                         <nb-icon icon="close-outline"></nb-icon>
                     </button>
                 </div>
-                <div class="filter-section">
-                    <h4>Trạng thái đơn hàng</h4>
-                    <div class="filter-options">
-                        <label *ngFor="let option of filterOptions" class="filter-item">
-                            <input type="checkbox" [checked]="selectedFilters.includes(option.value)"
-                                (change)="onFilterToggle(option.value)" />
-                            <span class="checkmark"></span>
-                            <span class="label">{{ option.label }}</span>
-                        </label>
+                <div class="section-body">
+                    <div class="filter-section">
+                        <h4>Trạng thái đơn hàng</h4>
+                        <div class="filter-options">
+                            <label *ngFor="let option of filterOptions" class="filter-item">
+                                <input type="checkbox" [checked]="selectedFilters.includes(option.value)"
+                                    (change)="onFilterToggle(option.value)" />
+                                <span class="checkmark"></span>
+                                <span class="label">{{ option.label }}</span>
+                            </label>
+                        </div>
                     </div>
-                </div>
-                <div class="sort-section">
-                    <h4>Sắp xếp theo</h4>
-                    <div class="sort-buttons">
-                        <button *ngFor="let option of sortOptions" class="sort-button"
-                            [ngClass]="{'active': sortControl.value === option.value}"
-                            (click)="onSortToggle(option.value)">
-                            {{ option.label }}
-                        </button>
+                    <div class="sort-section">
+                        <h4>Sắp xếp theo</h4>
+                        <div class="sort-buttons">
+                            <button *ngFor="let option of sortOptions" class="sort-button"
+                                [ngClass]="{'active': sortControl.value === option.value}"
+                                (click)="onSortToggle(option.value)">
+                                {{ option.label }}
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="footer">
