@@ -26,7 +26,7 @@ const PIPES = [OrderStatusColorPipe];
     standalone: true,
     selector: 'list-order-component',
     templateUrl: './list-order.component.html',
-    styleUrl: './list-order.component.scss',
+    styleUrls: ['./list-order.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [...NB_LIBS, ...ANGULAR_MODULES, ...PIPES],
     providers: [...PROVIDERS]
@@ -80,10 +80,10 @@ export class ListOrderComponent implements OnInit {
     @HostListener('document:click', ['$event'])
     onDocumentClick(event: MouseEvent) {
         const filterElement = document.querySelector('.filter-box');
-        const toggleButton = document.querySelector('.util-box img'); // Nút mở filter
+        const toggleButton = document.querySelector('.util-box img');
         if (this.isFilterOpen && filterElement && !filterElement.contains(event.target as Node) && !toggleButton?.contains(event.target as Node)) {
             this.isFilterOpen = false;
-            // this.cdr.detectChanges();
+            this.cdr.detectChanges();
         }
     }
 
@@ -114,7 +114,6 @@ export class ListOrderComponent implements OnInit {
         const searchValue = this.search.value?.trim().toLowerCase() ?? '';
         const selectedSet = new Set(this.selectedFilters);
 
-        // Apply search
         if (searchValue) {
             filteredList = filteredList.filter(order =>
                 order.id.toString().includes(searchValue) ||
@@ -122,12 +121,10 @@ export class ListOrderComponent implements OnInit {
             );
         }
 
-        // Apply status filters
         if (selectedSet.size > 0) {
             filteredList = filteredList.filter(order => selectedSet.has(order.status));
         }
 
-        // Apply sorting
         const sortValue = this.sortControl.value ?? 'created_at_desc';
         filteredList.sort((a, b) => {
             switch (sortValue) {
@@ -177,8 +174,10 @@ export class ListOrderComponent implements OnInit {
         this.applyFilterAndSort();
     }
 
-    onToggleOpenFilter() {
+    onToggleOpenFilter(event: Event) {
+        event.stopPropagation();
         this.isFilterOpen = !this.isFilterOpen;
+        this.cdr.detectChanges();
     }
 
     onFilterToggle(value: string) {
@@ -187,6 +186,12 @@ export class ListOrderComponent implements OnInit {
         } else {
             this.selectedFilters.push(value);
         }
+        this.cdr.detectChanges();
+    }
+
+    onSortToggle(value: string) {
+        this.sortControl.setValue(value);
+        this.cdr.detectChanges();
     }
 
     onFilter() {
