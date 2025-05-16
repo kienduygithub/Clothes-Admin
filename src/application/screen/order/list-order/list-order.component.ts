@@ -176,7 +176,6 @@ export class ListOrderComponent implements OnInit {
     onToggleOpenFilter(event: Event) {
         event.stopPropagation();
         this.isFilterOpen = !this.isFilterOpen;
-        this.cdr.detectChanges();
     }
 
     onFilterToggle(value: string) {

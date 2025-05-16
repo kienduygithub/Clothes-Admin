@@ -3,9 +3,11 @@
         <div class="search-input-container">
             <input nbInput type="text" placeholder="Nhập mã đơn hàng hoặc tên khách hàng" [formControl]="search">
         </div>
-        <div nbButton class="util-box" (click)="onToggleOpenFilter($event)" [nbTooltip]="'Filter'"
-            nbTooltipPlacement="bottom">
-            <img class="common-icon" [src]="icon_filter" />
+        <div class="filter-container">
+            <div class="util-box" (click)="onToggleOpenFilter($event)" [nbTooltip]="'Filter'"
+                nbTooltipPlacement="bottom">
+                <img class="common-icon" [src]="icon_filter" />
+            </div>
             <div class="filter-box" [ngClass]="{'open': isFilterOpen}">
                 <div class="filter-header">
                     <h3><img class="common-icon" [src]="icon_filter" /> Lọc & Sắp xếp</h3>
@@ -43,7 +45,7 @@
                 </div>
             </div>
         </div>
-        <div nbButton class="util-box" (click)="onRefreshTable()" [nbTooltip]="'Làm mới'" nbTooltipPlacement="bottom">
+        <div class="util-box" (click)="onRefreshTable()" [nbTooltip]="'Làm mới'" nbTooltipPlacement="bottom">
             <img class="common-icon" [src]="icon_refresh" />
         </div>
     </div>
