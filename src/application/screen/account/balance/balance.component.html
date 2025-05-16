@@ -39,13 +39,22 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let withdrawal of withdrawalHistories">
+                                            <tr *ngFor="let withdrawal of withdrawalHistories  | paginate: paging">
                                                 <td>{{ withdrawal.id }}</td>
                                                 <td>{{ withdrawal.amount | currency:'VND':'symbol' }}</td>
                                                 <td>{{ withdrawal.created_at | date:'dd/MM/yyyy HH:mm:ss' }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <div style="display: flex; align-items: center;">
+                                        <div class="total-items">
+                                            <span>Tổng số: {{ paging.totalItems }}</span>
+                                        </div>
+                                        <div class="pagination-flex">
+                                            <pagination-controls (pageChange)="onPageChange($event)" previousLabel=""
+                                                nextLabel=""></pagination-controls>
+                                        </div>
+                                    </div>
                                     <div *ngIf="withdrawalHistories.length === 0"
                                         class="d-flex flex-column align-items-center justify-content-center">
                                         <img [src]="image_not_found" />

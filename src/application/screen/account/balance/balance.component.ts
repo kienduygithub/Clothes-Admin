@@ -2,15 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
     FormBuilder,
-    FormGroup,
-    FormsModule,
-    ReactiveFormsModule,
 } from '@angular/forms';
 import { NbButtonModule, NbDialogModule, NbIconModule, NbInputModule, NbSelectModule, NbTooltipModule } from '@nebular/theme';
 import { TranslateModule } from '@ngx-translate/core';
 import { ShopManagement } from '../../../data/management/shop.management';
 import { ShopService } from '../../../data/service/shop.service';
 import { ImageResource } from '../../../common/resource/image_resource';
+import { PagingModel } from '../../../common/model/paging.model';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 const NB_LIBS = [
     NbTooltipModule,
@@ -24,8 +23,7 @@ const NB_LIBS = [
 const ANGULAR_MODULE = [
     CommonModule,
     TranslateModule,
-    ReactiveFormsModule,
-    FormsModule,
+    NgxPaginationModule
 ]
 
 const PROVIDERS = [
@@ -55,14 +53,19 @@ export class BalanceComponent implements OnInit {
 
     balance: number = 0;
     withdrawalHistories: Withdrawal[] = [];
+
+    offset: number = 0;
+    paging: PagingModel = new PagingModel();
     constructor(
         private fb: FormBuilder,
         private shopMana: ShopManagement
     ) { }
 
     async ngOnInit() {
+        this.paging = new PagingModel();
         await this.fetchBalanceShop();
         await this.fetchWithdrawalHistories();
+        this.resetPagination();
     }
 
     async fetchBalanceShop() {
@@ -85,6 +88,20 @@ export class BalanceComponent implements OnInit {
     openWithdrawPopup() {
         // Placeholder for your popup logic
         console.log('Open withdraw popup');
+    }
+
+    onPageChange(currentPage: number) {
+        this.paging.currentPage = currentPage;
+        this.offset = (currentPage - 1) * this.paging.itemsPerPage + 1;
+    }
+
+
+    resetPagination() {
+        this.paging.currentPage = 1;
+        this.paging.itemsPerPage = 5;
+        this.paging.totalItems = this.withdrawalHistories.length;
+        this.paging.totalPage = Math.ceil(this.withdrawalHistories.length / this.paging.itemsPerPage);
+        this.offset = (this.paging.currentPage - 1) * this.paging.itemsPerPage + 1;
     }
 
 }
