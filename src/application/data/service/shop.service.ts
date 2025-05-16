@@ -154,12 +154,12 @@ export class ShopService {
     async withdrawalByOwner(amount: string, password: string) {
         try {
             const domain = this.appConfig.getDomain();
-            const shopId = this.appConfig.getShopId();
+            const user = this.appConfig.getUserInfo();
             const response = await this.serviceCore.POST(
                 `${domain}`,
                 `shop/withdrawal`,
                 {
-                    shop_id: shopId,
+                    shop_id: user.shopId,
                     amount: parseInt(amount, 10),
                     password: password
                 }

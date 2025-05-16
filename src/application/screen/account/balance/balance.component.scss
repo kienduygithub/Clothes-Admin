@@ -1,62 +1,8 @@
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-.form {
-    display: flex;
-    flex-direction: column;
-    padding: 0 60px;
-}
-
-.form-input {
-    width: 100%;
-    display: flex;
-    margin-bottom: 15px;
-
-    label.label-form {
-        line-height: 36px;
-        margin-bottom: 0px;
-        width: 200px;
-        white-space: nowrap;
-    }
-}
-
-.box {
-    width: 100%;
-
-    input {
-        width: 100%;
-        max-width: 1000px !important;
-    }
-}
-
 .button-container {
     margin-top: auto;
     padding: 0 60px;
     display: flex;
     justify-content: end;
-}
-
-button:disabled {
-    color: white !important;
-    opacity: 0.5;
-}
-
-.box.box-password {
-    position: relative;
-
-    button.change-password {
-        position: absolute;
-        top: 50%;
-        right: 0;
-        transform: translateY(-50%);
-        width: 120px;
-        border: none;
-        background-color: transparent;
-        color: #1890FF;
-        font-size: 13px;
-    }
 }
 
 .section-bg {

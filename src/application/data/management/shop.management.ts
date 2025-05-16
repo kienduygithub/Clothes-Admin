@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ShopModel } from "../model/shop.model";
 import { ShopService } from "../service/shop.service";
-import { Withdrawal } from "../../screen/account/balance/balance.component";
+import { Withdrawal } from "../model/withdrawal/withdrawal.model";
 
 @Injectable()
 export class ShopManagement {
@@ -101,8 +101,9 @@ export class ShopManagement {
 
     async withdrawalByOwner(amount: string, password: string) {
         try {
-            await this.shopService.withdrawalByOwner(amount, password);
-            return true;
+            const result = await this.shopService.withdrawalByOwner(amount, password);
+            console.log(result);
+            return new Withdrawal().convertObj(result?.body?.newWithdrawal);
         } catch (error) {
             throw error;
         }
@@ -112,15 +113,7 @@ export class ShopManagement {
         try {
             const result = await this.shopService.fetchListWithdrawalHistories();
             const response: Withdrawal[] = result?.body?.withdrawals?.map(
-                (withdrawal: any) => {
-                    const item: Withdrawal = {
-                        id: withdrawal?.id ?? 0,
-                        shop_id: withdrawal?.shop_id ?? 0,
-                        amount: withdrawal?.amount ?? 0,
-                        created_at: withdrawal?.createdAt ? new Date(withdrawal.createdAt) : null
-                    }
-                    return item;
-                }
+                (withdrawal: any) => new Withdrawal().convertObj(withdrawal)
             )
             return response;
         } catch (error) {

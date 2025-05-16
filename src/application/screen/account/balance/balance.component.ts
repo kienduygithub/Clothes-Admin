@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-    FormBuilder,
-} from '@angular/forms';
-import { NbButtonModule, NbDialogModule, NbIconModule, NbInputModule, NbSelectModule, NbTooltipModule } from '@nebular/theme';
+import { NbButtonModule, NbDialogModule, NbDialogService, NbIconModule, NbInputModule, NbSelectModule, NbTooltipModule } from '@nebular/theme';
 import { TranslateModule } from '@ngx-translate/core';
 import { ShopManagement } from '../../../data/management/shop.management';
 import { ShopService } from '../../../data/service/shop.service';
 import { ImageResource } from '../../../common/resource/image_resource';
 import { PagingModel } from '../../../common/model/paging.model';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { WithdrawalModalComponent } from '../withdrawal-modal/withdrawal-modal.component';
+import { ToastNotification } from '../../common/toast/toast.component';
+import { Withdrawal } from '../../../data/model/withdrawal/withdrawal.model';
 
 const NB_LIBS = [
     NbTooltipModule,
@@ -31,13 +31,6 @@ const PROVIDERS = [
     ShopService
 ]
 
-export interface Withdrawal {
-    id: number;
-    shop_id: number;
-    amount: number;
-    created_at: Date | null;
-}
-
 @Component({
     standalone: true,
     selector: 'app-balance-account',
@@ -56,9 +49,10 @@ export class BalanceComponent implements OnInit {
 
     offset: number = 0;
     paging: PagingModel = new PagingModel();
+
     constructor(
-        private fb: FormBuilder,
-        private shopMana: ShopManagement
+        private shopMana: ShopManagement,
+        private dialogService: NbDialogService
     ) { }
 
     async ngOnInit() {
@@ -79,15 +73,25 @@ export class BalanceComponent implements OnInit {
     async fetchWithdrawalHistories() {
         try {
             this.withdrawalHistories = await this.shopMana.fetchListWithdrawalHistories();
-            console.log(this.withdrawalHistories);
         } catch (error) {
             console.log(error);
         }
     }
 
     openWithdrawPopup() {
-        // Placeholder for your popup logic
-        console.log('Open withdraw popup');
+        this.dialogService.open(WithdrawalModalComponent, {
+            closeOnBackdropClick: false,
+            context: {
+                currBalance: this.balance
+            }
+        }).onClose.subscribe(response => {
+            if (response instanceof Withdrawal) {
+                this.withdrawalHistories.unshift(response);
+                this.balance = this.balance - response.amount;
+                this.resetPagination();
+                ToastNotification.success('Rút tiền thành công');
+            }
+        })
     }
 
     onPageChange(currentPage: number) {

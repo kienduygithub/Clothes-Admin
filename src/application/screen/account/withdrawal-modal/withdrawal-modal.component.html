@@ -1,0 +1,61 @@
+<div class="dialog-custom-size">
+    <div class="modal-header">
+        <span class="title-dialog">Rút tiền</span>
+        <img src="{{ icon_close_black }}" class="icon-close" (click)="close()" />
+    </div>
+    <form class="modal-body" [formGroup]="FormData" autocomplete="off">
+        <div class="d-flex align-items-center justify-content-center mb-4">
+            <span class="balance-title">Số dư hiện tại: </span>
+            <span class="balance-amount">{{currBalance}} VNĐ</span>
+        </div>
+        <div class="form-input">
+            <label class="label-form" for="password">
+                Số tiền<span class="required">*</span></label>
+            <div class="box">
+                <input type="text" formControlName="amount" nbInput class="input-form" [placeholder]="'Nhập số tiền'"
+                    [ngClass]="{'invalid-form': FormData.get('amount')?.invalid && (FormData.get('amount')?.dirty  ||  isFormSubmit) }" />
+                <div *ngIf="FormData.get('amount')?.invalid && (FormData.get('amount')?.dirty  ||  isFormSubmit)">
+                    <small class="vali-text-false" *ngIf="FormData.get('amount')?.hasError('required')">
+                        Số tiền không được bỏ trống
+                    </small>
+                    <small class="vali-text-false" *ngIf="FormData.get('amount')?.hasError('isNumber')">
+                        Số tiền chỉ được nhập số
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="form-input">
+            <label class="label-form" for="password">
+                Mật khẩu<span class="required">*</span></label>
+            <div class="box">
+                <div class="box-password">
+                    <input [type]="isPasswordVisibility ? 'text' : 'password'" formControlName="password" nbInput
+                        class="input-form" id="password" [placeholder]="'Nhập mật khẩu'"
+                        [ngClass]="{'invalid-form': FormData.get('password')?.invalid && (FormData.get('password')?.dirty  ||  isFormSubmit) }" />
+
+                    <i class="eye-icon" (click)="togglePasswordVisibility()">
+                        <ng-container *ngIf="isPasswordVisibility; else hideEye">
+                            <img src="{{ icon_hide_eye }}" alt="" />
+                        </ng-container>
+                        <ng-template #hideEye>
+                            <img src="{{ icon_eye }}" alt="" />
+                        </ng-template>
+                    </i>
+                </div>
+                <div *ngIf="FormData.get('password')?.invalid && (FormData.get('password')?.dirty  ||  isFormSubmit)">
+                    <small class="vali-text-false" *ngIf="  FormData.get('password')?.hasError('required')">
+                        Mật khẩu không được bỏ trống
+                    </small>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <button nbButton class="button-cancel-form" (click)="close()">
+            Hủy
+        </button>
+        <button nbButton class="button-submit-form ml-3" (click)="submit()">
+            Xác nhận
+        </button>
+    </div>
+</div>
