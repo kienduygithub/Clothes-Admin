@@ -24,6 +24,7 @@ import { AdminAccountInfoComponent } from './account/admin/account-info/account-
 import { AdminChangePassswordComponent } from './account/admin/change-password/change-password.component';
 import { OrderRouting, OrderURL } from './order/order.routing';
 import { OrderComponent } from './order/order.component';
+import { BalanceComponent } from './account/balance/balance.component';
 
 const routes: Routes = [
     {
@@ -56,7 +57,7 @@ const routes: Routes = [
             {
                 path: OverviewUrl.OWNER_OVERVIEW,
                 component: OwnerOverviewComponent,
-                title: 'Tổng quan'
+                title: 'Fashion Zone'
             },
             {
                 path: 'owner/products',
@@ -65,8 +66,8 @@ const routes: Routes = [
             },
             {
                 path: ProductUrl.PRODUCT_LIST,
-                title: 'Sản phẩm',
                 component: ProductComponent,
+                title: 'Fashion Zone',
             },
             {
                 path: 'admin/employee',
@@ -75,8 +76,8 @@ const routes: Routes = [
             },
             {
                 path: EmployeeUrl.EMPLOYEE_LIST,
-                title: 'Nhân sự',
                 component: EmployeeComponent,
+                title: 'Fashion Zone',
             },
             {
                 path: 'admin/shop',
@@ -86,12 +87,12 @@ const routes: Routes = [
             {
                 path: ShopURL.SHOP_URL,
                 component: ShopComponent,
-                title: 'Cửa hàng',
+                title: 'Fashion Zone'
             },
             {
                 path: RegisterShopURL.REGISTER_SHOP_URL,
                 component: RegisterShopComponent,
-                title: 'Danh sách xét duyệt'
+                title: 'Fashion Zone'
             },
             {
                 path: 'owner/coupon',
@@ -101,7 +102,7 @@ const routes: Routes = [
             {
                 path: CouponUrl.COUPON_LIST_URL,
                 component: CouponComponent,
-                title: 'Khuyến mãi'
+                title: 'Fashion Zone'
             },
             {
                 path: 'admin/category',
@@ -111,7 +112,7 @@ const routes: Routes = [
             {
                 path: CategoryUrl.CATEGORY_URL,
                 component: CategoryComponent,
-                title: 'Danh mục'
+                title: 'Fashion Zone'
             },
             {
                 path: AccountUrl.OWNER_ACCOUNT,
@@ -121,12 +122,12 @@ const routes: Routes = [
             {
                 path: AccountUrl.OWNER_ACCOUNT_INFO,
                 component: OwnerAccountInfoComponent,
-                title: 'Quản lý tài khoản'
+                title: 'Fashion Zone'
             },
             {
                 path: AccountUrl.OWNER_ACCOUNT_CHANGE_PASSWORD,
                 component: OwnerChangePassswordComponent,
-                title: 'Đổi mật khẩu'
+                title: 'Fashion Zone'
             },
             {
                 path: AccountUrl.ADMIN_ACCOUNT,
@@ -136,12 +137,17 @@ const routes: Routes = [
             {
                 path: AccountUrl.ADMIN_ACCOUNT_INFO,
                 component: AdminAccountInfoComponent,
-                title: 'Quản lý tài khoản'
+                title: 'Fashion Zone'
             },
             {
                 path: AccountUrl.ADMIN_ACCOUNT_CHANGE_PASSWORD,
                 component: AdminChangePassswordComponent,
-                title: 'Đổi mật khẩu'
+                title: 'Fashion Zone'
+            },
+            {
+                path: AccountUrl.OWNER_BALANCE_ACCOUNT,
+                component: BalanceComponent,
+                title: 'Fashion Zone'
             },
             {
                 path: OrderURL.ORDER,
@@ -151,8 +157,9 @@ const routes: Routes = [
             {
                 path: OrderURL.LIST_ORDER,
                 component: OrderComponent,
-                title: 'Đơn hàng cửa hàng'
-            }
+                title: 'Fashion Zone'
+            },
+
         ],
     },
 ];

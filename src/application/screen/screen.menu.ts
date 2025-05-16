@@ -105,6 +105,11 @@ export const OWNER_MENU_ITEMS: any[] = [
                 link: '/' + AccountUrl.OWNER_ACCOUNT_CHANGE_PASSWORD,
                 pathMatch: 'prefix'
             },
+            {
+                title: 'Số dư cửa hàng',
+                link: '/' + AccountUrl.OWNER_BALANCE_ACCOUNT,
+                pathMatch: 'prefix'
+            },
         ],
     },
 ];
