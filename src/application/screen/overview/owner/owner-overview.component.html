@@ -1,7 +1,7 @@
 <div class="screen">
     <div class="layout-size">
         <div class="d-flex align-items-center mb-2 header-form">
-            <span class="header-title-text">Tổng quan</span>
+            <span class="header-title-text">Thống kê</span>
         </div>
         <filter-stats-component (OnFilter)="onFilterStats($event)"></filter-stats-component>
         <!-- Overview Stats -->
@@ -9,8 +9,9 @@
             <div class="box-overview-stats">
                 <div class="overview-stats">
                     <div class="title">Tổng doanh thu</div>
-                    <div class="value">{{(overviewStats && overviewStats.totalRevenue.toLocaleString('vi-VN')) || 0}}
-                        VNĐ</div>
+                    <div class="value">
+                        {{(overviewStats && overviewStats.totalRevenue.toLocaleString('vi-VN')) || 0}} VNĐ
+                    </div>
                 </div>
                 <div class="icon-stats revenue">
                     <img [src]="icon_money_bag" />

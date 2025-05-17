@@ -66,7 +66,7 @@ export const ADMIN_MENU_ITEMS: any[] = [
 
 export const OWNER_MENU_ITEMS: any[] = [
     {
-        title: 'Tổng quan',
+        title: 'Thống kê',
         icon: { icon: 'dashboard_icon', pack: 'mainIcon' },
         link: '/' + OverviewUrl.OWNER_OVERVIEW,
         pathMatch: 'prefix',
