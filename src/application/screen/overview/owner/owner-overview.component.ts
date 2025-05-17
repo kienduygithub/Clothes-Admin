@@ -155,6 +155,10 @@ export class OwnerOverviewComponent implements OnInit {
         }
     }
 
+    navigateShopDetails() {
+
+    }
+
     resetPageLowStock() {
         this.pagingLowStock.currentPage = 1;
         this.pagingLowStock.itemsPerPage = 5;

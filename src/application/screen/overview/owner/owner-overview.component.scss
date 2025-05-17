@@ -128,6 +128,18 @@
     }
 }
 
+.see-details {
+    font-family: Inter;
+    font-weight: 500;
+    font-size: 14px;
+    color: #40a9ff;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 .shop-info {
     border-radius: 16px;
     // padding: 16px;
@@ -200,9 +212,9 @@
 
 .overview-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); // 2 cột
-    grid-template-rows: repeat(2, auto); // 2 hàng
-    gap: 10px; // khoảng cách giữa các ô, có thể điều chỉnh
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 10px;
 }
 
 .status-box {
