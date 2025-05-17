@@ -75,6 +75,18 @@ export class ShopManagement {
         }
     }
 
+    async fetchShopByTokenId() {
+        try {
+            const result = await this.shopService.fetchShopByTokenId();
+            const response = await result?.body?.shops?.map(
+                (shop: any) => new ShopModel().convertObj(shop)
+            );
+            return response[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async deleteShopById(shopId: number) {
         try {
             await this.shopService.deleteShopById(shopId);

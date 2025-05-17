@@ -105,6 +105,19 @@ export class ShopService {
         }
     }
 
+    async fetchShopByTokenId(): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.GET(
+                `${domain}`,
+                `shop/owner/token-shop`,
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async deleteShopById(shopId: number): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();

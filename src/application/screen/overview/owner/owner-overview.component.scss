@@ -102,19 +102,134 @@
     flex-direction: column;
 }
 
-.circle-no-data-img {
-    width: 180px;
-    height: 180px;
+.info-row {
+    width: 100%;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+
+    label {
+        width: 150px;
+        margin-bottom: 0px;
+    }
 }
 
-.bar-no-data-img {
-    width: 120px;
-    height: 120px;
+.image-container {
+    width: fit-content;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    border: 2px solid #0000001A;
+    overflow: hidden;
+
+    .owner-image {
+        width: 100%;
+        height: 100%;
+    }
 }
 
-.line-no-data-img {
-    width: 140px;
-    height: 140px;
+.shop-info {
+    border-radius: 16px;
+    // padding: 16px;
+    background-color: #FFFFFF;
+    box-shadow: 0px 10px 24px 0px #0000001A;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .info {
+        position: relative;
+    }
+
+    .background-container {
+        width: 100%;
+        height: 150px;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .logo-and-info {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        height: 100%;
+        padding: 0 16px;
+
+        .logo-container {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .info-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .shop-name {
+                font-family: Inter;
+                font-size: 16px;
+                font-weight: 700;
+                color: white;
+                letter-spacing: 1.8px;
+            }
+
+            .address {
+                font-family: Inter;
+                font-size: 13px;
+                font-weight: 400;
+                color: white;
+                letter-spacing: 1.8px;
+            }
+        }
+    }
+}
+
+.overview-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); // 2 cột
+    grid-template-rows: repeat(2, auto); // 2 hàng
+    gap: 10px; // khoảng cách giữa các ô, có thể điều chỉnh
+}
+
+.status-box {
+    width: 80px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    border-radius: 3px;
+
+    &.active {
+        border: 1px solid #52C41A;
+
+        span {
+            color: #52C41A;
+        }
+    }
+
+    &.inactive {
+        border: 1px solid #F5222D;
+
+        span {
+            color: #F5222D;
+        }
+    }
+
 }
 
 .no-data-wrapper {

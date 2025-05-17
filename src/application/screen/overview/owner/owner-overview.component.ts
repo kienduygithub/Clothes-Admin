@@ -24,6 +24,10 @@ import { ProductUrl } from "../../product/product.routing";
 import { Option } from "../../../common/resource/option.interface";
 import { DateRange, FilterParams, FilterStatsComponent } from "../../../common/utils/filter-stats/filter-stats.component";
 import { adjustToUTCWithOffset } from "../../../common/resource/time";
+import { ShopManagement } from "../../../data/management/shop.management";
+import { ShopService } from "../../../data/service/shop.service";
+import { ToastNotification } from "../../common/toast/toast.component";
+import { ShopModel } from "../../../data/model/shop.model";
 echarts.use([
     BarChart,
     PieChart,
@@ -48,22 +52,18 @@ const NB_LIBS = [
 const ANGULAR_MODULES = [
     CommonModule,
     TranslateModule,
-    NgxEchartsDirective,
     NgxPaginationModule,
-    FilterStatsComponent
 ]
 
 const MAT_MODULES = [
     NbDatepickerModule,
 ]
 
-const PIPES = [
-    ShortenNumberPipe
-]
-
 const PROVIDERS = [
     OverviewManagement,
     OverviewService,
+    ShopManagement,
+    ShopService,
     provideEchartsCore({ echarts })
 ]
 
@@ -76,7 +76,6 @@ const PROVIDERS = [
         ...NB_LIBS,
         ...ANGULAR_MODULES,
         ...MAT_MODULES
-        // ...PIPES,
     ],
     providers: [...PROVIDERS]
 })
@@ -102,7 +101,7 @@ export class OwnerOverviewComponent implements OnInit {
     lowStockProducts: LowStockProductModel[] = [];
     orderCompletionRate!: OrderCompletionRateModel;
     today = new Date();
-    past14Days = new Date();
+    shopInfo: ShopModel = new ShopModel();
 
     /** Echarts options **/
     revenueChartOptions: any;
@@ -118,6 +117,7 @@ export class OwnerOverviewComponent implements OnInit {
         private router: Router,
         private appConfig: AppConfig,
         private overviewMana: OverviewManagement,
+        private shopMana: ShopManagement
     ) { }
 
     async ngOnInit(): Promise<any> {
@@ -132,34 +132,18 @@ export class OwnerOverviewComponent implements OnInit {
             startDate: adjustToUTCWithOffset(startOfMonth),
             endDate: adjustToUTCWithOffset(todayEnd)
         })
+        await this.fetchShopInfo();
         await this.fetchShopOverviewStats();
-        await this.fetchRevenueOvertime(GroupDate.DAY);
-        await this.fetchOrderStats(GroupDate.DAY);
-        await this.fetchTopSellingProducts();
-        await this.fetchCustomerStats();
-        await this.fetchLowStockProducts();
-        await this.fetchOrderCompletionStats();
-        this.initRevenueChart(GroupDate.DAY);
-        this.initOrderPieChart(GroupDate.DAY);
-        this.initTopCustomerChart();
-        this.initOrderCompletionChart();
-        this.resetPageLowStock();
     }
 
-    async onFilterStats(filter: FilterParams) {
-        let groupBy = filter.filter === 'YEAR' ? GroupDate.MONTH : GroupDate.DAY;
-        this.initDateRanges = filter.dateRanges;
-        await this.fetchShopOverviewStats();
-        await this.fetchRevenueOvertime(groupBy);
-        await this.fetchOrderStats(groupBy);
-        await this.fetchTopSellingProducts();
-        await this.fetchCustomerStats();
-        await this.fetchOrderCompletionStats();
-
-        this.initRevenueChart(groupBy);
-        this.initOrderPieChart(groupBy);
-        this.initTopCustomerChart();
-        this.initOrderCompletionChart();
+    async fetchShopInfo() {
+        try {
+            this.shopInfo = await this.shopMana.fetchShopByTokenId();
+            console.log(this.shopInfo);
+        } catch (error) {
+            console.log(error)
+            ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.');
+        }
     }
 
     async fetchShopOverviewStats() {
@@ -168,348 +152,6 @@ export class OwnerOverviewComponent implements OnInit {
             this.overviewStats = response;
         } catch (error) {
             console.log(error);
-        }
-    }
-
-    async fetchRevenueOvertime(groupBy: GroupDate) {
-        try {
-            const response = await this.overviewMana.fetchRevenueOvertime(this.initDateRanges, groupBy);
-            this.revenueStats = response;
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async fetchOrderStats(groupBy: GroupDate) {
-        try {
-            const response = await this.overviewMana.fetchOrderStats(
-                this.initDateRanges,
-                groupBy,
-            );
-            this.orderStats = response;
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async fetchTopSellingProducts() {
-        try {
-            const response = await this.overviewMana.fetchTopSellingProducts(
-                this.initDateRanges,
-                10
-            );
-            this.topSellingProducts = response;
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async fetchCustomerStats() {
-        try {
-            const response = await this.overviewMana.fetchCustomerStats(
-                this.initDateRanges,
-                10
-            );
-            this.totalCustomers = response.get('totalCustomers') ?? 0;
-            this.topCustomers = response.get('topCustomers') ?? [];
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async fetchLowStockProducts() {
-        try {
-            const minStock = 50;
-            const response = await this.overviewMana.fetchLowStockProducts(minStock);
-            this.lowStockProducts = response;
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async fetchOrderCompletionStats() {
-        try {
-            const response = await this.overviewMana.fetchOrderCompletionStats(
-                this.initDateRanges,
-                GroupDate.DAY,
-            );
-            this.orderCompletionRate = response;
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    initRevenueChart(groupBy: GroupDate) {
-        if (!this.revenueStats || !this.revenueStats.revenues) {
-            return;
-        }
-
-        this.revenueChartOptions = null;
-
-        this.revenueChartOptions = {
-            xAxis: {
-                type: 'category',
-                data: this.revenueStats.revenues.map(item => this.revenueStats.formatPeriod(item.period, groupBy)),
-                axisLabel: {
-                    rotate: 0,
-                    fontSize: 12,
-                    color: '#515151',
-                },
-                axisLine: { show: true },
-                axisTick: { show: true }
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value} VNĐ',
-                    fontSize: 12,
-                    color: '#515151'
-                },
-                axisLine: { show: false },
-                splitLine: {
-                    lineStyle: {
-                        color: '#E0E0E0',
-                        type: 'dashed'
-                    }
-                },
-                min: 0
-            },
-            series: [{
-                type: 'bar',
-                data: this.revenueStats.revenues.map(item => item.revenue),
-                itemStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        { offset: 0, color: '#69C0FF' },
-                        { offset: 1, color: '#F5F5F5' }
-                    ]),
-                    borderRadius: [5, 5, 0, 0] // Bo góc trên cùng
-                },
-                barWidth: '30%', // Độ rộng cột
-                label: {
-                    show: false,
-                    position: 'top',
-                    formatter: '{c} VNĐ',
-                    fontSize: 12,
-                    color: '#515151'
-                }
-            }],
-            tooltip: {
-                trigger: 'axis',
-                formatter: (params: any) => `
-                    <div style="padding: 5px; background: #fff; border: 1px solid #ccc; border-radius: 3px;">
-                        <strong>${params[0].name}</strong><br/>
-                        Doanh thu: <span style="color: #69C0FF">${params[0].value} VNĐ</span><br/>
-                        Tổng: <span style="color: #515151">${this.revenueStats.totalRevenue} VNĐ</span>
-                    </div>
-                `,
-                textStyle: { fontSize: 12 }
-            },
-            grid: {
-                left: '3%',
-                right: '3%',
-                bottom: '0',
-                top: '10%',
-                containLabel: true
-            }
-        };
-    }
-
-    initOrderPieChart(groupBy: GroupDate) { // Có vẻ không dùng
-        if (!this.orderStats || !this.orderStats.statusCounts) {
-            return;
-        }
-
-        this.orderPieChartOptions = null;
-
-        this.orderPieChartOptions = {
-            tooltip: {
-                trigger: 'item',
-                formatter: '{b}: {c} ({d}%)'
-            },
-            legend: {
-                orient: 'horizontal',
-                bottom: 'bottom',
-                type: 'scroll',
-                itemWidth: 20,
-                itemHeight: 14,
-                textStyle: {
-                    color: '#515151',
-                    fontSize: 12
-                }
-            },
-            series: [{
-                name: 'Trạng thái đơn hàng',
-                type: 'pie',
-                radius: ['30%', '60%'],
-                avoidLabelOverlap: false,
-                minAngle: 5,
-                label: {
-                    show: true,
-                    formatter: '{b}: {c}',
-                    fontSize: 12,
-                    color: '#515151'
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: 14,
-                        fontWeight: 'bold'
-                    }
-                },
-                labelLine: {
-                    show: true
-                },
-                data: [
-                    { value: this.orderStats.statusCounts.pending, name: 'Đang chờ' },
-                    { value: this.orderStats.statusCounts.paid, name: 'Đã thanh toán' },
-                    { value: this.orderStats.statusCounts.shipped, name: 'Đã vận chuyển' },
-                    { value: this.orderStats.statusCounts.completed, name: 'Hoàn thành' },
-                    { value: this.orderStats.statusCounts.canceled, name: 'Hủy bỏ' }
-                ],
-                itemStyle: {
-                    color: function (params: any) {
-                        const colors = ['#69C0FF', '#FF6384', '#FFCD56', '#4BC0C0', '#9966FF'];
-                        return colors[params.dataIndex % colors.length];
-                    }
-                }
-            }],
-            grid: {
-                left: '0',
-                right: '0',
-                bottom: '15%',
-                top: '0',
-                containLabel: true
-            }
-        };
-    }
-
-    initTopCustomerChart() {
-        if (!this.topCustomers || this.topCustomers.length === 0) {
-            return;
-        }
-
-        this.topCustomerChartOptions = null;
-        this.topCustomerChartOptions = {
-            xAxis: {
-                type: 'category',
-                data: this.topCustomers.map(customer => customer.name),
-                axisLabel: { rotate: 0, fontSize: 12, color: '#515151' },
-                axisLine: { show: true },
-                axisTick: { show: false }
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: { formatter: '{value}', fontSize: 12, color: '#515151' },
-                axisLine: { show: false },
-                splitLine: { lineStyle: { color: '#E0E0E0', type: 'dashed' } },
-                min: 0
-            },
-            series: [{
-                type: 'bar',
-                data: this.topCustomers.map(customer => customer.totalSpent),
-                itemStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        { offset: 0, color: '#69C0FF' },
-                        { offset: 1, color: '#F5F5F5' }
-                    ]),
-                    borderRadius: [5, 5, 0, 0]
-                },
-                barWidth: '30%',
-                label: {
-                    show: true,
-                    position: 'top',
-                    formatter: '{c}',
-                    fontSize: 12,
-                    color: '#515151'
-                }
-            }],
-            tooltip: {
-                trigger: 'axis',
-                formatter: (params: any) => `
-                    <div style="padding: 5px; background: #fff; border: 1px solid #ccc; border-radius: 3px;">
-                        <strong>${params[0].name}</strong><br/>
-                        Tổng chi tiêu: <span style="color: #4a90e2">${this.shortenNumber(params[0].value)} VNĐ</span>
-                    </div>
-                `,
-                textStyle: { fontSize: 12 }
-            },
-            grid: { left: '3%', right: '3%', bottom: '0', top: '15%', containLabel: true }
-        };
-    }
-
-    initOrderCompletionChart() {
-        if (!this.orderCompletionRate || !this.orderCompletionRate.summary) {
-            return;
-        }
-
-        // Tính các trạng thái khác dựa trên total (giả định total bao gồm tất cả các trạng thái)
-        const total = this.orderCompletionRate.summary.total || 0;
-        const completed = this.orderCompletionRate.summary.completed || 0;
-        const canceled = this.orderCompletionRate.summary.canceled || 0;
-        const pending = total - completed - canceled; // Giả định pending là phần còn lại
-
-        this.orderCompletionChartOptions = {
-            tooltip: {
-                trigger: 'item',
-                formatter: '{b}: {c} ({d}%)'
-            },
-            legend: {
-                orient: 'horizontal',
-                bottom: '0',
-                left: 'center',
-                type: 'scroll',
-                itemWidth: 20,
-                itemHeight: 10,
-                textStyle: { color: '#515151', fontSize: 12 }
-            },
-            series: [{
-                name: 'Tỉ lệ hoàn thành',
-                type: 'pie',
-                radius: ['30%', '60%'],
-                avoidLabelOverlap: false,
-                minAngle: 20,
-                label: {
-                    show: true,
-                    formatter: '{b}: {d}%',
-                    fontSize: 12,
-                    color: '#515151'
-                },
-                emphasis: {
-                    label: { show: true, fontSize: 14, fontWeight: 'bold' }
-                },
-                labelLine: { show: true },
-                data: [
-                    { value: completed, name: 'Hoàn thành' },
-                    { value: pending > 0 ? pending : 0, name: 'Đang chờ' },
-                    { value: canceled, name: 'Hủy bỏ' }
-                ],
-                itemStyle: {
-                    color: function (params: any) {
-                        const colors = ['#4BC0C0', '#69C0FF', '#9966FF'];
-                        return colors[params.dataIndex % colors.length];
-                    }
-                }
-            }],
-            grid: { left: '0', right: '0', bottom: '0', top: '15%', containLabel: true }
-        };
-    }
-
-    onViewProduct(id: number) {
-        this.router.navigate([ProductUrl.PRODUCT_VIEW], { queryParams: { id: id } });
-    }
-
-    onPageTopSellingChange(currentPage: number) {
-        this.pagingLowStock.currentPage = currentPage;
-        this.offsetLowStock = (currentPage - 1) * this.pagingLowStock.itemsPerPage + 1;
-        if (currentPage === 1) {
-            this.pagingLowStock.before = currentPage;
-            this.pagingLowStock.after = currentPage + 1;
-        } else if (currentPage === this.pagingLowStock.totalPage) {
-            this.pagingLowStock.before = currentPage - 1;
-            this.pagingLowStock.after = currentPage;
-        } else if (currentPage > 1 || currentPage < this.pagingLowStock.totalPage) {
-            this.pagingLowStock.before = currentPage - 1;
-            this.pagingLowStock.after = currentPage + 1;
         }
     }
 
@@ -522,24 +164,5 @@ export class OwnerOverviewComponent implements OnInit {
         this.pagingLowStock.after = 0;
 
         this.offsetLowStock = (this.pagingLowStock.currentPage - 1) * this.pagingLowStock.itemsPerPage + 1;
-    }
-
-    private shortenNumber(value: number | string) {
-        const num = typeof value === 'string' ? parseFloat(value) : value;
-
-        if (isNaN(num) || num === 0) return '0';
-
-        const absNum = Math.abs(num);
-        let result: string;
-
-        if (absNum >= 1000000) {
-            result = (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
-        } else if (absNum >= 1000) {
-            result = (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-        } else {
-            result = num.toString();
-        }
-
-        return result;
     }
 }

@@ -1,89 +1,133 @@
 <div class="screen">
     <div class="layout-size">
-        <div class="d-flex align-items-center mb-2 header-form">
-            <span class="header-title">Tổng quan</span>
-        </div>
-        <!-- Overview Stats -->
-        <div class="row-container">
-            <div class="box-overview-stats">
-                <div class="overview-stats">
-                    <div class="title">Tổng doanh thu</div>
-                    <div class="value">
-                        {{(overviewStats && overviewStats.totalRevenue.toLocaleString('vi-VN')) || 0}} VNĐ
+        <div class="shop-info" style="flex: 1;">
+            <div class="info">
+                <div class="background-container">
+                    <img src="{{preImage}}/{{shopInfo.background_url}}" />
+                </div>
+                <div class="logo-and-info">
+                    <div class="logo-container">
+                        <img src="{{preImage}}/{{shopInfo.logo_url}}" />
                     </div>
-                </div>
-                <div class="icon-stats revenue">
-                    <img [src]="icon_money_bag" />
-                </div>
-            </div>
-            <div class="box-overview-stats">
-                <div class="overview-stats">
-                    <div class="title">Tổng đơn hàng</div>
-                    <div class="value">{{(overviewStats && overviewStats.totalOrders)|| 0}}</div>
-                </div>
-                <div class="icon-stats order">
-                    <img [src]="icon_complete_order" />
-                </div>
-            </div>
-            <div class="box-overview-stats">
-                <div class="overview-stats">
-                    <div class="title">Sản phẩm bán</div>
-                    <div class="value">{{ (overviewStats && overviewStats.totalSoldProducts) || 0}}</div>
-                </div>
-                <div class="icon-stats sold-product">
-                    <img [src]="icon_product_widge" />
-                </div>
-            </div>
-            <div class="box-overview-stats">
-                <div class="overview-stats">
-                    <div class="title">Khách hàng</div>
-                    <div class="value">{{(overviewStats && overviewStats.totalCustomers) || 0}}</div>
-                </div>
-                <div class="icon-stats customer">
-                    <img [src]="icon_group_customer" />
+                    <div class="info-details">
+                        <span class="shop-name">
+                            {{shopInfo.shop_name}}
+                        </span>
+                        <span class="address">
+                            {{shopInfo.contact_address}}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="row-container">
-            <div class="box-chart top-selling">
-                <div class="box-chart-title">
-                    Sản phẩm bán chạy
-                </div>
-                <div *ngIf="topSellingProducts.length === 0" class="no-data-wrapper">
-                    <img [src]="image_chart_bar" />
-                    <span class="no-data-text">Không có dữ liệu</span>
-                </div>
-                <div class="table-responsive mt-1" *ngIf="topSellingProducts.length > 0">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>SKU</th>
-                                <th>Sản phẩm</th>
-                                <th>Số lượng bán</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let product of topSellingProducts">
-                                <td>{{product.sku}}</td>
-                                <td>
-                                    {{product.product?.product_name}}({{product.color?.color_name}},{{product.size?.size_code}})
-                                </td>
-                                <td>{{product.totalQuantity}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div class="row-container align-items-stretch mt-2">
+            <div class="box-chart" style="flex: 1;">
+                <span class="sub-title d-block mb-3">
+                    Thông tin cửa hàng
+                </span>
+                <div class="info-container">
+                    <div class="image-container">
+                        <img class="owner-image" src="{{preImage}}/{{shopInfo.user?.image_url}}" />
+                    </div>
+                    <div class="info-row">
+                        <label class="label-text">Chủ cửa hàng</label>
+                        <span class="value-text">{{shopInfo.user?.name}}</span>
+                    </div>
+                    <div class="info-row">
+                        <label class="label-text">Số điện thoại</label>
+                        <span class="value-text">{{shopInfo.user?.phone}}</span>
+                    </div>
+                    <div class="info-row">
+                        <label class="label-text">Email liên hệ</label>
+                        <span class="value-text">{{shopInfo.contact_email}}</span>
+                    </div>
+                    <div class="info-row">
+                        <label class="label-text">Địa chỉ liên hệ</label>
+                        <span class="value-text">{{shopInfo.contact_address}}</span>
+                    </div>
+                    <div class="info-row">
+                        <label class="label-text">Thành lập</label>
+                        <span class="value-text">{{shopInfo.createdAt | date: 'dd/MM/yyyy'}}</span>
+                    </div>
+                    <div class="info-row">
+                        <label class="label-text">Trạng thái</label>
+                        <div class="status-box {{shopInfo.status}}">
+                            <span class="{{shopInfo.status}}">{{shopInfo.status}}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="box-chart status-order">
-                <div class="box-chart-title">
-                    Trạng thái đơn hàng (Tổng: {{ (orderStats && orderStats.totalOrders) || 0 }})
+            <div style="flex: 1;display: flex;flex-direction: column; gap: 10px;">
+                <div class="overview-container">
+                    <div class="box-overview-stats">
+                        <div class="overview-stats">
+                            <div class="title">Tổng doanh thu</div>
+                            <div class="value">
+                                {{(overviewStats && overviewStats.totalRevenue.toLocaleString('vi-VN')) || 0}} VNĐ
+                            </div>
+                        </div>
+                        <div class="icon-stats revenue">
+                            <img [src]="icon_money_bag" />
+                        </div>
+                    </div>
+                    <div class="box-overview-stats">
+                        <div class="overview-stats">
+                            <div class="title">Tổng đơn hàng</div>
+                            <div class="value">{{(overviewStats && overviewStats.totalOrders)|| 0}}</div>
+                        </div>
+                        <div class="icon-stats order">
+                            <img [src]="icon_complete_order" />
+                        </div>
+                    </div>
+                    <div class="box-overview-stats">
+                        <div class="overview-stats">
+                            <div class="title">Sản phẩm bán</div>
+                            <div class="value">{{ (overviewStats && overviewStats.totalSoldProducts) || 0}}</div>
+                        </div>
+                        <div class="icon-stats sold-product">
+                            <img [src]="icon_product_widge" />
+                        </div>
+                    </div>
+                    <div class="box-overview-stats">
+                        <div class="overview-stats">
+                            <div class="title">Khách hàng</div>
+                            <div class="value">{{(overviewStats && overviewStats.totalCustomers) || 0}}</div>
+                        </div>
+                        <div class="icon-stats customer">
+                            <img [src]="icon_group_customer" />
+                        </div>
+                    </div>
                 </div>
-                <div *ngIf="!orderPieChartOptions" class="no-data-wrapper">
-                    <img [src]="image_chart_pie" />
-                    <span class="no-data-text">Không có dữ liệu</span>
+                <div class="box-chart top-selling" style="flex: 1">
+                    <span class="sub-title d-block mb-3">
+                        Đơn hàng mới
+                    </span>
+                    <div class="table-responsive mt-1">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Khách hàng</th>
+                                    <th>Tổng giá trị</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let product of topSellingProducts">
+                                    <td>{{product.sku}}</td>
+                                    <td>
+                                        {{product.product?.product_name}}({{product.color?.color_name}},{{product.size?.size_code}})
+                                    </td>
+                                    <td>{{product.totalQuantity}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div *ngIf="topSellingProducts.length === 0" class="no-data-wrapper">
+                            <img [src]="image_chart_bar" />
+                            <span class="no-data-text">Không có dữ liệu</span>
+                        </div>
+                    </div>
                 </div>
-                <div echarts [options]="orderPieChartOptions" class="chart-container"></div>
             </div>
         </div>
     </div>
