@@ -187,7 +187,7 @@ export class ImageResource {
   static image_chart_pie: string = 'assets/image/image_chart_pie.svg';
   static image_chart_bar: string = 'assets/image/image_chart_bar.svg';
   static image_upload_person: string = 'assets/image/image_upload_person.svg';
-
+  static image_register_success: string = 'assets/image/image_register_success.svg';
   // ICON SIDEBAR
   static tool_icon: string = `
     <svg class="icon_tool active" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

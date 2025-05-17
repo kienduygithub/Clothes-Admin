@@ -5,13 +5,12 @@ import { AuthManagement } from "../../../data/management/auth.management";
 import { AuthModel } from "../../../common/model/auth.model";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
-import { NbDialogService, NbLayoutModule, NbRestoreScrollTopHelper, NbToastrService } from "@nebular/theme";
+import { NbLayoutModule, } from "@nebular/theme";
 import { ErrorModel } from "../../../common/model/error";
-import { HttpCode } from "../../../common/resource/http-code";
-import { EmployeeUrl } from "../../employee/employee.routing";
 import { AuthUrl } from "../auth.routing";
 import { Roles } from "../../../common/resource/roles";
 import { OverviewUrl } from "../../overview/overview.routing";
+import { ToastNotification } from "../../common/toast/toast.component";
 
 @Component({
     standalone: true,
@@ -43,7 +42,6 @@ export class SignInComponent implements OnInit {
         private router: Router,
         private fb: FormBuilder,
         private authManagement: AuthManagement,
-        private toastrService: NbToastrService
     ) { }
 
     ngOnInit(): void {
@@ -72,32 +70,19 @@ export class SignInComponent implements OnInit {
             const info = response?.body?.info;
             if (info?.roles === Roles.ADMIN) {
                 this.router.navigate([OverviewUrl.ADMIN_OVERVIEW]);
+                ToastNotification.success('Đăng nhập thành công.')
             } else if (info?.roles === Roles.OWNER) {
                 this.router.navigate([OverviewUrl.OWNER_OVERVIEW]);
+                ToastNotification.success('Đăng nhập thành công.')
             }
         } catch (error) {
             console.log(error);
             if (error instanceof ErrorModel) {
-                if (error.code === HttpCode.BAD_REQUEST) {
-                    if (error.message.includes('Tài khoản chủ shop chưa được xét duyệt')) {
-                        this.toastrService.danger(
-                            'Tên đăng nhập hoặc mật khẩu không hợp lệ.',
-                            'Không hợp lệ',
-                        );
-                    }
-                    return;
-                }
-
-                if (error.code === HttpCode.NOT_FOUND) {
-                    if (error.message.includes('Tên đăng nhập hoặc mật khẩu không chính xác.')) {
-                        this.toastrService.danger(
-                            'Tên đăng nhập hoặc mật khẩu không hợp lệ.',
-                            'Không hợp lệ',
-                        );
-                    }
-                    return;
-                }
+                ToastNotification.error(error.message);
+                return;
             }
+
+            ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.')
         }
     }
 

@@ -51,6 +51,7 @@ export class SignUpComponent implements OnInit {
     image_no_avatar: string = ImageResource.image_no_avatar;
     icon_no_logo_shop = ImageResource.icon_no_logo_shop;
     image_store_logo_upload = ImageResource.image_store_logo_upload;
+    image_register_success = ImageResource.image_register_success;
 
     isSubmit: boolean = false;
     isVisiblePassword = false;
@@ -205,12 +206,15 @@ export class SignUpComponent implements OnInit {
         this.isConfirmForm = false;
     }
 
+    backSignIn() {
+        this.router.navigate([AuthUrl.SIGNIN]);
+    }
+
     convertValueFormToUserModel() {
         const model = new UserModel();
         model.id = this.userInfo.id;
         model.name = this.confirmForm.getRawValue().name.trim();
         model.email = this.confirmForm.getRawValue().email.trim();
-        model.password = this.confirmForm.getRawValue().password.trim();
         model.phone = this.confirmForm.getRawValue().phone.trim();
         model.address = this.confirmForm.getRawValue().address.trim();
         model.gender = this.confirmForm.getRawValue().gender;

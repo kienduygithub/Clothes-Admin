@@ -283,4 +283,21 @@
             </div>
         </div>
     </form>
+    <div *ngIf="isSuccess" class="body-form mb-2">
+        <span class="sub-title">Đăng ký cửa hàng thành công</span>
+        <div class="d-flex flex-column" style="padding: 10px 18px 10px 0;gap: 10px;">
+            <div class="message-container">
+                <img [src]="image_register_success" />
+                <p>
+                    Cảm ơn bạn đã đăng ký cửa hàng! Vui lòng chờ quản trị viên xét duyệt. Bạn sẽ nhận được thông báo
+                    khi cửa hàng được kích hoạt.
+                </p>
+            </div>
+        </div>
+        <div style="padding: 10px 18px 10px 0">
+            <div class="button-container">
+                <button class="back-button" (click)="backSignIn()">Quay lại đăng nhập</button>
+            </div>
+        </div>
+    </div>
 </ng-template>

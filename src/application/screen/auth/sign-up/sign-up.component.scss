@@ -266,3 +266,40 @@ input.disabled {
 nb-icon {
     scale: 0.6;
 }
+
+// Đăng ký cửa hàng thành công
+.message-container {
+    margin: 10px auto 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    max-width: 400px;
+
+    img {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+.message-container p {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    button {
+        border: none;
+        outline: none;
+        background-color: transparent;
+        color: #0085ff;
+        font-size: 13px;
+    }
+}
