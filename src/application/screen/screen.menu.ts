@@ -6,6 +6,7 @@ import { OrderURL } from "./order/order.routing";
 import { OverviewUrl } from "./overview/overview.routing";
 import { ProductUrl } from "./product/product.routing";
 import { RegisterShopURL } from "./register-shop/register-shop.routing";
+import { StatsUrl } from "./stats/stats.routing";
 
 export const ADMIN_MENU_ITEMS: any[] = [
     {
@@ -66,7 +67,7 @@ export const ADMIN_MENU_ITEMS: any[] = [
 
 export const OWNER_MENU_ITEMS: any[] = [
     {
-        title: 'Thống kê',
+        title: 'Tổng quan',
         icon: { icon: 'dashboard_icon', pack: 'mainIcon' },
         link: '/' + OverviewUrl.OWNER_OVERVIEW,
         pathMatch: 'prefix',
@@ -88,6 +89,12 @@ export const OWNER_MENU_ITEMS: any[] = [
         icon: { icon: 'icon_orders', pack: 'mainIcon' },
         link: '/' + OrderURL.ORDER,
         pathMatch: 'prefix'
+    },
+    {
+        title: 'Thống kê',
+        icon: { icon: 'reports_icon', pack: 'mainIcon' },
+        link: '/' + StatsUrl.OWNER_STATS,
+        pathMatch: 'prefix',
     },
     {
         title: 'Quản lý tài khoản',

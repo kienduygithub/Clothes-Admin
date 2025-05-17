@@ -25,6 +25,9 @@ import { AdminChangePassswordComponent } from './account/admin/change-password/c
 import { OrderRouting, OrderURL } from './order/order.routing';
 import { OrderComponent } from './order/order.component';
 import { BalanceComponent } from './account/balance/balance.component';
+import { StatsUrl } from './stats/stats.routing';
+import { OwnerStatsComponent } from './stats/owner/owner-stats.component';
+import { AdminStatsComponent } from './stats/admin/admin-stats.component';
 
 const routes: Routes = [
     {
@@ -55,8 +58,18 @@ const routes: Routes = [
                 pathMatch: 'full'
             },
             {
+                path: StatsUrl.ADMIN_STATS,
+                component: AdminStatsComponent,
+                title: 'Fashion Zone'
+            },
+            {
                 path: OverviewUrl.OWNER_OVERVIEW,
                 component: OwnerOverviewComponent,
+                title: 'Fashion Zone'
+            },
+            {
+                path: StatsUrl.OWNER_STATS,
+                component: OwnerStatsComponent,
                 title: 'Fashion Zone'
             },
             {
