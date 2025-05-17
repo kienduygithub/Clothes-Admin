@@ -2,7 +2,10 @@ import { Component, OnInit } from "@angular/core";
 
 @Component({
     selector: 'app-root',
-    template: `<router-outlet></router-outlet>`
+    template: `
+        <app-toast-notification></app-toast-notification>
+        <router-outlet></router-outlet>
+    `
 })
 
 export class ApplicationComponent implements OnInit {

@@ -11,6 +11,9 @@ import { UserModel } from "../../../data/model/user/user.model";
 import { ShopModel } from "../../../data/model/shop.model";
 import { ErrorComponent } from "../../../common/layout/notify/error/error.component";
 import { AuthUrl } from "../auth.routing";
+import { AuthModel } from "../../../common/model/auth.model";
+import { ErrorModel } from "../../../common/model/error";
+import { ToastNotification } from "../../common/toast/toast.component";
 
 const NB_LIBS = [
     NbButtonModule,
@@ -53,14 +56,17 @@ export class SignUpComponent implements OnInit {
     isVisiblePassword = false;
     registerForm!: FormGroup;
     confirmForm!: FormGroup;
-    selectedImageFile!: File;
+    userInfo!: UserModel;
     selectedLogoFile!: File;
     selectedBackgroundFile!: File;
     typeFiles = {
         LOGO: 'logo',
         BACKGROUND: 'background'
     };
-
+    isRegisterForm = true;
+    isConfirmForm = false;
+    isSuccess = false;
+    preImage = '';
 
     constructor(
         private router: Router,
@@ -71,41 +77,34 @@ export class SignUpComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.initCreateForm();
+        this.preImage = this.appConfig.getPreImage() ?? '';
+        this.initRegisterForm();
     }
 
-    initCreateForm() {
+    initRegisterForm() {
+        this.registerForm = this.formBuilder.group({
+            email: this.formBuilder.control('', [ValueValidators.required, Validators.email]),
+            password: this.formBuilder.control('', [ValueValidators.required])
+        })
+    }
+
+    initConfirmForm() {
         this.confirmForm = this.formBuilder.group({
-            name: ['', [ValueValidators.required]],
-            email: ['', [ValueValidators.required, Validators.email]],
-            password: ['', [ValueValidators.required]],
-            phone: ['', [ValueValidators.required]],
-            gender: ['1'],
-            address: [''],
-            image_url: ['', [ValueValidators.required]],
+            name: this.formBuilder.control({ value: this.userInfo?.name ?? '', disabled: true }),
+            email: this.formBuilder.control({ value: this.userInfo?.email ?? '', disabled: true }),
+            phone: this.formBuilder.control({ value: this.userInfo?.phone ?? '', disabled: true }),
+            gender: this.formBuilder.control({ value: this.userInfo?.gender?.toString() ?? '1', disabled: true }),
+            address: this.formBuilder.control({ value: this.userInfo?.address ?? '', disabled: true }),
+            image_url: this.formBuilder.control(this.userInfo?.image_url ?? ''),
             // Shop
             shop_name: ['', [ValueValidators.required]],
             logo_url: ['', [ValueValidators.required]],
             background_url: ['', [ValueValidators.required]],
-            contact_email: ['', [ValueValidators.required]],
+            contact_email: this.formBuilder.control({ value: this.userInfo?.email ?? '', disabled: true }),
             contact_address: ['', [ValueValidators.required]],
             description: [''],
             accept: [false]
         });
-
-        this.emailValueChanges();
-    }
-
-    private emailValueChanges() {
-        this.confirmForm.get('email')?.valueChanges
-            .subscribe((response) => {
-                this.confirmForm.get('contact_email')?.patchValue(response, { emitEvent: false });
-            });
-
-        this.confirmForm.get('contact_email')?.valueChanges
-            .subscribe((response) => {
-                this.confirmForm.get('email')?.patchValue(response, { emitEvent: false });
-            })
     }
 
     onChangeLogoFile(files: any, typeFile: string) {
@@ -126,16 +125,6 @@ export class SignUpComponent implements OnInit {
         }
     }
 
-    onChangeAvatarFile(files: any) {
-        if (files && files[0]) {
-            this.selectedImageFile = files[0];
-            this.confirmForm.get('image_url')?.patchValue(
-                URL.createObjectURL(files[0]),
-                { emitEvent: false }
-            );
-        }
-    }
-
     onToggleVisiblePassword() {
         this.isVisiblePassword = !this.isVisiblePassword;
     }
@@ -144,15 +133,39 @@ export class SignUpComponent implements OnInit {
         this.router.navigate([AuthUrl.SIGNIN]);
     }
 
+    async onRegister() {
+        this.isSubmit = true;
+        console.log(this.registerForm.value);
+        if (this.registerForm.invalid) {
+            console.log('INVALID FORM');
+            return;
+        }
+
+        try {
+            const auth = new AuthModel(
+                this.registerForm.getRawValue().email,
+                this.registerForm.getRawValue().password
+            )
+            this.userInfo = await this.authManagement.checkUserForShopRegistration(auth);
+            this.isSubmit = false;
+            this.isRegisterForm = false;
+            this.isConfirmForm = true;
+            this.initConfirmForm();
+        } catch (error) {
+            console.log(error);
+            if (error instanceof ErrorModel) {
+                ToastNotification.error(error.message)
+            }
+        }
+    }
+
     async onSignUp() {
         this.isSubmit = true;
         console.log(this.confirmForm.value);
         if (this.confirmForm.invalid) {
             console.log('INVALID FORM');
             let errorMessage: string[] = [];
-            if (this.confirmForm.get('image_url')?.hasError('required')) {
-                errorMessage.push("Ảnh đại diện <b>người dùng</b> không được bỏ trống</br>");
-            }
+
             if (this.confirmForm.get('logo_url')?.hasError('required')) {
                 errorMessage.push("Ảnh đại diện <b>cửa hàng</b> không được bỏ trống</br>");
             }
@@ -171,24 +184,30 @@ export class SignUpComponent implements OnInit {
         try {
             const userModel = this.convertValueFormToUserModel();
             const shopModel = this.convertValueFormToShopModel();
-            const adminOwnerFile = this.selectedImageFile;
             const logoShopFile = this.selectedLogoFile;
             const backgroundShopFile = this.selectedBackgroundFile;
             await this.authManagement.signUp(
                 userModel,
                 shopModel,
-                adminOwnerFile,
                 logoShopFile,
                 backgroundShopFile
             );
-            this.router.navigate([AuthUrl.SIGNIN]);
+            this.isConfirmForm = false;
+            this.isSuccess = true;
+            ToastNotification.success('Đăng ký cửa hàng thành công');
         } catch (error) {
             console.log(error);
         }
     }
 
+    onBack() {
+        this.isRegisterForm = true;
+        this.isConfirmForm = false;
+    }
+
     convertValueFormToUserModel() {
         const model = new UserModel();
+        model.id = this.userInfo.id;
         model.name = this.confirmForm.getRawValue().name.trim();
         model.email = this.confirmForm.getRawValue().email.trim();
         model.password = this.confirmForm.getRawValue().password.trim();

@@ -30,7 +30,6 @@ export class AuthService {
     async signUp(
         userModel: UserModel,
         shopModel: ShopModel,
-        adminOwnerFile: any,
         logoShopFile: any,
         backgroundShopFile: any
     ): Promise<any> {
@@ -39,7 +38,6 @@ export class AuthService {
             const formData = new FormData();
             formData.append('userInfo', JSON.stringify(userModel));
             formData.append('shopInfo', JSON.stringify(shopModel));
-            formData.append('adminOwnerFile', adminOwnerFile);
             formData.append('logoShopFile', logoShopFile);
             formData.append('backgroundShopFile', backgroundShopFile);
             const response = await this.serviceCore.POST(
@@ -124,6 +122,20 @@ export class AuthService {
                 `${domain}`,
                 `auth/edit-details`,
                 formData
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async checkUserForShopRegistration(auth: AuthModel) {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `shop/register-check`,
+                auth
             );
             return response;
         } catch (error) {

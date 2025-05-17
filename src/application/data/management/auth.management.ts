@@ -51,7 +51,6 @@ export class AuthManagement {
     async signUp(
         userModel: UserModel,
         shopModel: ShopModel,
-        adminOwnerFile: any,
         logoShopFile: any,
         backgroundShopFile: any
     ): Promise<any> {
@@ -59,7 +58,6 @@ export class AuthManagement {
             await this.authService.signUp(
                 userModel,
                 shopModel,
-                adminOwnerFile,
                 logoShopFile,
                 backgroundShopFile
             );
@@ -119,6 +117,15 @@ export class AuthManagement {
                 adminOwnerFile
             );
             return result?.body?.image_url;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async checkUserForShopRegistration(auth: AuthModel) {
+        try {
+            const result = await this.authService.checkUserForShopRegistration(auth);
+            return new UserModel().convertObj(result?.body?.users[0]);
         } catch (error) {
             throw error;
         }
