@@ -59,6 +59,8 @@ export class SignUpComponent implements OnInit {
         LOGO: 'logo',
         BACKGROUND: 'background'
     };
+
+
     constructor(
         private router: Router,
         private appConfig: AppConfig,

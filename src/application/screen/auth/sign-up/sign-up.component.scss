@@ -2,9 +2,24 @@
     color: #FF0000;
 }
 
+.body-form {
+    min-height: 200px;
+}
+
+.header-title {
+    line-height: 25px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 30px auto;
+    width: fit-content;
+}
+
 .info-wrapper {
     display: flex;
-    padding: 10px 15px;
     gap: 20px;
 
     .info-left,

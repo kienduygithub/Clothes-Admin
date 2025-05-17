@@ -583,11 +583,14 @@ nb-sidebar.menu-sidebar.expanded nb-menu .menu-items li.menu-item .menu-items li
 span.sub-title {
   display: block;
   width: 100%;
-  padding: 5px 8px;
   margin-bottom: 10px;
-  background-color: #4A739F;
-  color: white;
-  font-weight: 700;
+
+  font-family: Roboto;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #000000D9;
 }
 
 nb-option-list {
@@ -685,4 +688,22 @@ nb-option-list {
   font-size: 14px;
   font-weight: 400;
   color: #818181;
+}
+
+.label-text {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #252525;
+}
+
+.text-placeholder {
+  color: #828282;
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0%;
 }
