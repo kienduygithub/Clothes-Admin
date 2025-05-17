@@ -2,149 +2,6 @@
     margin-bottom: 20px !important;
 }
 
-.filter-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-
-    .criteria-selector {
-        display: flex;
-        align-items: center;
-        height: 40px;
-        width: fit-content;
-        border-radius: 12px;
-        background-color: white;
-        box-shadow: 0px 10px 24px 0px #0000001A;
-        overflow: hidden;
-    }
-
-    .criteria-item {
-        padding: 0 5px;
-        height: 100%;
-        width: 80px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        color: #00000073;
-        cursor: pointer;
-        user-select: none;
-        transition: all 0.3s ease;
-
-        &:hover {
-            background-color: #f0faff;
-            color: #40A9FF;
-        }
-
-        &.active {
-            background-color: #40A9FF;
-            color: white;
-            font-weight: 500;
-        }
-
-        &.active:hover {
-            background-color: #3399FF;
-        }
-    }
-
-    .schedule-selector {
-        .schedule-item {
-            display: flex;
-            gap: 10px;
-            /* Khoảng cách giữa các dropdown */
-
-            .dropdown-container {
-                position: relative;
-                width: 120px;
-                height: 40px;
-
-                &.month-dropdown {
-                    /* Tùy chỉnh riêng cho dropdown tháng nếu cần */
-                }
-
-                &.year-dropdown {
-                    /* Tùy chỉnh riêng cho dropdown năm nếu cần */
-                    width: 100px;
-                    /* Ví dụ: dropdown năm nhỏ hơn */
-                }
-
-                .dropdown-toggle {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: 0 10px;
-                    height: 100%;
-                    background-color: white;
-                    border-radius: 12px;
-                    box-shadow: 0px 10px 24px 0px #0000001A;
-                    font-size: 14px;
-                    color: #00000073;
-                    cursor: pointer;
-                    user-select: none;
-                    transition: all 0.3s ease;
-
-                    &:hover {
-                        background-color: #f0faff;
-                        color: #40A9FF;
-                    }
-
-                    &::after {
-                        content: '▼';
-                        font-size: 10px;
-                        margin-left: 5px;
-                    }
-                }
-
-                .dropdown-menu {
-                    position: absolute;
-                    top: 45px;
-                    left: 0;
-                    width: 100%;
-                    max-height: 200px;
-                    overflow-y: auto;
-                    background-color: white;
-                    border-radius: 12px;
-                    box-shadow: 0px 10px 24px 0px #0000001A;
-                    z-index: 10;
-                    display: none;
-
-                    &.open {
-                        display: block;
-                    }
-
-                    .dropdown-item {
-                        padding: 10px;
-                        font-size: 14px;
-                        color: #00000073;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-
-                        &:hover {
-                            background-color: #f0faff;
-                            color: #40A9FF;
-                        }
-
-                        &.active {
-                            background-color: #40A9FF;
-                            color: white;
-                            font-weight: 500;
-                        }
-
-                        &.active:hover {
-                            background-color: #3399FF;
-                        }
-                    }
-                }
-            }
-
-            .dropdown-container:hover .dropdown-menu {
-                display: block;
-            }
-        }
-    }
-}
-
 .date-pick-container {
     position: relative;
     cursor: pointer;
@@ -169,9 +26,6 @@
     margin-bottom: 20px;
 }
 
-.chart-container {
-    flex: 1;
-}
 
 .box-overview-stats {
     flex: 1;
@@ -248,49 +102,6 @@
     flex-direction: column;
 }
 
-.box-chart.revenue {
-    width: 100%;
-    height: 360px;
-}
-
-.box-chart.status-order {
-    flex: 1;
-    min-height: 320px;
-    max-height: 360px;
-    align-self: stretch;
-}
-
-.box-chart.top-selling {
-    flex: 2;
-    min-height: 320px;
-    max-height: 360px;
-}
-
-.box-chart.top-customer {
-    flex: 2;
-    height: 300px;
-}
-
-.box-chart.low-stock {
-    flex: 1;
-    min-height: 320px;
-    max-height: 400px;
-}
-
-.box-chart.complete-rate-order {
-    flex: 1;
-    height: 300px;
-}
-
-.box-chart-title {
-    font-family: Inter;
-    font-weight: 600;
-    font-size: 15px;
-    line-height: 16.63px;
-    letter-spacing: 0px;
-    color: #515151;
-}
-
 .circle-no-data-img {
     width: 180px;
     height: 180px;
@@ -322,25 +133,6 @@
     letter-spacing: 0px;
     text-align: center;
     color: #828282;
-}
-
-::ng-deep nb-progress-bar .progress-container {
-    border-radius: 20px;
-    height: 8px !important;
-    background-color: #BAE7FF;
-}
-
-::ng-deep nb-progress-bar .progress-value {
-    border-radius: 20px;
-    transition-duration: 1000ms;
-}
-
-::ng-deep nb-progress-bar.status-info .progress-container .progress-value {
-    background-color: #40A9FF;
-}
-
-::ng-deep nb-progress-bar.status-danger .progress-container .progress-value {
-    background-color: rgba(207, 19, 34, 1);
 }
 
 .pagination-flex {

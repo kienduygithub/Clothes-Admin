@@ -3,7 +3,6 @@
         <div class="d-flex align-items-center mb-2 header-form">
             <span class="header-title">Tổng quan</span>
         </div>
-        <filter-stats-component (OnFilter)="onFilterStats($event)"></filter-stats-component>
         <!-- Overview Stats -->
         <div class="row-container">
             <div class="box-overview-stats">
@@ -47,20 +46,6 @@
         </div>
 
         <div class="row-container">
-            <div class="box-chart revenue">
-                <div class="box-chart-title">
-                    Doanh số theo thời gian
-                </div>
-                <div *ngIf="!revenueChartOptions || revenueStats.revenues.length === 0" class="no-data-wrapper">
-                    <img [src]="image_chart_bar" />
-                    <span class="no-data-text">Không có dữ liệu</span>
-                </div>
-                <div *ngIf="revenueChartOptions && revenueStats.revenues.length > 0" echarts
-                    [options]="revenueChartOptions" class="chart-container"></div>
-            </div>
-        </div>
-
-        <div class="row-container">
             <div class="box-chart top-selling">
                 <div class="box-chart-title">
                     Sản phẩm bán chạy
@@ -99,82 +84,6 @@
                     <span class="no-data-text">Không có dữ liệu</span>
                 </div>
                 <div echarts [options]="orderPieChartOptions" class="chart-container"></div>
-            </div>
-        </div>
-
-        <div class="row-container">
-            <div class="box-chart top-customer">
-                <div class="box-chart-title">
-                    Top khách hàng chi tiêu
-                </div>
-                <div *ngIf="topCustomers.length === 0" class="no-data-wrapper">
-                    <img [src]="image_chart_bar" />
-                    <span class="no-data-text">Không có dữ liệu</span>
-                </div>
-                <div *ngIf="topCustomers.length > 0" echarts [options]="topCustomerChartOptions"
-                    class="chart-container"></div>
-            </div>
-            <div class="box-chart complete-rate-order">
-                <div class="box-chart-title">
-                    Tỉ lệ hoàn thành đơn hàng
-                </div>
-                <div class="no-data-wrapper" *ngIf="!orderCompletionChartOptions">
-                    <img [src]="image_chart_pie" />
-                    <span class="no-data-text">Không có dữ liệu</span>
-                </div>
-                <div *ngIf="orderCompletionChartOptions" echarts [options]="orderCompletionChartOptions"
-                    class="completion-chart"></div>
-            </div>
-        </div>
-
-        <div class="row-container">
-            <div class="box-chart low-stock">
-                <div class="box-chart-title">
-                    Sản phẩm tồn kho thấp
-                </div>
-                <div *ngIf="lowStockProducts.length === 0" class="no-data-wrapper">
-                    <img [src]="image_chart_bar" />
-                    <span class="no-data-text">Không có dữ liệu</span>
-                </div>
-                <div class="table-responsive mt-1" *ngIf="lowStockProducts.length > 0">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>SKU</th>
-                                <th>Tên sản phẩm</th>
-                                <th>Tồn kho</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let product of lowStockProducts  | paginate: pagingLowStock;let i = index">
-                                <td>{{product.sku}}</td>
-                                <td>
-                                    {{product.product?.product_name}}
-                                    ({{product.color?.color_name}}, {{product.size?.size_code}})
-                                </td>
-                                <td>{{product.stock_quantity}}</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-end">
-                                        <img class="common-icon" [src]="icon_edit" [nbTooltip]="'Xem chi tiết'"
-                                            nbTooltipPlacement="bottom"
-                                            (click)="onViewProduct(product.product?.id ?? 0)" />
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style="display: flex; align-items: center;margin-top: auto;">
-                    <div class="total-items">
-                        <span>Tổng số: {{ pagingLowStock.totalItems }}</span>
-                    </div>
-                    <div *ngIf="lowStockProducts.length > 6" class="pagination-flex">
-                        <pagination-controls (pageChange)="onPageTopSellingChange($event)" previousLabel=""
-                            nextLabel="">
-                        </pagination-controls>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
