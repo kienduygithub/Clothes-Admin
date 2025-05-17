@@ -66,6 +66,19 @@ export class ShopService {
         }
     }
 
+    async fetchListShopNotPending(): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.GET(
+                `${domain}`,
+                `shop/active`,
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async fetchRegisterShops(): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();

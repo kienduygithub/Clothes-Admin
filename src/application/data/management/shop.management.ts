@@ -32,7 +32,19 @@ export class ShopManagement {
             const result = await this.shopService.fetchAllShops();
             const response = await result?.body?.shops?.map(
                 (shop: any) => new ShopModel().convertObj(shop)
-            );
+            ) ?? [];
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchListShopNotPending() {
+        try {
+            const result = await this.shopService.fetchListShopNotPending();
+            const response = await result?.body?.shops?.map(
+                (shop: any) => new ShopModel().convertObj(shop)
+            ) ?? [];
             return response;
         } catch (error) {
             throw error;
