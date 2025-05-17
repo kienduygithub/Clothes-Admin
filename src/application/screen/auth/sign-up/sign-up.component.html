@@ -23,7 +23,60 @@
 
 
 <ng-template #cruRef>
-    <form *ngIf="cruForm" [formGroup]="cruForm">
+    <form *ngIf="registerForm" [formGroup]="registerForm">
+        <div class="body-form">
+            <span class="sub-title">Tài khoản đăng ký</span>
+            <div class="d-flex flex-column" style="padding: 10px 18px 10px 0;gap: 10px;">
+                <div class="info d-flex">
+                    <label class="label-text" for="email">
+                        Email đăng ký<span class="required">*</span>
+                    </label>
+                    <div class="input-container">
+                        <input nbInput type="text" formControlName="name" id="name" placeholder="Nhập Email đăng ký"
+                            [ngClass]="{'invalid-form': (confirmForm.get('name')?.dirty || isSubmit) && confirmForm.get('name')?.invalid}">
+                        <ng-container
+                            *ngIf="(confirmForm.get('email')?.dirty || isSubmit) && confirmForm.get('email')?.invalid">
+                            <p *ngIf="confirmForm.get('email')?.hasError('required')" class="vali-text-false">
+                                Email đăng ký không được bỏ trống
+                            </p>
+                            <p *ngIf="confirmForm.get('email')?.hasError('email')" class="vali-text-false">
+                                Email đăng ký không hợp lệ
+                            </p>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="info d-flex">
+                    <label class="label-text" for="password">
+                        Mật khẩu<span class="required">*</span>
+                    </label>
+                    <div class="select-wrapper">
+                        <div class="input-container">
+                            <input nbInput [type]="isVisiblePassword ? 'type' : 'password'" formControlName="password"
+                                id="password" placeholder="Nhập mật khẩu"
+                                [ngClass]="{'invalid-form': (confirmForm.get('password')?.dirty || isSubmit) && confirmForm.get('password')?.invalid}">
+                            <img [src]="icon_visible_eye" class="common-icon" *ngIf="!isVisiblePassword"
+                                (click)="onToggleVisiblePassword()" />
+                            <img [src]="icon_invisible_eye" class="common-icon" *ngIf="isVisiblePassword"
+                                (click)="onToggleVisiblePassword()" />
+                        </div>
+                        <ng-container
+                            *ngIf="(confirmForm.get('password')?.dirty || isSubmit) && confirmForm.get('password')?.invalid">
+                            <p *ngIf="confirmForm.get('password')?.hasError('required')" class="vali-text-false">
+                                Mật khẩu không được bỏ trống
+                            </p>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div style="padding: 10px 18px 10px 0">
+                <button nbButton class="button-submit-form" [ngClass]="{'disabled': !confirmForm.get('accept')?.value}"
+                    style="width: 100%;max-width: 10000px;" (click)="onSignUp()">
+                    Đăng ký
+                </button>
+            </div>
+        </div>
+    </form>
+    <form *ngIf="confirmForm" [formGroup]="confirmForm">
         <div class="body-form">
             <span class="sub-title">Thông tin cá nhân</span>
             <div class="info-wrapper">
@@ -31,9 +84,9 @@
                     <div class="info">
                         <div class="info-image-wrapper">
                             <label class="upload-image" for="info-employee-files">
-                                <img *ngIf="cruForm.get('image_url')?.value === ''" [src]="image_no_avatar">
-                                <img *ngIf="cruForm.get('image_url')?.value !== '' && selectedImageFile"
-                                    [src]="cruForm.get('image_url')?.value">
+                                <img *ngIf="confirmForm.get('image_url')?.value === ''" [src]="image_no_avatar">
+                                <img *ngIf="confirmForm.get('image_url')?.value !== '' && selectedImageFile"
+                                    [src]="confirmForm.get('image_url')?.value">
                             </label>
                             <input #infoImageFile type="file" id="info-employee-files" accept=".png, .jpg, .jpeg"
                                 [hidden]="true" (change)="onChangeAvatarFile(infoImageFile.files)" />
@@ -47,12 +100,10 @@
                         </label>
                         <div class="input-container">
                             <input nbInput type="text" formControlName="name" id="name" placeholder="Nhập họ tên"
-                                [ngClass]="{
-                                'invalid-form': (cruForm.get('name')?.dirty || isSubmit) && cruForm.get('name')?.invalid
-                            }">
+                                [ngClass]="{'invalid-form': (confirmForm.get('name')?.dirty || isSubmit) && confirmForm.get('name')?.invalid }">
                             <ng-container
-                                *ngIf="(cruForm.get('name')?.dirty || isSubmit) && cruForm.get('name')?.invalid">
-                                <p *ngIf="cruForm.get('name')?.hasError('required')" class="vali-text-false">
+                                *ngIf="(confirmForm.get('name')?.dirty || isSubmit) && confirmForm.get('name')?.invalid">
+                                <p *ngIf="confirmForm.get('name')?.hasError('required')" class="vali-text-false">
                                     Tên người dùng không được bỏ trống
                                 </p>
                             </ng-container>
@@ -63,39 +114,7 @@
                             Email<span class="required">*</span>
                         </label>
                         <div class="input-container">
-                            <input nbInput type="text" formControlName="email" id="email" placeholder="Nhập email"
-                                [ngClass]="{
-                                'invalid-form': (cruForm.get('email')?.dirty || isSubmit) && cruForm.get('email')?.invalid
-                            }">
-                            <ng-container
-                                *ngIf="(cruForm.get('email')?.dirty || isSubmit) && cruForm.get('email')?.invalid">
-                                <p *ngIf="cruForm.get('email')?.hasError('required')" class="vali-text-false">
-                                    Địa chỉ email không được bỏ trống
-                                </p>
-                            </ng-container>
-                        </div>
-                    </div>
-                    <div class="info">
-                        <label class="label-text" for="password">
-                            Mật khẩu<span class="required">*</span>
-                        </label>
-                        <div class="select-wrapper">
-                            <div class="input-container">
-                                <input nbInput [type]="isVisiblePassword ? 'type' : 'password'"
-                                    formControlName="password" id="password" placeholder="Nhập mật khẩu" [ngClass]="{
-                                    'invalid-form': (cruForm.get('password')?.dirty || isSubmit) && cruForm.get('password')?.invalid
-                                }">
-                                <img [src]="icon_visible_eye" class="common-icon" *ngIf="!isVisiblePassword"
-                                    (click)="onToggleVisiblePassword()" />
-                                <img [src]="icon_invisible_eye" class="common-icon" *ngIf="isVisiblePassword"
-                                    (click)="onToggleVisiblePassword()" />
-                            </div>
-                            <ng-container
-                                *ngIf="(cruForm.get('password')?.dirty || isSubmit) && cruForm.get('password')?.invalid">
-                                <p *ngIf="cruForm.get('password')?.hasError('required')" class="vali-text-false">
-                                    Mật khẩu không được bỏ trống
-                                </p>
-                            </ng-container>
+                            <input nbInput type="text" formControlName="email" id="email" placeholder="Nhập email">
                         </div>
                     </div>
                     <div class="info">
@@ -104,12 +123,10 @@
                         </label>
                         <div class="input-container">
                             <input nbInput type="text" formControlName="phone" id="phone" placeholder="Nhập số liên hệ"
-                                [ngClass]="{
-                                'invalid-form': (cruForm.get('phone')?.dirty || isSubmit) && cruForm.get('phone')?.invalid
-                            }">
+                                [ngClass]="{'invalid-form': (confirmForm.get('phone')?.dirty || isSubmit) && confirmForm.get('phone')?.invalid}">
                             <ng-container
-                                *ngIf="(cruForm.get('phone')?.dirty || isSubmit) && cruForm.get('phone')?.invalid">
-                                <p *ngIf="cruForm.get('phone')?.hasError('required')" class="vali-text-false">
+                                *ngIf="(confirmForm.get('phone')?.dirty || isSubmit) && confirmForm.get('phone')?.invalid">
+                                <p *ngIf="confirmForm.get('phone')?.hasError('required')" class="vali-text-false">
                                     Số liên hệ không được bỏ trống
                                 </p>
                             </ng-container>
@@ -121,13 +138,11 @@
                         </label>
                         <div class="input-container">
                             <input nbInput type="text" formControlName="address" id="address" placeholder="Nhập địa chỉ"
-                                [ngClass]="{
-                                'invalid-form': (cruForm.get('address')?.dirty || isSubmit) && cruForm.get('address')?.invalid
-                            }">
+                                [ngClass]="{'invalid-form': (confirmForm.get('address')?.dirty || isSubmit) && confirmForm.get('address')?.invalid}">
                             <ng-container
-                                *ngIf="(cruForm.get('address')?.dirty || isSubmit) && cruForm.get('address')?.invalid">
-                                <p *ngIf="cruForm.get('address')?.hasError('required')" class="vali-text-false">
-                                    Địa chỉ không được bỏ trống (Tạm thời thế)
+                                *ngIf="(confirmForm.get('address')?.dirty || isSubmit) && confirmForm.get('address')?.invalid">
+                                <p *ngIf="confirmForm.get('address')?.hasError('required')" class="vali-text-false">
+                                    Địa chỉ không được bỏ trống
                                 </p>
                             </ng-container>
                         </div>
@@ -154,12 +169,12 @@
                     <div class="info">
                         <div class="info-image-wrapper logo">
                             <label class="upload-image"
-                                *ngIf="cruForm.get('logo_url')?.value === '' && !selectedLogoFile">
+                                *ngIf="confirmForm.get('logo_url')?.value === '' && !selectedLogoFile">
                                 <img [src]="image_store_logo_upload">
                             </label>
                             <label class="upload-image"
-                                *ngIf="cruForm.get('logo_url')?.value !== '' && selectedLogoFile">
-                                <img [src]="cruForm.get('logo_url')?.value">
+                                *ngIf="confirmForm.get('logo_url')?.value !== '' && selectedLogoFile">
+                                <img [src]="confirmForm.get('logo_url')?.value">
                             </label>
                             <div class="upload-logo-button">
                                 <label class="upload-image" for="logo-files">
@@ -179,12 +194,11 @@
                         </label>
                         <div class="input-container">
                             <input nbInput type="text" formControlName="shop_name" id="shop_name"
-                                placeholder="Nhập tên cửa hàng" [ngClass]="{
-                                'invalid-form': (cruForm.get('shop_name')?.dirty || isSubmit) && cruForm.get('shop_name')?.invalid
-                            }">
+                                placeholder="Nhập tên cửa hàng"
+                                [ngClass]="{'invalid-form': (confirmForm.get('shop_name')?.dirty || isSubmit) && confirmForm.get('shop_name')?.invalid}">
                             <ng-container
-                                *ngIf="(cruForm.get('shop_name')?.dirty || isSubmit) && cruForm.get('shop_name')?.invalid">
-                                <p *ngIf="cruForm.get('shop_name')?.hasError('required')" class="vali-text-false">
+                                *ngIf="(confirmForm.get('shop_name')?.dirty || isSubmit) && confirmForm.get('shop_name')?.invalid">
+                                <p *ngIf="confirmForm.get('shop_name')?.hasError('required')" class="vali-text-false">
                                     Tên cửa hàng không được bỏ trống
                                 </p>
                             </ng-container>
@@ -196,12 +210,12 @@
                         </label>
                         <div class="input-container">
                             <input nbInput type="email" formControlName="contact_email" id="contact_email"
-                                placeholder="Nhập email" [ngClass]="{
-                                'invalid-form': (cruForm.get('contact_email')?.dirty || isSubmit) && cruForm.get('contact_email')?.invalid
-                            }">
+                                placeholder="Nhập email"
+                                [ngClass]="{'invalid-form': (confirmForm.get('contact_email')?.dirty || isSubmit) && confirmForm.get('contact_email')?.invalid}">
                             <ng-container
-                                *ngIf="(cruForm.get('contact_email')?.dirty || isSubmit) && cruForm.get('contact_email')?.invalid">
-                                <p *ngIf="cruForm.get('contact_email')?.hasError('required')" class="vali-text-false">
+                                *ngIf="(confirmForm.get('contact_email')?.dirty || isSubmit) && confirmForm.get('contact_email')?.invalid">
+                                <p *ngIf="confirmForm.get('contact_email')?.hasError('required')"
+                                    class="vali-text-false">
                                     Email liên hệ không được bỏ trống
                                 </p>
                             </ng-container>
@@ -213,12 +227,12 @@
                         </label>
                         <div class="input-container">
                             <input nbInput type="text" formControlName="contact_address" id="contact_address"
-                                placeholder="Nhập địa chỉ" [ngClass]="{
-                                'invalid-form': (cruForm.get('contact_address')?.dirty || isSubmit) && cruForm.get('contact_address')?.invalid
-                            }">
+                                placeholder="Nhập địa chỉ"
+                                [ngClass]="{'invalid-form': (confirmForm.get('contact_address')?.dirty || isSubmit) && confirmForm.get('contact_address')?.invalid}">
                             <ng-container
-                                *ngIf="(cruForm.get('contact_address')?.dirty || isSubmit) && cruForm.get('contact_address')?.invalid">
-                                <p *ngIf="cruForm.get('contact_address')?.hasError('required')" class="vali-text-false">
+                                *ngIf="(confirmForm.get('contact_address')?.dirty || isSubmit) && confirmForm.get('contact_address')?.invalid">
+                                <p *ngIf="confirmForm.get('contact_address')?.hasError('required')"
+                                    class="vali-text-false">
                                     Địa chỉ liên hệ không được bỏ trống
                                 </p>
                             </ng-container>
@@ -240,13 +254,13 @@
                     Tải ảnh nền<span class="required">*</span>
                 </label>
                 <label for="backgroundForm" class="no-background upload"
-                    *ngIf="cruForm.get('background_url')?.value === ''">
+                    *ngIf="confirmForm.get('background_url')?.value === ''">
                     <img [src]="icon_upload_v4" />
                     <span class="upload-text">Tải ảnh nền</span>
                 </label>
                 <label for="backgroundForm" class="upload"
-                    *ngIf="cruForm.get('background_url')?.value !== '' && selectedBackgroundFile">
-                    <img [src]="cruForm.get('background_url')?.value" />
+                    *ngIf="confirmForm.get('background_url')?.value !== '' && selectedBackgroundFile">
+                    <img [src]="confirmForm.get('background_url')?.value" />
                 </label>
                 <input #backgroundFile type="file" id="backgroundForm" accept=".png, .jpg, .jpeg" [hidden]="true"
                     (change)="onChangeLogoFile(backgroundFile.files, typeFiles.BACKGROUND)" />
@@ -260,10 +274,15 @@
                         Tôi đồng ý với <strong>điều khoản sử dụng</strong> của hệ thống.
                     </label>
                 </div>
-                <button nbButton class="button-submit-form" [ngClass]="{'disabled': !cruForm.get('accept')?.value}"
-                    style="width: 100%;max-width: 10000px;" (click)="onSignUp()">
-                    Đăng ký
-                </button>
+                <div class="d-flex align-items-center">
+                    <button nbButton class="button-cancel-form mr-2" (click)="onSignUp()">
+                        Quay lại
+                    </button>
+                    <button nbButton class="button-submit-form"
+                        [ngClass]="{'disabled': !confirmForm.get('accept')?.value}" (click)="onSignUp()">
+                        Đăng ký
+                    </button>
+                </div>
             </div>
         </div>
     </form>

@@ -51,7 +51,8 @@ export class SignUpComponent implements OnInit {
 
     isSubmit: boolean = false;
     isVisiblePassword = false;
-    cruForm!: FormGroup;
+    registerForm!: FormGroup;
+    confirmForm!: FormGroup;
     selectedImageFile!: File;
     selectedLogoFile!: File;
     selectedBackgroundFile!: File;
@@ -74,7 +75,7 @@ export class SignUpComponent implements OnInit {
     }
 
     initCreateForm() {
-        this.cruForm = this.formBuilder.group({
+        this.confirmForm = this.formBuilder.group({
             name: ['', [ValueValidators.required]],
             email: ['', [ValueValidators.required, Validators.email]],
             password: ['', [ValueValidators.required]],
@@ -96,14 +97,14 @@ export class SignUpComponent implements OnInit {
     }
 
     private emailValueChanges() {
-        this.cruForm.get('email')?.valueChanges
+        this.confirmForm.get('email')?.valueChanges
             .subscribe((response) => {
-                this.cruForm.get('contact_email')?.patchValue(response, { emitEvent: false });
+                this.confirmForm.get('contact_email')?.patchValue(response, { emitEvent: false });
             });
 
-        this.cruForm.get('contact_email')?.valueChanges
+        this.confirmForm.get('contact_email')?.valueChanges
             .subscribe((response) => {
-                this.cruForm.get('email')?.patchValue(response, { emitEvent: false });
+                this.confirmForm.get('email')?.patchValue(response, { emitEvent: false });
             })
     }
 
@@ -111,13 +112,13 @@ export class SignUpComponent implements OnInit {
         if (files && files.length > 0) {
             if (typeFile === this.typeFiles.LOGO) {
                 this.selectedLogoFile = files[0];
-                this.cruForm.get('logo_url')?.patchValue(
+                this.confirmForm.get('logo_url')?.patchValue(
                     URL.createObjectURL(files[0]),
                     { emitEvent: false }
                 );
             } else if (typeFile === this.typeFiles.BACKGROUND) {
                 this.selectedBackgroundFile = files[0];
-                this.cruForm.get('background_url')?.patchValue(
+                this.confirmForm.get('background_url')?.patchValue(
                     URL.createObjectURL(files[0]),
                     { emitEvent: false }
                 )
@@ -128,7 +129,7 @@ export class SignUpComponent implements OnInit {
     onChangeAvatarFile(files: any) {
         if (files && files[0]) {
             this.selectedImageFile = files[0];
-            this.cruForm.get('image_url')?.patchValue(
+            this.confirmForm.get('image_url')?.patchValue(
                 URL.createObjectURL(files[0]),
                 { emitEvent: false }
             );
@@ -145,17 +146,17 @@ export class SignUpComponent implements OnInit {
 
     async onSignUp() {
         this.isSubmit = true;
-        console.log(this.cruForm.value);
-        if (this.cruForm.invalid) {
+        console.log(this.confirmForm.value);
+        if (this.confirmForm.invalid) {
             console.log('INVALID FORM');
             let errorMessage: string[] = [];
-            if (this.cruForm.get('image_url')?.hasError('required')) {
+            if (this.confirmForm.get('image_url')?.hasError('required')) {
                 errorMessage.push("Ảnh đại diện <b>người dùng</b> không được bỏ trống</br>");
             }
-            if (this.cruForm.get('logo_url')?.hasError('required')) {
+            if (this.confirmForm.get('logo_url')?.hasError('required')) {
                 errorMessage.push("Ảnh đại diện <b>cửa hàng</b> không được bỏ trống</br>");
             }
-            if (this.cruForm.get('background_url')?.hasError('required')) {
+            if (this.confirmForm.get('background_url')?.hasError('required')) {
                 errorMessage.push("Ảnh nền <b>cửa hàng</b> không được bỏ trống</br>");
             }
             this.dialogService.open(ErrorComponent, {
@@ -188,22 +189,22 @@ export class SignUpComponent implements OnInit {
 
     convertValueFormToUserModel() {
         const model = new UserModel();
-        model.name = this.cruForm.getRawValue().name.trim();
-        model.email = this.cruForm.getRawValue().email.trim();
-        model.password = this.cruForm.getRawValue().password.trim();
-        model.phone = this.cruForm.getRawValue().phone.trim();
-        model.address = this.cruForm.getRawValue().address.trim();
-        model.gender = this.cruForm.getRawValue().gender;
+        model.name = this.confirmForm.getRawValue().name.trim();
+        model.email = this.confirmForm.getRawValue().email.trim();
+        model.password = this.confirmForm.getRawValue().password.trim();
+        model.phone = this.confirmForm.getRawValue().phone.trim();
+        model.address = this.confirmForm.getRawValue().address.trim();
+        model.gender = this.confirmForm.getRawValue().gender;
 
         return model;
     }
 
     convertValueFormToShopModel() {
         const model = new ShopModel();
-        model.shop_name = this.cruForm.getRawValue().shop_name.trim();
-        model.contact_email = this.cruForm.getRawValue().contact_email.trim();
-        model.contact_address = this.cruForm.getRawValue().contact_address.trim();
-        model.description = this.cruForm.getRawValue().description.trim();
+        model.shop_name = this.confirmForm.getRawValue().shop_name.trim();
+        model.contact_email = this.confirmForm.getRawValue().contact_email.trim();
+        model.contact_address = this.confirmForm.getRawValue().contact_address.trim();
+        model.description = this.confirmForm.getRawValue().description.trim();
 
         return model;
     }

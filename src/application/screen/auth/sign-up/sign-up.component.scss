@@ -27,20 +27,6 @@ form {
         display: flex;
         flex-direction: column;
         gap: 10px;
-
-        .info {
-            display: flex;
-
-            label {
-                font-size: 14px;
-                font-weight: 400;
-                display: block;
-                line-height: 36px;
-                width: 150px;
-                flex-shrink: 0;
-            }
-
-        }
     }
 
     .info-left {
@@ -53,6 +39,20 @@ form {
     .info-right {
         flex: 2;
     }
+}
+
+.info {
+    display: flex;
+
+    label {
+        font-size: 14px;
+        font-weight: 400;
+        display: block;
+        line-height: 36px;
+        width: 150px;
+        flex-shrink: 0;
+    }
+
 }
 
 .info-image-wrapper {
