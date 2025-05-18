@@ -29,6 +29,7 @@ import { ShopService } from "../../../data/service/shop.service";
 import { ToastNotification } from "../../common/toast/toast.component";
 import { ShopModel } from "../../../data/model/shop.model";
 import { OrderModel } from "../../../data/model/order/order.model";
+import { OverviewUrl } from "../overview.routing";
 echarts.use([
     BarChart,
     PieChart,
@@ -131,7 +132,6 @@ export class OwnerOverviewComponent implements OnInit {
     async fetchShopInfo() {
         try {
             this.shopInfo = await this.shopMana.fetchShopByTokenId();
-            console.log(this.shopInfo);
         } catch (error) {
             console.log(error)
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.');
@@ -172,7 +172,7 @@ export class OwnerOverviewComponent implements OnInit {
     }
 
     navigateShopDetails() {
-
+        this.router.navigate([OverviewUrl.OWNER_OVERVIEW, this.shopInfo.id]);
     }
 
     resetPageLatestOrderShop() {

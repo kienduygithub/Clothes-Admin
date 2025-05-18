@@ -1,0 +1,218 @@
+.required {
+    color: #FF0000;
+}
+
+.info-wrapper {
+    display: flex;
+    padding: 10px 15px;
+    gap: 20px;
+
+    .info-left,
+    .info-right {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .info {
+            display: flex;
+            height: fit-content;
+
+            label {
+                font-size: 14px;
+                font-weight: 400;
+                display: block;
+                line-height: 36px;
+                width: 150px;
+                flex-shrink: 0;
+            }
+
+            .input-container {
+                width: 100%;
+                max-width: 600px !important;
+
+                input {
+                    width: 100%;
+                    max-width: 600px !important;
+                }
+            }
+        }
+    }
+
+    .info-right {
+        flex: 1;
+    }
+
+    .info-left {
+        margin-right: 20px;
+
+        .info-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            .logo-wrapper {
+                width: 140px;
+                height: 140px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden;
+                }
+
+                &.no-logo {
+                    border: 6px solid #ccc;
+                }
+
+                &:not(.no-logo) {
+                    border: 1px solid #ccc;
+                }
+            }
+
+            .upload-logo-wrapper {
+                display: flex;
+                align-items: center;
+
+                label {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border: 1px solid white;
+                    border-radius: 5px;
+                    width: 127px;
+                    height: 36px;
+                    background-color: #0085ff;
+                    transition: background-color 0.28s ease;
+                    cursor: pointer;
+
+                    img {
+                        width: 20px;
+                        height: 20px;
+                    }
+
+                    span {
+                        width: 60px;
+                        text-align: center;
+                        white-space: nowrap;
+                        color: white;
+                    }
+
+                    &:hover {
+                        background-color: rgba(0, 133, 255, 0.7);
+                    }
+                }
+            }
+        }
+    }
+}
+
+textarea {
+    height: 151px !important;
+    max-width: 1500px !important;
+}
+
+.select-wrapper {
+    width: 100%;
+
+    ::ng-deep nb-select {
+        width: 100%;
+        max-width: 600px !important;
+
+        button {
+            width: 100%;
+            background-color: white !important;
+        }
+
+        &.invalid {
+            button {
+                border-color: red !important;
+
+                &.top,
+                &.bottom {
+                    border-color: red !important;
+                }
+            }
+        }
+    }
+}
+
+.action {
+    color: transparent;
+}
+
+.color-opt {
+    display: block;
+    height: 100% !important;
+    width: 100% !important;
+    border: 1px solid #ccc;
+}
+
+input.disabled {
+    user-select: none;
+    pointer-events: none;
+    background-color: #e4e9f2 !important;
+}
+
+.upload-background-wrapper {
+    height: 300px;
+    margin-bottom: 18px;
+
+    label {
+        font-size: 14px;
+        margin-bottom: 0.5rem;
+    }
+
+    label.upload {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #e4e9f2;
+        border: 1px solid transparent;
+        position: relative;
+        cursor: pointer;
+
+        span {
+            display: block;
+            width: 88px;
+            text-align: center;
+            color: #0085ff;
+            font-size: 15px;
+        }
+
+        &.no-background {
+            &::before {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: transparent;
+                border-radius: 5px;
+                border: 2px dashed transparent;
+                transition: border-color 0.15s linear;
+            }
+
+            &:hover::before {
+                border-color: #0085ff;
+            }
+        }
+
+        &:not(.no-background) {
+            border-color: transparent;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+    }
+}

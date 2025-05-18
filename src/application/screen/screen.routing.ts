@@ -14,7 +14,7 @@ import { RegisterShopRouting, RegisterShopURL } from './register-shop/register-s
 import { RegisterShopComponent } from './register-shop/register-shop.component';
 import { CouponRouting, CouponUrl } from './coupon/coupon.routing';
 import { CouponComponent } from './coupon/coupon.component';
-import { OverviewUrl } from './overview/overview.routing';
+import { OverviewRouting, OverviewUrl } from './overview/overview.routing';
 import { AdminOverviewComponent } from './overview/admin/admin-overview.component';
 import { OwnerOverviewComponent } from './overview/owner/owner-overview.component';
 import { AccountUrl } from './account/account.routing';
@@ -42,6 +42,7 @@ const routes: Routes = [
             ...ProductRouting,
             ...CategoryRouting,
             ...OrderRouting,
+            ...OverviewRouting,
             {
                 path: 'admin',
                 redirectTo: OverviewUrl.ADMIN_OVERVIEW,
