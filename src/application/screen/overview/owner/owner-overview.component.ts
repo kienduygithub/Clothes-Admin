@@ -28,6 +28,7 @@ import { ShopManagement } from "../../../data/management/shop.management";
 import { ShopService } from "../../../data/service/shop.service";
 import { ToastNotification } from "../../common/toast/toast.component";
 import { ShopModel } from "../../../data/model/shop.model";
+import { OrderModel } from "../../../data/model/order/order.model";
 echarts.use([
     BarChart,
     PieChart,
@@ -93,24 +94,13 @@ export class OwnerOverviewComponent implements OnInit {
 
     preImage = '';
     overviewStats!: OverviewStatsModel;
-    revenueStats!: RevenueStatsModel;
-    orderStats!: OrderStatsModel;
-    topSellingProducts: TopSellingProductModel[] = [];
-    totalCustomers: number = 0;
-    topCustomers: TopCustomerModel[] = [];
-    lowStockProducts: LowStockProductModel[] = [];
-    orderCompletionRate!: OrderCompletionRateModel;
     today = new Date();
     shopInfo: ShopModel = new ShopModel();
+    latestOrderShops: OrderModel[] = [];
 
     /** Echarts options **/
-    revenueChartOptions: any;
-    orderPieChartOptions: any;
-    topCustomerChartOptions: any;
-    orderCompletionChartOptions: any;
-
-    offsetLowStock: number = 0;
-    pagingLowStock!: PagingModel;
+    offsetLatestOrderShop: number = 0;
+    pagingLatestOrderShop!: PagingModel;
     initDateRanges: DateRange[] = [];
 
     constructor(
@@ -122,7 +112,7 @@ export class OwnerOverviewComponent implements OnInit {
 
     async ngOnInit(): Promise<any> {
         this.preImage = this.appConfig.getPreImage() ?? '';
-        this.pagingLowStock = new PagingModel();
+        this.pagingLatestOrderShop = new PagingModel();
         const startOfMonth = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
         startOfMonth.setHours(0, 0, 0, 0);
         const todayEnd = new Date(this.today);
@@ -134,6 +124,8 @@ export class OwnerOverviewComponent implements OnInit {
         })
         await this.fetchShopInfo();
         await this.fetchShopOverviewStats();
+        await this.fetchListLatestOrderShop();
+        this.resetPageLatestOrderShop();
     }
 
     async fetchShopInfo() {
@@ -155,18 +147,42 @@ export class OwnerOverviewComponent implements OnInit {
         }
     }
 
+    async fetchListLatestOrderShop() {
+        try {
+            const response = await this.shopMana.fetchListLatestOrderShop(this.initDateRanges);
+            this.latestOrderShops = response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    onPageLatestOrderShopChange(currentPage: number) {
+        this.pagingLatestOrderShop.currentPage = currentPage;
+        this.offsetLatestOrderShop = (currentPage - 1) * this.pagingLatestOrderShop.itemsPerPage + 1;
+        if (currentPage === 1) {
+            this.pagingLatestOrderShop.before = currentPage;
+            this.pagingLatestOrderShop.after = currentPage + 1;
+        } else if (currentPage === this.pagingLatestOrderShop.totalPage) {
+            this.pagingLatestOrderShop.before = currentPage - 1;
+            this.pagingLatestOrderShop.after = currentPage;
+        } else if (currentPage > 1 || currentPage < this.pagingLatestOrderShop.totalPage) {
+            this.pagingLatestOrderShop.before = currentPage - 1;
+            this.pagingLatestOrderShop.after = currentPage + 1;
+        }
+    }
+
     navigateShopDetails() {
 
     }
 
-    resetPageLowStock() {
-        this.pagingLowStock.currentPage = 1;
-        this.pagingLowStock.itemsPerPage = 5;
-        this.pagingLowStock.totalItems = this.lowStockProducts.length;
-        this.pagingLowStock.totalPage = Math.ceil(this.lowStockProducts.length / 5);
-        this.pagingLowStock.before = 0;
-        this.pagingLowStock.after = 0;
+    resetPageLatestOrderShop() {
+        this.pagingLatestOrderShop.currentPage = 1;
+        this.pagingLatestOrderShop.itemsPerPage = 3;
+        this.pagingLatestOrderShop.totalItems = this.latestOrderShops.length;
+        this.pagingLatestOrderShop.totalPage = Math.ceil(this.latestOrderShops.length / 3);
+        this.pagingLatestOrderShop.before = 0;
+        this.pagingLatestOrderShop.after = 0;
 
-        this.offsetLowStock = (this.pagingLowStock.currentPage - 1) * this.pagingLowStock.itemsPerPage + 1;
+        this.offsetLatestOrderShop = (this.pagingLatestOrderShop.currentPage - 1) * this.pagingLatestOrderShop.itemsPerPage + 1;
     }
 }

@@ -118,18 +118,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let product of topSellingProducts">
-                                    <td>{{product.sku}}</td>
+                                <tr *ngFor="let orderShop of latestOrderShops | paginate: pagingLatestOrderShop">
                                     <td>
-                                        {{product.product?.product_name}}({{product.color?.color_name}},{{product.size?.size_code}})
+                                        <span>
+                                            #{{ orderShop.id }}
+                                            <span class="order-shop-title">({{ orderShop.order_shop_id }})</span>
+                                        </span>
                                     </td>
-                                    <td>{{product.totalQuantity}}</td>
+                                    <td>
+                                        <span>{{ orderShop.user?.name }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ orderShop.final_total.toLocaleString('vi-VN') }} VNĐ</span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div *ngIf="topSellingProducts.length === 0" class="no-data-wrapper">
+                        <div *ngIf="latestOrderShops.length === 0" class="no-data-wrapper">
                             <img [src]="image_chart_bar" />
                             <span class="no-data-text">Không có dữ liệu</span>
+                        </div>
+                        <div *ngIf="latestOrderShops.length > 0" style="display: flex; align-items: center;">
+                            <div class="total-items">
+                                <span>Tổng số: {{ pagingLatestOrderShop.totalItems }}</span>
+                            </div>
+                            <div class="pagination-flex">
+                                <pagination-controls (pageChange)="onPageLatestOrderShopChange($event)" previousLabel=""
+                                    nextLabel=""></pagination-controls>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { ShopModel } from "../model/shop.model";
 import { ShopService } from "../service/shop.service";
 import { Withdrawal } from "../model/withdrawal/withdrawal.model";
+import { DateRange } from "../../common/utils/filter-stats/filter-stats.component";
+import { OrderModel } from "../model/order/order.model";
 
 @Injectable()
 export class ShopManagement {
@@ -82,6 +84,18 @@ export class ShopManagement {
                 (shop: any) => new ShopModel().convertObj(shop)
             );
             return response[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchListLatestOrderShop(dateRanges: DateRange[]) {
+        try {
+            const result = await this.shopService.fetchListLatestOrderShop(dateRanges);
+            const response = await result?.body?.orders?.map(
+                (order: any) => new OrderModel().convertObj(order)
+            );
+            return response;
         } catch (error) {
             throw error;
         }

@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { ServiceCore } from "../../common/service/service-core";
 import { AppConfig } from "../../common/config/app.config";
 import { ShopModel } from "../model/shop.model";
+import { DateRange } from "../../common/utils/filter-stats/filter-stats.component";
 
 @Injectable()
 export class ShopService {
@@ -111,6 +112,22 @@ export class ShopService {
             const response = await this.serviceCore.GET(
                 `${domain}`,
                 `shop/owner/token-shop`,
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchListLatestOrderShop(dateRanges: DateRange[]): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `shop/order/latest`,
+                {
+                    dateRanges
+                }
             );
             return response;
         } catch (error) {
