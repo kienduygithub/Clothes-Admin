@@ -14,6 +14,7 @@ import { WarningComponent } from "../../../common/layout/notify/warning/warnimg.
 import { CRUCategoryDialogComponent } from "../comp/cru-category-dialog/cru-category-dialog.component";
 import { actions } from "../../../common/resource/actions";
 import { CRUSubcategoryDialogComponent } from "../comp/cru-subcategory-dialog/cru-subcategory-dialog.component";
+import { ErrorComponent } from "../../../common/layout/notify/error/error.component";
 
 const NB_LIBS = [
     NbInputModule,
@@ -117,6 +118,17 @@ export class CategoryListComponent implements OnInit {
     }
 
     onConfirmDeleteCategory(category: CategoryModel, index: number) {
+        if (category.sub_categories && category.sub_categories.length > 0) {
+            this.dialogService.open(ErrorComponent, {
+                context: {
+                    title: 'Không hợp lệ',
+                    content: 'Danh mục chứa danh mục con, không thể thực hiện xóa',
+                }
+            })
+
+            return;
+        }
+
         this.dialogService.open(WarningComponent, {
             context: {
                 title: 'Xóa',

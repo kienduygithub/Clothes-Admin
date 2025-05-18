@@ -128,6 +128,13 @@ export class WithdrawalModalComponent implements OnInit {
                             content: msg
                         }
                     })
+                } else if (msg.includes('Số dư phải từ 1 triệu trở lên')) {
+                    this.dialogService.open(ErrorComponent, {
+                        context: {
+                            title: 'Không hợp lệ',
+                            content: msg
+                        }
+                    })
                 }
             }
         }

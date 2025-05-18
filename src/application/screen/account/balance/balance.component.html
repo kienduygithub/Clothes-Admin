@@ -45,7 +45,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div style="display: flex; align-items: center;">
+                                <div *ngIf="withdrawalHistories.length > 0" style="display: flex; align-items: center;">
                                     <div class="total-items">
                                         <span>Tổng số: {{ paging.totalItems }}</span>
                                     </div>
