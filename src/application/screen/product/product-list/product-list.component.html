@@ -56,7 +56,7 @@
                     </td>
                     <td style="width: 14%;">
                         <span style="font-size: 14px;">
-                            đ{{product.unit_price}}
+                            {{product.unit_price ?? '0' | CurrencyPipe}} VNĐ
                         </span>
                     </td>
                     <td style="width: 14%;">

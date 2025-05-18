@@ -11,6 +11,7 @@ import { WarningComponent } from "../../../common/layout/notify/warning/warnimg.
 import { NgxPaginationModule } from "ngx-pagination";
 import { PagingModel } from "../../../common/model/paging.model";
 import { ProductUrl } from "../product.routing";
+import { CurrencyPipe } from "../../../common/layout/pipes/currency.pipe";
 
 const NB_LIBS = [
     NbInputModule,
@@ -20,7 +21,12 @@ const NB_LIBS = [
 ]
 
 const ANGULAR_LIBS = [
+    CommonModule,
     NgxPaginationModule
+]
+
+const PIPES = [
+    CurrencyPipe
 ]
 
 @Component({
@@ -31,7 +37,7 @@ const ANGULAR_LIBS = [
     imports: [
         ...NB_LIBS,
         ...ANGULAR_LIBS,
-        CommonModule,
+        ...PIPES,
     ],
     providers: [
         ProductManagement,
