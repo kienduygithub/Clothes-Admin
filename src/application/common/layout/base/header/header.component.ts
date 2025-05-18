@@ -20,6 +20,7 @@ import { AuthManagement } from '../../../../data/management/auth.management';
 import { UserStoreModel } from '../../../../data/model/user/user.store.model';
 import { WebSocketService } from '../../../service/websocket.service';
 import { Roles } from '../../../resource/roles';
+import { AccountUrl } from '../../../../screen/account/account.routing';
 
 @Component({
   selector: 'app-header',
@@ -85,9 +86,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onChange() { }
 
-  toChangePassword() { }
+  toChangePassword() {
+    if (this.router.url.includes('owner')) {
+      this.router.navigate([AccountUrl.OWNER_ACCOUNT_CHANGE_PASSWORD]);
+    } else if (this.router.url.includes('admin')) {
+      this.router.navigate([AccountUrl.ADMIN_ACCOUNT_CHANGE_PASSWORD]);
+    }
+  }
 
-  toAccountManagement() { }
+  toAccountManagement() {
+    if (this.router.url.includes('owner')) {
+      this.router.navigate([AccountUrl.OWNER_ACCOUNT_INFO]);
+    } else if (this.router.url.includes('admin')) {
+      this.router.navigate([AccountUrl.ADMIN_ACCOUNT_INFO]);
+    }
+  }
 
   toggleInput() {
     this.isInputVisible = !this.isInputVisible;
