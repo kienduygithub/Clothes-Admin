@@ -1,12 +1,13 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { NbButtonModule, NbIconModule, NbInputModule, NbTooltipModule } from "@nebular/theme";
 import { StatsManagement } from "../../../data/management/stats.management";
 import { StatsService } from "../../../data/service/stats.service";
 import { ToastNotification } from "../../common/toast/toast.component";
-import { ProductPerformanceMonthlyStatModel, ProductPerformanceOverviewModel } from "../../../data/model/stats/stats.model";
+import { OrderActivityMonthlyStatModel, OrderActivityOverviewModel, ProductPerformanceMonthlyStatModel, ProductPerformanceOverviewModel } from "../../../data/model/stats/stats.model";
 import { DateRange } from "../../../common/utils/filter-stats/filter-stats.component";
 import { GroupDate } from "../../../common/resource/group-date";
+import { adjustToUTCWithOffset } from "../../../common/resource/time";
 
 const NB_LIBS = [
     NbIconModule,
@@ -36,7 +37,9 @@ const PROVIDERS = [
     providers: [...PROVIDERS]
 })
 
-export class AdminOverviewComponent {
+export class AdminOverviewComponent implements OnInit {
+    orderActivityMonthlyStats: OrderActivityMonthlyStatModel[] = [];
+    orderActivityOverview!: OrderActivityOverviewModel;
     productPerformanceMonthlyStats: ProductPerformanceMonthlyStatModel[] = [];
     productPerformanceOverview!: ProductPerformanceOverviewModel;
     initDateRanges: DateRange[] = [];
@@ -45,9 +48,25 @@ export class AdminOverviewComponent {
         private statsMana: StatsManagement
     ) { }
 
+    async ngOnInit() {
+        await this.fetchData();
+    }
+
     async fetchData() {
         this.initDateRanges = this.getCurrentMonthDateRange();
+        await this.fetchOrderActivityStats(GroupDate.DAY);
         await this.fetchProductPerformanceStats(GroupDate.DAY);
+    }
+
+    async fetchOrderActivityStats(groupBy: GroupDate) {
+        try {
+            const respMap = await this.statsMana.fetchOrderActivityStats(this.initDateRanges, groupBy);
+            this.orderActivityMonthlyStats = respMap.get('monthlyStats');
+            this.orderActivityOverview = respMap.get('overview');
+        } catch (error) {
+            console.log(error);
+            ToastNotification.error('Hệ thống gặp sự cố, quay lại sau');
+        }
     }
 
     async fetchProductPerformanceStats(groupBy: GroupDate) {
@@ -55,6 +74,7 @@ export class AdminOverviewComponent {
             const respMap = await this.statsMana.fetchProductPerformanceStats(this.initDateRanges, groupBy);
             this.productPerformanceMonthlyStats = respMap.get('monthlyStats');
             this.productPerformanceOverview = respMap.get('overview');
+            console.log(this.productPerformanceMonthlyStats);
         } catch (error) {
             console.log(error);
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau');
@@ -71,8 +91,8 @@ export class AdminOverviewComponent {
 
         return [
             {
-                startDate: startDate,
-                endDate: endDate,
+                startDate: adjustToUTCWithOffset(startDate),
+                endDate: adjustToUTCWithOffset(endDate),
                 month: month + 1,
             },
         ];

@@ -146,3 +146,119 @@ export class ProductPerformanceOverviewModel {
         return obj;
     }
 }
+
+// API 2
+export class CountStatModel {
+    pending: number;
+    paid: number;
+    processing: number;
+    shipped: number;
+    completed: number;
+    canceled: number;
+    constructor(
+        pending?: number,
+        paid?: number,
+        processing?: number,
+        shipped?: number,
+        completed?: number,
+        canceled?: number,
+    ) {
+        this.pending = pending ?? 0;
+        this.paid = paid ?? 0;
+        this.processing = processing ?? 0;
+        this.shipped = shipped ?? 0;
+        this.completed = completed ?? 0;
+        this.canceled = canceled ?? 0;
+    }
+
+    fromJson(data: any) {
+        const obj = new CountStatModel();
+        obj.pending = data?.pending ?? 0;
+        obj.paid = data?.paid ?? 0;
+        obj.processing = data?.processing ?? 0;
+        obj.shipped = data?.shipped ?? 0;
+        obj.completed = data?.completed ?? 0;
+        obj.canceled = data?.canceled ?? 0;
+
+        return obj;
+    }
+}
+
+export class OrderStatModel {
+    period: string;
+    counts: CountStatModel;
+
+    constructor(
+        period?: string,
+        counts?: CountStatModel,
+    ) {
+        this.period = period ?? '';
+        this.counts = counts ?? new CountStatModel();
+    }
+
+    fromJson(data: any) {
+        const obj = new OrderStatModel();
+        obj.period = data?.period ?? '';
+        obj.counts = data?.counts ?? new CountStatModel();
+
+        return obj;
+    }
+}
+
+export class OrderActivityMonthlyStatModel {
+    month: string | null;
+    startDate: string;
+    endDate: string;
+    orders: OrderStatModel[];
+
+    constructor(
+        month?: string | null,
+        startDate?: string,
+        endDate?: string,
+        orders?: OrderStatModel[],
+    ) {
+        this.month = month ?? null;
+        this.startDate = startDate ?? '';
+        this.endDate = endDate ?? '';
+        this.orders = orders ?? [];
+    }
+
+    fromJson(data: any) {
+        const obj = new OrderActivityMonthlyStatModel();
+        obj.month = data?.month ?? null;
+        obj.startDate = data?.startDate ?? '';
+        obj.endDate = data?.endDate ?? '';
+        obj.orders = data?.orders?.map(
+            (order: any) => new OrderStatModel().fromJson(order)
+        ) ?? [];
+
+        return obj;
+    }
+}
+
+export class OrderActivityOverviewModel {
+    orders: OrderStatModel[];
+    totalOrders: number;
+    statusCounts: CountStatModel;
+
+    constructor(
+        orders?: OrderStatModel[],
+        totalOrders?: number,
+        statusCounts?: CountStatModel,
+    ) {
+        this.orders = orders ?? [];
+        this.totalOrders = totalOrders ?? 0;
+        this.statusCounts = statusCounts ?? new CountStatModel();
+    }
+
+    fromJson(data: any) {
+        const obj = new OrderActivityOverviewModel();
+        this.orders = data?.orders?.map(
+            (order: any) => new OrderStatModel().fromJson(order)
+        ) ?? [];
+        this.totalOrders = data?.totalOrders ?? 0;
+        this.statusCounts = data?.statusCounts ? new CountStatModel().fromJson(data?.statusCounts) : new CountStatModel();
+
+        return obj
+    }
+}

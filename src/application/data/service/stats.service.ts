@@ -12,6 +12,23 @@ export class StatsService {
         private appConfig: AppConfig
     ) { }
 
+    async fetchOrderActivityStats(dateRanges: DateRange[], groupBy: GroupDate = GroupDate.DAY): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `admin/order-activity-stats`,
+                {
+                    dateRanges,
+                    groupBy
+                }
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async fetchProductPerformanceStats(dateRanges: DateRange[], groupBy: GroupDate = GroupDate.DAY): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
