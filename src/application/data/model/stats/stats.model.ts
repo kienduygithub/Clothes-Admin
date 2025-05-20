@@ -327,13 +327,16 @@ export class ShopMonthlyStatModel {
 export class ShopOverviewModel {
     totalNewShops: number;
     newShops: ShopStatModel[];
+    periods: PeriodShopModel[];
 
     constructor(
         totalNewShops?: number,
         newShops?: ShopStatModel[],
+        periods?: PeriodShopModel[]
     ) {
         this.totalNewShops = totalNewShops ?? 0;
         this.newShops = newShops ?? [];
+        this.periods = periods ?? [];
     }
 
     fromJson(data: any) {
@@ -342,6 +345,36 @@ export class ShopOverviewModel {
         obj.newShops = data?.newShops?.map(
             (shop: any) => new ShopStatModel().fromJson(shop)
         ) ?? [];
+        obj.periods = data?.periods?.map(
+            (period: any) => new PeriodShopModel().fromJson(period)
+        ) ?? [];
+
+        return obj;
+    }
+}
+
+export class PeriodShopModel {
+    period: string;
+    totalNewShops: number;
+    newShops: ShopStatModel[];
+
+    constructor(
+        period?: string,
+        totalNewShops?: number,
+        newShops?: ShopStatModel[],
+    ) {
+        this.period = period ?? '';
+        this.totalNewShops = totalNewShops ?? 0;
+        this.newShops = newShops ?? []
+    }
+
+    fromJson(data: any) {
+        const obj = new PeriodShopModel();
+        this.period = data?.period ?? '';
+        this.totalNewShops = data?.totalNewShops ?? 0;
+        this.newShops = data?.newShops?.map(
+            (shop: any) => new ShopStatModel().fromJson(shop)
+        ) ?? []
 
         return obj;
     }
