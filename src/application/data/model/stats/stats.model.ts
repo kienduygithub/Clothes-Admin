@@ -262,3 +262,87 @@ export class OrderActivityOverviewModel {
         return obj
     }
 }
+
+// API 1
+export class ShopStatModel {
+    id: number;
+    shop_name: string;
+    statusChangedAt: string; // ISO
+
+    constructor(
+        id?: number,
+        shop_name?: string,
+        statusChangedAt?: string, // ISO
+    ) {
+        this.id = id ?? 0;
+        this.shop_name = shop_name ?? '';
+        this.statusChangedAt = statusChangedAt ?? ''; // ISO
+    }
+
+    fromJson(data: any) {
+        const obj = new ShopStatModel();
+        obj.id = data?.id ?? 0;
+        obj.shop_name = data?.shop_name ?? '';
+        obj.statusChangedAt = data?.statusChangedAt ?? ''; // ISO
+
+        return obj;
+    }
+}
+
+export class ShopMonthlyStatModel {
+    month: string | null;
+    startDate: string;
+    endDate: string;
+    totalNewShops: number;
+    newShops: ShopStatModel[];
+
+    constructor(
+        month?: string | null,
+        startDate?: string,
+        endDate?: string,
+        totalNewShops?: number,
+        newShops?: ShopStatModel[],
+    ) {
+        this.month = month ?? '';
+        this.startDate = startDate ?? '';
+        this.endDate = endDate ?? '';
+        this.totalNewShops = totalNewShops ?? 0;
+        this.newShops = newShops ?? [];
+    }
+
+    fromJson(data: any) {
+        const obj = new ShopMonthlyStatModel();
+        obj.month = data?.month ?? '';
+        obj.startDate = data?.startDate ?? '';
+        obj.endDate = data?.endDate ?? '';
+        obj.totalNewShops = data?.totalNewShops ?? 0;
+        obj.newShops = data?.newShops?.map(
+            (shop: any) => new ShopStatModel().fromJson(shop)
+        ) ?? [];
+
+        return obj
+    }
+}
+
+export class ShopOverviewModel {
+    totalNewShops: number;
+    newShops: ShopStatModel[];
+
+    constructor(
+        totalNewShops?: number,
+        newShops?: ShopStatModel[],
+    ) {
+        this.totalNewShops = totalNewShops ?? 0;
+        this.newShops = newShops ?? [];
+    }
+
+    fromJson(data: any) {
+        const obj = new ShopOverviewModel();
+        obj.totalNewShops = data?.totalNewShops ?? 0;
+        obj.newShops = data?.newShops?.map(
+            (shop: any) => new ShopStatModel().fromJson(shop)
+        ) ?? [];
+
+        return obj;
+    }
+}

@@ -4,7 +4,7 @@ import { NbButtonModule, NbIconModule, NbInputModule, NbTooltipModule } from "@n
 import { StatsManagement } from "../../../data/management/stats.management";
 import { StatsService } from "../../../data/service/stats.service";
 import { ToastNotification } from "../../common/toast/toast.component";
-import { OrderActivityMonthlyStatModel, OrderActivityOverviewModel, ProductPerformanceMonthlyStatModel, ProductPerformanceOverviewModel } from "../../../data/model/stats/stats.model";
+import { OrderActivityMonthlyStatModel, OrderActivityOverviewModel, ProductPerformanceMonthlyStatModel, ProductPerformanceOverviewModel, ShopMonthlyStatModel, ShopOverviewModel } from "../../../data/model/stats/stats.model";
 import { DateRange } from "../../../common/utils/filter-stats/filter-stats.component";
 import { GroupDate } from "../../../common/resource/group-date";
 import { adjustToUTCWithOffset } from "../../../common/resource/time";
@@ -38,6 +38,8 @@ const PROVIDERS = [
 })
 
 export class AdminOverviewComponent implements OnInit {
+    shopMontlyStats: ShopMonthlyStatModel[] = [];
+    shopOverview!: ShopOverviewModel;
     orderActivityMonthlyStats: OrderActivityMonthlyStatModel[] = [];
     orderActivityOverview!: OrderActivityOverviewModel;
     productPerformanceMonthlyStats: ProductPerformanceMonthlyStatModel[] = [];
@@ -54,8 +56,20 @@ export class AdminOverviewComponent implements OnInit {
 
     async fetchData() {
         this.initDateRanges = this.getCurrentMonthDateRange();
+        await this.fetchNewShopStats(GroupDate.DAY);
         await this.fetchOrderActivityStats(GroupDate.DAY);
         await this.fetchProductPerformanceStats(GroupDate.DAY);
+    }
+
+    async fetchNewShopStats(groupBy: GroupDate) {
+        try {
+            const respMap = await this.statsMana.fetchNewShopStats(this.initDateRanges, groupBy);
+            this.shopMontlyStats = respMap.get('monthlyStats');
+            this.shopOverview = respMap.get('overview');
+        } catch (error) {
+            console.log(error);
+            ToastNotification.error('Hệ thống gặp sự cố, quay lại sau');
+        }
     }
 
     async fetchOrderActivityStats(groupBy: GroupDate) {
@@ -74,7 +88,6 @@ export class AdminOverviewComponent implements OnInit {
             const respMap = await this.statsMana.fetchProductPerformanceStats(this.initDateRanges, groupBy);
             this.productPerformanceMonthlyStats = respMap.get('monthlyStats');
             this.productPerformanceOverview = respMap.get('overview');
-            console.log(this.productPerformanceMonthlyStats);
         } catch (error) {
             console.log(error);
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau');
