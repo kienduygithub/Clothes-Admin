@@ -17,6 +17,7 @@ import { NgxPaginationModule } from "ngx-pagination";
 import { EChartsOption } from "echarts/types/dist/shared";
 import { ImageResource } from "../../../common/resource/image_resource";
 import { OrderStatus } from "../../../common/resource/status";
+import { PagingModel } from "../../../common/model/paging.model";
 
 echarts.use([
     BarChart,
@@ -75,17 +76,22 @@ export class AdminOverviewComponent implements OnInit {
     image_chart_bar: string = ImageResource.image_chart_bar;
 
     shopMontlyStats: ShopMonthlyStatModel[] = [];
-    shopOverview!: ShopOverviewModel;
+    shopOverview: ShopOverviewModel = new ShopOverviewModel();
     orderActivityMonthlyStats: OrderActivityMonthlyStatModel[] = [];
-    orderActivityOverview!: OrderActivityOverviewModel;
+    orderActivityOverview: OrderActivityOverviewModel = new OrderActivityOverviewModel();
     productPerformanceMonthlyStats: ProductPerformanceMonthlyStatModel[] = [];
-    productPerformanceOverview!: ProductPerformanceOverviewModel;
+    productPerformanceOverview: ProductPerformanceOverviewModel = new ProductPerformanceOverviewModel();
     initDateRanges: DateRange[] = [];
     groupBy: GroupDate = GroupDate.DAY;
 
     shopChartOptions: any = {};
     orderChartOptions: EChartsOption = {};
     productChartOptions: EChartsOption = {};
+
+    offsetTopProduct: number = 0;
+    pagingTopProduct: PagingModel = new PagingModel();
+    offsetLowRatedProduct: number = 0;
+    pagingLowRatedProduct: PagingModel = new PagingModel();
 
     constructor(
         private statsMana: StatsManagement
@@ -110,6 +116,8 @@ export class AdminOverviewComponent implements OnInit {
                 this.fetchProductPerformanceStats(this.groupBy)
             ]);
             this.updateChartOptions();
+            this.resetPageTopProduct();
+            this.resetPageLowRatedProduct();
         } catch (error) {
             console.error(error);
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau');
@@ -262,5 +270,57 @@ export class AdminOverviewComponent implements OnInit {
             canceled: '#9966FF'
         };
         return colors[status] || '#999';
+    }
+
+    onPageTopProductChange(currentPage: number) {
+        this.pagingTopProduct.currentPage = currentPage;
+        this.offsetTopProduct = (currentPage - 1) * this.pagingTopProduct.itemsPerPage + 1;
+        if (currentPage === 1) {
+            this.pagingTopProduct.before = currentPage;
+            this.pagingTopProduct.after = currentPage + 1;
+        } else if (currentPage === this.pagingTopProduct.totalPage) {
+            this.pagingTopProduct.before = currentPage - 1;
+            this.pagingTopProduct.after = currentPage;
+        } else if (currentPage > 1 || currentPage < this.pagingTopProduct.totalPage) {
+            this.pagingTopProduct.before = currentPage - 1;
+            this.pagingTopProduct.after = currentPage + 1;
+        }
+    }
+
+    resetPageTopProduct() {
+        this.pagingTopProduct.currentPage = 1;
+        this.pagingTopProduct.itemsPerPage = 3;
+        this.pagingTopProduct.totalItems = this.productPerformanceOverview.topProducts.length;
+        this.pagingTopProduct.totalPage = Math.ceil(this.productPerformanceOverview.topProducts.length / 3);
+        this.pagingTopProduct.before = 0;
+        this.pagingTopProduct.after = 0;
+
+        this.offsetTopProduct = (this.pagingTopProduct.currentPage - 1) * this.pagingTopProduct.itemsPerPage + 1;
+    }
+
+    onPageLowRatedProductChange(currentPage: number) {
+        this.pagingLowRatedProduct.currentPage = currentPage;
+        this.offsetLowRatedProduct = (currentPage - 1) * this.pagingLowRatedProduct.itemsPerPage + 1;
+        if (currentPage === 1) {
+            this.pagingLowRatedProduct.before = currentPage;
+            this.pagingLowRatedProduct.after = currentPage + 1;
+        } else if (currentPage === this.pagingLowRatedProduct.totalPage) {
+            this.pagingLowRatedProduct.before = currentPage - 1;
+            this.pagingLowRatedProduct.after = currentPage;
+        } else if (currentPage > 1 || currentPage < this.pagingLowRatedProduct.totalPage) {
+            this.pagingLowRatedProduct.before = currentPage - 1;
+            this.pagingLowRatedProduct.after = currentPage + 1;
+        }
+    }
+
+    resetPageLowRatedProduct() {
+        this.pagingLowRatedProduct.currentPage = 1;
+        this.pagingLowRatedProduct.itemsPerPage = 3;
+        this.pagingLowRatedProduct.totalItems = this.productPerformanceOverview.lowRatedProducts.length;
+        this.pagingLowRatedProduct.totalPage = Math.ceil(this.productPerformanceOverview.lowRatedProducts.length / 3);
+        this.pagingLowRatedProduct.before = 0;
+        this.pagingLowRatedProduct.after = 0;
+
+        this.offsetTopProduct = (this.pagingLowRatedProduct.currentPage - 1) * this.pagingLowRatedProduct.itemsPerPage + 1;
     }
 }

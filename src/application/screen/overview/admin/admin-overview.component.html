@@ -67,13 +67,96 @@
         </div>
 
         <div class="row-container">
+            <div class="box-chart low-stock">
+                <div class="box-chart-title">
+                    Sản phẩm bán chạy
+                </div>
+                <div *ngIf="productPerformanceOverview.topProducts.length === 0" class="no-data-wrapper">
+                    <img [src]="image_chart_bar" />
+                    <span class="no-data-text">Không có dữ liệu</span>
+                </div>
+                <div class="table-responsive mt-1" *ngIf=" productPerformanceOverview.topProducts.length > 0">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Mã sãn phẩm</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Số lượng bán</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let product of productPerformanceOverview.topProducts| paginate: pagingTopProduct;let i = index">
+                                <td>{{product.id}}</td>
+                                <td>
+                                    {{product?.product_name}}
+                                </td>
+                                <td>{{product.sold_quantity}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="display: flex; align-items: center;margin-top: auto;">
+                    <div class="total-items" *ngIf="productPerformanceOverview.topProducts.length > 0">
+                        <span>Tổng số: {{ pagingTopProduct.totalItems }}</span>
+                    </div>
+                    <div *ngIf="productPerformanceOverview.topProducts.length > 3" class="pagination-flex">
+                        <pagination-controls (pageChange)="onPageTopProductChange($event)" previousLabel=""
+                            nextLabel="">
+                        </pagination-controls>
+                    </div>
+                </div>
+            </div>
+            <div class="box-chart low-stock">
+                <div class="box-chart-title">
+                    Sản phẩm đánh giá thấp
+                </div>
+                <div *ngIf="productPerformanceOverview.lowRatedProducts.length === 0" class="no-data-wrapper">
+                    <img [src]="image_chart_bar" />
+                    <span class="no-data-text">Không có dữ liệu</span>
+                </div>
+                <div class="table-responsive mt-1" *ngIf=" productPerformanceOverview.lowRatedProducts.length > 0">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Mã sãn phẩm</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Đánh Giá (Sao)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let product of productPerformanceOverview.lowRatedProducts | paginate: pagingLowRatedProduct;let i = index">
+                                <td>{{product.id}}</td>
+                                <td>
+                                    {{product?.product_name}}
+                                </td>
+                                <td>{{product.avgRating | number:'1.1-1'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="display: flex; align-items: center;margin-top: auto;">
+                    <div class="total-items" *ngIf="productPerformanceOverview.lowRatedProducts.length > 0">
+                        <span>Tổng số: {{ pagingLowRatedProduct.totalItems }}</span>
+                    </div>
+                    <div *ngIf="productPerformanceOverview.lowRatedProducts.length > 3" class="pagination-flex">
+                        <pagination-controls (pageChange)="onPageLowRatedProductChange($event)" previousLabel=""
+                            nextLabel="">
+                        </pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-container">
             <div class="box-chart revenue">
                 <div class="box-chart-title">
                     Hiệu suất sản phẩm
                 </div>
                 <div *ngIf="!productChartOptions || productPerformanceOverview?.productsListed?.length === 0"
                     class="no-data-wrapper">
-                    <img [src]="image_chart_bar" />
+                    <img [src]="image_chart_line" />
                     <span class="no-data-text">Không có dữ liệu</span>
                 </div>
                 <div *ngIf="productChartOptions && productPerformanceOverview && productPerformanceOverview.productsListed.length > 0"
