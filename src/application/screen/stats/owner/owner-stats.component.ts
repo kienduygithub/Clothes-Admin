@@ -1,18 +1,16 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { NbButtonModule, NbDatepickerModule, NbDateService, NbIconModule, NbInputModule, NbTooltipModule } from "@nebular/theme";
+import { NbButtonModule, NbDatepickerModule, NbIconModule, NbInputModule, NbTooltipModule } from "@nebular/theme";
 import { OverviewManagement } from "../../../data/management/overview.management";
 import { OverviewService } from "../../../data/service/overview.service";
 import { LowStockProductModel, OrderCompletionRateModel, OrderStatsModel, OverviewStatsModel, RevenueStatsModel, TopCustomerModel, TopSellingProductModel } from "../../../data/model/overview/overview.model";
 import { GroupDate } from "../../../common/resource/group-date";
-import { OrderStatus } from "../../../common/resource/status";
 import { NbProgressBarModule } from '@nebular/theme';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
 import { BarChart, LineChart, LinesChart, PieChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-import { EChartsCoreOption } from 'echarts/core';
 import { Router } from "@angular/router";
 import { TranslateModule } from "@ngx-translate/core";
 import { ImageResource } from "../../../common/resource/image_resource";
@@ -21,7 +19,6 @@ import { ShortenNumberPipe } from "../../../common/layout/pipes/shortenNumber";
 import { NgxPaginationModule } from "ngx-pagination";
 import { PagingModel } from "../../../common/model/paging.model";
 import { ProductUrl } from "../../product/product.routing";
-import { Option } from "../../../common/resource/option.interface";
 import { DateRange, FilterParams, FilterStatsComponent } from "../../../common/utils/filter-stats/filter-stats.component";
 import { adjustToUTCWithOffset } from "../../../common/resource/time";
 echarts.use([

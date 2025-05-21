@@ -1,296 +1,236 @@
-.screen {
-
-    div,
-    span,
-    p {
-        font-size: 14px;
-        font-weight: 400;
-    }
+.header-form {
+    margin-bottom: 20px !important;
 }
 
-.body-page {
-    display: flex;
-    flex-direction: column;
-    margin-top: 1rem;
-    gap: 1.25rem;
+.header-title-text {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #00427D;
+}
+
+.date-pick-container {
+    position: relative;
+    cursor: pointer;
+
+    img {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    input {
+        padding-left: 2.5rem;
+        padding-right: 0;
+    }
 }
 
 .row-container {
     display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    justify-content: space-between;
-    height: max-content;
-    gap: 1.25rem;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    &.grid {
+        display: grid;
+        grid-template-columns: repeat(5, auto);
+    }
 }
 
-.body-form {
-    min-height: 300px;
-    padding: 0.5rem 1.5rem;
-    border-radius: 16px;
-    margin-top: 0;
-    // box-shadow: 0px 20px 24px 0px rgba(0, 0, 0, 0.1);
+.chart-container {
+    flex: 1;
 }
 
-.header-frame {
+.box-overview-stats {
+    flex: 1;
+    height: 78px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: .75rem;
-    padding-top: 0.25rem;
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: 0px 10px 24px 0px #0000001A;
+    background-color: #FFFFFF;
 
-    div {
-        display: inherit;
-        align-items: center;
-    }
-
-    img {
-        width: 32px;
-        height: 32px;
-        margin-right: 1rem;
-    }
-}
-
-.system .header-frame {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-}
-
-.half {
-    border-radius: 16px;
-    flex: 1;
-    box-sizing: border-box;
-
-    &.containter {
+    .overview-stats {
         display: flex;
         flex-direction: column;
-        // align-items: stretch;
-        gap: 1.25rem;
+        gap: 5px;
 
-        .row-bandwidth {
-            flex: 1;
-            width: 100%;
-            // height: 48%;
-            display: flex;
-            gap: 1.25rem;
-            // justify-content: space-between;
+        .title {
+            font-family: Inter;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: 0px;
+            color: #00000073;
         }
 
+        .value {
+            font-family: Inter;
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 24px;
+            letter-spacing: 0px;
+            color: #000000D9;
+        }
+    }
+
+    .icon-stats {
+        border-radius: 12px;
+        width: 46px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            width: 30px;
+            height: 30px;
+        }
+
+        &.revenue {
+            background-color: #FF9431;
+        }
+
+        &.order {
+            background-color: #389E0D;
+        }
+
+        &.sold-product {
+            background-color: #69C0FF;
+        }
+
+        &.customer {
+            background-color: #7086FD;
+        }
     }
 }
 
-.one-third {
-    flex: 1;
-    background: #fff;
-    height: 100%;
-    // aspect-ratio: 1 / 1;
+.box-chart {
     border-radius: 16px;
-    padding: .75rem 1.5rem;
-    border: 0.8px solid #b3bdc68c;
-
-    h3.title-small {
-        line-height: 20px;
-        font-weight: 500;
-    }
-
-    .one-third-content {
-        font-size: 24px;
-        font-weight: 500;
-        margin-top: 1.75rem;
-
-    }
-
-    .progress_bar {
-        width: 75%;
-    }
-}
-
-.frame-row {
+    padding: 16px;
+    background-color: #FFFFFF;
+    box-shadow: 0px 10px 24px 0px #0000001A;
     display: flex;
-    align-items: start;
-    margin-top: .25rem;
-
-    label {
-        width: 30%;
-        line-height: 28px;
-        color: rgba(89, 89, 89, 1);
-    }
-
-    div.content {
-        width: 70%;
-        line-height: 28px;
-        font-size: 14px;
-        font-weight: 400;
-
-        .percent {
-            line-height: 20px;
-            margin-bottom: 0.5rem;
-            font-size: 13px;
-        }
-
-        // &.progress-bar {
-        //   display: flex;
-        //   flex-direction: column;
-        //   align-items: start;
-        // }
-    }
+    flex-direction: column;
 }
 
-.bandwidth-chart {
+.box-chart.revenue {
+    width: 100%;
+    height: 360px;
+}
+
+.box-chart.status-order {
+    flex: 1;
+    min-height: 320px;
+    max-height: 360px;
+    align-self: stretch;
+}
+
+.box-chart.top-selling {
+    flex: 2;
+    min-height: 320px;
+    max-height: 360px;
+}
+
+.box-chart.top-customer {
+    flex: 2;
     height: 300px;
-    // width: 600px;
-    // width: 100%;
+}
+
+.box-chart.low-stock {
+    flex: 1;
+    min-height: 320px;
+    max-height: 400px;
+}
+
+.box-chart.complete-rate-order {
+    flex: 1;
+    height: 300px;
+}
+
+.box-chart-title {
+    font-family: Inter;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 16.63px;
+    letter-spacing: 0px;
+    color: #515151;
+}
+
+.circle-no-data-img {
+    width: 180px;
+    height: 180px;
+}
+
+.bar-no-data-img {
+    width: 120px;
+    height: 120px;
+}
+
+.line-no-data-img {
+    width: 140px;
+    height: 140px;
+}
+
+.no-data-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.no-data-text {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.63px;
+    letter-spacing: 0px;
+    text-align: center;
+    color: #828282;
 }
 
 ::ng-deep nb-progress-bar .progress-container {
-    border-radius: 5px;
-    height: 12px !important;
+    border-radius: 20px;
+    height: 8px !important;
+    background-color: #BAE7FF;
 }
 
 ::ng-deep nb-progress-bar .progress-value {
+    border-radius: 20px;
     transition-duration: 1000ms;
 }
 
 ::ng-deep nb-progress-bar.status-info .progress-container .progress-value {
-    background-color: rgba(24, 144, 255, 1);
+    background-color: #40A9FF;
 }
 
 ::ng-deep nb-progress-bar.status-danger .progress-container .progress-value {
     background-color: rgba(207, 19, 34, 1);
 }
 
-.body-frame {
-    margin-top: .5rem;
+.pagination-flex {
+    margin-top: auto;
 
-    &.table-container {
-        width: 100%;
-        max-height: 300px;
-        overflow-y: scroll;
-        padding: 0;
-    }
+    ::ng-deep pagination-controls {
 
-    .table {
-        position: relative;
-        margin: 0;
+        .ngx-pagination {
+            margin-bottom: 0px !important;
 
-        thead {
-            position: sticky;
-            top: 0;
-            border: none;
-            // background-color: #fafafa;
-        }
-
-        // tbody {
-        //   border-bottom: none;
-        // }
-
-        .online div {
-            color: rgba(82, 196, 26, 1);
-            border: 1px solid rgba(82, 196, 26, 1);
-            border-radius: 5px;
-            padding: 5px 8px;
-            text-align: center;
-            width: fit-content;
-        }
-
-        .offline div {
-            color: rgba(207, 19, 34, 1);
-            border: 1px solid rgba(207, 19, 34, 1);
-            border-radius: 5px;
-            padding: 5px 8px;
-            text-align: center;
-            width: fit-content;
-        }
-    }
-}
-
-.alerts {
-    ul {
-        padding-inline-start: 0;
-        margin-top: 0.75rem;
-        max-height: 300px;
-        overflow-y: scroll;
-
-        li {
-            display: flex;
-            align-items: start;
-            margin-bottom: 0.75rem;
-
-            .li-style {
-                width: 8px;
-                height: 8px;
-                margin-right: .75rem;
-                margin-top: 0.3rem;
+            li.current {
+                border-radius: 50%;
             }
 
-            .time {
-                .date {
-                    font-size: 14px;
-                    font-weight: 400;
+            li.pagination-previous,
+            li.pagination-next {
+                span {
+                    display: none;
                 }
-
-                .hour {
-                    font-size: 12px;
-                    color: rgba(0, 0, 0, 0.45);
-                }
-            }
-
-            .alert-content {
-                display: flex;
-                align-items: center;
-                gap: .5rem;
-                margin-left: 5rem;
-
-                img {
-                    width: 24px;
-                    height: 24px;
-                }
-
-                .ip {
-                    color: rgba(9, 109, 217, 1);
-                }
-
             }
         }
-    }
-}
-
-.see-all {
-    color: rgba(24, 144, 255, 1);
-}
-
-.chart-nodata {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-
-    img {
-        width: 120px;
-        height: 120px;
-    }
-
-    span {
-        color: rgba(130, 130, 130, 1);
-    }
-
-}
-
-.footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    margin-top: 2rem;
-
-    img {
-        width: 16px;
-        height: 16px;
-    }
-
-    span {
-        color: rgba(0, 0, 0, 0.85);
-        padding-top: 2px;
     }
 }

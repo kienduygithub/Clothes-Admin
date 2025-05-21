@@ -5,9 +5,31 @@ import { StatsManagement } from "../../../data/management/stats.management";
 import { StatsService } from "../../../data/service/stats.service";
 import { ToastNotification } from "../../common/toast/toast.component";
 import { OrderActivityMonthlyStatModel, OrderActivityOverviewModel, ProductPerformanceMonthlyStatModel, ProductPerformanceOverviewModel, ShopMonthlyStatModel, ShopOverviewModel } from "../../../data/model/stats/stats.model";
-import { DateRange } from "../../../common/utils/filter-stats/filter-stats.component";
+import { DateRange, FilterParams, FilterStatsComponent } from "../../../common/utils/filter-stats/filter-stats.component";
 import { GroupDate } from "../../../common/resource/group-date";
 import { adjustToUTCWithOffset } from "../../../common/resource/time";
+import { NgxEchartsDirective, provideEchartsCore } from "ngx-echarts";
+import * as echarts from 'echarts/core';
+import { BarChart, LineChart, LinesChart, PieChart } from 'echarts/charts';
+import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from "echarts/components";
+import { CanvasRenderer } from "echarts/renderers";
+import { NgxPaginationModule } from "ngx-pagination";
+import { EChartsOption } from "echarts/types/dist/shared";
+import { ImageResource } from "../../../common/resource/image_resource";
+import { OrderStatus } from "../../../common/resource/status";
+
+echarts.use([
+    BarChart,
+    PieChart,
+    LineChart,
+    LinesChart,
+    GridComponent,
+    LegendComponent,
+    TitleComponent,
+    ToolboxComponent,
+    TooltipComponent,
+    CanvasRenderer
+]);
 
 const NB_LIBS = [
     NbIconModule,
@@ -18,11 +40,14 @@ const NB_LIBS = [
 
 const ANGULAR_MODULES = [
     CommonModule,
+    NgxEchartsDirective,
+    NgxPaginationModule,
 ]
 
 const PROVIDERS = [
     StatsManagement,
-    StatsService
+    StatsService,
+    provideEchartsCore({ echarts })
 ]
 
 @Component({
@@ -32,12 +57,23 @@ const PROVIDERS = [
     styleUrl: './admin-overview.component.scss',
     imports: [
         ...NB_LIBS,
-        ...ANGULAR_MODULES
+        ...ANGULAR_MODULES,
+        FilterStatsComponent
     ],
     providers: [...PROVIDERS]
 })
 
 export class AdminOverviewComponent implements OnInit {
+    icon_money_bag: string = ImageResource.icon_money_bag;
+    icon_complete_order: string = ImageResource.icon_complete_order;
+    icon_product_widge: string = ImageResource.icon_product_widge;
+    icon_group_customer: string = ImageResource.icon_group_customer;
+    icon_edit: string = ImageResource.icon_edit;
+
+    image_chart_line: string = ImageResource.image_chart_line;
+    image_chart_pie: string = ImageResource.image_chart_pie;
+    image_chart_bar: string = ImageResource.image_chart_bar;
+
     shopMontlyStats: ShopMonthlyStatModel[] = [];
     shopOverview!: ShopOverviewModel;
     orderActivityMonthlyStats: OrderActivityMonthlyStatModel[] = [];
@@ -45,20 +81,39 @@ export class AdminOverviewComponent implements OnInit {
     productPerformanceMonthlyStats: ProductPerformanceMonthlyStatModel[] = [];
     productPerformanceOverview!: ProductPerformanceOverviewModel;
     initDateRanges: DateRange[] = [];
+    groupBy: GroupDate = GroupDate.DAY;
+
+    shopChartOptions: any = {};
+    orderChartOptions: EChartsOption = {};
+    productChartOptions: EChartsOption = {};
 
     constructor(
         private statsMana: StatsManagement
     ) { }
 
+    async onFilterStats(filter: FilterParams) {
+        this.groupBy = filter.filter === 'YEAR' ? GroupDate.MONTH : GroupDate.DAY;
+        this.initDateRanges = filter.dateRanges;
+        await this.fetchData();
+    }
+
     async ngOnInit() {
+        this.initDateRanges = this.getCurrentMonthDateRange();
         await this.fetchData();
     }
 
     async fetchData() {
-        this.initDateRanges = this.getCurrentMonthDateRange();
-        await this.fetchNewShopStats(GroupDate.DAY);
-        await this.fetchOrderActivityStats(GroupDate.DAY);
-        await this.fetchProductPerformanceStats(GroupDate.DAY);
+        try {
+            await Promise.all([
+                this.fetchNewShopStats(this.groupBy),
+                this.fetchOrderActivityStats(this.groupBy),
+                this.fetchProductPerformanceStats(this.groupBy)
+            ]);
+            this.updateChartOptions();
+        } catch (error) {
+            console.error(error);
+            ToastNotification.error('Hệ thống gặp sự cố, quay lại sau');
+        }
     }
 
     async fetchNewShopStats(groupBy: GroupDate) {
@@ -99,15 +154,113 @@ export class AdminOverviewComponent implements OnInit {
         const year = now.getFullYear();
         const month = now.getMonth();
 
-        const startDate = new Date(year, month, 1, 0, 0, 0);
-        const endDate = new Date(year, month + 1, 0, 23, 59, 59);
+        const startMonth = new Date(year, month, 1, 0, 0, 0);
+        const todayEnd = new Date();
+        todayEnd.setHours(23, 59, 59, 999);
 
         return [
             {
-                startDate: adjustToUTCWithOffset(startDate),
-                endDate: adjustToUTCWithOffset(endDate),
+                startDate: adjustToUTCWithOffset(startMonth),
+                endDate: adjustToUTCWithOffset(todayEnd),
                 month: month + 1,
             },
         ];
+    }
+
+    updateChartOptions() {
+        this.shopChartOptions = {
+            tooltip: { trigger: 'axis' },
+            xAxis: {
+                type: 'category',
+                data: this.shopOverview.periods.map(p => p.period),
+                axisLabel: { rotate: 45 }
+            },
+            yAxis: { type: 'value', name: '' },
+            series: [{
+                name: 'Cửa hàng mới',
+                type: 'bar',
+                data: this.shopOverview.periods.map(p => p.totalNewShops),
+                itemStyle: { color: '#1890ff' },
+                barWidth: '20%'
+            }],
+            grid: {
+                left: '3%',
+                right: '3%',
+                bottom: '0',
+                top: '10%',
+                containLabel: true
+            }
+        };
+
+        const statusList = [
+            { enum: OrderStatus.PENDING, key: 'pending', label: 'Đang chờ' },
+            { enum: OrderStatus.PAID, key: 'paid', label: 'Đã thanh toán' },
+            { enum: OrderStatus.PROCESSING, key: 'processing', label: 'Đang xử lý' },
+            { enum: OrderStatus.SHIPPED, key: 'shipped', label: 'Đã vận chuyển' },
+            { enum: OrderStatus.COMPLETED, key: 'completed', label: 'Hoàn thành' },
+            { enum: OrderStatus.CANCELED, key: 'canceled', label: 'Hủy bỏ' }
+        ];
+        const legendData = statusList.map(status => status.label);
+        this.orderChartOptions = {
+            tooltip: { trigger: 'axis' },
+            legend: { data: legendData, top: 0 },
+            xAxis: {
+                type: 'category',
+                data: this.orderActivityOverview.orders.map(o => o.period),
+                axisLabel: { rotate: 45 }
+            },
+            yAxis: { type: 'value', name: '' },
+            series: statusList.map(status => ({
+                name: status.label,
+                type: 'bar',
+                stack: 'total',
+                data: this.orderActivityOverview.orders.map((o: any) => o.counts[status.key] ?? 0),
+                itemStyle: { color: this.getStatusColor(status.enum) }
+            })),
+            grid: {
+                left: '3%',
+                right: '3%',
+                bottom: '0',
+                top: '10%',
+                containLabel: true
+            }
+        };
+
+        this.productChartOptions = {
+            tooltip: { trigger: 'axis' },
+            legend: { data: ['Số Sản Phẩm Niêm Yết'], top: 0 },
+            xAxis: {
+                type: 'category',
+                data: this.productPerformanceOverview.productsListed.map(p => p.period || 'N/A'),
+                axisLabel: { rotate: 45 }
+            },
+            yAxis: { type: 'value', name: '' },
+            series: [{
+                name: 'Số Sản Phẩm Niêm Yết',
+                type: 'line',
+                data: this.productPerformanceOverview.productsListed.map(p => p.productsListed || 0),
+                lineStyle: { color: '#36A2EB' },
+                areaStyle: { color: 'rgba(54, 162, 235, 0.2)' }
+            }],
+            grid: {
+                left: '3%',
+                right: '3%',
+                bottom: '10%',
+                top: '10%',
+                containLabel: true
+            }
+        };
+    }
+
+    private getStatusColor(status: string): string {
+        const colors: { [key: string]: string } = {
+            pending: '#69C0FF',
+            paid: '#FF6384',
+            processing: '#1890ff',
+            shipped: '#FFCD56',
+            completed: '#4BC0C0',
+            canceled: '#9966FF'
+        };
+        return colors[status] || '#999';
     }
 }

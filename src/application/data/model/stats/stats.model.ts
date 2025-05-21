@@ -253,11 +253,11 @@ export class OrderActivityOverviewModel {
 
     fromJson(data: any) {
         const obj = new OrderActivityOverviewModel();
-        this.orders = data?.orders?.map(
+        obj.orders = data?.orders?.map(
             (order: any) => new OrderStatModel().fromJson(order)
         ) ?? [];
-        this.totalOrders = data?.totalOrders ?? 0;
-        this.statusCounts = data?.statusCounts ? new CountStatModel().fromJson(data?.statusCounts) : new CountStatModel();
+        obj.totalOrders = data?.totalOrders ?? 0;
+        obj.statusCounts = data?.statusCounts ? new CountStatModel().fromJson(data?.statusCounts) : new CountStatModel();
 
         return obj
     }
@@ -370,9 +370,9 @@ export class PeriodShopModel {
 
     fromJson(data: any) {
         const obj = new PeriodShopModel();
-        this.period = data?.period ?? '';
-        this.totalNewShops = data?.totalNewShops ?? 0;
-        this.newShops = data?.newShops?.map(
+        obj.period = data?.period ?? '';
+        obj.totalNewShops = data?.totalNewShops ?? 0;
+        obj.newShops = data?.newShops?.map(
             (shop: any) => new ShopStatModel().fromJson(shop)
         ) ?? []
 

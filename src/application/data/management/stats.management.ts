@@ -33,7 +33,9 @@ export class StatsManagement {
             const orderActivityMonthlyStats: OrderActivityMonthlyStatModel[] = result?.body?.monthlyStats?.map(
                 (stats: any) => new OrderActivityMonthlyStatModel().fromJson(stats)
             ) ?? [];
+
             const orderActivityOverview = new OrderActivityOverviewModel().fromJson(result?.body?.overview);
+
             const respMap = new Map();
             respMap.set('monthlyStats', orderActivityMonthlyStats);
             respMap.set('overview', orderActivityOverview);
