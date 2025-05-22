@@ -62,4 +62,21 @@ export class StatsService {
             throw error;
         }
     }
+
+    async fetchProductCategoryStats(dateRanges: DateRange[], groupBy: GroupDate = GroupDate.DAY): Promise<any> {
+        try {
+            const domain = this.appConfig.getDomain();
+            const response = await this.serviceCore.POST(
+                `${domain}`,
+                `admin/category-product-count`,
+                {
+                    dateRanges,
+                    groupBy
+                }
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

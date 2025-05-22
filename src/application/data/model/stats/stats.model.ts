@@ -1,3 +1,76 @@
+// API 4
+export class CategoryStatModel {
+    category_name: string;
+    count: number;
+
+    constructor(
+        category_name?: string,
+        count?: number,
+    ) {
+        this.category_name = category_name ?? '';
+        this.count = count ?? 0;
+    }
+
+    fromJson(data: any) {
+        const obj = new CategoryStatModel();
+        obj.category_name = data?.category_name ?? '';
+        obj.count = data?.count ?? 0;
+
+        return obj;
+    }
+}
+
+export class CategoryProductMonthlyStatModel {
+    month: number | null;
+    startDate: string;
+    endDate: string;
+    categoryStats: CategoryStatModel[];
+
+    constructor(
+        month?: number | null,
+        startDate?: string,
+        endDate?: string,
+        categoryStats?: CategoryStatModel[],
+    ) {
+        this.month = month ?? null;
+        this.startDate = startDate ?? '';
+        this.endDate = endDate ?? '';
+        this.categoryStats = categoryStats ?? [];
+    }
+
+    fromJson(data: any) {
+        const obj = new CategoryProductMonthlyStatModel();
+        obj.month = data?.month ?? null;
+        obj.startDate = data?.startDate ?? '';
+        obj.endDate = data?.endDate ?? '';
+        obj.categoryStats = data?.categoryStats?.map(
+            (stat: any) => new CategoryStatModel().fromJson(stat)
+        ) ?? [];
+
+        return obj;
+    }
+}
+
+export class CategoryProductOverviewModel {
+    categoryStats: CategoryStatModel[];
+    constructor(
+        categoryStats?: CategoryStatModel[],
+    ) {
+
+        this.categoryStats = categoryStats ?? [];
+    }
+
+    fromJson(data: any) {
+        const obj = new CategoryProductOverviewModel();
+        obj.categoryStats = data?.categoryStats?.map(
+            (stat: any) => new CategoryStatModel().fromJson(stat)
+        ) ?? [];
+
+        return obj;
+    }
+}
+
+// API 3
 export class ProductListedModel {
     period: string;
     productsListed: number;

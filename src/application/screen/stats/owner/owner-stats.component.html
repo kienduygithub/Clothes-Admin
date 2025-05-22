@@ -166,10 +166,10 @@
                     </table>
                 </div>
                 <div style="display: flex; align-items: center;margin-top: auto;">
-                    <div class="total-items">
+                    <div class="total-items" *ngIf="lowStockProducts.length > 0">
                         <span>Tổng số: {{ pagingLowStock.totalItems }}</span>
                     </div>
-                    <div *ngIf="lowStockProducts.length > 6" class="pagination-flex">
+                    <div *ngIf="lowStockProducts.length > 5" class="pagination-flex">
                         <pagination-controls (pageChange)="onPageTopSellingChange($event)" previousLabel=""
                             nextLabel="">
                         </pagination-controls>

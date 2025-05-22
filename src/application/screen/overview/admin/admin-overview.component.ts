@@ -4,7 +4,7 @@ import { NbButtonModule, NbIconModule, NbInputModule, NbTooltipModule } from "@n
 import { StatsManagement } from "../../../data/management/stats.management";
 import { StatsService } from "../../../data/service/stats.service";
 import { ToastNotification } from "../../common/toast/toast.component";
-import { OrderActivityMonthlyStatModel, OrderActivityOverviewModel, ProductPerformanceMonthlyStatModel, ProductPerformanceOverviewModel, ShopMonthlyStatModel, ShopOverviewModel } from "../../../data/model/stats/stats.model";
+import { CategoryProductMonthlyStatModel, CategoryProductOverviewModel, OrderActivityMonthlyStatModel, OrderActivityOverviewModel, ProductPerformanceMonthlyStatModel, ProductPerformanceOverviewModel, ShopMonthlyStatModel, ShopOverviewModel } from "../../../data/model/stats/stats.model";
 import { DateRange, FilterParams, FilterStatsComponent } from "../../../common/utils/filter-stats/filter-stats.component";
 import { GroupDate } from "../../../common/resource/group-date";
 import { adjustToUTCWithOffset } from "../../../common/resource/time";
@@ -81,12 +81,15 @@ export class AdminOverviewComponent implements OnInit {
     orderActivityOverview: OrderActivityOverviewModel = new OrderActivityOverviewModel();
     productPerformanceMonthlyStats: ProductPerformanceMonthlyStatModel[] = [];
     productPerformanceOverview: ProductPerformanceOverviewModel = new ProductPerformanceOverviewModel();
+    productCategoryMonthlyStats: CategoryProductMonthlyStatModel[] = [];
+    productCategoryOverview: CategoryProductOverviewModel = new CategoryProductOverviewModel();
     initDateRanges: DateRange[] = [];
     groupBy: GroupDate = GroupDate.DAY;
 
     shopChartOptions: any = {};
     orderChartOptions: EChartsOption = {};
     productChartOptions: EChartsOption = {};
+    categoryChartOptions: EChartsOption = {};
 
     offsetTopProduct: number = 0;
     pagingTopProduct: PagingModel = new PagingModel();
@@ -113,7 +116,8 @@ export class AdminOverviewComponent implements OnInit {
             await Promise.all([
                 this.fetchNewShopStats(this.groupBy),
                 this.fetchOrderActivityStats(this.groupBy),
-                this.fetchProductPerformanceStats(this.groupBy)
+                this.fetchProductPerformanceStats(this.groupBy),
+                this.fetchProductCategoryStats(this.groupBy)
             ]);
             this.updateChartOptions();
             this.resetPageTopProduct();
@@ -151,6 +155,17 @@ export class AdminOverviewComponent implements OnInit {
             const respMap = await this.statsMana.fetchProductPerformanceStats(this.initDateRanges, groupBy);
             this.productPerformanceMonthlyStats = respMap.get('monthlyStats');
             this.productPerformanceOverview = respMap.get('overview');
+        } catch (error) {
+            console.log(error);
+            ToastNotification.error('Hệ thống gặp sự cố, quay lại sau');
+        }
+    }
+
+    async fetchProductCategoryStats(groupBy: GroupDate) {
+        try {
+            const respMap = await this.statsMana.fetchProductCategoryStats(this.initDateRanges, groupBy);
+            this.productCategoryMonthlyStats = respMap.get('monthlyStats');
+            this.productCategoryOverview = respMap.get('overview');
         } catch (error) {
             console.log(error);
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau');
@@ -210,7 +225,7 @@ export class AdminOverviewComponent implements OnInit {
         ];
         const legendData = statusList.map(status => status.label);
         this.orderChartOptions = {
-            tooltip: { trigger: 'axis' },
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             legend: { data: legendData, top: 0 },
             xAxis: {
                 type: 'category',
@@ -254,6 +269,30 @@ export class AdminOverviewComponent implements OnInit {
                 left: '3%',
                 right: '3%',
                 bottom: '10%',
+                top: '10%',
+                containLabel: true
+            }
+        };
+
+        this.categoryChartOptions = {
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            xAxis: {
+                type: 'category',
+                data: this.productCategoryOverview.categoryStats.map(c => c.category_name),
+                axisLabel: { rotate: 45, interval: 0 }
+            },
+            yAxis: { type: 'value', name: '' },
+            series: [{
+                name: 'Tổng:',
+                type: 'bar',
+                data: this.productCategoryOverview.categoryStats.map(c => c.count),
+                itemStyle: { color: '#2199e8' },
+                barMaxWidth: 50
+            }],
+            grid: {
+                left: '3%',
+                right: '3%',
+                bottom: '0',
                 top: '10%',
                 containLabel: true
             }

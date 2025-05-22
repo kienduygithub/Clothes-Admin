@@ -163,5 +163,20 @@
                     echarts [options]="productChartOptions" class="chart-container"></div>
             </div>
         </div>
+
+        <div class="row-container">
+            <div class="box-chart revenue">
+                <div class="box-chart-title">
+                    Sản phẩm theo danh mục
+                </div>
+                <div *ngIf="!categoryChartOptions || productCategoryOverview?.categoryStats?.length === 0"
+                    class="no-data-wrapper">
+                    <img [src]="image_chart_line" />
+                    <span class="no-data-text">Không có dữ liệu</span>
+                </div>
+                <div *ngIf="categoryChartOptions && productCategoryOverview && productCategoryOverview.categoryStats.length > 0"
+                    echarts [options]="categoryChartOptions" class="chart-container"></div>
+            </div>
+        </div>
     </div>
 </div>

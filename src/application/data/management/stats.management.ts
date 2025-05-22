@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { DateRange } from "../../common/utils/filter-stats/filter-stats.component";
 import { GroupDate } from "../../common/resource/group-date";
 import { StatsService } from "../service/stats.service";
-import { OrderActivityMonthlyStatModel, OrderActivityOverviewModel, ProductPerformanceMonthlyStatModel, ProductPerformanceOverviewModel, ShopMonthlyStatModel, ShopOverviewModel } from "../model/stats/stats.model";
+import { CategoryProductMonthlyStatModel, CategoryProductOverviewModel, OrderActivityMonthlyStatModel, OrderActivityOverviewModel, ProductPerformanceMonthlyStatModel, ProductPerformanceOverviewModel, ShopMonthlyStatModel, ShopOverviewModel } from "../model/stats/stats.model";
 
 @Injectable()
 export class StatsManagement {
@@ -56,6 +56,23 @@ export class StatsManagement {
             const respMap = new Map();
             respMap.set('monthlyStats', productPerformanceMonthlyStats);
             respMap.set('overview', productPerformanceOverview);
+
+            return respMap;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchProductCategoryStats(dateRanges: DateRange[], groupBy: GroupDate = GroupDate.DAY) {
+        try {
+            const result = await this.statsService.fetchProductCategoryStats(dateRanges, groupBy);
+            const categoryProductMonthlyStats: CategoryProductMonthlyStatModel[] = result?.body?.monthlyStats?.map(
+                (stats: any) => new CategoryProductMonthlyStatModel().fromJson(stats)
+            ) ?? [];
+            const categoryProductOverview = new CategoryProductOverviewModel().fromJson(result?.body?.overview);
+            const respMap = new Map();
+            respMap.set('monthlyStats', categoryProductMonthlyStats);
+            respMap.set('overview', categoryProductOverview);
 
             return respMap;
         } catch (error) {
