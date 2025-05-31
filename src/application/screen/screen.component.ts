@@ -62,7 +62,7 @@ export class ScreenComponent {
         }
         info.roles === Roles.ADMIN
             ? this.wsService.connectWebSocket(info.id)
-            : this.wsService.connectWebSocketShop(info.shopId);
+            : this.wsService.connectWebSocketShop(info.shopId, info.id);
 
         this.menuService.onSubmenuToggle().subscribe((event: { tag: string, item: NbMenuItem }) => {
             let selectedTabParent = event.item;
@@ -89,7 +89,7 @@ export class ScreenComponent {
             if (info.roles === Roles.ADMIN) {
                 this.wsService.disconnect(info.id);
             } else if (info.roles === Roles.OWNER) {
-                this.wsService.disconnectShop(info.shopId);
+                this.wsService.disconnectShop(info.shopId, info.id);
             }
         }
     }

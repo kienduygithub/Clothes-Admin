@@ -111,7 +111,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.appConfig.clear();
       this.userInfo.roles === Roles.ADMIN
         ? this.wsService.disconnect(this.userInfo.id)
-        : this.wsService.disconnectShop(this.userInfo.shopId);
+        : this.wsService.disconnectShop(this.userInfo.shopId, this.userInfo.id);
       this.router.navigate([AuthUrl.SIGNIN]);
     } catch (error) {
       console.log(error);

@@ -28,14 +28,15 @@ export class WebSocketService {
         }
     }
 
-    connectWebSocketShop(id: number) {
+    connectWebSocketShop(shopId: number, ownerId: number) {
         this.socket = new WebSocket(this.socketUrl);
 
         this.socket.onopen = () => {
             console.log('>>> Shop connected websocket');
             const payload = {
                 type: 'register',
-                shopId: id
+                shopId: shopId,
+                ownerId: ownerId
             }
             this.socket.send(JSON.stringify(payload));
         }
@@ -67,11 +68,12 @@ export class WebSocketService {
         }
     }
 
-    disconnectShop(shop_id: number) {
+    disconnectShop(shop_id: number, ownerId: number) {
         if (this.socket && this.socket.readyState === WebSocket.OPEN) {
             const payload = {
                 type: 'logout',
-                shopId: shop_id
+                shopId: shop_id,
+                ownerId: ownerId
             };
             this.socket.send(JSON.stringify(payload));
             this.socket.close();
