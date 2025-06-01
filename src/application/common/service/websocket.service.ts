@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
+import { WebSocketType } from "../resource/websocket-type";
 
 @Injectable({ providedIn: 'root' })
 export class WebSocketService {
@@ -12,7 +13,7 @@ export class WebSocketService {
         this.socket.onopen = () => {
             console.log('>>> User connected websocket');
             const payload = {
-                type: 'register',
+                type: WebSocketType.REGISTER,
                 userId: id
             }
             this.socket.send(JSON.stringify(payload));
@@ -34,7 +35,7 @@ export class WebSocketService {
         this.socket.onopen = () => {
             console.log('>>> Shop connected websocket');
             const payload = {
-                type: 'register',
+                type: WebSocketType.REGISTER,
                 shopId: shopId,
                 ownerId: ownerId
             }
@@ -60,7 +61,7 @@ export class WebSocketService {
     disconnect(user_id: number) {
         if (this.socket && this.socket.readyState === WebSocket.OPEN) {
             const payload = {
-                type: 'logout',
+                type: WebSocketType.LOGOUT,
                 userId: user_id
             };
             this.socket.send(JSON.stringify(payload));
@@ -71,7 +72,7 @@ export class WebSocketService {
     disconnectShop(shop_id: number, ownerId: number) {
         if (this.socket && this.socket.readyState === WebSocket.OPEN) {
             const payload = {
-                type: 'logout',
+                type: WebSocketType.LOGOUT,
                 shopId: shop_id,
                 ownerId: ownerId
             };
