@@ -94,7 +94,6 @@ export class ChatMessageComponent implements OnInit {
         try {
             this.conversations = await this.chatMessageMana.fetchConversations();
             this.filteredConversations = [...this.conversations];
-            console.log(this.filteredConversations);
         } catch (error) {
             console.log(error);
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.')
