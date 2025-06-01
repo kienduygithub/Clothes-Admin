@@ -94,6 +94,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
                 this.userInfo = { ...user }
             }
         )
+        this.subscribeToMessages();
         await this.fetchConversations();
     }
 
@@ -113,6 +114,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
 
         this.messageSubscription = this.wsService.getMessages().subscribe(
             (data: any) => {
+                console.log(data);
                 switch (data.type) {
                     case WebSocketType.NEW_MESSAGE: {
                         const newMessage = data.data as ChatMessageModel;
@@ -143,6 +145,8 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
                     }
                     case WebSocketType.USER_STATUS: {
                         const targetUserId = this.otherUser?.id;
+                        console.log(targetUserId);
+
                         if (targetUserId && data.userId === targetUserId) {
                             this.isOtherUserOnline = data.isOnline;
                         }
