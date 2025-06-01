@@ -108,7 +108,7 @@
                                         *ngIf="msg.senderId === userInfo.id && group.messages.indexOf(msg) === group.messages.length - 1 && msg.status">
                                         <span class="status-text"
                                             *ngIf="msg.status === StatusMessage.SENT && !msg.isRead">Đã gửi</span>
-                                        <nb-icon icon="checkmark-done"
+                                        <nb-icon icon="checkmark-circle-outline"
                                             *ngIf="msg.status === StatusMessage.SENT && msg.isRead" size="small"
                                             class="status-icon"></nb-icon>
                                         <span class="status-text error-text" *ngIf="msg.status === 'failed'">
