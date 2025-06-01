@@ -58,7 +58,7 @@ export class ChatMessageModel {
         this.isRead = isRead ?? false;
     }
 
-    fromJson(data: any, preImage: string) {
+    fromJson(data: any, preImage: string, status?: string) {
         const obj = new ChatMessageModel();
         obj.id = data?.id ?? 0;
         obj.senderId = data?.senderId ?? 0;
@@ -80,6 +80,7 @@ export class ChatMessageModel {
         obj.sender = data?.sender ?? new UserModel();
         obj.receiver = data?.receiver ?? new UserModel();
         obj.isRead = data?.isRead ?? false;
+        obj.status = status;
 
         return obj;
     }

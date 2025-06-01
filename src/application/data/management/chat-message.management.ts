@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { CategoryModel } from "../model/category.model";
 import { ChatMessageService } from "../service/chat-message.service";
-import { ChatMessageModel, Conversation } from "../model/chat-message/chat-message.model";
+import { ChatMessageModel, Conversation, StatusMessage } from "../model/chat-message/chat-message.model";
 import { AppConfig } from "../../common/config/app.config";
 import { UserModel } from "../model/user/user.model";
 
@@ -57,7 +57,7 @@ export class ChatMessageManagement {
         try {
             const result = await this.chatMessageService.fetchChatHistory(receiverId);
             const response: ChatMessageModel[] = result?.body?.messages?.map(
-                (message: any) => new ChatMessageModel().fromJson(message, this.appConfig.getPreImage() ?? '')
+                (message: any) => new ChatMessageModel().fromJson(message, this.appConfig.getPreImage() ?? '', StatusMessage.SENT)
             ) ?? [];
             return response;
         } catch (error) {
