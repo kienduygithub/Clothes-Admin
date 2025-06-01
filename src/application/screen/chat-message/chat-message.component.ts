@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NbButtonModule, NbDialogModule, NbIconModule, NbInputModule, NbSelectModule, NbTooltipModule } from '@nebular/theme';
 import { TranslateModule } from '@ngx-translate/core';
@@ -54,7 +54,7 @@ const PIPES = [
     imports: [...NB_LIBS, ...ANGULAR_MODULE, ...PIPES],
     providers: [...PROVIDERS],
 })
-export class ChatMessageComponent implements OnInit {
+export class ChatMessageComponent implements OnInit, OnDestroy {
     icon_camera_upload: string = ImageResource.icon_camera_upload;
     image_upload_person: string = ImageResource.image_upload_person;
     image_not_found: string = ImageResource.image_chart_bar;
@@ -76,6 +76,7 @@ export class ChatMessageComponent implements OnInit {
 
     @ViewChild('messagesList') messagesList!: ElementRef;
     @ViewChild('inputRef') inputRef!: ElementRef;
+    private messageSubscription!: Subscription;
 
     constructor(
         private appConfig: AppConfig,
@@ -94,6 +95,66 @@ export class ChatMessageComponent implements OnInit {
             }
         )
         await this.fetchConversations();
+    }
+
+    ngOnDestroy() {
+        if (this.userSubscription) {
+            this.userSubscription.unsubscribe();
+        }
+        if (this.messageSubscription) {
+            this.messageSubscription.unsubscribe();
+        }
+    }
+
+    private subscribeToMessages() {
+        if (this.messageSubscription) {
+            this.messageSubscription.unsubscribe();
+        }
+
+        this.messageSubscription = this.wsService.getMessages().subscribe(
+            (data: any) => {
+                switch (data.type) {
+                    case WebSocketType.NEW_MESSAGE: {
+                        const newMessage = data.data as ChatMessageModel;
+                        if (
+                            this.selectedReceiverId &&
+                            (newMessage.receiverId === this.userInfo.id || newMessage.senderId === this.userInfo.id) &&
+                            (newMessage.senderId === this.selectedReceiverId || newMessage.receiverId === this.selectedReceiverId)
+                        ) {
+                            this.messages = [...this.messages, newMessage];
+                            this.scrollToBottom();
+
+                            if (newMessage.receiverId === this.userInfo.id) {
+                                this.chatMessageMana.markMessageAsRead(newMessage.id)
+                                    .then(() => console.log("Tin nhắn mới đã được đánh dấu đã đọc"))
+                                    .catch((err) => console.error("Lỗi khi đánh dấu tin nhắn: ", err));
+                            }
+                        }
+                        break;
+                    }
+                    case WebSocketType.MESSAGE_READ: {
+                        this.messages = this.messages.map(msg => {
+                            if (msg.id === data.messageId) {
+                                return { ...msg, isRead: true } as ChatMessageModel;
+                            }
+                            return msg;
+                        });
+                        break;
+                    }
+                    case WebSocketType.USER_STATUS: {
+                        const targetUserId = this.otherUser?.id;
+                        if (targetUserId && data.userId === targetUserId) {
+                            this.isOtherUserOnline = data.isOnline;
+                        }
+                        break;
+                    }
+                    case WebSocketType.CONVERSATION_READ: {
+                        console.log("Cuộc trò chuyện đã được đánh dấu đã đọc:", data);
+                        break;
+                    }
+                }
+            }
+        )
     }
 
     async fetchConversations() {
@@ -143,17 +204,22 @@ export class ChatMessageComponent implements OnInit {
                     }
                 }
 
-                if (WebSocketType.CHECK_USER_STATUS) { // Kiêm tra người dùng có online không
 
+                if (this.otherUser?.id && this.wsService.isConnected()) {
+                    this.wsService.sendMessage({
+                        type: WebSocketType.CHECK_USER_STATUS,
+                        userId: this.otherUser.id
+                    });
+                    setTimeout(() => {
+                        if (this.isOtherUserOnline === false) {
+                            this.isOtherUserOnline = false;
+                        }
+                    }, 5000);
                 } else {
                     this.isOtherUserOnline = false;
                 }
             } else {
-                if (WebSocketType.CHECK_USER_STATUS) {
-
-                } else {
-                    this.isOtherUserOnline = false;
-                }
+                this.isOtherUserOnline = false;
             }
             this.scrollToBottom();
         } catch (error: any) {

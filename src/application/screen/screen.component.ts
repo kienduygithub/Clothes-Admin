@@ -1,4 +1,4 @@
-import { Component, HostListener } from "@angular/core";
+import { Component, HostListener, OnDestroy } from "@angular/core";
 import { NbIconLibraries, NbMenuItem, NbMenuService } from "@nebular/theme";
 import { ImageResource } from "../common/resource/image_resource";
 import { ADMIN_MENU_ITEMS, OWNER_MENU_ITEMS } from "./screen.menu";
@@ -7,6 +7,8 @@ import { AppConfig } from "../common/config/app.config";
 import { Roles } from "../common/resource/roles";
 import { WebSocketService } from "../common/service/websocket.service";
 import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
+import { UserStoreModel } from "../data/model/user/user.store.model";
 
 @Component({
     selector: 'app-root',
@@ -21,8 +23,9 @@ import { Router } from "@angular/router";
         AuthManagement
     ]
 })
-export class ScreenComponent {
+export class ScreenComponent implements OnDestroy {
     menu: NbMenuItem[] = [];
+    private userSubscription!: Subscription;
 
     constructor(
         private iconLibrary: NbIconLibraries,
@@ -60,9 +63,18 @@ export class ScreenComponent {
                 ? ADMIN_MENU_ITEMS
                 : OWNER_MENU_ITEMS;
         }
-        info.roles === Roles.ADMIN
-            ? this.wsService.connectWebSocket(info.id)
-            : this.wsService.connectWebSocketShop(info.shopId, info.id);
+
+        this.userSubscription = this.authManagement.getSelectUser().subscribe(
+            (user: UserStoreModel) => {
+                if (user && user.id) {
+                    if (user.roles === Roles.ADMIN) {
+                        this.wsService.connectWebSocket(user.id)
+                    } else if (user.roles === Roles.OWNER && user.shopId) {
+                        this.wsService.connectWebSocketShop(user.shopId, user.id);
+                    }
+                }
+            }
+        )
 
         this.menuService.onSubmenuToggle().subscribe((event: { tag: string, item: NbMenuItem }) => {
             let selectedTabParent = event.item;
@@ -85,13 +97,7 @@ export class ScreenComponent {
     @HostListener('window:beforeunload', ['$event'])
     unloadHandler(event: Event) {
         const info = this.appConfig.getUserInfo();
-        if (info) {
-            if (info.roles === Roles.ADMIN) {
-                this.wsService.disconnect(info.id);
-            } else if (info.roles === Roles.OWNER) {
-                this.wsService.disconnectShop(info.shopId, info.id);
-            }
-        }
+        this.wsService.disconnect();
     }
 
     async fetchDetailUser(id: number) {
@@ -100,5 +106,12 @@ export class ScreenComponent {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    ngOnDestroy() {
+        if (this.userSubscription) {
+            this.userSubscription.unsubscribe();
+        }
+        this.wsService.disconnect();
     }
 }

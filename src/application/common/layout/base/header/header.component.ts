@@ -118,9 +118,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   async logOut() {
     try {
       this.appConfig.clear();
-      this.userInfo.roles === Roles.ADMIN
-        ? this.wsService.disconnect(this.userInfo.id)
-        : this.wsService.disconnectShop(this.userInfo.shopId, this.userInfo.id);
+      this.wsService.disconnect();
       this.router.navigate([AuthUrl.SIGNIN]);
     } catch (error) {
       console.log(error);
