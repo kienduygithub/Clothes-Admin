@@ -1,3 +1,5 @@
+import { ShopModel } from "../shop.model";
+
 export class UserModel {
     id?: number;
     name?: string;
@@ -10,6 +12,7 @@ export class UserModel {
     shopId?: number;
     roles?: string; // "Admin", "Customer", "Owner",
     createdAt?: string;
+    shop: ShopModel | null;
 
     constructor(
         id?: number,
@@ -23,6 +26,7 @@ export class UserModel {
         shopId?: number,
         roles?: string, // "Admin", "Customer", "Owner",
         createdAt?: string,
+        shop?: ShopModel,
     ) {
         this.id = id ?? 0;
         this.name = name ?? "";
@@ -34,6 +38,7 @@ export class UserModel {
         this.image_url = image_url ?? "";
         this.shopId = shopId ?? 0;
         this.roles = roles; // "Admin", "Customer", "Owner",
+        this.shop = shop ?? null;
         this.createdAt = createdAt ?? "";
     }
 
@@ -50,6 +55,7 @@ export class UserModel {
         model.shopId = obj.shopId;
         model.roles = obj.roles;
         model.createdAt = obj.createdAt;
+        model.shop = obj?.shop ? new ShopModel().convertObj(obj.shop) : null;
 
         return model;
     }

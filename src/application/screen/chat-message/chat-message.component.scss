@@ -1,0 +1,24 @@
+.section-bg {
+    display: flex;
+    gap: 10px;
+    height: 550px;
+    width: 100%;
+}
+
+.section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 15px;
+    height: auto;
+    height: 100%;
+    border: 0.8px solid #b3bdc68c;
+}
+
+.left-section {
+    width: 300px;
+}
+
+.right-section {
+    flex: 1;
+}

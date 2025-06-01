@@ -28,6 +28,8 @@ import { BalanceComponent } from './account/balance/balance.component';
 import { StatsUrl } from './stats/stats.routing';
 import { OwnerStatsComponent } from './stats/owner/owner-stats.component';
 import { AdminStatsComponent } from './stats/admin/admin-stats.component';
+import { ChatMessageUrl } from './chat-message/chat-message.routing';
+import { ChatMessageComponent } from './chat-message/chat-message.component';
 
 const routes: Routes = [
     {
@@ -173,7 +175,11 @@ const routes: Routes = [
                 component: OrderComponent,
                 title: 'Fashion Zone'
             },
-
+            {
+                path: ChatMessageUrl.CHAT_MESSAGE,
+                component: ChatMessageComponent,
+                title: 'Fashion Zone'
+            }
         ],
     },
 ];

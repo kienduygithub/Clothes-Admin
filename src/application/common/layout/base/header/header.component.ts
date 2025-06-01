@@ -21,6 +21,7 @@ import { UserStoreModel } from '../../../../data/model/user/user.store.model';
 import { WebSocketService } from '../../../service/websocket.service';
 import { Roles } from '../../../resource/roles';
 import { AccountUrl } from '../../../../screen/account/account.routing';
+import { OverviewUrl } from '../../../../screen/overview/overview.routing';
 
 @Component({
   selector: 'app-header',
@@ -99,6 +100,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.router.navigate([AccountUrl.OWNER_ACCOUNT_INFO]);
     } else if (this.router.url.includes('admin')) {
       this.router.navigate([AccountUrl.ADMIN_ACCOUNT_INFO]);
+    }
+  }
+
+  toOverview() {
+    if (this.userInfo.roles === Roles.OWNER) {
+      this.router.navigate([OverviewUrl.OWNER_OVERVIEW]);
+    } else if (this.userInfo.roles === Roles.ADMIN) {
+      this.router.navigate([OverviewUrl.ADMIN_OVERVIEW]);
     }
   }
 

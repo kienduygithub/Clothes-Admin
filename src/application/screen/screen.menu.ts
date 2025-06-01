@@ -1,5 +1,6 @@
 import { AccountUrl } from "./account/account.routing";
 import { CategoryUrl } from "./category/category.routing";
+import { ChatMessageUrl } from "./chat-message/chat-message.routing";
 import { CouponUrl } from "./coupon/coupon.routing";
 import { EmployeeUrl } from "./employee/employee.routing";
 import { OrderURL } from "./order/order.routing";
@@ -118,5 +119,11 @@ export const OWNER_MENU_ITEMS: any[] = [
                 pathMatch: 'prefix'
             },
         ],
+    },
+    {
+        title: 'Tin nhắn',
+        icon: { icon: 'reports_icon', pack: 'mainIcon' },
+        link: '/' + ChatMessageUrl.CHAT_MESSAGE,
+        pathMatch: 'prefix',
     },
 ];
