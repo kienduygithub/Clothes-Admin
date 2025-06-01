@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NbButtonModule, NbDialogModule, NbIconModule, NbInputModule, NbSelectModule, NbTooltipModule } from '@nebular/theme';
 import { TranslateModule } from '@ngx-translate/core';
@@ -9,7 +9,7 @@ import { ChatMessageModel, Conversation, StatusMessage } from '../../data/model/
 import { ToastNotification } from '../common/toast/toast.component';
 import { TimeAgoPipe } from '../../common/layout/pipes/time-ago.pipe';
 import { AppConfig } from '../../common/config/app.config';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserModel } from '../../data/model/user/user.model';
 import { debounceTime, Observable, Subscription } from 'rxjs';
 import { UserStoreModel } from '../../data/model/user/user.store.model';
@@ -17,6 +17,7 @@ import { AuthManagement } from '../../data/management/auth.management';
 import { AuthService } from '../../data/service/auth.service';
 import { WebSocketService } from '../../common/service/websocket.service';
 import { WebSocketType } from '../../common/resource/websocket-type';
+import moment from 'moment';
 
 const NB_LIBS = [
     NbTooltipModule,
@@ -30,7 +31,8 @@ const NB_LIBS = [
 const ANGULAR_MODULE = [
     CommonModule,
     TranslateModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
 ]
 
 const PROVIDERS = [
@@ -68,8 +70,11 @@ export class ChatMessageComponent implements OnInit {
     conversations: Conversation[] = [];
     filteredConversations: Conversation[] = [];
     messages: ChatMessageModel[] = [];
-    message = new FormControl('');
+    message: string = '';
     isOtherUserOnline: boolean = false;
+    StatusMessage = StatusMessage;
+
+    @ViewChild('messagesList') messagesList!: ElementRef;
 
     constructor(
         private appConfig: AppConfig,
@@ -110,6 +115,7 @@ export class ChatMessageComponent implements OnInit {
             }
             this.selectedReceiverId = receiverId;
             await this.fetchMessages();
+            this.scrollToBottom();
         } catch (error) {
             console.log(error);
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.')
@@ -145,6 +151,7 @@ export class ChatMessageComponent implements OnInit {
                     this.isOtherUserOnline = false;
                 }
             }
+            this.scrollToBottom();
         } catch (error: any) {
             console.log(error);
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.');
@@ -153,23 +160,20 @@ export class ChatMessageComponent implements OnInit {
     };
 
     async handleSendMessage() {
-        if (!this.message.value?.trim() || this.selectedReceiverId === null) {
+        if (!this.message.trim() || this.selectedReceiverId === null) {
             return;
         }
-
-        let messageText = this.message.value.trim();
 
         const tempMessage = ChatMessageModel.createMessage({
             senderId: this.userInfo.id,
             receiverId: this.selectedReceiverId,
-            message: messageText,
+            message: this.message.trim(),
             messageType: 'text'
         });
 
         this.messages.push(tempMessage);
-        this.message.setValue('');
-
-        // Thêm kéo xuống cuối danh sách messages
+        this.message = '';
+        this.scrollToBottom();
 
         try {
             const response = await this.chatMessageMana.createMessage(tempMessage);
@@ -179,14 +183,76 @@ export class ChatMessageComponent implements OnInit {
             }
         } catch (error) {
             console.log(error);
-            ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.')
+            ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.');
+            const failedMessage = this.messages.find(msg => msg.id === tempMessage.id);
+            if (failedMessage) {
+                failedMessage.status = StatusMessage.FAILED;
+            }
         }
+    }
+
+    handleImageSelect() {
+        // Placeholder cho chức năng chọn ảnh, sẽ triển khai sau
+        console.log('Chọn ảnh được kích hoạt');
     }
 
     onSearch(event: Event) {
         const input = (event.target as HTMLInputElement).value.toLowerCase();
         this.filteredConversations = this.conversations.filter(conversation =>
-            conversation.otherUser.shop?.shop_name?.toLowerCase().includes(input) || false
+            conversation.otherUser.name?.toLowerCase().includes(input) || false
         );
+    }
+
+    groupMessages(): { timestamp: string; messages: ChatMessageModel[] }[] {
+        const grouped: { timestamp: string; messages: ChatMessageModel[] }[] = [];
+        let currentGroup: ChatMessageModel[] = [];
+        let lastTimestamp: moment.Moment | null = null;
+        const timeThreshold = 15; // 15 minutes
+        const today = moment().startOf('day');
+
+        this.messages.forEach((msg, index) => {
+            const currentTime = moment(msg.createdAt);
+
+            if (lastTimestamp === null) {
+                currentGroup.push(msg);
+                lastTimestamp = currentTime;
+            } else if (currentTime.diff(lastTimestamp, 'minutes') >= timeThreshold) {
+                if (currentGroup.length > 0) {
+                    grouped.push({
+                        timestamp: currentTime.isSame(today, 'day')
+                            ? lastTimestamp.format('HH:mm')
+                            : lastTimestamp.format('DD/MM/YYYY HH:mm'),
+                        messages: currentGroup,
+                    });
+                }
+                currentGroup = [msg];
+                lastTimestamp = currentTime;
+            } else {
+                currentGroup.push(msg);
+            }
+
+            if (index === this.messages.length - 1 && currentGroup.length > 0) {
+                grouped.push({
+                    timestamp: currentTime.isSame(today, 'day')
+                        ? lastTimestamp.format('HH:mm')
+                        : lastTimestamp.format('DD/MM/YYYY HH:mm'),
+                    messages: currentGroup,
+                });
+            }
+        });
+
+        return grouped;
+    }
+
+    get groupedMessages(): { timestamp: string; messages: ChatMessageModel[] }[] {
+        return this.groupMessages();
+    }
+
+    private scrollToBottom() {
+        if (this.messagesList) {
+            setTimeout(() => {
+                this.messagesList.nativeElement.scrollTop = this.messagesList.nativeElement.scrollHeight;
+            }, 100); // Đợi một chút để DOM cập nhật
+        }
     }
 }

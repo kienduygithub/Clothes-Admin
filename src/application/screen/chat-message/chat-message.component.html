@@ -52,7 +52,77 @@
                 </div>
                 <!-- Right Section -->
                 <div class="section right-section">
-
+                    <div class="chat-detail" *ngIf="selectedReceiverId && otherUser">
+                        <div class="chat-header">
+                            <img [src]="preImage + '/' + otherUser.image_url" class="header-avatar" alt="Avatar"
+                                *ngIf="otherUser.image_url; else defaultHeaderAvatar" />
+                            <ng-template #defaultHeaderAvatar>
+                                <div class="default-avatar">?</div>
+                            </ng-template>
+                            <div class="header-info">
+                                <span class="header-name">{{ otherUser.name || 'Anonymous' }}</span>
+                                <div class="online-status-container">
+                                    <div class="online-indicator" [ngClass]="{
+                                    'online-indicator-active': isOtherUserOnline,
+                                    'online-indicator-inactive': !isOtherUserOnline
+                                }"></div>
+                                    <span class="header-status">
+                                        {{ isOtherUserOnline ? 'Đang hoạt động' : 'Không hoạt động' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="messages-list" #messagesList>
+                            <div class="message-group" *ngFor="let group of groupedMessages">
+                                <div class="timestamp-container">
+                                    <span class="timestamp-text">{{ group.timestamp }}</span>
+                                </div>
+                                <div class="message-container" *ngFor="let msg of group.messages" [ngClass]="{
+                                    'own-message': msg.senderId === userInfo.id,
+                                    'other-message': msg.senderId !== userInfo.id
+                                }">
+                                    <img [src]="preImage + '/' + otherUser.image_url" class="avatar" alt="Avatar"
+                                        *ngIf="msg.senderId !== userInfo.id && otherUser.image_url; else avatarSpacer" />
+                                    <ng-template #avatarSpacer>
+                                        <div class="avatar-spacer"></div>
+                                    </ng-template>
+                                    <div class="message-bubble" [ngClass]="{
+                                    'own-bubble': msg.senderId === userInfo.id,
+                                    'other-bubble': msg.senderId !== userInfo.id,
+                                    'first-bubble': group.messages.indexOf(msg) === 0,
+                                    'last-bubble': group.messages.indexOf(msg) === group.messages.length - 1
+                                }">
+                                        <span class="message-text" [ngClass]="{
+                                        'own-message-text': msg.senderId === userInfo.id,
+                                        'other-message-text': msg.senderId !== userInfo.id
+                                    }">
+                                            {{ msg.message }}
+                                        </span>
+                                    </div>
+                                    <div class="status-container"
+                                        *ngIf="msg.senderId === userInfo.id && group.messages.indexOf(msg) === group.messages.length - 1 && msg.status">
+                                        <span class="status-text"
+                                            *ngIf="msg.status === StatusMessage.SENT && !msg.isRead">Đã gửi</span>
+                                        <nb-icon icon="checkmark-done"
+                                            *ngIf="msg.status === StatusMessage.SENT && msg.isRead" size="small"
+                                            class="status-icon"></nb-icon>
+                                        <span class="status-text error-text" *ngIf="msg.status === 'failed'">
+                                            lỗi gửi tin nhắn
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-container">
+                            <img [src]="icon_camera_upload" class="image-icon" (click)="handleImageSelect()" />
+                            <input nbInput type="text" placeholder="Aa" [(ngModel)]="message"
+                                (keyup.enter)="handleSendMessage()" class="input" />
+                            <button nbButton [disabled]="!message.trim()" (click)="handleSendMessage()"
+                                class="send-button">
+                                <nb-icon icon="arrow-forward-outline"></nb-icon>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
