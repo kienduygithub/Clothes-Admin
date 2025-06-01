@@ -176,6 +176,7 @@ export class ImageResource {
   static icon_eye: string = 'assets/icon/icon_eye.svg';
   static icon_eye_off: string = 'assets/icon/icon_eye_off.svg';
   static icon_camera_upload: string = 'assets/icon/icon_camera_upload.svg';
+  static icon_filter_chat: string = 'assets/icon/icon_filter_chat.svg';
 
   static image_not_found: string = 'assets/image/image_not_found.jpg';
   static image_no_avatar: string = 'assets/image/no_avatar.png';

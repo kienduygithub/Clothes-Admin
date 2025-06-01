@@ -7,12 +7,13 @@
 
 .section {
     background: #fff;
-    border-radius: 8px;
-    padding: 1.5rem;
+    border-radius: 16px;
+    padding: 0.5rem 0 1.5rem;
     margin-top: 15px;
     height: auto;
     height: 100%;
-    border: 0.8px solid #b3bdc68c;
+    box-shadow: 0px 20px 24px 0px #0000001A;
+    overflow: hidden;
 }
 
 .left-section {
@@ -21,4 +22,133 @@
 
 .right-section {
     flex: 1;
+}
+
+.search-header {
+    background-color: white;
+    height: 58px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    box-shadow: 0px 20px 24px 0px #0000001A;
+}
+
+.search-container {
+    position: relative;
+    flex: 1;
+
+    input {
+        width: 100%;
+        border-radius: 4px;
+        font-size: 14px;
+        border: none;
+    }
+
+    .search-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+    }
+}
+
+.conversations-list {
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+.conversation-item {
+    display: flex;
+    padding: 10px 1rem;
+    cursor: pointer;
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+        object-fit: cover;
+    }
+
+    .default-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        color: #fff;
+        font-size: 18px;
+    }
+
+    .conversation-content {
+        flex: 1;
+    }
+
+    .conversation-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+
+        .user-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .time-ago {
+            font-size: 12px;
+            color: #666;
+        }
+    }
+
+    .message-preview {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .last-message {
+            font-size: 14px;
+            color: #666;
+            max-width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &.unread-message {
+                color: #313131;
+                font-weight: 500;
+            }
+        }
+
+        .unread-badge {
+            background-color: #0084ff;
+            border-radius: 10px;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 6px;
+
+            .unread-count {
+                color: #fff;
+                font-size: 12px;
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+.no-conversations {
+    text-align: center;
+    color: #666;
+    padding: 20px 0;
+    font-size: 16px;
 }

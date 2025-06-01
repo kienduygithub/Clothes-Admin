@@ -56,6 +56,7 @@ export class ChatMessageComponent implements OnInit {
     icon_camera_upload: string = ImageResource.icon_camera_upload;
     image_upload_person: string = ImageResource.image_upload_person;
     image_not_found: string = ImageResource.image_chart_bar;
+    icon_filter_chat: string = ImageResource.icon_filter_chat;
 
     preImage: string = '';
     $selectUser!: Observable<UserStoreModel>;
@@ -65,6 +66,7 @@ export class ChatMessageComponent implements OnInit {
     selectedReceiverId: number | null = null;
     otherUser: UserModel | null = null;
     conversations: Conversation[] = [];
+    filteredConversations: Conversation[] = [];
     messages: ChatMessageModel[] = [];
     message = new FormControl('');
     isOtherUserOnline: boolean = false;
@@ -81,8 +83,7 @@ export class ChatMessageComponent implements OnInit {
         this.$selectUser = this.authMana.getSelectUser()
             .pipe(debounceTime(300));
         this.userSubscription = this.$selectUser.subscribe(
-            (user: UserStoreModel) => {
-                console.log(user);
+            async (user: UserStoreModel) => {
                 this.userInfo = { ...user }
             }
         )
@@ -92,6 +93,8 @@ export class ChatMessageComponent implements OnInit {
     async fetchConversations() {
         try {
             this.conversations = await this.chatMessageMana.fetchConversations();
+            this.filteredConversations = [...this.conversations];
+            console.log(this.filteredConversations);
         } catch (error) {
             console.log(error);
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.')
@@ -104,8 +107,10 @@ export class ChatMessageComponent implements OnInit {
             let conversationIndex = this.conversations.findIndex(rc => rc.otherUser.id === receiverId);
             if (conversationIndex > -1) {
                 this.conversations[conversationIndex].unreadCount = 0;
+                this.filteredConversations = [...this.conversations];
             }
             this.selectedReceiverId = receiverId;
+            await this.fetchMessages();
         } catch (error) {
             console.log(error);
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.')
@@ -177,5 +182,12 @@ export class ChatMessageComponent implements OnInit {
             console.log(error);
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.')
         }
+    }
+
+    onSearch(event: Event) {
+        const input = (event.target as HTMLInputElement).value.toLowerCase();
+        this.filteredConversations = this.conversations.filter(conversation =>
+            conversation.otherUser.shop?.shop_name?.toLowerCase().includes(input) || false
+        );
     }
 }

@@ -4,7 +4,51 @@
             <div class="section-bg">
                 <!-- Left Section -->
                 <div class="section left-section">
-
+                    <!-- Thanh tìm kiếm -->
+                    <div class="search-header">
+                        <div class="search-container">
+                            <input type="text" nbInput placeholder="Tìm kiếm theo tên" (input)="onSearch($event)" />
+                        </div>
+                        <img [src]="icon_filter_chat" />
+                    </div>
+                    <div class="conversations-list"
+                        *ngIf="(filteredConversations.length > 0 && userInfo); else noConversations">
+                        <div class="conversation-item" *ngFor="let conversation of filteredConversations"
+                            (click)="handleConversationPress(conversation.otherUser.id ?? 0)">
+                            <img [src]="preImage + '/' + conversation.otherUser.image_url" class="avatar" alt="Avatar"
+                                *ngIf="conversation.otherUser.image_url; else defaultAvatar" />
+                            <ng-template #defaultAvatar>
+                                <div class="default-avatar">?</div>
+                            </ng-template>
+                            <div class="conversation-content">
+                                <div class="conversation-header">
+                                    <span class="user-name">
+                                        {{conversation.otherUser.name || 'Anonymous'}}
+                                    </span>
+                                    <span class="time-ago">
+                                        {{conversation.lastMessage.createdAt | TimeAgoPipe}}
+                                    </span>
+                                </div>
+                                <div class="message-preview">
+                                    <span class="last-message"
+                                        [ngClass]="{ 'unread-message': conversation.unreadCount > 0 }">
+                                        {{ conversation.lastMessage.senderId === userInfo.id ? 'Bạn: ' : '' }}
+                                        {{
+                                        conversation.lastMessage.messageType === 'image'
+                                        ? 'Đã gửi hình ảnh' : conversation.lastMessage.message
+                                        }}
+                                    </span>
+                                    <div class="unread-badge" *ngIf="conversation.unreadCount > 0">
+                                        <span class="unread-count">{{ conversation.unreadCount }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Không có hội thoại -->
+                    <ng-template #noConversations>
+                        <div class="no-conversations">Không có hội thoại</div>
+                    </ng-template>
                 </div>
                 <!-- Right Section -->
                 <div class="section right-section">
