@@ -178,6 +178,11 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
 
     async handleConversationPress(receiverId: number) {
         try {
+            if (this.selectedReceiverId === receiverId) {
+                this.scrollToBottom();
+                return;
+            }
+
             await this.chatMessageMana.markConversationAsRead(receiverId);
             let conversationIndex = this.conversations.findIndex(rc => rc.otherUser.id === receiverId);
             if (conversationIndex > -1) {

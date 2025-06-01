@@ -245,6 +245,7 @@
 .message-container {
     display: flex;
     margin-bottom: 4px;
+    align-items: flex-start;
 }
 
 .own-message {
@@ -269,20 +270,29 @@
     margin-right: 8px;
 }
 
-.message-bubble {
+.message-wrapper {
+    display: flex;
+    flex-direction: column;
     max-width: 70%;
+}
+
+.message-bubble {
     padding: 12px;
     border-radius: 16px;
+    display: inline-block;
+    word-wrap: break-word;
 }
 
 .own-bubble {
     background-color: #0084ff;
     border-bottom-right-radius: 0;
+    color: #fff;
 }
 
 .other-bubble {
     background-color: #f0f0f0;
     border-bottom-left-radius: 0;
+    color: #000;
 }
 
 .first-bubble {
@@ -308,8 +318,7 @@
 }
 
 .status-container {
-    margin-left: 5px;
-    margin-bottom: 2px;
+    margin-top: 4px;
     align-self: flex-end;
     opacity: 1;
     transition: opacity 0.3s ease;
