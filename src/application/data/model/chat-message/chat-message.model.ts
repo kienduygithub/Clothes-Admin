@@ -26,6 +26,7 @@ export class ChatMessageModel {
     message: string;
     messageType: 'text' | 'image';
     attachments: ChatAttachment[];
+    uploadImages?: File[];
     createdAt: string;
     status?: string;
     sender: UserModel;
@@ -39,6 +40,7 @@ export class ChatMessageModel {
         message?: string,
         messageType?: 'text' | 'image',
         attachments?: ChatAttachment[],
+        uploadImages?: File[],
         createdAt?: string,
         status?: string,
         sender?: UserModel,
@@ -51,6 +53,7 @@ export class ChatMessageModel {
         this.message = message ?? '';
         this.messageType = messageType ?? 'text';
         this.attachments = attachments ?? [];
+        this.uploadImages = uploadImages ?? [];
         this.createdAt = createdAt ?? new Date().toISOString();
         this.status = status;
         this.sender = sender ?? new UserModel();
@@ -91,6 +94,7 @@ export class ChatMessageModel {
         message: string;
         messageType: 'text' | 'image';
         attachments?: ChatAttachment[];
+        uploadImages?: File[];
     }): ChatMessageModel {
         const obj = new ChatMessageModel();
         obj.id = Date.now();
@@ -99,6 +103,7 @@ export class ChatMessageModel {
         obj.message = data.message;
         obj.messageType = data.messageType;
         obj.attachments = data?.attachments ?? [];
+        obj.uploadImages = data?.uploadImages ?? [];
         obj.createdAt = new Date().toISOString();
         obj.status = StatusMessage.SENDING;
 

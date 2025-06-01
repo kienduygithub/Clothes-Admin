@@ -1,10 +1,9 @@
 <div class="screen">
     <div class="layout-size">
-        <div class=" ">
+        <div class="">
             <div class="section-bg">
                 <!-- Left Section -->
                 <div class="section left-section">
-                    <!-- Thanh tìm kiếm -->
                     <div class="search-header">
                         <div class="search-container">
                             <input type="text" nbInput placeholder="Tìm kiếm theo tên" (input)="onSearch($event)" />
@@ -45,7 +44,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Không có hội thoại -->
                     <ng-template #noConversations>
                         <div class="no-conversations">Không có hội thoại</div>
                     </ng-template>
@@ -87,15 +85,28 @@
                                         <div class="avatar-spacer"></div>
                                     </ng-template>
                                     <div class="message-bubble" [ngClass]="{
-                                    'own-bubble': msg.senderId === userInfo.id,
-                                    'other-bubble': msg.senderId !== userInfo.id,
-                                    'first-bubble': group.messages.indexOf(msg) === 0,
-                                    'last-bubble': group.messages.indexOf(msg) === group.messages.length - 1
-                                }">
-                                        <span class="message-text" [ngClass]="{
-                                        'own-message-text': msg.senderId === userInfo.id,
-                                        'other-message-text': msg.senderId !== userInfo.id
+                                        'own-bubble': msg.senderId === userInfo.id,
+                                        'other-bubble': msg.senderId !== userInfo.id,
+                                        'first-bubble': group.messages.indexOf(msg) === 0,
+                                        'last-bubble': group.messages.indexOf(msg) === group.messages.length - 1
                                     }">
+                                        <ng-container *ngIf="msg.attachments && msg.attachments.length > 0">
+                                            <div class="images-container">
+                                                <img *ngFor="let attachment of msg.attachments" [src]="attachment.url"
+                                                    class="message-image" alt="Message Image" />
+                                            </div>
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="msg.uploadImages && msg.uploadImages.length > 0 && msg.status === 'sending'">
+                                            <div class="images-container">
+                                                <img *ngFor="let url of previewUrls" [src]="url" class="message-image"
+                                                    alt="Message Image" />
+                                            </div>
+                                        </ng-container>
+                                        <span class="message-text" [ngClass]="{
+                                            'own-message-text': msg.senderId === userInfo.id,
+                                            'other-message-text': msg.senderId !== userInfo.id
+                                        }" *ngIf="msg.message">
                                             {{ msg.message }}
                                         </span>
                                     </div>
@@ -114,13 +125,24 @@
                             </div>
                         </div>
                         <div class="input-container">
-                            <button class="image-button" (click)="handleImageSelect()">
+                            <label for="fileInput" class="image-button">
                                 <img [src]="icon_camera_upload" class="image-icon" />
-                            </button>
+                            </label>
+                            <input type="file" width="500px" id="fileInput" #fileInput
+                                (change)="handleImageSelect($event)" style="display: none;" accept="image/*" multiple />
+                            <div class="image-preview-container" *ngIf="previewUrls.length > 0">
+                                <div class="preview-images">
+                                    <img *ngFor="let attachment of previewUrls" [src]="attachment" class="image-preview"
+                                        alt="Image Preview" />
+                                </div>
+                                <button class="remove-image" (click)="clearImagePreviews()">
+                                    <nb-icon icon="close-outline"></nb-icon>
+                                </button>
+                            </div>
                             <input nbInput type="text" placeholder="Nhập tin nhắn..." [(ngModel)]="message"
                                 (keyup.enter)="handleSendMessage()" class="message-input" #inputRef />
                             <button (click)="handleSendMessage()" class="send-button"
-                                [ngClass]="{'disabled': message.trim() === ''}">
+                                [ngClass]="{'disabled': !message.trim() && previewUrls.length === 0}">
                                 <nb-icon icon="paper-plane-outline" class="send-icon"></nb-icon>
                             </button>
                         </div>

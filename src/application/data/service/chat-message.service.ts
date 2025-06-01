@@ -16,19 +16,15 @@ export class ChatMessageService {
             const domain = this.appConfig.getDomain();
             const formData = new FormData();
             formData.append('receiverId', chatMessage.receiverId + '');
-            if (chatMessage.attachments.length === 0) {
+            if (chatMessage.uploadImages?.length === 0) {
                 formData.append('message', chatMessage.message);
-            } else if (chatMessage.attachments.length > 0) {
-                formData.append('message', '');
-                chatMessage.attachments.forEach((attachment: ChatAttachment) => {
-                    formData.append('chatAttachments', {
-                        uri: attachment.url,
-                        type: attachment.type, // 'image/png'
-                        name: attachment.name,  // 'Filename.png'
-                        size: attachment.size,  // 75016
-                    } as any);
+            } else if (chatMessage.uploadImages && chatMessage.uploadImages.length > 0) {
+                formData.append('message', chatMessage.message);
+                chatMessage.uploadImages.forEach((file: File) => {
+                    formData.append('chatAttachments', file);
                 })
             }
+
             const response = await this.serviceCore.POST(
                 `${domain}`,
                 `chat/send`,

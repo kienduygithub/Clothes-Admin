@@ -5,7 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ChatMessageManagement } from '../../data/management/chat-message.management';
 import { ChatMessageService } from '../../data/service/chat-message.service';
 import { ImageResource } from '../../common/resource/image_resource';
-import { ChatMessageModel, Conversation, StatusMessage } from '../../data/model/chat-message/chat-message.model';
+import { ChatAttachment, ChatMessageModel, Conversation, StatusMessage } from '../../data/model/chat-message/chat-message.model';
 import { ToastNotification } from '../common/toast/toast.component';
 import { TimeAgoPipe } from '../../common/layout/pipes/time-ago.pipe';
 import { AppConfig } from '../../common/config/app.config';
@@ -74,8 +74,13 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
     isOtherUserOnline: boolean = false;
     StatusMessage = StatusMessage;
 
+    // Thay đổi thành mảng để hỗ trợ nhiều ảnh
+    selectedImages: File[] = []; // Lưu mảng File
+    previewUrls: string[] = []; // Lưu URL preview từ File
+
     @ViewChild('messagesList') messagesList!: ElementRef;
     @ViewChild('inputRef') inputRef!: ElementRef;
+    @ViewChild('fileInput') fileInput!: ElementRef;
     private messageSubscription!: Subscription;
 
     constructor(
@@ -234,7 +239,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
     };
 
     async handleSendMessage() {
-        if (!this.message.trim() || this.selectedReceiverId === null) {
+        if (!this.message.trim() && this.previewUrls.length === 0 || this.selectedReceiverId === null) {
             return;
         }
 
@@ -242,7 +247,9 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
             senderId: this.userInfo.id,
             receiverId: this.selectedReceiverId,
             message: this.message.trim(),
-            messageType: 'text'
+            messageType: this.selectedImages.length > 0 ? 'image' : 'text',
+            attachments: [],
+            uploadImages: this.selectedImages
         });
 
         this.messages.push(tempMessage);
@@ -262,12 +269,28 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
             if (failedMessage) {
                 failedMessage.status = StatusMessage.FAILED;
             }
+        } finally {
+            this.clearImagePreviews();
         }
     }
 
-    handleImageSelect() {
-        // Placeholder cho chức năng chọn ảnh, sẽ triển khai sau
-        console.log('Chọn ảnh được kích hoạt');
+    handleImageSelect(event: Event) {
+        const input = event.target as HTMLInputElement;
+        if (input.files && input.files.length > 0) {
+            const files = Array.from(input.files);
+            const newImages = files.slice(0, 5 - this.selectedImages.length);
+            this.selectedImages = [...this.selectedImages, ...newImages].slice(0, 5);
+            this.previewUrls = this.selectedImages.map(file => URL.createObjectURL(file));
+        }
+    }
+
+    clearImagePreviews() {
+        this.previewUrls.forEach(url => URL.revokeObjectURL(url));
+        this.selectedImages = [];
+        this.previewUrls = [];
+        if (this.fileInput) {
+            this.fileInput.nativeElement.value = '';
+        }
     }
 
     onSearch(event: Event) {
