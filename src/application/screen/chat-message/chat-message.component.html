@@ -50,7 +50,8 @@
                 </div>
                 <!-- Right Section -->
                 <div class="section right-section">
-                    <div class="chat-detail" *ngIf="selectedReceiverId && otherUser">
+                    <div class="chat-detail" [class.has-preview]="previewUrls.length > 0"
+                        *ngIf="selectedReceiverId && otherUser">
                         <div class="chat-header">
                             <img [src]="preImage + '/' + otherUser.image_url" class="header-avatar" alt="Avatar"
                                 *ngIf="otherUser.image_url; else defaultHeaderAvatar" />
@@ -124,27 +125,29 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="input-container">
-                            <label for="fileInput" class="image-button">
-                                <img [src]="icon_camera_upload" class="image-icon" />
-                            </label>
-                            <input type="file" width="500px" id="fileInput" #fileInput
-                                (change)="handleImageSelect($event)" style="display: none;" accept="image/*" multiple />
+                        <div class="input-container" [class.expanded]="previewUrls.length > 0">
                             <div class="image-preview-container" *ngIf="previewUrls.length > 0">
                                 <div class="preview-images">
-                                    <img *ngFor="let attachment of previewUrls" [src]="attachment" class="image-preview"
+                                    <img *ngFor="let url of previewUrls" [src]="url" class="image-preview"
                                         alt="Image Preview" />
                                 </div>
                                 <button class="remove-image" (click)="clearImagePreviews()">
                                     <nb-icon icon="close-outline"></nb-icon>
                                 </button>
                             </div>
-                            <input nbInput type="text" placeholder="Nhập tin nhắn..." [(ngModel)]="message"
-                                (keyup.enter)="handleSendMessage()" class="message-input" #inputRef />
-                            <button (click)="handleSendMessage()" class="send-button"
-                                [ngClass]="{'disabled': !message.trim() && previewUrls.length === 0}">
-                                <nb-icon icon="paper-plane-outline" class="send-icon"></nb-icon>
-                            </button>
+                            <div class="d-flex align-items-center w-100">
+                                <label for="fileInput" class="image-button">
+                                    <img [src]="icon_camera_upload" class="image-icon" />
+                                </label>
+                                <input type="file" id="fileInput" #fileInput (change)="handleImageSelect($event)"
+                                    style="display: none;" accept="image/*" multiple />
+                                <input nbInput type="text" placeholder="Nhập tin nhắn..." [(ngModel)]="message"
+                                    (keyup.enter)="handleSendMessage()" class="message-input" #inputRef />
+                                <button (click)="handleSendMessage()" class="send-button"
+                                    [ngClass]="{'disabled': !message.trim() && previewUrls.length === 0}">
+                                    <nb-icon icon="paper-plane-outline" class="send-icon"></nb-icon>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
