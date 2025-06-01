@@ -117,58 +117,112 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
             this.messageSubscription.unsubscribe();
         }
 
-        this.messageSubscription = this.wsService.getMessages().subscribe(
-            (data: any) => {
-                console.log(data);
-                switch (data.type) {
-                    case WebSocketType.NEW_MESSAGE: {
-                        const newMessage = data.data as ChatMessageModel;
-                        if (
-                            this.selectedReceiverId &&
-                            (newMessage.receiverId === this.userInfo.id || newMessage.senderId === this.userInfo.id) &&
-                            (newMessage.senderId === this.selectedReceiverId || newMessage.receiverId === this.selectedReceiverId)
-                        ) {
+        this.messageSubscription = this.wsService.getMessages().subscribe((data: any) => {
+            console.log(data);
+            switch (data.type) {
+                case WebSocketType.NEW_MESSAGE: {
+                    const newMessage = data.data as ChatMessageModel;
+                    if (
+                        this.selectedReceiverId &&
+                        (newMessage.receiverId === this.userInfo.id || newMessage.senderId === this.userInfo.id) &&
+                        (newMessage.senderId === this.selectedReceiverId || newMessage.receiverId === this.selectedReceiverId)
+                    ) {
+                        // Không thêm tin nhắn vào mảng nếu là tin nhắn của chính mình
+                        if (newMessage.senderId !== this.userInfo.id) {
                             this.messages = [...this.messages, newMessage];
                             this.scrollToBottom();
-
-                            if (newMessage.receiverId === this.userInfo.id) {
-                                this.chatMessageMana.markMessageAsRead(newMessage.id)
-                                    .then(() => console.log("Tin nhắn mới đã được đánh dấu đã đọc"))
-                                    .catch((err) => console.error("Lỗi khi đánh dấu tin nhắn: ", err));
-                            }
                         }
-                        break;
-                    }
-                    case WebSocketType.MESSAGE_READ: {
-                        console.log('>>> Tin nhắn đã đọc: ', data, typeof data);
-                        let tempMessages = this.messages.map(msg => {
-                            if (msg.id === data.data.messageId) {
-                                console.log("Có nhé");
-                                const readMessage = new ChatMessageModel().fromJson(msg, this.preImage, StatusMessage.SENT);
-                                readMessage.isRead = true;
-                                return readMessage;
-                            }
-                            return msg;
-                        });
-                        this.messages = [...tempMessages];
-                        break;
-                    }
-                    case WebSocketType.USER_STATUS: {
-                        const targetUserId = this.otherUser?.id;
-                        console.log(targetUserId);
 
-                        if (targetUserId && data.userId === targetUserId) {
-                            this.isOtherUserOnline = data.isOnline;
+                        if (newMessage.receiverId === this.userInfo.id) {
+                            this.chatMessageMana.markMessageAsRead(newMessage.id)
+                                .then(() => {
+                                    console.log("Tin nhắn mới đã được đánh dấu đã đọc");
+                                    this.updateConversationsAfterRead(newMessage);
+                                })
+                                .catch((err) => console.error("Lỗi khi đánh dấu tin nhắn: ", err));
                         }
-                        break;
                     }
-                    case WebSocketType.CONVERSATION_READ: {
-                        console.log("Cuộc trò chuyện đã được đánh dấu đã đọc:", data);
-                        break;
+                    this.updateConversations(newMessage);
+                    break;
+                }
+                case WebSocketType.MESSAGE_READ: {
+                    let tempMessages = this.messages.map(msg => {
+                        if (msg.id === data.data.messageId) {
+                            const readMessage = new ChatMessageModel().fromJson(msg, this.preImage, StatusMessage.SENT);
+                            readMessage.isRead = true;
+                            return readMessage;
+                        }
+                        return msg;
+                    });
+                    this.messages = [...tempMessages];
+                    break;
+                }
+                case WebSocketType.USER_STATUS: {
+                    const targetUserId = this.otherUser?.id;
+                    if (targetUserId && data.userId === targetUserId) {
+                        this.isOtherUserOnline = data.isOnline;
                     }
+                    break;
+                }
+                case WebSocketType.CONVERSATION_READ: {
+                    console.log("Cuộc trò chuyện đã được đánh dấu đã đọc:", data);
+                    break;
+                }
+                case WebSocketType.UPDATE_CONVERSATIONS: {
+                    const updatedConversation = data.data;
+                    const existingConversation = this.conversations.find(conv =>
+                        conv.otherUser.id === updatedConversation.otherUserId
+                    );
+
+                    if (existingConversation) {
+                        existingConversation.lastMessage = updatedConversation.lastMessage;
+                        existingConversation.unreadCount = updatedConversation.unreadCount;
+                    } else {
+                        const lastMessage = updatedConversation.lastMessage;
+                        const otherUser = lastMessage.senderId === this.userInfo.id ? lastMessage.receiver : lastMessage.sender;
+                        const newConversation: Conversation = {
+                            otherUser: otherUser,
+                            lastMessage: updatedConversation.lastMessage,
+                            unreadCount: updatedConversation.unreadCount
+                        };
+                        this.conversations.push(newConversation);
+                    }
+                    this.filteredConversations = [...this.conversations];
+                    break;
                 }
             }
-        )
+        });
+    }
+
+    private updateConversations(newMessage: ChatMessageModel) {
+        const existingConversation = this.conversations.find(conv =>
+            (conv.otherUser.id === newMessage.senderId && conv.otherUser.id !== this.userInfo.id) ||
+            (conv.otherUser.id === newMessage.receiverId && conv.otherUser.id !== this.userInfo.id)
+        );
+
+        if (existingConversation) {
+            existingConversation.lastMessage = newMessage;
+        } else {
+            const newConversation: Conversation = {
+                otherUser: newMessage.senderId === this.userInfo.id ? newMessage.receiver : newMessage.sender,
+                lastMessage: newMessage,
+                unreadCount: 0 // Sẽ được cập nhật bởi backend qua UPDATE_CONVERSATIONS
+            };
+            this.conversations.push(newConversation);
+        }
+        this.filteredConversations = [...this.conversations];
+    }
+
+    private updateConversationsAfterRead(newMessage: ChatMessageModel) {
+        const existingConversation = this.conversations.find(conv =>
+            (conv.otherUser.id === newMessage.senderId && conv.otherUser.id !== this.userInfo.id) ||
+            (conv.otherUser.id === newMessage.receiverId && conv.otherUser.id !== this.userInfo.id)
+        );
+
+        if (existingConversation) {
+            existingConversation.unreadCount = 0;
+            this.filteredConversations = [...this.conversations];
+        }
     }
 
     async fetchConversations() {
@@ -277,6 +331,8 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
             if (pushedMessageIndex > -1) {
                 this.messages[pushedMessageIndex] = { ...response, status: StatusMessage.SENT } as ChatMessageModel;
             }
+            // Cập nhật conversations sau khi gửi tin nhắn thành công
+            this.updateConversations(response);
         } catch (error) {
             console.log(error);
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.');
@@ -367,4 +423,5 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
             }, 100); // Đợi một chút để DOM cập nhật
         }
     }
+
 }
