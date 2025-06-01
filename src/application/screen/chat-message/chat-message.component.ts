@@ -140,12 +140,17 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
                         break;
                     }
                     case WebSocketType.MESSAGE_READ: {
-                        this.messages = this.messages.map(msg => {
-                            if (msg.id === data.messageId) {
-                                return { ...msg, isRead: true } as ChatMessageModel;
+                        console.log('>>> Tin nhắn đã đọc: ', data, typeof data);
+                        let tempMessages = this.messages.map(msg => {
+                            if (msg.id === data.data.messageId) {
+                                console.log("Có nhé");
+                                const readMessage = new ChatMessageModel().fromJson(msg, this.preImage, StatusMessage.SENT);
+                                readMessage.isRead = true;
+                                return readMessage;
                             }
                             return msg;
                         });
+                        this.messages = [...tempMessages];
                         break;
                     }
                     case WebSocketType.USER_STATUS: {
