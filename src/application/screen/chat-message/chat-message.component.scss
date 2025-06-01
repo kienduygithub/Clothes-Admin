@@ -216,13 +216,11 @@
     padding: 16px 16px 0;
     overflow-y: auto;
     height: 425px;
-    /* Chiều cao mặc định */
     transition: height 0.3s ease;
 }
 
 .chat-detail.has-preview .messages-list {
     height: 360px;
-    /* Giảm chiều cao khi có preview */
 }
 
 .message-group {
@@ -313,6 +311,13 @@
     margin-left: 5px;
     margin-bottom: 2px;
     align-self: flex-end;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.status-container.hide-status {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .status-text {
@@ -341,9 +346,7 @@
 
 .input-container.expanded {
     height: auto;
-    /* Tăng chiều cao khi có preview */
     padding-bottom: 8px;
-    /* Thêm padding để chứa ảnh */
     flex-wrap: wrap;
 }
 

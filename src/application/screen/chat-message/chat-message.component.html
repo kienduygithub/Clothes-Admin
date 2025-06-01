@@ -72,11 +72,13 @@
                             </div>
                         </div>
                         <div class="messages-list" #messagesList>
-                            <div class="message-group" *ngFor="let group of groupedMessages">
+                            <div class="message-group"
+                                *ngFor="let group of groupedMessages; let i = index; let last = last">
                                 <div class="timestamp-container">
                                     <span class="timestamp-text">{{ group.timestamp }}</span>
                                 </div>
-                                <div class="message-container" *ngFor="let msg of group.messages" [ngClass]="{
+                                <div class="message-container" *ngFor="let msg of group.messages; let msgIndex = index"
+                                    [ngClass]="{
                                     'own-message': msg.senderId === userInfo.id,
                                     'other-message': msg.senderId !== userInfo.id
                                 }">
@@ -88,8 +90,8 @@
                                     <div class="message-bubble" [ngClass]="{
                                         'own-bubble': msg.senderId === userInfo.id,
                                         'other-bubble': msg.senderId !== userInfo.id,
-                                        'first-bubble': group.messages.indexOf(msg) === 0,
-                                        'last-bubble': group.messages.indexOf(msg) === group.messages.length - 1
+                                        'first-bubble': msgIndex === 0,
+                                        'last-bubble': msgIndex === group.messages.length - 1
                                     }">
                                         <ng-container *ngIf="msg.attachments && msg.attachments.length > 0">
                                             <div class="images-container">
@@ -104,16 +106,21 @@
                                             {{ msg.message }}
                                         </span>
                                     </div>
-                                    <div class="status-container"
-                                        *ngIf="msg.senderId === userInfo.id && group.messages.indexOf(msg) === group.messages.length - 1 && msg.status">
-                                        <span class="status-text"
-                                            *ngIf="msg.status === StatusMessage.SENT && !msg.isRead">Đã gửi</span>
-                                        <nb-icon icon="checkmark-circle-outline"
-                                            *ngIf="msg.status === StatusMessage.SENT && msg.isRead" size="small"
-                                            class="status-icon"></nb-icon>
-                                        <span class="status-text error-text" *ngIf="msg.status === 'failed'">
+                                    <div class="status-container" *ngIf="msg.senderId === userInfo.id">
+                                        <span class="status-text" *ngIf="msg.status === StatusMessage.SENDING">
+                                            Đang gửi
+                                        </span>
+                                        <span class="status-text error-text"
+                                            *ngIf="msg.status === StatusMessage.FAILED">
                                             lỗi gửi tin nhắn
                                         </span>
+                                        <span class="status-text"
+                                            *ngIf="(msgIndex === group.messages.length - 1) && last && msg.status === StatusMessage.SENT && !msg.isRead">
+                                            Đã gửi
+                                        </span>
+                                        <nb-icon icon="checkmark-circle-outline"
+                                            *ngIf="(msgIndex === group.messages.length - 1) && last && msg.status === StatusMessage.SENT && msg.isRead"
+                                            size="small" class="status-icon"></nb-icon>
                                     </div>
                                 </div>
                             </div>
