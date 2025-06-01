@@ -248,7 +248,12 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
             receiverId: this.selectedReceiverId,
             message: this.message.trim(),
             messageType: this.selectedImages.length > 0 ? 'image' : 'text',
-            attachments: [],
+            attachments: this.previewUrls.map((url: string) => ({
+                url: url,
+                name: '',
+                size: 0,
+                type: ''
+            })),
             uploadImages: this.selectedImages
         });
 
@@ -258,9 +263,9 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
 
         try {
             const response = await this.chatMessageMana.createMessage(tempMessage);
-            let pushedMessage = this.messages.find(msg => msg.id === tempMessage.id);
-            if (pushedMessage) {
-                pushedMessage = { ...response, status: StatusMessage.SENT } as ChatMessageModel;
+            let pushedMessageIndex = this.messages.findIndex(msg => msg.id === tempMessage.id);
+            if (pushedMessageIndex > -1) {
+                this.messages[pushedMessageIndex] = { ...response, status: StatusMessage.SENT } as ChatMessageModel;
             }
         } catch (error) {
             console.log(error);

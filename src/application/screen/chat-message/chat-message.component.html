@@ -97,13 +97,6 @@
                                                     class="message-image" alt="Message Image" />
                                             </div>
                                         </ng-container>
-                                        <ng-container
-                                            *ngIf="msg.uploadImages && msg.uploadImages.length > 0 && msg.status === 'sending'">
-                                            <div class="images-container">
-                                                <img *ngFor="let url of previewUrls" [src]="url" class="message-image"
-                                                    alt="Message Image" />
-                                            </div>
-                                        </ng-container>
                                         <span class="message-text" [ngClass]="{
                                             'own-message-text': msg.senderId === userInfo.id,
                                             'other-message-text': msg.senderId !== userInfo.id
