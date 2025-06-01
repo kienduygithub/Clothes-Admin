@@ -75,6 +75,7 @@ export class ChatMessageComponent implements OnInit {
     StatusMessage = StatusMessage;
 
     @ViewChild('messagesList') messagesList!: ElementRef;
+    @ViewChild('inputRef') inputRef!: ElementRef;
 
     constructor(
         private appConfig: AppConfig,
@@ -116,6 +117,9 @@ export class ChatMessageComponent implements OnInit {
             this.selectedReceiverId = receiverId;
             await this.fetchMessages();
             this.scrollToBottom();
+            setTimeout(() => {
+                this.inputRef.nativeElement.focus();
+            }, 100)
         } catch (error) {
             console.log(error);
             ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.')

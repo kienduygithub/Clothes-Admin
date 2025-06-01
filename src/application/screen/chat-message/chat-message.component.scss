@@ -318,42 +318,66 @@
 .input-container {
     display: flex;
     align-items: center;
-    padding: 10px;
-    border-top: 1px solid #ccc;
+    padding: 8px 16px;
     background-color: #fff;
+    gap: 10px;
+    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.05);
+    max-width: 2000px !important;
+}
+
+.image-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-top: 2px;
 }
 
 .image-icon {
     width: 24px;
     height: 24px;
-    margin-right: 10px;
-    cursor: pointer;
 }
 
-.input {
+.message-input {
     flex: 1;
-    min-height: 40px;
-    padding: 8px 15px;
-    background-color: #f0f0f0;
+    padding: 10px 16px;
+    background-color: #f5f5f5;
     border-radius: 20px;
     font-size: 16px;
     border: none;
+    transition: background-color 0.2s;
+    max-width: 2000px !important;
 
     &:focus {
         outline: none;
+        background-color: #ececec;
     }
 }
 
 .send-button {
-    padding: 10px;
+    padding: 8px;
     background-color: #0084ff;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    outline: none;
+    border: none;
+    transition: all 0.2s ease;
 
-    &:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
+    &:hover {
+        opacity: 0.9;
     }
+
+    &.disabled {
+        opacity: 0.6;
+
+        &:hover {
+            opacity: 0.6;
+        }
+    }
+}
+
+.send-icon {
+    color: #fff;
+    font-size: 20px;
 }

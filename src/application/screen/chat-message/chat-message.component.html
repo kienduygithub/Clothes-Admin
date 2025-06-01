@@ -114,12 +114,14 @@
                             </div>
                         </div>
                         <div class="input-container">
-                            <img [src]="icon_camera_upload" class="image-icon" (click)="handleImageSelect()" />
-                            <input nbInput type="text" placeholder="Aa" [(ngModel)]="message"
-                                (keyup.enter)="handleSendMessage()" class="input" />
-                            <button nbButton [disabled]="!message.trim()" (click)="handleSendMessage()"
-                                class="send-button">
-                                <nb-icon icon="arrow-forward-outline"></nb-icon>
+                            <button class="image-button" (click)="handleImageSelect()">
+                                <img [src]="icon_camera_upload" class="image-icon" />
+                            </button>
+                            <input nbInput type="text" placeholder="Nhập tin nhắn..." [(ngModel)]="message"
+                                (keyup.enter)="handleSendMessage()" class="message-input" #inputRef />
+                            <button (click)="handleSendMessage()" class="send-button"
+                                [ngClass]="{'disabled': message.trim() === ''}">
+                                <nb-icon icon="paper-plane-outline" class="send-icon"></nb-icon>
                             </button>
                         </div>
                     </div>
