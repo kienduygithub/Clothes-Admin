@@ -24,256 +24,261 @@
                 </button>
             </div>
         </div>
-        <div class="body-form">
-            <ng-container [ngTemplateOutlet]="cruRef"></ng-container>
-        </div>
+        <ng-container [ngTemplateOutlet]="cruRef"></ng-container>
     </div>
 </div>
 
 <ng-template #cruRef>
     <form *ngIf="cruForm" [formGroup]="cruForm">
-        <span class="sub-title">Thông tin cơ bản</span>
-        <div class="info-wrapper">
-            <div class="info-left">
-                <div class="info">
-                    <label for="name">
-                        Tên sản phẩm<span class="required">*</span>
-                    </label>
-                    <div class="input-container">
-                        <input nbInput type="text" formControlName="product_name" id="name" placeholder="Nhập tên"
-                            [ngClass]="{
-                            'invalid-form': (cruForm.get('product_name')?.dirty || isSubmit) && cruForm.get('product_name')?.invalid
-                        }">
-                        <ng-container
-                            *ngIf="(cruForm.get('product_name')?.dirty || isSubmit) && cruForm.get('product_name')?.invalid">
-                            <p *ngIf="cruForm.get('product_name')?.hasError('required')" class="vali-text-false">
-                                Tên sản phẩm không được bỏ trống
-                            </p>
-                        </ng-container>
-                    </div>
-                </div>
-                <div class="info">
-                    <label for="origin">
-                        Xuất xứ<span class="required">*</span>
-                    </label>
-                    <div class="select-wrapper">
-                        <nb-select formControlName="origin" placeholder="Chọn xuất xứ" [ngClass]="{
-                            'invalid': (cruForm.get('origin')?.dirty || isSubmit) && cruForm.get('origin')?.invalid
-                        }">
-                            <nb-option *ngFor="let origin of originList" [value]="origin">
-                                {{origin}}
-                            </nb-option>
-                        </nb-select>
-                        <ng-container
-                            *ngIf="(cruForm.get('origin')?.dirty || isSubmit) && cruForm.get('origin')?.invalid">
-                            <p class="vali-text-false" *ngIf="cruForm.get('origin')?.hasError('required')">
-                                Xuất xứ không được bỏ trống
-                            </p>
-                        </ng-container>
-                    </div>
-                </div>
-                <div class="info">
-                    <label for="gender">
-                        Sản phẩm dành cho<span class="required">*</span>
-                    </label>
-                    <div class="select-wrapper">
-                        <nb-select formControlName="gender">
-                            <nb-option *ngFor="let gender of genderProductList" [value]="gender.value">
-                                {{gender.label}}
-                            </nb-option>
-                        </nb-select>
-                    </div>
-                </div>
-                <div class="info">
-                    <label for="unit_price">
-                        Giá thành<span class="required">*</span>
-                    </label>
-                    <div class="input-container">
-                        <input nbInput type="text" formControlName="unit_price" id="unit_price"
-                            placeholder="Nhập giá thành" [ngClass]="{
-                                'invalid-form': (cruForm.get('unit_price')?.dirty || isSubmit) && cruForm.get('unit_price')?.invalid
-                            }">
-                        <ng-container
-                            *ngIf="(cruForm.get('unit_price')?.dirty || isSubmit) && cruForm.get('unit_price')?.invalid">
-                            <p class="vali-text-false" *ngIf="cruForm.get('unit_price')?.hasError('required')">
-                                Giá thành không được bỏ trống
-                            </p>
-                            <p class="vali-text-false" *ngIf="cruForm.get('unit_price')?.hasError('isNumber')">
-                                Giá thành chỉ chấp nhận nhập số
-                            </p>
-                        </ng-container>
-                    </div>
-                </div>
-                <div class="info">
-                    <label for="category1">
-                        Danh mục cha<span class="required">*</span>
-                    </label>
-                    <div class="select-wrapper">
-                        <nb-select formControlName="category1" placeholder="Chọn danh mục cha"
-                            [ngClass]="{'invalid': (cruForm.get('category1')?.dirty || isSubmit) && cruForm.get('category1')?.invalid}">
-                            <nb-option *ngFor="let parent of parentCategories" [value]="parent.id">
-                                {{parent.category_name}}
-                            </nb-option>
-                        </nb-select>
-                        <ng-container
-                            *ngIf="(cruForm.get('category1')?.dirty || isSubmit) && cruForm.get('category1')?.invalid">
-                            <p class="vali-text-false">
-                                Danh mục không được bỏ trống
-                            </p>
-                        </ng-container>
-                    </div>
-                </div>
-                <div class="info">
-                    <label for="category2">
-                        Danh mục con<span class="required">*</span>
-                    </label>
-                    <div class="select-wrapper">
-                        <nb-select formControlName="category2" placeholder="Chọn danh mục con"
-                            [ngClass]="{'invalid': (cruForm.get('category2')?.dirty || isSubmit) && cruForm.get('category2')?.invalid}">
-                            <nb-option *ngFor="let child of childCategories" [value]="child.id">
-                                {{child.category_name}}
-                            </nb-option>
-                        </nb-select>
-                        <ng-container
-                            *ngIf="(cruForm.get('category2')?.dirty || isSubmit) && cruForm.get('category2')?.invalid">
-                            <p class="vali-text-false">
-                                Danh mục không được bỏ trống
-                            </p>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
-            <div class="info-right">
-                <div class="info">
-                    <label>
-                        Danh sách ảnh<span class="required">*</span>
-                    </label>
-                    <div class="info-image-wrapper" formArrayName="image_urls">
-                        <div class="image-list"
-                            *ngIf="(cruForm.get('image_urls')?.value.length + infoImageUrls.length) > 0">
-                            <div class="image-child"
-                                *ngFor="let image of cruForm.get('image_urls')?.value;let i = index">
-                                <img src="{{preImage}}/{{image.image_url}}" class="image">
-                                <img [src]="icon_delete" class="common-icon"
-                                    (click)="onRemoveInfoImageFiles(i, false)" />
-                            </div>
-                            <div class="image-child" *ngFor="let image of infoImageUrls;let i = index">
-                                <img [src]="image.url" class="image">
-                                <img [src]="icon_delete" class="common-icon"
-                                    (click)="onRemoveInfoImageFiles(i, image.isNew)" />
-                            </div>
-                        </div>
-                        <div class="no-data-list"
-                            *ngIf="(cruForm.get('image_urls')?.value.length + infoImageUrls.length) === 0">
-                            <span>Không có dữ liệu</span>
-                        </div>
-                        <label class="upload-image" for="info-product-files">
-                            <img [src]="icon_upload_v2">
-                            <span>Upload files</span>
+        <div class="body-form">
+            <span class="sub-title">Thông tin cơ bản</span>
+            <div class="info-wrapper">
+                <div class="info-left">
+                    <div class="info">
+                        <label for="name">
+                            Tên sản phẩm<span class="required">*</span>
                         </label>
-                        <input #infoImageFiles (change)="onChangeFiles($event, infoImageFiles.files)" type="file"
-                            multiple id="info-product-files" accept=".png, .jpg, .jpeg" [hidden]="true" />
+                        <div class="input-container">
+                            <input nbInput type="text" formControlName="product_name" id="name" placeholder="Nhập tên"
+                                [ngClass]="{
+                                'invalid-form': (cruForm.get('product_name')?.dirty || isSubmit) && cruForm.get('product_name')?.invalid
+                            }">
+                            <ng-container
+                                *ngIf="(cruForm.get('product_name')?.dirty || isSubmit) && cruForm.get('product_name')?.invalid">
+                                <p *ngIf="cruForm.get('product_name')?.hasError('required')" class="vali-text-false">
+                                    Tên sản phẩm không được bỏ trống
+                                </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <label for="origin">
+                            Xuất xứ<span class="required">*</span>
+                        </label>
+                        <div class="select-wrapper">
+                            <nb-select formControlName="origin" placeholder="Chọn xuất xứ" [ngClass]="{
+                                'invalid': (cruForm.get('origin')?.dirty || isSubmit) && cruForm.get('origin')?.invalid
+                            }">
+                                <nb-option *ngFor="let origin of originList" [value]="origin">
+                                    {{origin}}
+                                </nb-option>
+                            </nb-select>
+                            <ng-container
+                                *ngIf="(cruForm.get('origin')?.dirty || isSubmit) && cruForm.get('origin')?.invalid">
+                                <p class="vali-text-false" *ngIf="cruForm.get('origin')?.hasError('required')">
+                                    Xuất xứ không được bỏ trống
+                                </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <label for="gender">
+                            Sản phẩm dành cho<span class="required">*</span>
+                        </label>
+                        <div class="select-wrapper">
+                            <nb-select formControlName="gender">
+                                <nb-option *ngFor="let gender of genderProductList" [value]="gender.value">
+                                    {{gender.label}}
+                                </nb-option>
+                            </nb-select>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <label for="unit_price">
+                            Giá thành<span class="required">*</span>
+                        </label>
+                        <div class="input-container">
+                            <input nbInput type="text" formControlName="unit_price" id="unit_price"
+                                placeholder="Nhập giá thành" [ngClass]="{
+                                    'invalid-form': (cruForm.get('unit_price')?.dirty || isSubmit) && cruForm.get('unit_price')?.invalid
+                                }">
+                            <ng-container
+                                *ngIf="(cruForm.get('unit_price')?.dirty || isSubmit) && cruForm.get('unit_price')?.invalid">
+                                <p class="vali-text-false" *ngIf="cruForm.get('unit_price')?.hasError('required')">
+                                    Giá thành không được bỏ trống
+                                </p>
+                                <p class="vali-text-false" *ngIf="cruForm.get('unit_price')?.hasError('isNumber')">
+                                    Giá thành chỉ chấp nhận nhập số
+                                </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <label for="category1">
+                            Danh mục cha<span class="required">*</span>
+                        </label>
+                        <div class="select-wrapper">
+                            <nb-select formControlName="category1" placeholder="Chọn danh mục cha"
+                                [ngClass]="{'invalid': (cruForm.get('category1')?.dirty || isSubmit) && cruForm.get('category1')?.invalid}">
+                                <nb-option *ngFor="let parent of parentCategories" [value]="parent.id">
+                                    {{parent.category_name}}
+                                </nb-option>
+                            </nb-select>
+                            <ng-container
+                                *ngIf="(cruForm.get('category1')?.dirty || isSubmit) && cruForm.get('category1')?.invalid">
+                                <p class="vali-text-false">
+                                    Danh mục không được bỏ trống
+                                </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <label for="category2">
+                            Danh mục con<span class="required">*</span>
+                        </label>
+                        <div class="select-wrapper">
+                            <nb-select formControlName="category2" placeholder="Chọn danh mục con"
+                                [ngClass]="{'invalid': (cruForm.get('category2')?.dirty || isSubmit) && cruForm.get('category2')?.invalid}">
+                                <nb-option *ngFor="let child of childCategories" [value]="child.id">
+                                    {{child.category_name}}
+                                </nb-option>
+                            </nb-select>
+                            <ng-container
+                                *ngIf="(cruForm.get('category2')?.dirty || isSubmit) && cruForm.get('category2')?.invalid">
+                                <p class="vali-text-false">
+                                    Danh mục không được bỏ trống
+                                </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-right">
+                    <div class="info">
+                        <label>
+                            Danh sách ảnh<span class="required">*</span>
+                        </label>
+                        <div class="info-image-wrapper" formArrayName="image_urls">
+                            <div class="image-list"
+                                *ngIf="(cruForm.get('image_urls')?.value.length + infoImageUrls.length) > 0">
+                                <div class="image-child"
+                                    *ngFor="let image of cruForm.get('image_urls')?.value;let i = index">
+                                    <img src="{{preImage}}/{{image.image_url}}" class="image">
+                                    <img [src]="icon_delete" class="common-icon"
+                                        (click)="onRemoveInfoImageFiles(i, false)" />
+                                </div>
+                                <div class="image-child" *ngFor="let image of infoImageUrls;let i = index">
+                                    <img [src]="image.url" class="image">
+                                    <img [src]="icon_delete" class="common-icon"
+                                        (click)="onRemoveInfoImageFiles(i, image.isNew)" />
+                                </div>
+                            </div>
+                            <div class="no-data-list"
+                                *ngIf="(cruForm.get('image_urls')?.value.length + infoImageUrls.length) === 0">
+                                <span>Không có dữ liệu</span>
+                            </div>
+                            <label class="upload-image" for="info-product-files">
+                                <img [src]="icon_upload_v2">
+                                <span>Upload files</span>
+                            </label>
+                            <input #infoImageFiles (change)="onChangeFiles($event, infoImageFiles.files)" type="file"
+                                multiple id="info-product-files" accept=".png, .jpg, .jpeg" [hidden]="true" />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="d-flex flex-column" style="padding: 10px 18px;">
-            <label>
-                Mô tả sản phẩm
-            </label>
-            <app-ckeditor [group]="cruForm" [controlName]="'description'"
-                [placeholder]="'Mô tả sản phẩm'"></app-ckeditor>
-        </div>
-        <span class="sub-title mt-2">Danh sách biến thể</span>
-        <div class="table-wrapper">
-            <div>
-                <button nbButton class="button-submit-form mb-2" (click)="onAddVariantControl()">
-                    Thêm biến thể
-                </button>
+            <div class="d-flex flex-column" style="padding: 10px 18px;">
+                <label>
+                    Mô tả sản phẩm
+                </label>
+                <app-ckeditor [group]="cruForm" [controlName]="'description'"
+                    [placeholder]="'Mô tả sản phẩm'"></app-ckeditor>
             </div>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Hình ảnh</th>
-                            <th>Màu sắc</th>
-                            <th>Kích cỡ</th>
-                            <th>SKU</th>
-                            <th>Tồn kho</th>
-                            <th class="action">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <ng-container formArrayName="product_variants">
-                            <tr *ngFor="let variant of product_variants.controls; let j = index" [formGroupName]="j">
-                                <td>{{j + 1}}</td>
-                                <td>
-                                    <div class="image-container">
-                                        <label for="file-{{j}}"
-                                            [ngClass]="{'invalid': (variant.get('image_url')?.dirty || isSubmit) && variant.get('image_url')?.invalid}">
-                                            <img *ngIf="variant.get('image_url')?.value !== ''"
-                                                [src]="variant.get('image_url')?.value">
-                                            <img *ngIf="variant.get('image_url')?.value === ''" [src]="image_not_found">
-                                        </label>
-                                        <input type="file" accept=".png, .jpg, .jpeg" id="file-{{j}}" [hidden]="true"
-                                            (change)="onChangeVariantFile(variant.get('id')?.value, $event, variant.get('isTemp')?.value)">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="select-wrapper">
-                                        <nb-select formControlName="colorId" nbTooltipStatus="danger"
-                                            [nbTooltipDisabled]="!variant.get('colorId')?.hasError('unique')"
-                                            [nbTooltip]="variant.get('colorId')?.hasError('unique') ? 'Có biến thể trùng' : ''"
-                                            [ngClass]="{'invalid': ((variant.get('colorId')?.dirty || isSubmit) && variant.get('colorId')?.invalid) || variant.get('colorId')?.hasError('unique')}">
-                                            <nb-select-label>
-                                                <span class="color-opt"
-                                                    [style]="{'background-color': variant.get('colorId')?.value | transformColorId: allColors}"></span>
-                                            </nb-select-label>
-                                            <nb-option [value]="color.id" *ngFor="let color of allColors">
-                                                <span class="color-opt"
-                                                    [style]="{'background-color': color.color_code}"></span>
-                                            </nb-option>
-                                        </nb-select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="select-wrapper">
-                                        <nb-select formControlName="sizeId" nbTooltipStatus="danger"
-                                            [nbTooltipDisabled]="!variant.get('sizeId')?.hasError('unique')"
-                                            [nbTooltip]="variant.get('sizeId')?.hasError('unique') ? 'Có biến thể trùng' : ''"
-                                            [ngClass]="{'invalid': ((variant.get('sizeId')?.dirty || isSubmit) && variant.get('sizeId')?.invalid) || variant.get('sizeId')?.hasError('unique')}">
-                                            <nb-option [value]="size.id" *ngFor="let size of allSizes">
-                                                {{size.size_code}}
-                                            </nb-option>
-                                        </nb-select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="input-container" style="max-width: 200px;">
-                                        <input class="disabled" nbInput type="text" formControlName="sku">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="input-container">
-                                        <input nbInput type="text" formControlName="stock_quantity" [ngClass]="{
-                                            'invalid-form': (variant.get('stock_quantity')?.dirty || isSubmit) && variant.get('stock_quantity')?.invalid
-                                        }">
-                                    </div>
-                                </td>
-                                <td style="width: 10%;text-align: right;">
-                                    <img [src]="icon_delete" class="common-icon"
-                                        (click)="onConfirmDeleteVariant(variant.get('id')?.value, variant.get('isTemp')?.value)">
-                                </td>
+        </div>
+        <div class="body-form">
+            <span class="sub-title mt-2">Danh sách biến thể</span>
+            <div class="table-wrapper">
+                <div>
+                    <button nbButton class="button-submit-form mb-2" (click)="onAddVariantControl()">
+                        Thêm biến thể
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Hình ảnh</th>
+                                <th>Màu sắc</th>
+                                <th>Kích cỡ</th>
+                                <th>SKU</th>
+                                <th>Tồn kho</th>
+                                <th class="action">Actions</th>
                             </tr>
-                            <tr *ngIf="cruForm.get('product_variants')?.value.length === 0">
-                                <td class="table-no-data text-center" colspan="11">
-                                    Không có dữ liệu
-                                </td>
-                            </tr>
-                        </ng-container>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <ng-container formArrayName="product_variants">
+                                <tr *ngFor="let variant of product_variants.controls; let j = index"
+                                    [formGroupName]="j">
+                                    <td>{{j + 1}}</td>
+                                    <td>
+                                        <div class="image-container">
+                                            <label for="file-{{j}}"
+                                                [ngClass]="{'invalid': (variant.get('image_url')?.dirty || isSubmit) && variant.get('image_url')?.invalid}">
+                                                <img *ngIf="variant.get('image_url')?.value !== ''"
+                                                    [src]="variant.get('image_url')?.value">
+                                                <img *ngIf="variant.get('image_url')?.value === ''"
+                                                    [src]="image_not_found">
+                                            </label>
+                                            <input type="file" accept=".png, .jpg, .jpeg" id="file-{{j}}"
+                                                [hidden]="true"
+                                                (change)="onChangeVariantFile(variant.get('id')?.value, $event, variant.get('isTemp')?.value)">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="select-wrapper">
+                                            <nb-select formControlName="colorId" nbTooltipStatus="danger"
+                                                [nbTooltipDisabled]="!variant.get('colorId')?.hasError('unique')"
+                                                [nbTooltip]="variant.get('colorId')?.hasError('unique') ? 'Có biến thể trùng' : ''"
+                                                [ngClass]="{'invalid': ((variant.get('colorId')?.dirty || isSubmit) && variant.get('colorId')?.invalid) || variant.get('colorId')?.hasError('unique')}">
+                                                <nb-select-label>
+                                                    <span class="color-opt"
+                                                        [style]="{'background-color': variant.get('colorId')?.value | transformColorId: allColors}"></span>
+                                                </nb-select-label>
+                                                <nb-option [value]="color.id" *ngFor="let color of allColors">
+                                                    <span class="color-opt"
+                                                        [style]="{'background-color': color.color_code}"></span>
+                                                </nb-option>
+                                            </nb-select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="select-wrapper">
+                                            <nb-select formControlName="sizeId" nbTooltipStatus="danger"
+                                                [nbTooltipDisabled]="!variant.get('sizeId')?.hasError('unique')"
+                                                [nbTooltip]="variant.get('sizeId')?.hasError('unique') ? 'Có biến thể trùng' : ''"
+                                                [ngClass]="{'invalid': ((variant.get('sizeId')?.dirty || isSubmit) && variant.get('sizeId')?.invalid) || variant.get('sizeId')?.hasError('unique')}">
+                                                <nb-option [value]="size.id" *ngFor="let size of allSizes">
+                                                    {{size.size_code}}
+                                                </nb-option>
+                                            </nb-select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-container" style="max-width: 200px;">
+                                            <input class="disabled" nbInput type="text" formControlName="sku">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-container">
+                                            <input nbInput type="text" formControlName="stock_quantity" [ngClass]="{
+                                                'invalid-form': (variant.get('stock_quantity')?.dirty || isSubmit) && variant.get('stock_quantity')?.invalid
+                                            }">
+                                        </div>
+                                    </td>
+                                    <td style="width: 10%;text-align: right;">
+                                        <img [src]="icon_delete" class="common-icon"
+                                            (click)="onConfirmDeleteVariant(variant.get('id')?.value, variant.get('isTemp')?.value)">
+                                    </td>
+                                </tr>
+                                <tr *ngIf="cruForm.get('product_variants')?.value.length === 0">
+                                    <td class="table-no-data text-center" colspan="11">
+                                        Không có dữ liệu
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </form>
