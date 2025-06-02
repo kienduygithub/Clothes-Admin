@@ -57,7 +57,7 @@
                     <td style="width: 10%;" (click)="$event.stopPropagation()">
                         <div class="list-actions">
                             <img class="common-icon" [src]="icon_folder_open" [nbTooltip]="'Danh mục con'"
-                                nbTooltipPlacement="bottom" (click)="onOpenViewChildList(category)" />
+                                nbTooltipPlacement="bottom" (click)="onOpenViewChildList(category, i)" />
                             <img class="common-icon" [src]="icon_edit" [nbTooltip]="'Chỉnh sửa'"
                                 nbTooltipPlacement="bottom" (click)="onUpdateCategory(category, i)" />
                             <nb-icon class="common-icon" icon="icon_delete" pack="mainIcon" [nbTooltip]="'Xóa'"

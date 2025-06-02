@@ -118,6 +118,7 @@ export class CategoryListComponent implements OnInit {
     }
 
     onConfirmDeleteCategory(category: CategoryModel, index: number) {
+        console.log(category);
         if (category.sub_categories && category.sub_categories.length > 0) {
             this.dialogService.open(ErrorComponent, {
                 context: {
@@ -156,10 +157,19 @@ export class CategoryListComponent implements OnInit {
         }
     }
 
-    onOpenViewChildList(parentCategory: CategoryModel) {
+    onOpenViewChildList(parentCategory: CategoryModel, index: number) {
         this.dialogService.open(CRUSubcategoryDialogComponent, {
+            closeOnBackdropClick: false,
             context: {
                 categoryModel: parentCategory
+            }
+        }).onClose.subscribe((response) => {
+            if (response) {
+                console.log(response);
+                let categoryIndex = this.categories.findIndex(c => c.id === parentCategory.id);
+                if (categoryIndex > -1) {
+                    this.categories[categoryIndex].sub_categories = response;
+                }
             }
         })
     }

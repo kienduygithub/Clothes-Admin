@@ -259,7 +259,8 @@ export class CRUSubcategoryDialogComponent implements OnInit {
     }
 
     onCancel() {
-        this.ref.close(false);
+        let subCategories = this.subCategoryControls.map(c => c.value);
+        this.ref.close(subCategories);
     }
 
     onPageChange(currentPage: number) {
