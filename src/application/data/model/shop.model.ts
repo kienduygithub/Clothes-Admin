@@ -56,23 +56,7 @@ export class ShopModel {
         model.description = data.description;
         model.user = data.user ? new UserModel().convertObj(data.user) : undefined;
         model.products = data.products?.map((product: any) => new ProductModel().convertObj(product));
-
-        const stockProducts = data.products?.map(
-            (product: any) => {
-                const totalStock = product?.variants?.reduce(
-                    (stocks: number, variant: any) => {
-                        return stocks + variant?.stock_quantity;
-                    }, 0
-                );
-                return {
-                    id: product.id,
-                    stocks: totalStock
-                }
-            }
-        )
-        model.stock_quantities = stockProducts?.reduce((sum: number, curr: any) => {
-            return sum + curr.stocks
-        }, 0);
+        model.stock_quantities = data?.total_stock ?? 0;
         model.status = data.status ?? ShopStatus.ACTIVE;
         model.createdAt = data.createdAt;
 

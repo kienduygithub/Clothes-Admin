@@ -65,6 +65,7 @@ export class ShopListComponent implements OnInit {
     async fetchAllShops() {
         try {
             this.allShops = await this.shopManagement.fetchListShopNotPending();
+            console.log(this.allShops);
         } catch (error) {
             console.log(error);
         }
