@@ -166,6 +166,28 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
                 }
                 case WebSocketType.CONVERSATION_READ: {
                     console.log("Cuộc trò chuyện đã được đánh dấu đã đọc:", data);
+                    const { userId1, userId2 } = data.data;
+
+                    // userId1 là người vừa đánh dấu đã đọc (người nhận tin nhắn của bạn)
+                    // userId2 là bạn (người gửi tin nhắn)
+                    if (userId2 !== this.userInfo.id || userId1 !== this.selectedReceiverId) {
+                        console.log("Thông báo không khớp với cuộc trò chuyện hiện tại:", {
+                            userId1,
+                            userId2,
+                            userId: this.userInfo.id,
+                            selectedReceiverId: this.selectedReceiverId
+                        });
+                        break;
+                    }
+
+                    // Cập nhật trạng thái isRead cho các tin nhắn trong chat detail
+                    this.messages = this.messages.map(msg => {
+                        if (msg.senderId === this.userInfo.id && !msg.isRead) {
+                            console.log(`Cập nhật tin nhắn ${msg.id} thành đã đọc`);
+                            return { ...msg, isRead: true } as ChatMessageModel;
+                        }
+                        return msg;
+                    });
                     break;
                 }
                 case WebSocketType.UPDATE_CONVERSATIONS: {
