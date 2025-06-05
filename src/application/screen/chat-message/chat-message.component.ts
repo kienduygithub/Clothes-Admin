@@ -133,7 +133,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
                             this.scrollToBottom();
                         }
 
-                        if (newMessage.receiverId === this.userInfo.id) {
+                        if (newMessage.receiverId === this.userInfo.id && this.selectedReceiverId === newMessage.receiverId) {
                             this.chatMessageMana.markMessageAsRead(newMessage.id)
                                 .then(() => {
                                     console.log("Tin nhắn mới đã được đánh dấu đã đọc");
@@ -225,11 +225,12 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
 
         if (existingConversation) {
             existingConversation.lastMessage = newMessage;
+            existingConversation.unreadCount = existingConversation.unreadCount + 1;
         } else {
             const newConversation: Conversation = {
                 otherUser: newMessage.senderId === this.userInfo.id ? newMessage.receiver : newMessage.sender,
                 lastMessage: newMessage,
-                unreadCount: 0 // Sẽ được cập nhật bởi backend qua UPDATE_CONVERSATIONS
+                unreadCount: 1 // Sẽ được cập nhật bởi backend qua UPDATE_CONVERSATIONS
             };
             this.conversations.push(newConversation);
         }

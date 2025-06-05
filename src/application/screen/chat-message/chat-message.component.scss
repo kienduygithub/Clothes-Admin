@@ -114,11 +114,13 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        max-width: 218px;
+        overflow: hidden;
 
         .last-message {
             font-size: 14px;
             color: #666;
-            max-width: 80%;
+            max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
