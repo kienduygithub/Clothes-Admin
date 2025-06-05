@@ -225,7 +225,6 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
 
         if (existingConversation) {
             existingConversation.lastMessage = newMessage;
-            existingConversation.unreadCount = existingConversation.unreadCount + 1;
         } else {
             const newConversation: Conversation = {
                 otherUser: newMessage.senderId === this.userInfo.id ? newMessage.receiver : newMessage.sender,
@@ -356,6 +355,14 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
                 this.messages[pushedMessageIndex].status = StatusMessage.SENT;
                 this.clearImagePreviews();
             }
+
+            this.wsService.sendMessage({
+                type: WebSocketType.NEW_MESSAGE,
+                data: {
+                    senderId: this.userInfo.id,
+                    receiverId: this.selectedReceiverId
+                }
+            });
             // Cập nhật conversations sau khi gửi tin nhắn thành công
             this.updateConversations(response);
         } catch (error) {
