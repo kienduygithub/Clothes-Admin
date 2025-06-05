@@ -133,7 +133,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
                             this.scrollToBottom();
                         }
 
-                        if (newMessage.receiverId === this.userInfo.id && this.selectedReceiverId === newMessage.receiverId) {
+                        if (newMessage.receiverId === this.userInfo.id && this.selectedReceiverId === newMessage.senderId) {
                             this.chatMessageMana.markMessageAsRead(newMessage.id)
                                 .then(() => {
                                     console.log("Tin nhắn mới đã được đánh dấu đã đọc");
