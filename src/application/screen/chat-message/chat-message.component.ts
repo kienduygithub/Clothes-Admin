@@ -149,6 +149,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
                     let tempMessages = this.messages.map(msg => {
                         if (msg.id === data.data.messageId) {
                             const readMessage = new ChatMessageModel().fromJson(msg, this.preImage, StatusMessage.SENT);
+                            readMessage.attachments = msg.attachments;
                             readMessage.isRead = true;
                             return readMessage;
                         }
@@ -299,7 +300,6 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
                     }
                 }
 
-
                 if (this.otherUser?.id && this.wsService.isConnected()) {
                     this.wsService.sendMessage({
                         type: WebSocketType.CHECK_USER_STATUS,
@@ -334,12 +334,12 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
             receiverId: this.selectedReceiverId,
             message: this.message.trim(),
             messageType: this.selectedImages.length > 0 ? 'image' : 'text',
-            attachments: this.previewUrls.map((url: string) => ({
+            attachments: [...this.previewUrls.map((url: string) => ({
                 url: url,
                 name: '',
                 size: 0,
                 type: ''
-            })),
+            }))],
             uploadImages: this.selectedImages
         });
 
@@ -351,7 +351,9 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
             const response = await this.chatMessageMana.createMessage(tempMessage);
             let pushedMessageIndex = this.messages.findIndex(msg => msg.id === tempMessage.id);
             if (pushedMessageIndex > -1) {
-                this.messages[pushedMessageIndex] = { ...response, status: StatusMessage.SENT } as ChatMessageModel;
+                this.messages[pushedMessageIndex] = response;
+                this.messages[pushedMessageIndex].status = StatusMessage.SENT;
+                this.clearImagePreviews();
             }
             // Cập nhật conversations sau khi gửi tin nhắn thành công
             this.updateConversations(response);
@@ -361,9 +363,8 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
             const failedMessage = this.messages.find(msg => msg.id === tempMessage.id);
             if (failedMessage) {
                 failedMessage.status = StatusMessage.FAILED;
+                this.clearImagePreviews();
             }
-        } finally {
-            this.clearImagePreviews();
         }
     }
 
