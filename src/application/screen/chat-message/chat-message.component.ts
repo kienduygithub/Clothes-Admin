@@ -194,12 +194,17 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
                 case WebSocketType.UPDATE_CONVERSATIONS: {
                     const updatedConversation = data.data;
                     const existingConversation = this.conversations.find(conv =>
-                        conv.otherUser.id === updatedConversation.otherUserId
+                        (conv.otherUser.id === updatedConversation.lastMessage.senderId && conv.otherUser.id !== this.userInfo.id) ||
+                        (conv.otherUser.id === updatedConversation.lastMessage.receiverId && conv.otherUser.id !== this.userInfo.id)
                     );
 
                     if (existingConversation) {
                         existingConversation.lastMessage = updatedConversation.lastMessage;
-                        existingConversation.unreadCount = updatedConversation.unreadCount;
+                        if (updatedConversation.lastMessage.senderId === this.userInfo.id) {
+                            existingConversation.unreadCount = 0;
+                        } else {
+                            existingConversation.unreadCount = updatedConversation.unreadCount;
+                        }
                     } else {
                         const lastMessage = updatedConversation.lastMessage;
                         const otherUser = lastMessage.senderId === this.userInfo.id ? lastMessage.receiver : lastMessage.sender;
@@ -208,7 +213,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
                             lastMessage: updatedConversation.lastMessage,
                             unreadCount: updatedConversation.unreadCount
                         };
-                        this.conversations.push(newConversation);
+                        this.conversations.unshift(newConversation);
                     }
                     this.filteredConversations = [...this.conversations];
                     break;
@@ -231,7 +236,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
                 lastMessage: newMessage,
                 unreadCount: 1 // Sẽ được cập nhật bởi backend qua UPDATE_CONVERSATIONS
             };
-            this.conversations.push(newConversation);
+            this.conversations.unshift(newConversation);
         }
         this.filteredConversations = [...this.conversations];
     }
