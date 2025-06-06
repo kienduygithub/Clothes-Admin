@@ -358,10 +358,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
 
             this.wsService.sendMessage({
                 type: WebSocketType.NEW_MESSAGE,
-                data: {
-                    senderId: this.userInfo.id,
-                    receiverId: this.selectedReceiverId
-                }
+                data: response
             });
             // Cập nhật conversations sau khi gửi tin nhắn thành công
             this.updateConversations(response);
