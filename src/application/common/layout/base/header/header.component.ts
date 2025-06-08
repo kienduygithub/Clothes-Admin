@@ -71,6 +71,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   change_password = ImageResource.change_password;
   icon_search = ImageResource.icon_search;
   icon_bell_outline = ImageResource.icon_bell_outline;
+  icon_check_all = ImageResource.icon_check_all;
   image_notification = ImageResource.image_notification;
 
   logout = ImageResource.log_out;
@@ -165,6 +166,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
       //     console.log(error);
       //     showToast(MessageError.BUSY_SYSTEM, 'error');
       // }
+    }
+  }
+
+  async onReadAll() {
+    try {
+      await this.notificationMana.markAllNotificationsAsRead();
+      this.unreadCount = this.notificationStore.fetchUnreadCount();
+      this.notifications = this.notificationStore.fetchListNotification();
+      if (this.TabSelect === this.Tabs.Unread) {
+        this.displayNotifications = [];
+      } else {
+        this.displayNotifications = this.notifications;
+      }
+    } catch (error) {
+      console.log(error);
+      ToastNotification.error("Hệ thống gặp sự cố, quay lại sau.");
     }
   }
 

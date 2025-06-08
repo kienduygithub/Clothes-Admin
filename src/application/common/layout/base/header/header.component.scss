@@ -131,6 +131,9 @@
       height: 24px;
       width: 420px;
       padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
       span {
         font-family: Roboto;
@@ -138,6 +141,10 @@
         font-size: 16px;
         line-height: 100%;
         color: #000000D9;
+      }
+
+      .read-all {
+        cursor: pointer;
       }
     }
 

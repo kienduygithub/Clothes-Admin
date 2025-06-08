@@ -25,6 +25,9 @@
     <div class="notification-dropdown">
       <div class="header">
         <span>Thông báo</span>
+        <div class="read-all" (click)="onReadAll()">
+          <img [src]="icon_check_all" />
+        </div>
       </div>
       <div class="line-tab">
         <div class="tab" [ngClass]="{'tab-select': TabSelect === Tabs.All}" (click)="onChangeNotifyTab(Tabs.All)">

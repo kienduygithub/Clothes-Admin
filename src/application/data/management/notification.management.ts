@@ -56,4 +56,20 @@ export class NotificationManagement {
         }
     }
 
+    markAllNotificationsAsRead = async () => {
+        try {
+            await this.notificationService.markAllNotificationsAsRead();
+            this.notificationStore.saveUnreadCount(0);
+            let notifications = this.notificationStore.fetchListNotification();
+            notifications = notifications.map(item => {
+                item.is_read = true;
+                return item;
+            })
+            this.notificationStore.saveNotifications(notifications);
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }

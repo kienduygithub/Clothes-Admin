@@ -178,6 +178,7 @@ export class ImageResource {
   static icon_camera_upload: string = 'assets/icon/icon_camera_upload.svg';
   static icon_filter_chat: string = 'assets/icon/icon_filter_chat.svg';
   static icon_bell_outline: string = 'assets/icon/icon_bell_outline.svg';
+  static icon_check_all: string = 'assets/icon/icon_check_all.svg';
 
   static image_not_found: string = 'assets/image/image_not_found.jpg';
   static image_no_avatar: string = 'assets/image/no_avatar.png';

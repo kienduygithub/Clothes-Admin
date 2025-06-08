@@ -52,6 +52,21 @@ export class NotificationService {
         }
     }
 
+    markAllNotificationsAsRead = async () => {
+        try {
+            const domain = this.appConfig.getDomain();
+            const userInfo = this.appConfig.getUserInfo();
+            const response = await this.serviceCore.PATCH(
+                `${domain}`,
+                `notification/user/${userInfo.id}/read`,
+                {}
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     fetchOrderDetails = async (order_id: number) => {
         try {
             const domain = this.appConfig.getDomain();
