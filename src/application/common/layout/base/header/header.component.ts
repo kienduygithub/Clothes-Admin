@@ -32,6 +32,7 @@ import { CurrencyPipe } from '../../pipes/currency.pipe';
 import { TimeAgoV2Pipe } from '../../pipes/time-ago-v2.pipe';
 import { OrderURL } from '../../../../screen/order/order.routing';
 import { NotificationStore } from '../../../../data/stores/notification.store';
+import { WebSocketType } from '../../../resource/websocket-type';
 
 @Component({
   selector: 'app-header',
@@ -98,6 +99,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   NotificationType = NotificationType;
   NotificationActionType = NotificationActionType;
   NotificationReferenceType = NotificationReferenceType;
+  private notificationSubscribe!: Subscription;
 
   constructor(
     private appConfig: AppConfig,
@@ -115,7 +117,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.userSubscription = this.$selectUser.subscribe(
       (user: UserStoreModel) => this.userInfo = { ...user }
     )
+    this.subscribeWebSocket();
     await this.fetchNotification();
+  }
+
+  private subscribeWebSocket() {
+    if (this.notificationSubscribe) {
+      this.notificationSubscribe.unsubscribe();
+    }
+
+    this.notificationSubscribe = this.wsService.getMessages().subscribe((data: any) => {
+      switch (data.type) {
+        case WebSocketType.NOTIFICATION: {
+          let newNotification = new NotificationModel().convertObj(data.notification);
+          this.notifications.unshift(newNotification);
+          this.displayNotifications.unshift(newNotification);
+          this.notificationStore.saveNotifications(this.notifications);
+          this.notificationStore.saveUnreadCount(this.unreadCount + 1);
+          this.unreadCount = this.unreadCount + 1;
+          break;
+        }
+      }
+    });
   }
 
   async fetchNotification() {
@@ -150,22 +173,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRead(notification: NotificationModel) {
+  async onRead(notification: NotificationModel) {
     if (notification.action === NotificationActionType.VIEW_ORDER && notification.reference_type === NotificationReferenceType.ORDER) {
       this.router.navigate([OrderURL.DETAIL_ORDER], { queryParams: { order_id: notification.data?.order_id, order_shop_id: notification.reference_id } })
-      // try {
-      //     await NotificationMana.markNotificationAsRead(notification.id);
-      //     const currNotifications = notifications;
-      //     const readNotification = currNotifications.find(n => n.id === notification.id);
-      //     if (readNotification) {
-      //         readNotification.is_read = true;
-      //     }
-      //     dispatch(NotificationActions.MarkNotificationAsRead(notification.id));
-      //     setNotifications(currNotifications);
-      // } catch (error) {
-      //     console.log(error);
-      //     showToast(MessageError.BUSY_SYSTEM, 'error');
-      // }
+      try {
+        await this.notificationMana.markNotificationAsRead(notification.id);
+        let notificationIndex = this.notifications.findIndex(n => n.id === notification.id);
+        if (notificationIndex > -1) {
+          this.notifications[notificationIndex].is_read = true;
+          if (this.TabSelect === this.Tabs.Unread) {
+            this.displayNotifications = this.displayNotifications.filter(n => n.id !== notification.id);
+          }
+        }
+        this.unreadCount = this.notificationStore.fetchUnreadCount();
+      } catch (error) {
+        console.log(error);
+        ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.');
+      }
     }
   }
 

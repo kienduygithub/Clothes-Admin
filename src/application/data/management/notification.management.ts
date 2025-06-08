@@ -49,7 +49,8 @@ export class NotificationManagement {
 
     markNotificationAsRead = async (notification_id: number) => {
         try {
-            await this.notificationService.markNotificationAsRead(notification_id);
+            const result = await this.notificationService.markNotificationAsRead(notification_id);
+            this.notificationStore.saveUnreadCount(result?.body?.unreadCount ?? 0);
             return true;
         } catch (error) {
             throw error;
