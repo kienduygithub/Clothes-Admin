@@ -17,7 +17,43 @@
 </div>
 
 <div class="header-container">
-  <div>
+  <div class="notification-wrapper">
+    <div class="notification-button">
+      <img [src]="icon_bell_outline" />
+    </div>
+    <div class="notification-dropdown">
+      <div class="header">
+        <span>Thông báo</span>
+      </div>
+      <div class="line-tab">
+        <div class="tab" [ngClass]="{'tab-select': TabSelect === Tabs.All}" (click)="onChangeNotifyTab(Tabs.All)">
+          Tất cả
+        </div>
+        <div class="tab" [ngClass]="{'tab-select': TabSelect === Tabs.Unread}" (click)="onChangeNotifyTab(Tabs.Unread)">
+          Chưa đọc
+        </div>
+      </div>
+      <div class="notification-list">
+        <div class="notification-item">
+          <div class="image">
+            <img [src]="image_notification" />
+          </div>
+          <div class="item-content">
+            <div class="item-title">
+              Chúc mừng
+            </div>
+            <div class="item-message">
+              Bạn đã trúng giải thưởng lên đến 100 triệu!
+            </div>
+            <div class="item-time">
+              3 ngày trước
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ml-2">
     <button mat-button #account_button="matMenuTrigger" [matMenuTriggerFor]="account_menu" class="no-hover mr-sm-3">
       <img *ngIf="userInfo && userInfo.image_url === ''" class="avatar" src="{{ avt_3 }}" />
       <img *ngIf="userInfo && userInfo.image_url !== ''" class="avatar" src="{{preImage}}/{{ userInfo.image_url }}" />

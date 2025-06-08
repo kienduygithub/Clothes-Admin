@@ -56,6 +56,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   account_setting = ImageResource.account_setting;
   change_password = ImageResource.change_password;
   icon_search = ImageResource.icon_search;
+  icon_bell_outline = ImageResource.icon_bell_outline;
+  image_notification = ImageResource.image_notification;
+
   logout = ImageResource.log_out;
   logo = ImageResource.image_fashion_logo_big;
 
@@ -63,6 +66,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userInfo!: UserStoreModel;
   private userSubscription!: Subscription;
   preImage = "";
+
+  Tabs = {
+    All: 'All',
+    Unread: 'Unread'
+  }
+
+  TabSelect = this.Tabs.All;
+
   constructor(
     private appConfig: AppConfig,
     private router: Router,
@@ -79,7 +90,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     )
   }
 
-  getApp() { }
+  onChangeNotifyTab(tab: string) {
+    this.TabSelect = tab;
+  }
 
   getAva() {
     return '';

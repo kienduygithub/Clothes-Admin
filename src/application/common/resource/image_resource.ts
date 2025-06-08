@@ -177,6 +177,7 @@ export class ImageResource {
   static icon_eye_off: string = 'assets/icon/icon_eye_off.svg';
   static icon_camera_upload: string = 'assets/icon/icon_camera_upload.svg';
   static icon_filter_chat: string = 'assets/icon/icon_filter_chat.svg';
+  static icon_bell_outline: string = 'assets/icon/icon_bell_outline.svg';
 
   static image_not_found: string = 'assets/image/image_not_found.jpg';
   static image_no_avatar: string = 'assets/image/no_avatar.png';
@@ -189,6 +190,7 @@ export class ImageResource {
   static image_chart_bar: string = 'assets/image/image_chart_bar.svg';
   static image_upload_person: string = 'assets/image/image_upload_person.svg';
   static image_register_success: string = 'assets/image/image_register_success.svg';
+  static image_notification: string = 'assets/icon/image_notification.svg';
   // ICON SIDEBAR
   static tool_icon: string = `
     <svg class="icon_tool active" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
