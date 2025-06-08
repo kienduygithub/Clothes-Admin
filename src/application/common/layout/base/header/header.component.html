@@ -20,6 +20,7 @@
   <div class="notification-wrapper">
     <div class="notification-button">
       <img [src]="icon_bell_outline" />
+      <div class="dot-unread" *ngIf="unreadCount > 0"></div>
     </div>
     <div class="notification-dropdown">
       <div class="header">
@@ -34,19 +35,33 @@
         </div>
       </div>
       <div class="notification-list">
-        <div class="notification-item">
+        <div class="notification-item" *ngFor="let notification of displayNotifications" (click)="onRead(notification)">
           <div class="image">
             <img [src]="image_notification" />
           </div>
-          <div class="item-content">
+          <!-- Đơn hàng mới -->
+          <div class="item-content" *ngIf="notification.type === NotificationType.ORDER_NEW">
             <div class="item-title">
-              Chúc mừng
+              Đơn hàng mới
             </div>
             <div class="item-message">
-              Bạn đã trúng giải thưởng lên đến 100 triệu!
+              Bạn có đơn hàng #{{notification.reference_id}}.
+              Tổng: {{(notification.data?.shop_total ?? 0) | CurrencyPipe}} VNĐ
             </div>
             <div class="item-time">
-              3 ngày trước
+              {{notification.created_at! | TimeAgoV2Pipe}}
+            </div>
+          </div>
+          <!-- Hủy đơn hàng -->
+          <div class="item-content" *ngIf="notification.type === NotificationType.ORDER_CANCELED">
+            <div class="item-title">
+              Đơn hàng đã bị hủy
+            </div>
+            <div class="item-message">
+              Bạn có đơn hàng #{{notification.reference_id}} đã bị hủy bởi người dùng
+            </div>
+            <div class="item-time">
+              {{notification.created_at! | TimeAgoV2Pipe}}
             </div>
           </div>
         </div>

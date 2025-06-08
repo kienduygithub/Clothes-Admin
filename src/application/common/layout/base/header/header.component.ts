@@ -22,6 +22,16 @@ import { WebSocketService } from '../../../service/websocket.service';
 import { Roles } from '../../../resource/roles';
 import { AccountUrl } from '../../../../screen/account/account.routing';
 import { OverviewUrl } from '../../../../screen/overview/overview.routing';
+import { NotificationManagement } from '../../../../data/management/notification.management';
+import { NotificationService } from '../../../../data/service/notification.service';
+import { ToastNotification } from '../../../../screen/common/toast/toast.component';
+import { NotificationModel } from '../../../../data/model/notification/notification.model';
+import { PagingModel } from '../../../model/paging.model';
+import { NotificationActionType, NotificationReferenceType, NotificationType } from '../../../resource/notification.config';
+import { CurrencyPipe } from '../../pipes/currency.pipe';
+import { TimeAgoV2Pipe } from '../../pipes/time-ago-v2.pipe';
+import { OrderURL } from '../../../../screen/order/order.routing';
+import { NotificationStore } from '../../../../data/stores/notification.store';
 
 @Component({
   selector: 'app-header',
@@ -37,10 +47,14 @@ import { OverviewUrl } from '../../../../screen/overview/overview.routing';
     NbTooltipModule,
     MatAutocompleteModule,
     MatMenuModule,
+    CurrencyPipe,
+    TimeAgoV2Pipe
   ],
   providers: [
     AuthManagement,
-    AuthService
+    AuthService,
+    NotificationManagement,
+    NotificationService
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
@@ -74,11 +88,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   TabSelect = this.Tabs.All;
 
+  notifications: NotificationModel[] = [];
+  unreadNotifications: NotificationModel[] = [];
+  displayNotifications: NotificationModel[] = [];
+  unreadCount: number = 0;
+  paging!: PagingModel;
+  unreadPaging!: PagingModel;
+  NotificationType = NotificationType;
+  NotificationActionType = NotificationActionType;
+  NotificationReferenceType = NotificationReferenceType;
+
   constructor(
     private appConfig: AppConfig,
     private router: Router,
     private authManagement: AuthManagement,
-    private wsService: WebSocketService
+    private wsService: WebSocketService,
+    private notificationMana: NotificationManagement,
+    private notificationStore: NotificationStore
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -88,17 +114,63 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.userSubscription = this.$selectUser.subscribe(
       (user: UserStoreModel) => this.userInfo = { ...user }
     )
+    await this.fetchNotification();
+  }
+
+  async fetchNotification() {
+    if (this.notificationStore.fetchIsLoaded()) {
+      console.log("Đã load thông báo");
+      return;
+    }
+
+    try {
+      const responseMap = await this.notificationMana.fetchNotificationByUser(1, 10);
+      this.notifications = responseMap.get('notifications');
+      this.displayNotifications = [...this.notifications];
+      this.unreadCount = this.notificationStore.fetchUnreadCount();
+      this.paging = responseMap.get('pagination');
+    } catch (error) {
+      console.log(error);
+      ToastNotification.error("Hệ thống gặp sự cố, quay lại sau.");
+    }
   }
 
   onChangeNotifyTab(tab: string) {
+    if (tab === this.TabSelect) {
+      return;
+    }
     this.TabSelect = tab;
+    if (this.TabSelect === this.Tabs.All) {
+      this.displayNotifications = [...this.notifications];
+    } else if (this.TabSelect === this.Tabs.Unread) {
+      this.displayNotifications = this.notifications.filter(
+        (notify) => notify.is_read === false
+      )
+    }
+  }
+
+  onRead(notification: NotificationModel) {
+    if (notification.action === NotificationActionType.VIEW_ORDER && notification.reference_type === NotificationReferenceType.ORDER) {
+      this.router.navigate([OrderURL.DETAIL_ORDER], { queryParams: { order_id: notification.data?.order_id, order_shop_id: notification.reference_id } })
+      // try {
+      //     await NotificationMana.markNotificationAsRead(notification.id);
+      //     const currNotifications = notifications;
+      //     const readNotification = currNotifications.find(n => n.id === notification.id);
+      //     if (readNotification) {
+      //         readNotification.is_read = true;
+      //     }
+      //     dispatch(NotificationActions.MarkNotificationAsRead(notification.id));
+      //     setNotifications(currNotifications);
+      // } catch (error) {
+      //     console.log(error);
+      //     showToast(MessageError.BUSY_SYSTEM, 'error');
+      // }
+    }
   }
 
   getAva() {
     return '';
   }
-
-  onChange() { }
 
   toChangePassword() {
     if (this.router.url.includes('owner')) {
@@ -122,10 +194,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     } else if (this.userInfo.roles === Roles.ADMIN) {
       this.router.navigate([OverviewUrl.ADMIN_OVERVIEW]);
     }
-  }
-
-  toggleInput() {
-    this.isInputVisible = !this.isInputVisible;
   }
 
   async logOut() {
