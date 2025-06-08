@@ -113,6 +113,8 @@
   }
 
   .notification-dropdown {
+    display: none;
+    flex-direction: column;
     position: absolute;
     width: 420px;
     height: 538px;
@@ -126,6 +128,10 @@
     margin-top: 15px;
     box-shadow: 0px 20px 24px 0px #0000001A;
     overflow: hidden;
+
+    &.open {
+      display: flex;
+    }
 
     .header {
       height: 24px;

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import {
   NbActionsModule,
@@ -100,6 +100,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   NotificationActionType = NotificationActionType;
   NotificationReferenceType = NotificationReferenceType;
   private notificationSubscribe!: Subscription;
+  isOpenNotification = false;
 
   constructor(
     private appConfig: AppConfig,
@@ -107,7 +108,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authManagement: AuthManagement,
     private wsService: WebSocketService,
     private notificationMana: NotificationManagement,
-    private notificationStore: NotificationStore
+    private notificationStore: NotificationStore,
+    private elementRef: ElementRef,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -173,22 +175,29 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
+  onToggleNotification() {
+    this.isOpenNotification = !this.isOpenNotification;
+  }
+
   async onRead(notification: NotificationModel) {
+    this.isOpenNotification = false;
     if (notification.action === NotificationActionType.VIEW_ORDER && notification.reference_type === NotificationReferenceType.ORDER) {
       this.router.navigate([OrderURL.DETAIL_ORDER], { queryParams: { order_id: notification.data?.order_id, order_shop_id: notification.reference_id } })
-      try {
-        await this.notificationMana.markNotificationAsRead(notification.id);
-        let notificationIndex = this.notifications.findIndex(n => n.id === notification.id);
-        if (notificationIndex > -1) {
-          this.notifications[notificationIndex].is_read = true;
-          if (this.TabSelect === this.Tabs.Unread) {
-            this.displayNotifications = this.displayNotifications.filter(n => n.id !== notification.id);
+      if (notification.is_read === false) {
+        try {
+          await this.notificationMana.markNotificationAsRead(notification.id);
+          let notificationIndex = this.notifications.findIndex(n => n.id === notification.id);
+          if (notificationIndex > -1) {
+            this.notifications[notificationIndex].is_read = true;
+            if (this.TabSelect === this.Tabs.Unread) {
+              this.displayNotifications = this.displayNotifications.filter(n => n.id !== notification.id);
+            }
           }
+          this.unreadCount = this.notificationStore.fetchUnreadCount();
+        } catch (error) {
+          console.log(error);
+          ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.');
         }
-        this.unreadCount = this.notificationStore.fetchUnreadCount();
-      } catch (error) {
-        console.log(error);
-        ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.');
       }
     }
   }
@@ -247,9 +256,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
+  @HostListener('document:click', ['$event'])
+  handleOutsideClick(event: MouseEvent) {
+    if (this.isOpenNotification && !this.elementRef.nativeElement.contains(event.target)) {
+      this.isOpenNotification = false;
+    }
+  }
+
   ngOnDestroy(): void {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
+    }
+
+    if (this.notificationSubscribe) {
+      this.notificationSubscribe.unsubscribe();
     }
   }
 }

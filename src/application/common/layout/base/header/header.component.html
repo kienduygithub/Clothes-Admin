@@ -18,11 +18,11 @@
 
 <div class="header-container">
   <div class="notification-wrapper">
-    <div class="notification-button">
+    <div class="notification-button" (click)="onToggleNotification()">
       <img [src]="icon_bell_outline" />
       <div class="dot-unread" *ngIf="unreadCount > 0"></div>
     </div>
-    <div class="notification-dropdown">
+    <div class="notification-dropdown" [ngClass]="{'open': isOpenNotification}">
       <div class="header">
         <span>Thông báo</span>
         <div class="read-all" (click)="onReadAll()">
