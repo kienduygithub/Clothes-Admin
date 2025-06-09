@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ShopManagement } from "../../../../data/management/shop.management";
 import { ShopService } from "../../../../data/service/shop.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -13,6 +13,7 @@ import { ValueValidators } from "../../../../common/utils/validate/value.validat
 import { CKEditorComponent } from "../../../../common/utils/ckeditor/ckeditor.component";
 import { ShopURL } from "../../shop.routing";
 import { ErrorComponent } from "../../../../common/layout/notify/error/error.component";
+import { Gender } from "../../../../common/resource/gender";
 
 const NB_LIBS = [
     NbInputModule,
@@ -55,6 +56,7 @@ export class CRUShopComponent implements OnInit {
 
     actionWebs = actions;
     action = this.actionWebs.CREATE;
+    Gender = Gender;
     isSubmit: boolean = false;
     cruForm!: FormGroup;
     updatedShop!: ShopModel;
@@ -97,6 +99,13 @@ export class CRUShopComponent implements OnInit {
 
     initCreateForm() {
         this.cruForm = this.formBuilder.group({
+            image_url: this.formBuilder.control('', [ValueValidators.required]),
+            name: this.formBuilder.control('', [ValueValidators.required]),
+            email: this.formBuilder.control('', [ValueValidators.required, Validators.email]),
+            phone: this.formBuilder.control('', [ValueValidators.required]),
+            address: this.formBuilder.control(''),
+            gender: this.formBuilder.control(Gender.Male),
+
             shop_name: ['', [ValueValidators.required]],
             logo_url: ['', [ValueValidators.required]],
             background_url: ['', [ValueValidators.required]],
@@ -121,6 +130,13 @@ export class CRUShopComponent implements OnInit {
         } else {
             this.updatedName = this.updatedShop.shop_name ?? '';
             this.cruForm = this.formBuilder.group({
+                image_url: this.formBuilder.control('', [ValueValidators.required]),
+                name: this.formBuilder.control('', [ValueValidators.required]),
+                email: this.formBuilder.control('', [ValueValidators.required, Validators.email]),
+                phone: this.formBuilder.control('', [ValueValidators.required]),
+                address: this.formBuilder.control(''),
+                gender: this.formBuilder.control('1'),
+
                 shop_name: [this.updatedName, [ValueValidators.required]],
                 logo_url: [this.updatedShop.logo_url, [ValueValidators.required]],
                 background_url: [this.updatedShop.background_url, [ValueValidators.required]],

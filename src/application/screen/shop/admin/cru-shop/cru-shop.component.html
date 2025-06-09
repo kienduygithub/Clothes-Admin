@@ -24,118 +24,203 @@
                 </button>
             </div>
         </div>
-        <div class="body-form">
-            <ng-container [ngTemplateOutlet]="cruRef"></ng-container>
-        </div>
+        <ng-container [ngTemplateOutlet]="cruRef"></ng-container>
     </div>
 </div>
 
 <ng-template #cruRef>
     <form *ngIf="cruForm" [formGroup]="cruForm">
-        <span class="sub-title">Thông tin chi tiết</span>
-        <div class="info-wrapper">
-            <div class="info-left">
-                <div class="info-logo">
-                    <div class="logo-wrapper no-logo"
-                        *ngIf="cruForm.get('logo_url')?.value === '' && !selectedLogoFile">
-                        <img class="no-logo" [src]="icon_no_logo_shop">
+        <!-- Thông tin người dùng -->
+        <div class="body-form">
+            <span class="sub-title">Thông tin cá nhân</span>
+            <div class="info-wrapper">
+                <div class="info-left">
+                    <div class="info">
+                        <div class="info-image-wrapper">
+                            <label class="upload-image" for="info-employee-files">
+                                <img *ngIf="cruForm.get('image_url')?.value === ''" [src]="image_no_avatar">
+                                <img *ngIf="cruForm.get('image_url')?.value !== ''"
+                                    src="{{preImage}}/{{cruForm.get('image_url')?.value}}">
+                            </label>
+                        </div>
                     </div>
-                    <div class="logo-wrapper" *ngIf="cruForm.get('logo_url')?.value !== '' && selectedLogoFile">
-                        <img [src]="cruForm.get('logo_url')?.value">
-                    </div>
-                    <div class="logo-wrapper" *ngIf="cruForm.get('logo_url')?.value !== '' && !selectedLogoFile">
-                        <img [src]="preImage + '/' + cruForm.get('logo_url')?.value">
-                    </div>
-                    <div class="upload-logo-wrapper">
-                        <label class="upload-image" for="logo-files">
-                            <img [src]="icon_upload_v3" />
-                            <span>Tải logo</span>
+                </div>
+                <div class="info-right">
+                    <div class="info">
+                        <label class="label-text" for="name">
+                            Tên người dùng<span class="required">*</span>
                         </label>
-                        <input #logoFile type="file" id="logo-files" accept=".png, .jpg, .jpeg" [hidden]="true"
-                            (change)="onChangeLogoFile(logoFile.files, typeFiles.LOGO)" />
+                        <div class="input-container">
+                            <input nbInput type="text" formControlName="name" id="name" placeholder="Nhập họ tên"
+                                [ngClass]="{'invalid-form': (cruForm.get('name')?.dirty || isSubmit) && cruForm.get('name')?.invalid }">
+                            <ng-container
+                                *ngIf="(cruForm.get('name')?.dirty || isSubmit) && cruForm.get('name')?.invalid">
+                                <p *ngIf="cruForm.get('name')?.hasError('required')" class="vali-text-false">
+                                    Tên người dùng không được bỏ trống
+                                </p>
+                            </ng-container>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="info-right">
-                <div class="info">
-                    <label for="shop_name">
-                        Tên cửa hàng<span class="required">*</span>
-                    </label>
-                    <div class="input-container">
-                        <input nbInput type="text" formControlName="shop_name" id="shop_name"
-                            placeholder="Nhập tên cửa hàng" [ngClass]="{
-                            'invalid-form': (cruForm.get('shop_name')?.dirty || isSubmit) && cruForm.get('shop_name')?.invalid
-                        }">
-                        <ng-container
-                            *ngIf="(cruForm.get('shop_name')?.dirty || isSubmit) && cruForm.get('shop_name')?.invalid">
-                            <p *ngIf="cruForm.get('shop_name')?.hasError('required')" class="vali-text-false">
-                                Tên cửa hàng không được bỏ trống
-                            </p>
-                        </ng-container>
+                    <div class="info">
+                        <label class="label-text" for="email">
+                            Email<span class="required">*</span>
+                        </label>
+                        <div class="input-container">
+                            <input nbInput type="text" formControlName="email" id="email" placeholder="Nhập email">
+                        </div>
                     </div>
-                </div>
-                <div class="info">
-                    <label for="contact_email">
-                        Email liên hệ<span class="required">*</span>
-                    </label>
-                    <div class="input-container">
-                        <input nbInput type="email" formControlName="contact_email" id="contact_email"
-                            placeholder="Nhập email" [ngClass]="{
-                            'invalid-form': (cruForm.get('contact_email')?.dirty || isSubmit) && cruForm.get('contact_email')?.invalid
-                        }">
-                        <ng-container
-                            *ngIf="(cruForm.get('contact_email')?.dirty || isSubmit) && cruForm.get('contact_email')?.invalid">
-                            <p *ngIf="cruForm.get('contact_email')?.hasError('required')" class="vali-text-false">
-                                Email liên hệ không được bỏ trống
-                            </p>
-                        </ng-container>
+                    <div class="info">
+                        <label class="label-text" for="phone">
+                            Số liên hệ<span class="required">*</span>
+                        </label>
+                        <div class="input-container">
+                            <input nbInput type="text" formControlName="phone" id="phone" placeholder="Nhập số liên hệ"
+                                [ngClass]="{'invalid-form': (cruForm.get('phone')?.dirty || isSubmit) && cruForm.get('phone')?.invalid}">
+                            <ng-container
+                                *ngIf="(cruForm.get('phone')?.dirty || isSubmit) && cruForm.get('phone')?.invalid">
+                                <p *ngIf="cruForm.get('phone')?.hasError('required')" class="vali-text-false">
+                                    Số liên hệ không được bỏ trống
+                                </p>
+                            </ng-container>
+                        </div>
                     </div>
-                </div>
-                <div class="info">
-                    <label for="contact_address">
-                        Địa chỉ liên hệ<span class="required">*</span>
-                    </label>
-                    <div class="input-container">
-                        <input nbInput type="text" formControlName="contact_address" id="contact_address"
-                            placeholder="Nhập địa chỉ" [ngClass]="{
-                            'invalid-form': (cruForm.get('contact_address')?.dirty || isSubmit) && cruForm.get('contact_address')?.invalid
-                        }">
-                        <ng-container
-                            *ngIf="(cruForm.get('contact_address')?.dirty || isSubmit) && cruForm.get('contact_address')?.invalid">
-                            <p *ngIf="cruForm.get('contact_address')?.hasError('required')" class="vali-text-false">
-                                Địa chỉ liên hệ không được bỏ trống
-                            </p>
-                        </ng-container>
+                    <div class="info">
+                        <label class="label-text" for="phone">
+                            Địa chỉ
+                        </label>
+                        <div class="input-container">
+                            <input nbInput type="text" formControlName="address" id="address" placeholder="Nhập địa chỉ"
+                                [ngClass]="{'invalid-form': (cruForm.get('address')?.dirty || isSubmit) && cruForm.get('address')?.invalid}">
+                            <ng-container
+                                *ngIf="(cruForm.get('address')?.dirty || isSubmit) && cruForm.get('address')?.invalid">
+                                <p *ngIf="cruForm.get('address')?.hasError('required')" class="vali-text-false">
+                                    Địa chỉ không được bỏ trống
+                                </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <label class="label-text" for="gender">
+                            Giới tính
+                        </label>
+                        <div class="select-wrapper">
+                            <nb-select formControlName="gender">
+                                <nb-option [value]="Gender.Male">Nam</nb-option>
+                                <nb-option [value]="Gender.Famale">Nữ</nb-option>
+                                <nb-option [value]="Gender.Other">Khác</nb-option>
+                            </nb-select>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="d-flex flex-column" style="padding: 10px 18px;">
-            <label>
-                Mô tả cửa hàng
-            </label>
-            <app-ckeditor [group]="cruForm" [controlName]="'description'"
-                [placeholder]="'Mô tả cửa hàng'"></app-ckeditor>
-        </div>
-        <div class="padding-form upload-background-wrapper">
-            <label>
-                Tải ảnh nền<span class="required">*</span>
-            </label>
-            <label for="backgroundForm" class="no-background upload"
-                *ngIf="cruForm.get('background_url')?.value === ''">
-                <img [src]="icon_upload_v4" />
-                <span class="upload-text">Tải ảnh nền</span>
-            </label>
-            <label for="backgroundForm" class="upload"
-                *ngIf="cruForm.get('background_url')?.value !== '' && selectedBackgroundFile">
-                <img [src]="cruForm.get('background_url')?.value" />
-            </label>
-            <label for="backgroundForm" class="upload"
-                *ngIf="cruForm.get('background_url')?.value !== '' && !selectedBackgroundFile">
-                <img [src]="preImage + '/' + cruForm.get('background_url')?.value" />
-            </label>
-            <input #backgroundFile type="file" id="backgroundForm" accept=".png, .jpg, .jpeg" [hidden]="true"
-                (change)="onChangeLogoFile(backgroundFile.files, typeFiles.BACKGROUND)" />
+        <!-- Thông tin cửa hàng -->
+        <div class="body-form">
+            <span class="sub-title">Thông tin cửa hàng</span>
+            <div class="info-wrapper">
+                <div class="info-left">
+                    <div class="info-logo">
+                        <div class="logo-wrapper no-logo"
+                            *ngIf="cruForm.get('logo_url')?.value === '' && !selectedLogoFile">
+                            <img class="no-logo" [src]="icon_no_logo_shop">
+                        </div>
+                        <div class="logo-wrapper" *ngIf="cruForm.get('logo_url')?.value !== '' && selectedLogoFile">
+                            <img [src]="cruForm.get('logo_url')?.value">
+                        </div>
+                        <div class="logo-wrapper" *ngIf="cruForm.get('logo_url')?.value !== '' && !selectedLogoFile">
+                            <img [src]="preImage + '/' + cruForm.get('logo_url')?.value">
+                        </div>
+                        <div class="upload-logo-wrapper">
+                            <label class="upload-image" for="logo-files">
+                                <img [src]="icon_upload_v3" />
+                                <span>Tải logo</span>
+                            </label>
+                            <input #logoFile type="file" id="logo-files" accept=".png, .jpg, .jpeg" [hidden]="true"
+                                (change)="onChangeLogoFile(logoFile.files, typeFiles.LOGO)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="info-right">
+                    <div class="info">
+                        <label for="shop_name">
+                            Tên cửa hàng<span class="required">*</span>
+                        </label>
+                        <div class="input-container">
+                            <input nbInput type="text" formControlName="shop_name" id="shop_name"
+                                placeholder="Nhập tên cửa hàng" [ngClass]="{
+                                'invalid-form': (cruForm.get('shop_name')?.dirty || isSubmit) && cruForm.get('shop_name')?.invalid
+                            }">
+                            <ng-container
+                                *ngIf="(cruForm.get('shop_name')?.dirty || isSubmit) && cruForm.get('shop_name')?.invalid">
+                                <p *ngIf="cruForm.get('shop_name')?.hasError('required')" class="vali-text-false">
+                                    Tên cửa hàng không được bỏ trống
+                                </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <label for="contact_email">
+                            Email liên hệ<span class="required">*</span>
+                        </label>
+                        <div class="input-container">
+                            <input nbInput type="email" formControlName="contact_email" id="contact_email"
+                                placeholder="Nhập email" [ngClass]="{
+                                'invalid-form': (cruForm.get('contact_email')?.dirty || isSubmit) && cruForm.get('contact_email')?.invalid
+                            }">
+                            <ng-container
+                                *ngIf="(cruForm.get('contact_email')?.dirty || isSubmit) && cruForm.get('contact_email')?.invalid">
+                                <p *ngIf="cruForm.get('contact_email')?.hasError('required')" class="vali-text-false">
+                                    Email liên hệ không được bỏ trống
+                                </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <label for="contact_address">
+                            Địa chỉ liên hệ<span class="required">*</span>
+                        </label>
+                        <div class="input-container">
+                            <input nbInput type="text" formControlName="contact_address" id="contact_address"
+                                placeholder="Nhập địa chỉ" [ngClass]="{
+                                'invalid-form': (cruForm.get('contact_address')?.dirty || isSubmit) && cruForm.get('contact_address')?.invalid
+                            }">
+                            <ng-container
+                                *ngIf="(cruForm.get('contact_address')?.dirty || isSubmit) && cruForm.get('contact_address')?.invalid">
+                                <p *ngIf="cruForm.get('contact_address')?.hasError('required')" class="vali-text-false">
+                                    Địa chỉ liên hệ không được bỏ trống
+                                </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column" style="padding: 10px 18px;">
+                <label>
+                    Mô tả cửa hàng
+                </label>
+                <app-ckeditor [group]="cruForm" [controlName]="'description'"
+                    [placeholder]="'Mô tả cửa hàng'"></app-ckeditor>
+            </div>
+            <div class="padding-form upload-background-wrapper">
+                <label>
+                    Tải ảnh nền<span class="required">*</span>
+                </label>
+                <label for="backgroundForm" class="no-background upload"
+                    *ngIf="cruForm.get('background_url')?.value === ''">
+                    <img [src]="icon_upload_v4" />
+                    <span class="upload-text">Tải ảnh nền</span>
+                </label>
+                <label for="backgroundForm" class="upload"
+                    *ngIf="cruForm.get('background_url')?.value !== '' && selectedBackgroundFile">
+                    <img [src]="cruForm.get('background_url')?.value" />
+                </label>
+                <label for="backgroundForm" class="upload"
+                    *ngIf="cruForm.get('background_url')?.value !== '' && !selectedBackgroundFile">
+                    <img [src]="preImage + '/' + cruForm.get('background_url')?.value" />
+                </label>
+                <input #backgroundFile type="file" id="backgroundForm" accept=".png, .jpg, .jpeg" [hidden]="true"
+                    (change)="onChangeLogoFile(backgroundFile.files, typeFiles.BACKGROUND)" />
+            </div>
         </div>
     </form>
 </ng-template>
