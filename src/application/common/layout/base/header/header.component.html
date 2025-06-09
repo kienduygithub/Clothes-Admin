@@ -67,6 +67,18 @@
               {{notification.created_at! | TimeAgoV2Pipe}}
             </div>
           </div>
+          <!-- Đơn đăng ký cửa hàng mới -->
+          <div class="item-content" *ngIf="notification.type === NotificationType.STORE_REGISTRATION_REQUEST">
+            <div class="item-title">
+              Đơn đăng ký cửa hàng mới
+            </div>
+            <div class="item-message">
+              Bạn có đơn đăng ký cửa hàng mới #{{notification.reference_id}}
+            </div>
+            <div class="item-time">
+              {{notification.created_at! | TimeAgoV2Pipe}}
+            </div>
+          </div>
         </div>
         <div class="not-found">
           <span>Không tìm thấy thông báo</span>

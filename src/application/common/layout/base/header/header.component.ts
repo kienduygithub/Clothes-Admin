@@ -33,6 +33,7 @@ import { TimeAgoV2Pipe } from '../../pipes/time-ago-v2.pipe';
 import { OrderURL } from '../../../../screen/order/order.routing';
 import { NotificationStore } from '../../../../data/stores/notification.store';
 import { WebSocketType } from '../../../resource/websocket-type';
+import { RegisterShopURL } from '../../../../screen/register-shop/register-shop.routing';
 
 @Component({
   selector: 'app-header',
@@ -183,21 +184,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isOpenNotification = false;
     if (notification.action === NotificationActionType.VIEW_ORDER && notification.reference_type === NotificationReferenceType.ORDER) {
       this.router.navigate([OrderURL.DETAIL_ORDER], { queryParams: { order_id: notification.data?.order_id, order_shop_id: notification.reference_id } })
-      if (notification.is_read === false) {
-        try {
-          await this.notificationMana.markNotificationAsRead(notification.id);
-          let notificationIndex = this.notifications.findIndex(n => n.id === notification.id);
-          if (notificationIndex > -1) {
-            this.notifications[notificationIndex].is_read = true;
-            if (this.TabSelect === this.Tabs.Unread) {
-              this.displayNotifications = this.displayNotifications.filter(n => n.id !== notification.id);
-            }
+    } else if (notification.action === NotificationActionType.VIEW_REGISTRATION && notification.reference_type === NotificationReferenceType.STORE_REGISTRATION) {
+      this.router.navigate([RegisterShopURL.VIEW_REGISTER_SHOP_URL], { queryParams: { id: notification.reference_id } })
+    }
+
+    if (notification.is_read === false) {
+      try {
+        await this.notificationMana.markNotificationAsRead(notification.id);
+        let notificationIndex = this.notifications.findIndex(n => n.id === notification.id);
+        if (notificationIndex > -1) {
+          this.notifications[notificationIndex].is_read = true;
+          if (this.TabSelect === this.Tabs.Unread) {
+            this.displayNotifications = this.displayNotifications.filter(n => n.id !== notification.id);
           }
-          this.unreadCount = this.notificationStore.fetchUnreadCount();
-        } catch (error) {
-          console.log(error);
-          ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.');
         }
+        this.unreadCount = this.notificationStore.fetchUnreadCount();
+      } catch (error) {
+        console.log(error);
+        ToastNotification.error('Hệ thống gặp sự cố, quay lại sau.');
       }
     }
   }
