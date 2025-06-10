@@ -14,6 +14,7 @@ import { CKEditorComponent } from "../../../../common/utils/ckeditor/ckeditor.co
 import { ShopURL } from "../../shop.routing";
 import { ErrorComponent } from "../../../../common/layout/notify/error/error.component";
 import { Gender } from "../../../../common/resource/gender";
+import { UserModel } from "../../../../data/model/user/user.model";
 
 const NB_LIBS = [
     NbInputModule,
@@ -62,11 +63,13 @@ export class CRUShopComponent implements OnInit {
     updatedShop!: ShopModel;
     updatedId!: number;
     updatedName!: string;
+    selectedUserFile!: File;
     selectedLogoFile!: File;
     selectedBackgroundFile!: File;
     typeFiles = {
         LOGO: 'logo',
-        BACKGROUND: 'background'
+        BACKGROUND: 'background',
+        USER_IMAGE: 'userImage'
     };
 
     constructor(
@@ -105,15 +108,23 @@ export class CRUShopComponent implements OnInit {
             phone: this.formBuilder.control('', [ValueValidators.required]),
             address: this.formBuilder.control(''),
             gender: this.formBuilder.control(Gender.Male),
+            password: this.formBuilder.control('', [ValueValidators.required]),
 
             shop_name: ['', [ValueValidators.required]],
             logo_url: ['', [ValueValidators.required]],
             background_url: ['', [ValueValidators.required]],
-            contact_email: ['', [ValueValidators.required]],
+            contact_email: ['', [ValueValidators.required, Validators.email]],
             contact_address: ['', [ValueValidators.required]],
             description: ['']
         });
 
+        this.cruForm.get('email')?.valueChanges.subscribe((value) => {
+            this.cruForm.get('contact_email')?.setValue(value, { emitEvent: false });
+        })
+
+        this.cruForm.get('contact_email')?.valueChanges.subscribe((value) => {
+            this.cruForm.get('email')?.setValue(value, { emitEvent: false });
+        })
     }
 
     async initUpdateForm() {
@@ -135,7 +146,8 @@ export class CRUShopComponent implements OnInit {
                 email: this.formBuilder.control('', [ValueValidators.required, Validators.email]),
                 phone: this.formBuilder.control('', [ValueValidators.required]),
                 address: this.formBuilder.control(''),
-                gender: this.formBuilder.control('1'),
+                gender: this.formBuilder.control(Gender.Male),
+
 
                 shop_name: [this.updatedName, [ValueValidators.required]],
                 logo_url: [this.updatedShop.logo_url, [ValueValidators.required]],
@@ -158,6 +170,12 @@ export class CRUShopComponent implements OnInit {
             } else if (typeFile === this.typeFiles.BACKGROUND) {
                 this.selectedBackgroundFile = files[0];
                 this.cruForm.get('background_url')?.patchValue(
+                    URL.createObjectURL(files[0]),
+                    { emitEvent: false }
+                )
+            } else if (typeFile === this.typeFiles.USER_IMAGE) {
+                this.selectedUserFile = files[0];
+                this.cruForm.get('image_url')?.patchValue(
                     URL.createObjectURL(files[0]),
                     { emitEvent: false }
                 )
@@ -197,7 +215,9 @@ export class CRUShopComponent implements OnInit {
         try {
             const instance = this.convertValueFormToModel();
             await this.shopManagement.createShop(
-                instance,
+                instance.userModel,
+                instance.shopModel,
+                this.selectedUserFile,
                 this.selectedLogoFile,
                 this.selectedBackgroundFile
             );
@@ -219,7 +239,7 @@ export class CRUShopComponent implements OnInit {
         try {
             const instance = this.convertValueFormToModel();
             await this.shopManagement.updateShopById(
-                instance,
+                instance.shopModel,
                 this.selectedLogoFile,
                 this.selectedBackgroundFile
             );
@@ -230,18 +250,31 @@ export class CRUShopComponent implements OnInit {
     }
 
     convertValueFormToModel() {
-        const model = new ShopModel();
+        const shopModel = new ShopModel();
+        const userModel = new UserModel();
 
         if (this.action === actions.UPDATE) {
-            model.id = this.updatedId;
+            shopModel.id = this.updatedId;
+            userModel.id = this.updatedShop.user?.id;
         }
-        model.shop_name = this.cruForm.getRawValue().shop_name === this.updatedName
+
+        userModel.name = this.cruForm.getRawValue().name;
+        userModel.email = this.cruForm.getRawValue().email;
+        userModel.address = this.cruForm.getRawValue().address;
+        userModel.gender = this.cruForm.getRawValue().gender;
+        userModel.phone = this.cruForm.getRawValue().phone;
+        userModel.password = this.cruForm.getRawValue().password;
+
+        shopModel.shop_name = this.cruForm.getRawValue().shop_name === this.updatedName
             ? undefined
             : this.cruForm.getRawValue().shop_name;
-        model.contact_email = this.cruForm.getRawValue().contact_email;
-        model.contact_address = this.cruForm.getRawValue().contact_address;
-        model.description = this.cruForm.getRawValue().description;
+        shopModel.contact_email = this.cruForm.getRawValue().contact_email;
+        shopModel.contact_address = this.cruForm.getRawValue().contact_address;
+        shopModel.description = this.cruForm.getRawValue().description;
 
-        return model;
+        return {
+            userModel: userModel,
+            shopModel: shopModel
+        };
     }
 }

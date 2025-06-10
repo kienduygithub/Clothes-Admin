@@ -37,11 +37,15 @@
                 <div class="info-left">
                     <div class="info">
                         <div class="info-image-wrapper">
-                            <label class="upload-image" for="info-employee-files">
+                            <label class="upload-image" for="user-files">
                                 <img *ngIf="cruForm.get('image_url')?.value === ''" [src]="image_no_avatar">
-                                <img *ngIf="cruForm.get('image_url')?.value !== ''"
+                                <img *ngIf="cruForm.get('image_url')?.value !== '' && selectedUserFile"
+                                    src="{{cruForm.get('image_url')?.value}}">
+                                <img *ngIf="cruForm.get('image_url')?.value !== '' && !selectedUserFile"
                                     src="{{preImage}}/{{cruForm.get('image_url')?.value}}">
                             </label>
+                            <input #userFile type="file" id="user-files" accept=".png, .jpg, .jpeg" [hidden]="true"
+                                (change)="onChangeLogoFile(userFile.files, typeFiles.USER_IMAGE)" />
                         </div>
                     </div>
                 </div>
@@ -66,7 +70,33 @@
                             Email<span class="required">*</span>
                         </label>
                         <div class="input-container">
-                            <input nbInput type="text" formControlName="email" id="email" placeholder="Nhập email">
+                            <input nbInput type="text" formControlName="email" id="email" placeholder="Nhập email"
+                                [ngClass]="{'invalid-form': (cruForm.get('email')?.dirty || isSubmit) && cruForm.get('email')?.invalid }">
+                            <ng-container
+                                *ngIf="(cruForm.get('email')?.dirty || isSubmit) && cruForm.get('email')?.invalid">
+                                <p *ngIf="cruForm.get('email')?.hasError('required')" class="vali-text-false">
+                                    Email không được bỏ trống
+                                </p>
+                                <p *ngIf="cruForm.get('email')?.hasError('email')" class="vali-text-false">
+                                    Email không đúng định dạng
+                                </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <label class="label-text" for="password" *ngIf="action === actionWebs.CREATE">
+                            Mật khẩu<span class="required">*</span>
+                        </label>
+                        <div class="input-container">
+                            <input nbInput type="password" formControlName="password" id="password"
+                                placeholder="Nhập mật khẩu"
+                                [ngClass]="{'invalid-form': (cruForm.get('password')?.dirty || isSubmit) && cruForm.get('password')?.invalid }">
+                            <ng-container
+                                *ngIf="(cruForm.get('password')?.dirty || isSubmit) && cruForm.get('password')?.invalid">
+                                <p *ngIf="cruForm.get('password')?.hasError('required')" class="vali-text-false">
+                                    Mật khẩu không được bỏ trống
+                                </p>
+                            </ng-container>
                         </div>
                     </div>
                     <div class="info">
@@ -171,6 +201,9 @@
                                 *ngIf="(cruForm.get('contact_email')?.dirty || isSubmit) && cruForm.get('contact_email')?.invalid">
                                 <p *ngIf="cruForm.get('contact_email')?.hasError('required')" class="vali-text-false">
                                     Email liên hệ không được bỏ trống
+                                </p>
+                                <p *ngIf="cruForm.get('contact_email')?.hasError('email')" class="vali-text-false">
+                                    Email không đúng định dạng
                                 </p>
                             </ng-container>
                         </div>

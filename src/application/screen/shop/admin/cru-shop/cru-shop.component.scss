@@ -135,6 +135,8 @@
         flex-direction: column;
         justify-content: center;
         cursor: pointer;
+        border-radius: 50%;
+        overflow: hidden;
 
         img {
             width: 100%;

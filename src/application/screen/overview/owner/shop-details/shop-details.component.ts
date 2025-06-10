@@ -164,33 +164,33 @@ export class ShopDetailsComponent implements OnInit {
     }
 
     async handleCreate() {
-        this.isSubmit = true;
-        console.log(this.cruForm.value);
+        // this.isSubmit = true;
+        // console.log(this.cruForm.value);
 
-        if (this.cruForm.invalid) {
-            if (this.cruForm.get('logo_url')?.hasError('required') || this.cruForm.get('background_url')?.hasError('required')) {
-                this.dialogService.open(ErrorComponent, {
-                    context: {
-                        title: 'Không hợp lệ',
-                        content: 'Ảnh nền và logo không được để trống. Vui lòng thêm để hoàn tất thao tác.'
-                    }
-                })
-            }
-            console.log('INVALID FORM');
-            return;
-        }
+        // if (this.cruForm.invalid) {
+        //     if (this.cruForm.get('logo_url')?.hasError('required') || this.cruForm.get('background_url')?.hasError('required')) {
+        //         this.dialogService.open(ErrorComponent, {
+        //             context: {
+        //                 title: 'Không hợp lệ',
+        //                 content: 'Ảnh nền và logo không được để trống. Vui lòng thêm để hoàn tất thao tác.'
+        //             }
+        //         })
+        //     }
+        //     console.log('INVALID FORM');
+        //     return;
+        // }
 
-        try {
-            const instance = this.convertValueFormToModel();
-            await this.shopManagement.createShop(
-                instance,
-                this.selectedLogoFile,
-                this.selectedBackgroundFile
-            );
-            this.onCancel();
-        } catch (error) {
-            console.log(error);
-        }
+        // try {
+        //     const instance = this.convertValueFormToModel();
+        //     await this.shopManagement.createShop(
+        //         instance,
+        //         this.selectedLogoFile,
+        //         this.selectedBackgroundFile
+        //     );
+        //     this.onCancel();
+        // } catch (error) {
+        //     console.log(error);
+        // }
     }
 
     async handleUpdate() {

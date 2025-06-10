@@ -4,6 +4,7 @@ import { ShopService } from "../service/shop.service";
 import { Withdrawal } from "../model/withdrawal/withdrawal.model";
 import { DateRange } from "../../common/utils/filter-stats/filter-stats.component";
 import { OrderModel } from "../model/order/order.model";
+import { UserModel } from "../model/user/user.model";
 
 @Injectable()
 export class ShopManagement {
@@ -11,9 +12,9 @@ export class ShopManagement {
         private shopService: ShopService
     ) { }
 
-    async createShop(data: ShopModel, logoFile: any, backgroundFile: any) {
+    async createShop(user: UserModel, data: ShopModel, userFile: any, logoFile: any, backgroundFile: any) {
         try {
-            await this.shopService.createShop(data, logoFile, backgroundFile);
+            await this.shopService.createShop(user, data, userFile, logoFile, backgroundFile);
             return true;
         } catch (error) {
             throw error;

@@ -3,6 +3,7 @@ import { ServiceCore } from "../../common/service/service-core";
 import { AppConfig } from "../../common/config/app.config";
 import { ShopModel } from "../model/shop.model";
 import { DateRange } from "../../common/utils/filter-stats/filter-stats.component";
+import { UserModel } from "../model/user/user.model";
 
 @Injectable()
 export class ShopService {
@@ -12,18 +13,27 @@ export class ShopService {
         private appConfig: AppConfig
     ) { }
 
-    async createShop(data: ShopModel, logoFile: any, backgroundFile: any): Promise<any> {
+    async createShop(user: UserModel, data: ShopModel, userFile: any, logoFile: any, backgroundFile: any): Promise<any> {
         try {
             const domain = this.appConfig.getDomain();
+            const userInfo = new UserModel().convertObj(user);
             const shopInfo = new ShopModel().convertObj(data);
             const formData = new FormData();
+            formData.append("userInfo", JSON.stringify(userInfo));
             formData.append("shopInfo", JSON.stringify(shopInfo));
+
+            if (userFile) {
+                formData.append('adminOwnerFile', userFile);
+            }
+
             if (logoFile) {
                 formData.append("logoShopFile", logoFile);
             }
+
             if (backgroundFile) {
                 formData.append("backgroundShopFile", backgroundFile);
             }
+
             const response = await this.serviceCore.POST(
                 `${domain}`,
                 `shop/admin/create`,
@@ -41,8 +51,15 @@ export class ShopService {
             const shopInfo = new ShopModel().convertModelToUpdate(data);
             const formData = new FormData();
             formData.append("shopInfo", JSON.stringify(shopInfo));
-            formData.append("logoShopFile", logoFile);
-            formData.append("backgroundShopFile", backgroundFile);
+
+            if (logoFile) {
+                formData.append("logoShopFile", logoFile);
+            }
+
+            if (backgroundFile) {
+                formData.append("backgroundShopFile", backgroundFile);
+            }
+
             const response = await this.serviceCore.PATCH(
                 `${domain}`,
                 `shop/admin/${data.id}`,
