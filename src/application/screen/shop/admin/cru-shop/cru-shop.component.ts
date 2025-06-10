@@ -141,18 +141,18 @@ export class CRUShopComponent implements OnInit {
         } else {
             this.updatedName = this.updatedShop.shop_name ?? '';
             this.cruForm = this.formBuilder.group({
-                image_url: this.formBuilder.control('', [ValueValidators.required]),
-                name: this.formBuilder.control('', [ValueValidators.required]),
-                email: this.formBuilder.control('', [ValueValidators.required, Validators.email]),
-                phone: this.formBuilder.control('', [ValueValidators.required]),
-                address: this.formBuilder.control(''),
-                gender: this.formBuilder.control(Gender.Male),
-
+                image_url: this.formBuilder.control({ value: this.updatedShop.user?.image_url, disabled: true }),
+                name: this.formBuilder.control({ value: this.updatedShop.user?.name ?? '', disabled: true }),
+                email: this.formBuilder.control({ value: this.updatedShop.user?.email ?? '', disabled: true }),
+                phone: this.formBuilder.control({ value: this.updatedShop.user?.phone ?? '', disabled: true }),
+                address: this.formBuilder.control({ value: this.updatedShop.user?.address ?? '', disabled: true }),
+                gender: this.formBuilder.control({ value: this.updatedShop.user?.gender ? `${this.updatedShop.user.gender}` : Gender.Male, disabled: true }),
+                password: this.formBuilder.control({ value: '123456789', disabled: true }),
 
                 shop_name: [this.updatedName, [ValueValidators.required]],
                 logo_url: [this.updatedShop.logo_url, [ValueValidators.required]],
                 background_url: [this.updatedShop.background_url, [ValueValidators.required]],
-                contact_email: [this.updatedShop.contact_email, [ValueValidators.required]],
+                contact_email: this.formBuilder.control({ value: this.updatedShop.contact_email, disabled: true }),
                 contact_address: [this.updatedShop.contact_address, [ValueValidators.required]],
                 description: [this.updatedShop.description]
             });
