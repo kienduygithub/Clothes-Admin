@@ -73,7 +73,8 @@
               Đơn đăng ký cửa hàng mới
             </div>
             <div class="item-message">
-              Bạn có đơn đăng ký cửa hàng mới #{{notification.reference_id}}
+              Bạn có đơn đăng ký cửa hàng mới #{{notification.reference_id}} từ người dùng
+              #{{notification.data.owner_id}}
             </div>
             <div class="item-time">
               {{notification.created_at! | TimeAgoV2Pipe}}
